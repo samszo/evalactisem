@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EvalActiSem>
+	<StarIEML>
+		<Seme full="F" empty="E" verb="O" noun="M"/>
+		<Go copy="!" opening="~"/>
+		<Slo union="|" difference="^" intersection="&amp;"/>
+		<Mark name="seme" layer="6" closing="_" gted="5"/>
+		<Mark name="phrase" layer="5" closing="," gted="4" gtor="6"/>
+		<Mark name="idea" layer="4" closing="'" gted="3" gtor="5"/>
+		<Mark name="relation" layer="3" closing="-" gted="2" gtor="4"/>
+		<Mark name="event" layer="2" closing="." gted="1" gtor="3"/>
+		<Mark name="primitive" layer="1" closing=":" gtor="2"/>
+	</StarIEML>
+	<Querys>
+		<Query fonction="Sem-GetChoixNavig-infoSo">
+			<select>SELECT	De.ieml_id Deid, De.ieml_code Decode, De.ieml_desc Delib, De.ieml_parent Detype</select>
+			<from> FROM ieml_onto De 
+					INNER JOIN ieml_onto So ON So.ieml_id = De.ieml_parent				
+			</from>
+			<where> WHERE So.ieml_code = '-So-' </where>
+		</Query>
+		<Query fonction="Sem-GetChoixNavig-infoDe">
+			<select>SELECT De.ieml_id Deid, De.ieml_code Decode, De.ieml_desc Delib, De.ieml_parent Detype</select>
+			<from> FROM ieml_onto De  </from>
+			<where> WHERE De.ieml_code LIKE '%-So-%'</where>
+		</Query>
+		<Query fonction="Sem-GetInfos">
+			<select>SELECT ieml_id id, ieml_desc dsc</select>
+			<from> FROM ieml_onto  </from>
+			<where> WHERE ieml_code = '-So-'</where>
+		</Query>
+		<Query fonction="ExeAjax-AddTrad-VerifExist">
+			<select>SELECT COUNT(1) </select>
+			<from> FROM ieml_trad De  </from>
+			<where> WHERE 10ef_id = -id10eF- AND ieml_id = -idIeml- </where>
+		</Query>
+		<Query fonction="ExeAjax-AddTrad-Insert">
+			<insert>INSERT INTO ieml_trad (10ef_id, ieml_id, trad_date)</insert>
+			<values> VALUES(-id10eF-, -idIeml-, now())  </values>
+		</Query>
+		<Query fonction="ExeAjax-SetProc">
+			<update>UPDATE ieml_onto </update>
+			<values> SET ieml_code='-code-', ieml_desc='-desc-', ieml_date=now() </values>
+			<where> WHERE ieml_id = -id- </where>
+		</Query>
+	</Querys>
+</EvalActiSem>
