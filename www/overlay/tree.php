@@ -20,6 +20,7 @@ require_once ("../param/ParamPage.php");
 <overlay id="oTree"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+<script type="text/javascript" src="../xbl/editableTree/functions.js" />
     <popupset>
         <tooltip id="tipBadValue" onclick="this.hidePopup( );">
             <vbox>
@@ -28,7 +29,7 @@ require_once ("../param/ParamPage.php");
         </tooltip>
     </popupset>
 	<box id="<?php echo $objSite->scope["box"]; ?>"  class="editableTree" >
-		<tree id="treeRing"
+		<tree id="tree<?php echo $type;?>"
 				width="600" height="600"
 				context="clipmenu"			
 				enableColumnDrag="true"
@@ -40,6 +41,7 @@ require_once ("../param/ParamPage.php");
 			typesource="<?php echo $type;?>"	
 			ref="urn:roots" 
 			datasources="<?php echo $ds[0]["datasource"]."?type=".$type;?>"
+			idTree="tree<?php echo $type;?>"
 		 >
 				<treecols>
 				<?php
@@ -48,10 +50,7 @@ require_once ("../param/ParamPage.php");
 					echo('<splitter class="tree-splitter"/>');
 					foreach($Rdfs as $Rdf)
 					{
-						echo('<treecol id="treecol_'.$Rdf["tag"].'" label="'.$Rdf["tag"].'"> <col tag="id" parse="Integer" hidden="true"/>
-			<col tag="lib " hidden="false"/>
-			<col tag="niveau" hidden="false"/>
-			<col tag="type" hidden="true"/>'.$Rdf["hidden"].'"/>');
+						echo('<treecol id="treecol_'.$Rdf["tag"].'" label="'.$Rdf["tag"].'" />');
 						echo('<splitter class="tree-splitter"/>');
 					}
 				?>
@@ -59,7 +58,7 @@ require_once ("../param/ParamPage.php");
 				<template>
 					<rule>
 					<?php
-						echo('<treechildren  id="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'">');
+						echo('<treechildren id="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'">');
 						echo('<treeitem uri="rdf:*">');
 						echo('<treerow id="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'">');
 						//ajout d'une cellule pour la branche
