@@ -1,7 +1,7 @@
 //--------------------------------------------
 // AJAX Functions
 //--------------------------------------------
-var urlExeAjax = "http://localhost/mundilogiweb/ieml-delicio.us/ieml//library/ExeAjax.php";
+var urlExeAjax = "/evalactisem";
 
 function AfficheResult(response,params) {
    	alert(params);
