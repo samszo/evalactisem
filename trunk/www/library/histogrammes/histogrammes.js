@@ -14,7 +14,7 @@ function SetDonnees(result,param){
 function Requette(){
 
 
-	AjaxRequest("http://localhost/mundilogiweb/ieml/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value,'SetDonnees','');
+	AjaxRequest("http://localhost/evalactisem/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value,'SetDonnees','');
 
 }
 
