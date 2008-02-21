@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<window id="ieml-global" title="IEML-10eF v0.1 - information economy meta language - Dixième Famille" orient="horizontal" left="0" top="0" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+<toolbox flex="1">
+  <menubar id="sample-menubar">
+    <menu id="file-menu" label="Fichier">
+      <menupopup id="file-popup">
+        <menu id="new-menu" label="Nouveau">
+          <menupopup id="new-popup">
+            <menuitem label="Fenêtre"/>
+            <menuitem label="Message"/>
+
+        <menu id="new-menu" label="Nouveau">
+          <menupopup id="new-popup">
+            <menuitem label="Fenêtre"/>
+            <menuitem label="Message"/>
+
+		</menupopup>
+        </menu>
+
+
+			</menupopup>
+        </menu>
+        <menuitem label="Ouvrir"/>
+        <menuitem label="Sauver"/>
+        <menuseparator/>
+        <menuitem label="Quitter"/>
+      </menupopup>
+    </menu>
+  </menubar>
+</toolbox>
+</window>
