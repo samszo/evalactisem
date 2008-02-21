@@ -18,16 +18,23 @@ require_once ("../param/ParamPage.php");
 ?>
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <overlay id="tabletrad" >
+	<script language="JavaScript" type="application/x-javascript" src="js/Interface.js"/>
 	<box id="<?php echo $objSite->scope["box"]; ?>" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
-		<listbox >
+		<listbox id="boxlist" onselect="startSelectTab();" >
 			
 			<listhead >
-				<listheader label="id_ieml"></listheader>
-				<listheader label="id_10eF"></listheader>
+				<?php
+					$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/rdf";
+					$Rdfs = $objSite->XmlParam->GetElements($Xpath);
+					foreach($Rdfs as $Rdf){
+						echo'<listheader label="'.$Rdf["tag"].'"></listheader>';
+					}
+			    ?>
 			</listhead>
 			<listcols>
 				<listcol flex="1"></listcol>
-
+				<listcol flex="1"></listcol>
+				<listcol flex="1"></listcol>
 				<listcol flex="1"></listcol>
 			</listcols>
 		
@@ -35,7 +42,6 @@ require_once ("../param/ParamPage.php");
 			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='ieml-10eF']";
 			$Q = $objSite->XmlParam->GetElements($Xpath);
 			$sql = $Q[0]->select.$Q[0]->from.$Q[0]->where;
-			//echo $Xpath."<br/>"; 
 
 			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 			$db->connect();
@@ -45,10 +51,12 @@ require_once ("../param/ParamPage.php");
 
 			while($r = mysql_fetch_assoc($req))
 			{
-				echo('<listitem >');
-				echo('<listcell idTradIeml="'.$r["ieml_id"].'" label="'.$r["ieml_desc"].'"/>');
-				echo('<listcell idTrad10ef="'.$r["10ef_id"].'" label="'.$r["10ef_desc"].'"/>');
-				echo ('</listitem>');
+				echo('<listitem>');
+				echo('<listcell label="'.$r["ieml_id"].'"/>');
+				echo('<listcell label="'.$r["10ef_id"].'"/>');
+				echo('<listcell label="'.$r["ieml_desc"].'"/>');
+				echo('<listcell label="'.$r["10ef_desc"].'"/>');
+				echo('</listitem>');
 			}		    			    
 		?>
 		</listbox>
