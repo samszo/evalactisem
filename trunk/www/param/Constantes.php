@@ -9,7 +9,7 @@
 	// Include the class files.
 	require_once(TT_CLASS_BASE."AllClass.php");
 
-  define ("DEFSITE", "local");
+  define ("DEFSITE", "thyp");
 
   $DB_OPTIONS = array (
 		'ERROR_DISPLAY' => true
@@ -38,9 +38,24 @@ $Site = array(
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"gmKey" => gmKey
 	); 
+$SiteThyp = array(
+	"SQL_LOGIN" => "root", 
+	"SQL_PWD" => "thyp2006", 
+	"SQL_HOST" => "localhost",
+	"SQL_DB" => "evalactisem",
+	"NOM" => "EvalActiSem",//je sais pas
+	"SITE_PARENT" => -1,//je sais pas
+	"SITE_ENFANT" => -1,
+	"DEF_LAT" => 45,
+	"DEF_LNG" => 1,
+	"DEF_ZOOM" => 4,
+	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
+	"gmKey" => gmKey
+	); 
 	
   $SITES = array(
-	"local" => $Site
-	);
+	"local" => $Site,
+	"thyp" => $SiteThyp
+  );
 
 ?>
