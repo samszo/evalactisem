@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <?xul-overlay href="overlay/popupset.php?f=1"?>
 <?xul-overlay href="overlay/tree.php?box=box1&ParamNom=GetOntoTree"?>
-<?xul-overlay href="overlay/tablephp.php?box=box3&ParamNom=GetOntoTrad&type=ieml-10eF"?>
+<?xul-overlay href="overlay/table.php?box=box3&ParamNom=GetOntoTrad&type=ieml-10eF"?>
 <?xul-overlay href="overlay/tree.php?box=box2&ParamNom=GetOntoTree&type=10eF" ?>
 <?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?>
 
@@ -25,7 +25,6 @@
 				<hbox >
 					<label value="Langage : ieml"/>
 				</hbox>
-				<label id="id-trad-ieml" hidden="true"/>
 				<label id="id-trad-ieml" hidden="true"/>
 				<hbox >
 					<label value="code :"/><label id="code-trad-ieml"  />
