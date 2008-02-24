@@ -7,16 +7,16 @@
    
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
 
-	if ($aPosts = $oDelicious->GetDates($_GET["tag"])) { 
-			//echo "<p>".count($aPosts)." posts in this account. Results cached for 10 seconds (by default).</p>";
-   		 /*
+	if ($aPosts = $oDelicious->GetAllTags()) { 
+			/*echo "<p>".count($aPosts)." posts in this account. Results cached for 10 seconds (by default).</p>";
+   		 
 		 echo "<br/>aPosts=<br/>";
 		 print_r($aPosts);
-		 echo "<br/>";
-		 */
+		 echo "<br/>";*/
+		 
 
 			foreach ($aPosts as $aPost) { 
-	            $dates .= "".$aPost['date'].";";
+	            $tags .= "".$aPost['tag'].";";
 	            $counts .= "".$aPost['count'].";";
 	        } 
 	    } else {
@@ -24,5 +24,5 @@
 	    }
 //echo $dates;
 //echo $counts;
-echo $dates.DELIM.$counts;
+echo $tags.DELIM.$counts;
 ?>
