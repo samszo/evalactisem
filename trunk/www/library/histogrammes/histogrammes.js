@@ -7,8 +7,14 @@ function pf_couleur(num, color){
 //ajout samszo
 function SetDonnees(result,param){
 	arr = result.split("*");
+	alert(result);
 	document.getElementById("donnees").value = arr[1];
 	document.getElementById("noms").value = arr[0];
+	
+
+}
+function recupFlux(){
+	AjaxRequest("http://localhost/evalactisem/ieml_into_flux.php?code_f=");	
 }
 //fin ajout samszo
 function Requette(){
@@ -21,6 +27,7 @@ function Requette(){
 function pf_dessin(dom_doc)
 {
 Requette();
+
 lien='stats.php?large='+escape(document.getElementById("large").value);
 lien=lien+'&haut='+escape(document.getElementById("haut").value);
 lien=lien+'&titre='+escape(document.getElementById("titre").value);
