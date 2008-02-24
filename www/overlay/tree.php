@@ -4,14 +4,11 @@ require_once ("../param/ParamPage.php");
 	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']";
 	$ds = $objSite->XmlParam->GetElements($Xpath);
 	//echo $ds[0]["datasource"];
-	//param de la description
-	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/rdfDesc";
-	$Desc = $objSite->XmlParam->GetElements($Xpath);
 	//print_r($Desc);
-	//param des lignes rdf
-	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/rdf";
-	$Rdfs = $objSite->XmlParam->GetElements($Xpath);	
-	//print_r($Rdfs);
+	//param des colonnes
+	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
+	$Cols = $objSite->XmlParam->GetElements($Xpath);	
+
 
     header('Content-type: application/vnd.mozilla.xul+xml');
 ?>
@@ -26,53 +23,44 @@ require_once ("../param/ParamPage.php");
             <vbox>
                 <label value="Valeur incorrecte !!"/>
             </vbox>
+
         </tooltip>
     </popupset>
 	<box id="<?php echo $objSite->scope["box"]; ?>"  class="editableTree" >
 		<tree id="tree<?php echo $type;?>"
-				width="600" height="600"
-				context="clipmenu"			
-				enableColumnDrag="true"
-				fctStart="startEditable"
-				fctSave="saveEditable"
-				fctInsert="startInsert"
-				fctDelete="startDelete"
-				fctSelect="startSelect"
+			width="300" height="400"
+			context="clipmenu"			
+			enableColumnDrag="true"
+			fctStart="startEditable"
+			fctSave="saveEditable"
+			fctInsert="startInsert"
+			fctDelete="startDelete"
+			fctSelect="startSelect"
 			typesource="<?php echo $type;?>"	
-			ref="urn:roots" 
-			datasources="<?php echo $ds[0]["datasource"]."?type=".$type;?>"
-			idTree="tree<?php echo $type;?>"
-		 >
+			idTree="tree<?php echo $type;?>">
 				<treecols>
 				<?php
 					//le conteneur doit avoir comme id id pour editableTree
-					echo('<treecol id="id" label="branche" primary="true" flex="1" cycler="true" sort="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'"/>');
+					echo('<treecol id="id" label="branche" primary="true" flex="1" cycler="true"/>');
 					echo('<splitter class="tree-splitter"/>');
-					foreach($Rdfs as $Rdf)
+					
+					foreach($Cols as $Col)
 					{
-						echo('<treecol id="treecol_'.$Rdf["tag"].'" label="'.$Rdf["tag"].'" />');
-						echo('<splitter class="tree-splitter"/>');
+						//la première colonne est le bouton pour déplier
+							
+							echo('<treecol id="treecol_'.$Col["tag"].'" label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"/>');
+							echo('<splitter class="tree-splitter"/>');
+						
+						
 					}
 				?>
 				</treecols>
-				<template>
-					<rule>
-					<?php
-						echo('<treechildren id="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'">');
-						echo('<treeitem uri="rdf:*">');
-						echo('<treerow id="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'">');
-						//ajout d'une cellule pour la branche
-						echo('<treecell label="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Desc[0]["tag"].'"/>');
-						foreach($Rdfs as $Rdf)
-						{
-							echo('<treecell label="rdf:http://'.$Desc[0]["urn"].'/rdf#'.$Rdf["tag"].'"/>');
-						}
-						echo('</treerow>');
-						echo('</treeitem>');
-						echo('</treechildren>');
-					?>
-					</rule>
-				</template>
+				<?php
+					//print_r($Cols);
+					
+					echo $objSite->GetTreeChildren($type, $Cols);
+				?>
 			</tree>
+
 	</box>
 </overlay>
