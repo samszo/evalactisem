@@ -1,12 +1,10 @@
-	var urlExeAjax = "http://localhost/mundilogiweb/ieml/library/ExeAjax.php";
+	var urlExeAjax = "http://localhost/evalactisem/library/ExeAjax.php";
 
 function AddTrad()
 {
 	//récupération des valeurs
 	var idIeml = document.getElementById("id-trad-ieml");
 	var id10eF = document.getElementById("id-trad-10eF");
-    var listbox=document.getElementById("box3");
-	
 	//construction de la requete
 	url = urlExeAjax+"?f=AddTrad&idIeml="+idIeml.value+"&id10eF="+id10eF.value;
     
@@ -25,8 +23,8 @@ function SupTrad()
     var listbox=document.getElementById("boxlist");
     var select=listbox.selectedIndex;
 	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&id10eF="+id10eF.value;
-    
-	//vérification des valeurs
+   
+	//vérification des valeursboxlistJ
 	if(idIeml.value=="" || id10eF.value=="")
 		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
 	else
@@ -163,15 +161,15 @@ function read(filepath) {
 { 
 var listbox=document.getElementById("boxlist");
 var cell = listbox.selectedItem.childNodes[0]; // suivant l'index de colonne que vous desirez
-var cellF = listbox.selectedItem.childNodes[1];
-var celldescp = listbox.selectedItem.childNodes[2];
+var celldescp = listbox.selectedItem.childNodes[1];
+var cellF = listbox.selectedItem.childNodes[2];
 var celldescpF = listbox.selectedItem.childNodes[3];
+
 txtIdieml=document.getElementById("id-trad-ieml");
 txtIdieml.value=cell.getAttribute('label');
 txtId10F=document.getElementById("id-trad-10eF");
 txtId10F.value=cellF.getAttribute('label');
-//alert(cell-descp);
-//txtIdieml.value=cell.getAttribute('id-trad-ieml');
+
 txtCode = document.getElementById("code-trad-ieml");
 txtCode.value=cell.getAttribute('label');
 txtDescp= document.getElementById("lib-trad-ieml");
@@ -180,7 +178,7 @@ txtCodeF = document.getElementById("code-trad-10eF");
 txtCodeF.value=cellF.getAttribute('label');
 txtDescpF= document.getElementById("lib-trad-10eF");
 txtDescpF.value = celldescpF.getAttribute('label');
-//alert("Listcell: "+txtDescpF);
+
 }
 
 
