@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by samszo (lsd) -->
 <XmlParams>
-	<XmlParam nom="GetOntoTree" datasource="http://localhost/mundilogiweb/ieml/library/CreaRdfTree.php">
+	<XmlParam nom="GetOntoTree" datasource="http://localhost/evalactisem/library/CreaRdfTree.php">
 		<Querys>
 			<Query fonction="ieml">
 				<select>SELECT ieml_id id, ieml_code code, ieml_lib lib, ieml_niveau niveau, ieml_parent type </select>
@@ -40,7 +40,7 @@
 		<rdf tag="niveau" hidden="false"/>
 		<rdf tag="type" hidden="true"/>
 	</XmlParam>
-	<XmlParam nom="GetOntoTree1" datasource="http://localhost/mundilogiweb/ieml/library/CreaRdfTree.php">
+	<XmlParam nom="GetOntoTree1" datasource="http://localhost/evalactisem/library/CreaRdfTree.php">
 		<Querys>
 			<Query fonction="ieml">
 				<select>SELECT ieml_id id, ieml_code code, ieml_lib lib, ieml_niveau niveau, ieml_parent type </select>
@@ -67,12 +67,12 @@
 		<rdf tag="code" hidden="false"/>
 		<rdf tag="lib" hidden="false"/>
 	</XmlParam>
-	<XmlParam nom="GetOntoTrad" datasource="http://localhost/mundilogiweb/ieml/library/CreaRdfTable.php">
+	<XmlParam nom="GetOntoTrad" datasource="http://localhost/evalactisem/library/CreaRdfTable.php">
 		<Querys>
 			<Query fonction="ieml-10eF">
 				<select>SELECT t.ieml_id,t.10ef_id,i.ieml_lib,f.10ef_desc </select>
 				<from> FROM ieml_trad t
-					   INNER JOIN ieml_10ef f ON f.10ef_id = t.10ef_id
+					   INNER JOIN ieml_10ef f ON f.10ef_id = t.10ef_id 
 					   INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id 
 				</from>
 				<where> </where>
@@ -85,12 +85,25 @@
 		<rdf tag="10eF_desc"/>
 	</XmlParam>
 	
-	
+	<XmlParam nom="GetOntoFlux" datasource="http://localhost/evalactisem/library/CreaRdfTable.php">
+		<Querys>
+			<Query fonction="Ieml_Onto_Flux">
+				<insert> INSERT INTO ieml_onto_flux (onto_flux_id,onto_flux_code,onto_flux_desc,onto_flux_niveau,onto_flux_parents)</insert>
+				<values> VALUES ("", '-codeFlux-' , '-descFlux- ', '-niveauFlux- ', '-parentsFlux-' )</values>
+			</Query>
+			
+			<Query fonction="Ieml_Onto_Flux">
+				<update> UPDATE ieml_onto_flux SET onto_flux_parents=-parentsFlux-</update>
+				<where> WHERE onto_flux_code=-enfant-</where>
+			</Query>
+		</Querys>
+	</XmlParam>
 	<XmlParam nom="GetOntoTree">
 	<Querys>
 		<Query fonction="GetTreeChildren_ieml" >
 			<Cols>
 				<col tag="id" parse="Integer" hidden="true"/>
+				<col tag="code" hidden="false"/>
 				<col tag="lib" hidden="false"/>
 				<col tag="niveau" hidden="false"/>
 				<col tag="type" hidden="true"/>
@@ -105,33 +118,54 @@
 				
 				<where></where>
 			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','lib-param0-'],[0,1])"/>
-		</Query>
+		</Query>	
 		
-		
+		<Query fonction="GetTreeChildren_10eF" >
+			<Cols>
+				<col tag="id" parse="Integer" hidden="false"/>
+				<col tag="code" hidden="false"/>
+				<col tag="lib" hidden="false"/>
+				<col tag="niveau" hidden="false"/>
+				<col tag="type" hidden="true"/>
+			</Cols>
+			<select>SELECT oe.10ef_id , oe.10ef_code , oe.10ef_desc , oe.10ef_niveau , oe.10ef_parent </select>
+			
+				<from niv="0"> FROM ieml_10ef oe
+                               INNER JOIN ieml_10ef op ON oe.10ef_id = op.10ef_id
+                               AND op.10ef_parent =-parent-
+				
+				</from>
+				
+				<where></where>
+			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','lib-param0-'],[0,1])"/>
+		</Query>	
 	</Querys>
+	
+	
 	
 	</XmlParam>
 	<XmlParam nom="MenuUrl">
 		<menu nom="Outils" >
 			<Sousmenu nom="Tradution">
-			<urlDesc nom="Ieml-10eF" src="http://localhost/mundilogiweb/ieml/overlay/iframMenu.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF" dst="http://localhost/mundilogiweb/ieml/traduction.xul"/>
-			<urlDesc nom="Ieml-APIGoogle" src="http://localhost/mundilogiweb/ieml/overlay/iframMenu.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIGoogle" dst=""/>
+			<urlDesc nom="Ieml-10eF" src="http://localhost/evalactisem/overlay/iframMenu.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF" dst="http://localhost/mundilogiweb/ieml/traduction.xul"/>
+			<urlDesc nom="Ieml-APIGoogle" src="http://localhost/evalactisem/overlay/iframMenu.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIGoogle" dst=""/>
 			</Sousmenu>
-			<urlDesc nom="Processus" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/mundilogiweb/ieml/processus.php"/>
+			<urlDesc nom="Processus" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/evalactisem/processus.php"/>
 		</menu>
 		<menu nom="Aide">
-			<urlDesc nom="aide 10eF" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide 10eF" dst="http://www.dixiemefamille.com/public/page/animation.php"/>
-			<urlDesc nom="aide IEML" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide IEML" dst="http://www.ieml.org/french/elements.html"/>
+			<urlDesc nom="aide 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide 10eF" dst="http://www.dixiemefamille.com/public/page/animation.php"/>
+			<urlDesc nom="aide IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide IEML" dst="http://www.ieml.org/french/elements.html"/>
 		</menu>
 		<menu nom="Ontologie">
-			<urlDesc nom="Consulter 10eF" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter 10eF" dst="../ieml/onto.php?ParamNom=GetOntoTree1"/>
-			<urlDesc nom="Consulter IEML" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter IEML" dst="../ieml/onto.php?ParamNom=GetOntoTree"/>
+			<urlDesc nom="Consulter 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter 10eF" dst="../ieml/onto.php?ParamNom=GetOntoTree1"/>
+			<urlDesc nom="Consulter IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter IEML" dst="../ieml/onto.php?ParamNom=GetOntoTree"/>
 		</menu>
 		<menu nom="Cartographie">
-			<urlDesc nom="Afficher la carte" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Afficher la carte" dst="http://dixiemefamille.com/ieml/10eFCarto.php"/>
-			<urlDesc nom="Modifier les localisations" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Modifier les localisations" dst="http://dixiemefamille.com/ieml/geocoding.php"/>
+			<urlDesc nom="Afficher la carte" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Afficher la carte" dst="http://dixiemefamille.com/ieml/10eFCarto.php"/>
+			<urlDesc nom="Modifier les localisations" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Modifier les localisations" dst="http://dixiemefamille.com/ieml/geocoding.php"/>
 		</menu>
-	</XmlParam>
+	
+		</XmlParam>
 </XmlParams>
 <!--
 <overlay id="menubar"
