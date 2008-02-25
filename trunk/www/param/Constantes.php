@@ -2,7 +2,7 @@
 
   //
   // Fichier contenant les definitions de constantes
-  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/mundilogiweb/ieml");
+  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
   
 	// *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/");

@@ -180,5 +180,13 @@ txtDescpF= document.getElementById("lib-trad-10eF");
 txtDescpF.value = celldescpF.getAttribute('label');
 
 }
+function StartSelectMenu(){
+var menu= document.getElementById("requette");
+var selc=menu.selectedItem.value;
 
+var req=document.getElementById("selctreq");
+req.value=selc;
+//alert(req.value);
+
+}
 

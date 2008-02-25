@@ -2,6 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <window id="histogrammes" title="Histogrammes" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="pf_init();">
 	<script src="histogrammes.js"/>
+	<script src="../../js/Interface.js"/>
 	<script src="../../js/ajax.js"/>
 	<popup id="colorpicker1">
 		<colorpicker onselect="pf_couleur('1', this.color);"/>
@@ -73,9 +74,18 @@
 				<textbox id="pwd" value=""/>
 				<label value="tag"/>
 				<textbox id="tag" value=""/>
-				<label value="query"/>
-				<textbox id="query" value=""/>
-			</groupbox>
+				<label value="requette"/><label id="selctreq" value="" hidden="true"/>
+				<menulist id="requette" oncommand="StartSelectMenu();">
+					<menupopup >
+						<menuitem label="Afficher tous les Tags " value="GetAllTags"/>
+						<menuitem label="Afficher les Posts recents" value="GetRecentPosts"/>
+						<menuitem label="Afficher tous les Posts" value="GetAllPosts"/>
+						<menuitem label="Afficher tous les Bundles" value="GetAllBundeles"/>
+						
+					</menupopup>
+				</menulist>
+				
+				</groupbox>
 		</vbox>
 		<vbox>
 </vbox>
