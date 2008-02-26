@@ -1,31 +1,838 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<window id="ieml-global" title="IEML-10eF v0.1 - information economy meta language - Dixi�me Famille" orient="horizontal" left="0" top="0" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
-<toolbox flex="1">
-  <menubar id="sample-menubar">
-    <menu id="file-menu" label="Fichier">
-      <menupopup id="file-popup">
-        <menu id="new-menu" label="Nouveau">
-          <menupopup id="new-popup">
-            <menuitem label="Fen�tre"/>
-            <menuitem label="Message"/>
+<?xml version="1.0" ?>
 
-        <menu id="new-menu" label="Nouveau">
-          <menupopup id="new-popup">
-            <menuitem label="Fen�tre"/>
-            <menuitem label="Message"/>
+<overlay id="oTree"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-		</menupopup>
-        </menu>
+<script type="text/javascript" src="../xbl/editableTree/functions.js" />
+    <popupset>
+        <tooltip id="tipBadValue" onclick="this.hidePopup( );">
+            <vbox>
+                <label value="Valeur incorrecte !!"/>
+            </vbox>
 
+        </tooltip>
 
-			</menupopup>
-        </menu>
-        <menuitem label="Ouvrir"/>
-        <menuitem label="Sauver"/>
-        <menuseparator/>
-        <menuitem label="Quitter"/>
-      </menupopup>
-    </menu>
-  </menubar>
-</toolbox>
-</window>
+    </popupset>
+	<box id="box1"  class="editableTree" >
+		<tree id="treeieml"
+			width="300" height="400"
+			context="clipmenu"			
+			enableColumnDrag="true"
+			fctStart="startEditable"
+			fctSave="saveEditable"
+			fctInsert="startInsert"
+			fctDelete="startDelete"
+			fctSelect="startSelect"
+			typesource="ieml"	
+			idTree="treeieml">
+				<treecols>
+				<treecol id="id" label="branche" primary="true" flex="1" cycler="true"/><splitter class="tree-splitter"/><treecol id="treecol_id" label="id"  hidden="true"/><splitter class="tree-splitter"/><treecol id="treecol_code" label="code"  hidden="false"/><splitter class="tree-splitter"/><treecol id="treecol_lib" label="lib"  hidden="false"/><splitter class="tree-splitter"/><treecol id="treecol_niveau" label="niveau"  hidden="false"/><splitter class="tree-splitter"/><treecol id="treecol_type" label="type"  hidden="true"/><splitter class="tree-splitter"/>				</treecols>
+				<treechildren >
+<treeitem id="ieml_1" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="1"/>
+
+<treecell label="uwe"/>
+<treecell label="s’entr’aider"/>
+<treecell label="1"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_2" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="2"/>
+<treecell label="ea"/>
+<treecell label="offrir"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_3" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="3"/>
+<treecell label="ae"/>
+<treecell label="demande"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_4" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="4"/>
+<treecell label="aa"/>
+<treecell label="contracter"/>
+<treecell label="2"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_5" container="true" empty="false" >
+<treerow>
+
+<treecell label=""/>
+<treecell label="5"/>
+<treecell label="i"/>
+<treecell label=" faire"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_6" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="6"/>
+<treecell label="a"/>
+<treecell label=" s’engager dans"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_7" container="true" empty="false" >
+
+<treerow>
+<treecell label=""/>
+<treecell label="7"/>
+<treecell label="ie"/>
+<treecell label=" prêter"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_8" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="8"/>
+<treecell label="ei"/>
+<treecell label=" emprunter"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+
+<treeitem id="ieml_9" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="9"/>
+<treecell label="ii"/>
+<treecell label=" produire, construire"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_10" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="10"/>
+<treecell label="ye"/>
+<treecell label=" enseigner"/>
+<treecell label="3"/>
+</treerow>
+
+</treeitem>
+<treeitem id="ieml_11" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="11"/>
+<treecell label="ey"/>
+<treecell label=" apprendre"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_12" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="12"/>
+<treecell label="ay"/>
+<treecell label=" chercher"/>
+<treecell label="3"/>
+
+</treerow>
+</treeitem>
+<treeitem id="ieml_13" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="13"/>
+<treecell label="io"/>
+<treecell label=" conseiller"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_14" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="14"/>
+<treecell label="web"/>
+<treecell label=" cultiver système d’information"/>
+
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_15" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="15"/>
+<treecell label="wok"/>
+<treecell label=" semer graine chgt social"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_16" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="16"/>
+<treecell label="wak"/>
+
+<treecell label=" agir social, communautaire"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_17" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="17"/>
+<treecell label="wakbili*"/>
+<treecell label=" accompagner"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_18" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="18"/>
+
+<treecell label="wuk"/>
+<treecell label=" être sensible aux rapports humains"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_19" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="19"/>
+<treecell label="wek"/>
+<treecell label=" constituer liens sociaux"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_20" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="20"/>
+<treecell label="wowu"/>
+<treecell label=" jouer"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_21" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="21"/>
+<treecell label="wuwu"/>
+<treecell label=" découvrir, visiter"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_22" container="true" empty="false" >
+<treerow>
+
+<treecell label=""/>
+<treecell label="22"/>
+<treecell label="wawu"/>
+<treecell label=" faire la fête, célébrer"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_23" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="23"/>
+<treecell label="owo"/>
+<treecell label=" agir dans le cadre du droit de propriété intellectuelle"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_24" container="true" empty="false" >
+
+<treerow>
+<treecell label=""/>
+<treecell label="24"/>
+<treecell label="owa"/>
+<treecell label=" agir dans le cadre du droit du droit administratif ou commercial"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_25" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="25"/>
+<treecell label="owu"/>
+<treecell label=" agir dans le cadre du droit pénal"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+
+<treeitem id="ieml_26" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="26"/>
+<treecell label="owe"/>
+<treecell label=" agir dans le cadre du droit de la famille"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_27" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="27"/>
+<treecell label="ewe"/>
+<treecell label=" contrôler la reproduction"/>
+<treecell label="3"/>
+</treerow>
+
+</treeitem>
+<treeitem id="ieml_28" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="28"/>
+<treecell label="awa"/>
+<treecell label=" créer une entreprise"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_29" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="29"/>
+<treecell label="awu"/>
+<treecell label=" mener une action politique ou communautaire"/>
+<treecell label="3"/>
+
+</treerow>
+</treeitem>
+<treeitem id="ieml_30" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="30"/>
+<treecell label="iwe"/>
+<treecell label=" équiper un ménage"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_31" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="31"/>
+<treecell label="iwa"/>
+<treecell label=" équiper une activité économique, une entreprise"/>
+
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_32" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="32"/>
+<treecell label="uaweh"/>
+<treecell label=" cultiver mémoire collective"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_33" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="33"/>
+<treecell label="oeweh"/>
+
+<treecell label=" éduquer, aide à la parentalité"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_34" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="34"/>
+<treecell label="yoweh"/>
+<treecell label=" définir, poser problème"/>
+<treecell label="3"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_38" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="38"/>
+
+<treecell label="pk  loeae"/>
+<treecell label="Recherche d'emploi"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_39" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="39"/>
+<treecell label="ok"/>
+<treecell label="Désocialisation"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_40" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="40"/>
+<treecell label="of  oeweh"/>
+<treecell label="Difficultés éducatives"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_41" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="41"/>
+<treecell label="ps  kili"/>
+<treecell label="Problèmes de logement"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_42" container="true" empty="false" >
+<treerow>
+
+<treecell label=""/>
+<treecell label="42"/>
+<treecell label="gtut"/>
+<treecell label="Surendettement"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_43" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="43"/>
+<treecell label="if  yd"/>
+<treecell label="Maladie / handicap"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_44" container="true" empty="false" >
+
+<treerow>
+<treecell label=""/>
+<treecell label="44"/>
+<treecell label="of  kata"/>
+<treecell label="Problèmes administratifs"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_45" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="45"/>
+<treecell label="gk  of  noxx"/>
+<treecell label="Problèmes légaux"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+
+<treeitem id="ieml_46" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="46"/>
+<treecell label="ps  diki"/>
+<treecell label="Difficultés financières"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_47" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="47"/>
+<treecell label="xb"/>
+<treecell label="Isolement"/>
+<treecell label="4"/>
+</treerow>
+
+</treeitem>
+</treechildren>
+</treeitem>
+<treeitem id="ieml_35" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="35"/>
+<treecell label="yeweh"/>
+<treecell label=" proposer des solutions"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_36" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="36"/>
+<treecell label="eeweh"/>
+
+<treecell label=" résoudre problèmes"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_37" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="37"/>
+<treecell label="yiweh"/>
+<treecell label=" transférer des connaissances dans la pratique"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+</treechildren>
+</treeitem>
+
+<treeitem id="ieml_50" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="50"/>
+<treecell label="fo"/>
+<treecell label="Les acteurs"/>
+<treecell label="1"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_51" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="51"/>
+<treecell label="(MED-R-fo)-I-I"/>
+<treecell label="Le public"/>
+<treecell label="2"/>
+</treerow>
+
+<treechildren >
+<treeitem id="ieml_52" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="52"/>
+<treecell label="namafo"/>
+<treecell label=" Adultes"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_53" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="53"/>
+<treecell label="nonofo* loeeae*"/>
+<treecell label=" Demandeurs d'emploi"/>
+<treecell label="3"/>
+
+</treerow>
+</treeitem>
+<treeitem id="ieml_54" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="54"/>
+<treecell label="damafo"/>
+<treecell label=" Enfants"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_55" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="55"/>
+<treecell label="lotofo*"/>
+<treecell label=" Étrangers"/>
+
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_56" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="56"/>
+<treecell label="mamafo"/>
+<treecell label=" Familles"/>
+<treecell label="3"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_64" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="64"/>
+<treecell label="fsnffo*"/>
+
+<treecell label="animaux domestiques"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_65" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="65"/>
+<treecell label="famafo"/>
+<treecell label="mère"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_66" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="66"/>
+
+<treecell label="damafo"/>
+<treecell label="enfant"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_67" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="67"/>
+<treecell label="namafo"/>
+<treecell label="père"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_68" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="68"/>
+<treecell label="kamafo"/>
+<treecell label="frère/sœur"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_69" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="69"/>
+<treecell label="tamafo"/>
+<treecell label="ancêtre"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_70" container="true" empty="false" >
+<treerow>
+
+<treecell label=""/>
+<treecell label="70"/>
+<treecell label="lamafo"/>
+<treecell label="ami"/>
+<treecell label="4"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_71" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="71"/>
+<treecell label="doee-R"/>
+<treecell label="niveaux de compétence"/>
+<treecell label="1"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_72" container="true" empty="false" >
+
+<treerow>
+<treecell label=""/>
+<treecell label="72"/>
+<treecell label="doeeoo*"/>
+<treecell label="Débutant"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_73" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="73"/>
+<treecell label="doeeee*"/>
+<treecell label="initié"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+
+<treeitem id="ieml_74" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="74"/>
+<treecell label="doeeyy*"/>
+<treecell label="expert"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_75" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="75"/>
+<treecell label="doeeye*"/>
+<treecell label="enseigner"/>
+<treecell label="2"/>
+</treerow>
+
+</treeitem>
+<treeitem id="ieml_76" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="76"/>
+<treecell label="doeewuwe*"/>
+<treecell label="amateur"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+</treechildren>
+</treeitem>
+<treeitem id="ieml_57" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="57"/>
+<treecell label="nonofo* fama"/>
+<treecell label=" Femmes"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_58" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="58"/>
+<treecell label="damafo wawa yoweh"/>
+<treecell label=" Jeunes en difficulté"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_59" container="true" empty="false" >
+<treerow>
+
+<treecell label=""/>
+<treecell label="59"/>
+<treecell label="nonofo* noxxon*"/>
+<treecell label=" Milieu carcéral"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_60" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="60"/>
+<treecell label="tamafo"/>
+<treecell label=" Personnes âgées"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_61" container="true" empty="false" >
+
+<treerow>
+<treecell label=""/>
+<treecell label="61"/>
+<treecell label="nonofo* yd"/>
+<treecell label=" Personnes handicapées"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_62" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="62"/>
+<treecell label="nonofo* ps"/>
+<treecell label=" Précaires"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+
+<treeitem id="ieml_63" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="63"/>
+<treecell label="nonofo* nusudu"/>
+<treecell label="Tous"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+</treechildren>
+</treeitem>
+<treeitem id="ieml_77" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="77"/>
+
+<treecell label="s.y.-wa.e.-"/>
+<treecell label="Objet"/>
+<treecell label="1"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_48" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="48"/>
+<treecell label="s.y.-"/>
+<treecell label="les savoirs"/>
+<treecell label="2"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_49" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="49"/>
+<treecell label="wae"/>
+<treecell label="les savoir-faire et compétences"/>
+<treecell label="2"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_115" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="115"/>
+<treecell label="tesuwae"/>
+<treecell label="création d'images"/>
+<treecell label="3"/>
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+
+</treechildren>
+</treeitem>
+<treeitem id="ieml_198" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="198"/>
+<treecell label="l.o.-t.o.-we.b.-"/>
+<treecell label="navigation système d'information"/>
+<treecell label="1"/>
+</treerow>
+<treechildren >
+<treeitem id="ieml_196" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="196"/>
+<treecell label="s.y.-wa.e.-|doee-R"/>
+<treecell label="Choix d un savoir pour un membre"/>
+
+<treecell label="1"/>
+</treerow>
+</treeitem>
+<treeitem id="ieml_197" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+<treecell label="197"/>
+<treecell label="s.y.-wa.e.-|doee-R"/>
+<treecell label="TEST"/>
+<treecell label="1"/>
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+<treeitem id="ieml_199" container="true" empty="false" >
+<treerow>
+<treecell label=""/>
+
+<treecell label="199"/>
+<treecell label="ieml_10eF"/>
+<treecell label="ontologie solidarité"/>
+<treecell label="0"/>
+</treerow>
+</treeitem>
+</treechildren>
+			</tree>
+
+	</box>
+</overlay>
