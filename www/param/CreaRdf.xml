@@ -92,7 +92,7 @@
 				<values> VALUES ("", '-codeFlux-' , '-descFlux- ', '-niveauFlux- ', '-parentsFlux-' )</values>
 			</Query>
 			
-			<Query fonction="Ieml_Onto_Flux">
+			<Query fonction="Ieml_Onto_Flux1">
 				<update> UPDATE ieml_onto_flux SET onto_flux_parents=-parentsFlux-</update>
 				<where> WHERE onto_flux_code=-enfant-</where>
 			</Query>

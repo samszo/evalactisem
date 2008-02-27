@@ -101,7 +101,7 @@
             curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
 
 			//ajout samszo
-			curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, False);
+			curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, false);
 			//echo $sCmd."<br/>";
 			//$arrInfos = curl_getinfo($ch);
 			//print_r($arrInfos);
@@ -112,6 +112,8 @@
 
             // request URL
             $sResult = curl_exec($oCurl);
+            
+           
             // close session
             curl_close($oCurl);
 
@@ -146,7 +148,7 @@
                   if (strstr($http_response_header[0], '401')) {
                      $this->iLastError = ERR_INCORRECT_LOGIN;
                   } else {
-                     return $sResult;
+                     return $sResult;echo "sResult=".$sResult." <br/>";
                   } 
                }
             } else {

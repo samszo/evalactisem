@@ -16,7 +16,7 @@ function RefreshResult(response, params) {
 }
 
 function AjaxRequest(url,fonction_sortie,params) {
-
+   
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
  	this.params = params;

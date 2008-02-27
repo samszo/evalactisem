@@ -6,9 +6,9 @@ function pf_couleur(num, color){
 
 //ajout samszo
 function SetDonnees(result,param){
-	//arr = result.split("*");
-	//document.getElementById("donnees").value = arr[1];
-	//document.getElementById("noms").value = arr[0];
+	arr = result.split("*");
+	document.getElementById("donnees").value = arr[1];
+	document.getElementById("noms").value = arr[0];
 	alert(result);
 
 }
@@ -19,7 +19,7 @@ function Requette(){
     var req= document.getElementById("selctreq").value;
 	
 	AjaxRequest("http://localhost/evalactisem/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value+"&requette="+req,'SetDonnees','');
-
+	alert(req);
 }
 
 function pf_dessin(dom_doc)
