@@ -45,7 +45,7 @@
 					</menupopup>
 				</menulist>
 			</groupbox>
-			<button id="bt_10" label="Voir" tooltiptext="Voir l'histogramme" onclick="pf_dessin()"/>
+			<button id="bt_10" label="Voir" tooltiptext="Voir l'histogramme" onclick="Requette()"/>
 			<groupbox orient="vertical">
 				<caption label="Couleurs"/>
 				<button id="bt_01" label="Fond" tooltiptext="Couleur du fond" popup="colorpicker1"/>

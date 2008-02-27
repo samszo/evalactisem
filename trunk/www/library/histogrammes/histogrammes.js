@@ -6,72 +6,25 @@ function pf_couleur(num, color){
 
 //ajout samszo
 function SetDonnees(result,param){
-	arr = result.split("*");
-	document.getElementById("donnees").value = arr[1];
-	document.getElementById("noms").value = arr[0];
-	
+	//arr = result.split("*");
+	//document.getElementById("donnees").value = arr[1];
+	//document.getElementById("noms").value = arr[0];
+	alert(result);
 
 }
-function recupFlux(result,param){
-	var req= document.getElementById("selctreq").value;
-	
-	if((req=="GetAllTags")||(req=="GetRecentPosts")||(req=="GetAllPosts")){
-		var desc_f='Tag';
-		var niv_f=1;
-		var par_f=0;
-	
-		var arr= new Array();
-		arr=result.split(' ');
-		length=arr.length-arr.length/2;
-		for(var i=0; i<length; i++){
-			AjaxRequest("http://localhost/evalactisem/library/ieml_onto_flux.php?ParamNom=GetOntoFlux&code_f="+arr[i]+"&desc_f="+desc_f+" &niv_f="+niv_f+"&par_f="+par_f+"&req="+req,"","");	
-	
-		}
-	}
-	
 
-	if(req=="GetAllBundeles"){
-	
-		var desc_f='Bundles';
-		var niv_f=0;
-		var par_f=0;
-		arr=result.split("*");
-		
-		var code_f=arr[0];
-		var enfant= new Array();
-		enfant=arr[1].split('');
-		alert(enfant);
-	   AjaxRequest("http://localhost/evalactisem/library/ieml_onto_flux.php?ParamNom=GetOntoFlux&code_f="+code_f+"&desc_f="+desc_f+" &niv_f="+niv_f+"&par_f="+par_f+"&enf="+enfant+"&req="+req,"","");	
-	
-	}
-	else
-	{
-		var desc_f='Tag';
-		var niv_f=1;
-		var par_f=0;
-	
-	
-	}
-	
-	
-	
-	
-	
-	
-	
-}
 //fin ajout samszo
 function Requette(){
 
     var req= document.getElementById("selctreq").value;
 	
-	AjaxRequest("http://localhost/evalactisem/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value+"&requette="+req,'recupFlux','');
+	AjaxRequest("http://localhost/evalactisem/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value+"&requette="+req,'SetDonnees','');
 
 }
 
 function pf_dessin(dom_doc)
 {
-Requette();
+
 
 lien='stats.php?large='+escape(document.getElementById("large").value);
 lien=lien+'&haut='+escape(document.getElementById("haut").value);
