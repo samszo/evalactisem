@@ -9,7 +9,7 @@
 	// Include the class files.
 	require_once(TT_CLASS_BASE."AllClass.php");
 
-  define ("DEFSITE", "thyp");
+  define ("DEFSITE", "local");
 
   $DB_OPTIONS = array (
 		'ERROR_DISPLAY' => true
