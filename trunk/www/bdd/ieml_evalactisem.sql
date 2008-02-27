@@ -1,3 +1,12 @@
+-- Base de données: `ieml_evalactisem`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ieml_10ef`
+--
+
 CREATE TABLE `ieml_10ef` (
   `10ef_id` int(11) NOT NULL auto_increment,
   `10ef_desc` varchar(255) NOT NULL,
@@ -115,7 +124,7 @@ INSERT INTO `ieml_10ef` (`10ef_id`, `10ef_desc`, `10ef_code`, `10ef_parent`, `10
 (101, ' Romans historiques', '85', 80, 5),
 (102, ' Romans régionaux', '86', 80, 5),
 (103, ' Théâtre', '89', 80, 5),
-(104, ' Livres Arts & Spectacles', '113', 2, 4),
+(104, ' Livres Arts et Spectacles', '113', 2, 4),
 (105, ' Architecture', '114', 113, 5),
 (106, ' Arts plastiques', '115', 113, 5),
 (107, ' Cinéma', '118', 113, 5),
@@ -125,13 +134,13 @@ INSERT INTO `ieml_10ef` (`10ef_id`, `10ef_desc`, `10ef_code`, `10ef_parent`, `10
 (111, ' Spectacles', '120', 113, 5),
 (112, ' Livres Jeunesse', '147', 2, 4),
 (113, ' Albums jeunesse', '149', 147, 5),
-(114, ' Arts & Créations', '155', 147, 5),
-(115, ' Comptines & Chansons', '152', 147, 5),
-(116, ' Contes & Légendes', '151', 147, 5),
+(114, ' Arts et Créations', '155', 147, 5),
+(115, ' Comptines et Chansons', '152', 147, 5),
+(116, ' Contes et Légendes', '151', 147, 5),
 (117, ' Dicos/Encyclopédies', '154', 147, 5),
 (118, ' Jeux', '156', 147, 5),
 (119, ' Romans juniors', '150', 147, 5),
-(120, ' Savoirs & Découvertes', '153', 147, 5),
+(120, ' Savoirs et Découvertes', '153', 147, 5),
 (121, ' Tout-petits', '148', 147, 5),
 (122, ' Livres Loisirs', '121', 2, 4),
 (123, ' Animaux', '129', 121, 5),
@@ -139,7 +148,7 @@ INSERT INTO `ieml_10ef` (`10ef_id`, `10ef_desc`, `10ef_code`, `10ef_parent`, `10
 (125, ' Jardin', '128', 121, 5),
 (126, ' Jeux', '131', 121, 5),
 (127, ' Livres de Voyage', '122', 121, 5),
-(128, ' Cartes & Atlas', '126', 122, 6),
+(128, ' Cartes et Atlas', '126', 122, 6),
 (129, ' Europe', '124', 122, 6),
 (130, ' France', '123', 122, 6),
 (131, ' Monde', '125', 122, 6),
@@ -219,7 +228,7 @@ INSERT INTO `ieml_10ef` (`10ef_id`, `10ef_desc`, `10ef_code`, `10ef_parent`, `10
 (205, ' Jazz', '62', 59, 5),
 (206, ' Musique traditionnelle', '61', 59, 5),
 (207, ' Pop/Rock', '70', 59, 5),
-(208, ' R&B', '72', 59, 5),
+(208, ' R et B', '72', 59, 5),
 (209, ' Rap', '73', 59, 5),
 (210, ' Reggae', '71', 59, 5),
 (211, ' Variété', '63', 59, 5),
@@ -332,7 +341,7 @@ INSERT INTO `ieml_10ef` (`10ef_id`, `10ef_desc`, `10ef_code`, `10ef_parent`, `10
 (318, ' Psychologie', '461', 456, 5),
 (319, ' Sciences politiques', '462', 456, 5),
 (320, ' Sociologie', '463', 456, 5),
-(321, ' Sciences Vie & Terre', '445', 443, 4),
+(321, ' Sciences Vie et Terre', '445', 443, 4),
 (322, ' Biologie', '446', 445, 5),
 (323, ' Botanique', '447', 445, 5),
 (324, ' Géologie', '449', 445, 5),
@@ -993,26 +1002,6 @@ INSERT INTO `ieml_foret` (`ieml_id`, `ieml_parent`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `ieml_into_flux`
---
-
-CREATE TABLE `ieml_into_flux` (
-  `Onto_flux_id` int(11) NOT NULL,
-  `Onto_flux_code` varchar(225) NOT NULL,
-  `Onto_flux_desc` varchar(255) NOT NULL,
-  `Onto_flux_niveau` int(11) NOT NULL,
-  `Onto_flux_parents` int(11) NOT NULL,
-  PRIMARY KEY  (`Onto_flux_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `ieml_into_flux`
---
-
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `ieml_onto`
 --
 
@@ -1223,6 +1212,26 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (197, 's.y.-wa.e.-|doee-R', 'TEST', 1, '198', '2008-01-12'),
 (198, 'l.o.-t.o.-we.b.-', 'navigation système d''information', 1, 'ieml_10eF', '2008-01-02'),
 (199, 'ieml_10eF', 'ontologie solidarité', 0, 'ieml', '2008-01-02');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ieml_onto_flux`
+--
+
+CREATE TABLE `ieml_onto_flux` (
+  `onto_flux_id` int(11) NOT NULL,
+  `onto_flux_code` varchar(225) NOT NULL,
+  `onto_flux_desc` varchar(255) NOT NULL,
+  `onto_flux_niveau` int(11) NOT NULL,
+  `onto_flux_parents` int(11) NOT NULL,
+  PRIMARY KEY  (`onto_flux_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `ieml_onto_flux`
+--
+
 
 -- --------------------------------------------------------
 
