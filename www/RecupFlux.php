@@ -24,6 +24,9 @@
 	$values = str_replace("-niveauFlux-", $niveauFlux_Band, $values);
 	$values = str_replace("-parentsFlux-", $parentsFlux_Band, $values);
 	
+	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	$db->connect();
+	
 	if ($aPosts = $oDelicious->GetAllBundles()) {
 			foreach ($aPosts as $aPost) { 
 	           $Q = $objSite->XmlParam->GetElements($Xpath);
@@ -34,15 +37,10 @@
 			   $values = str_replace("-descFlux-", $descFlux_Band, $Q[0]->values);
 			   $values = str_replace("-niveauFlux-", $niveauFlux_Band, $values);
 	           $values = str_replace("-parentsFlux-", $parentsFlux_Band, $values);
-			   $values = str_replace("-codeFlux-",$aPost['name'],$values );
-
+			   $values = str_replace("-codeFlux-",$aPost['name'].";",$values );
+			   
 			   $sql = $Q[0]->insert.$values;
-			  
-          
-			//instertion de bundles
-			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-			$db->connect();
-			$req = $db->query($sql);
+			   $req = $db->query($sql);
 			
 			
 			$enfant=explode(" ",$tags);
@@ -51,7 +49,7 @@
 				
 				$Q = $objSite->XmlParam->GetElements($Xpath);
 				
-				 
+				 echo"enfant=".$enfant[$i];
 				$value = str_replace("-descFlux-",$descFlux,$Q[0]->values);
 				$value = str_replace("-niveauFlux-",$niveauFlux,$value );
 				$value = str_replace("-parentsFlux-", $name.";",$value );
@@ -59,20 +57,20 @@
 				
 				$sqltag = $Q[0]->insert.$value; 
 				
-				echo"enfant=".($sqltag)."</br>";
+				
 				$req = $db->query($sqltag);
 			
 			}
 			} 
-			
-	        	$db->close();
+			$db->close();
+	        	
 	        } else {
 	        echo $oDelicious->LastErrorString();
 		}
 	echo $name.DELIM.$tags;
    }else{
    	echo "erreur </br>";
-   echo "requtte=".$requette;
+   
    }
 
 ?>
