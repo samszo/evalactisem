@@ -11,7 +11,7 @@
   
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
 	
-   if($requette==$_GET["requette"] ){
+   if($requette==GetAllBundles ){
 	
    	$descFlux_Band="bundels";
 	$niveauFlux_Band=0;
@@ -19,9 +19,7 @@
 	$descFlux="tag";
 	$niveauFlux=1;
 	
-	
-	
-  	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 	$db->connect();
 	
 	
@@ -100,9 +98,7 @@
 			        
 		          }
 	           }
-			 
-	
-	}
+			 }
 	$db->close();
 	        	
 	} 
@@ -112,7 +108,61 @@
 	
 	 echo $name.DELIM.$tags;
    
-   }else{
+   }
+   
+  if($requette==GetAllTags){
+  	
+  	$descFlux="tag";
+	$niveauFlux=1;
+	
+	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	$db->connect();
+  	
+	if ($aPosts = $oDelicious->GetAllTags()) {
+  	  foreach ($aPosts as $aPost) { 
+	           
+			   $tags.=$aPost['tag']." ";
+			   $count.=$aPost['count'].";";
+  	           
+	  }
+	$Xpath=Xpath('Ieml_Onto_Flux2');
+               
+               
+               $Q=$objSite->XmlParam->GetElements($Xpath);
+               
+               $where=str_replace("-tag-",$aPost['tag'],$Q[0]->where);
+			   $sql=$Q[0]->select.$Q[0]->from." ".$where;
+	           
+			   //echo $Q[0]->select.$Q[0]->from." ".$where;
+			   $req = $db->query($sql);
+			   
+			   if(@mysql_num_rows($req)==0){
+				 
+			       $tag=explode(" ",$tags);
+			       echo "size=".sizeof($tag);
+			       for($i=0;$i<sizeof($tag)-1;$i++){				  
+
+				   	    $Xpath=Xpath('Ieml_Onto_Flux');
+						$Q=$objSite->XmlParam->GetElements($Xpath);
+					  	
+				   	    $value = str_replace("-descFlux-",$descFlux,$Q[0]->values);
+						$value = str_replace("-codeFlux-",$tag[$i],$value );
+						$value = str_replace("-niveauFlux-",$niveauFlux,$value );
+						$value = str_replace("-parentsFlux-",$parentsFlux,$value );
+					    
+						$sql = $Q[0]->insert.$value;
+					    $req = $db->query($sql);
+					 
+				
+			        }
+  
+ 
+ 		} 
+  	}else {
+	        echo $oDelicious->LastErrorString();
+	 }
+  	echo $tags.DELIM.$count;
+  }else{
    	echo "erreur </br>";
 }
 
