@@ -7,7 +7,7 @@
    define('DELICIOUS_PASS', "lema1983");
    
    $requette= $_GET["requette"];
-  
+   $aTag=$_GET["tag"];
   
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
 	
@@ -162,10 +162,66 @@
 	        echo $oDelicious->LastErrorString();
 	 }
   	echo $tags.DELIM.$count;
-  }else{
-   	echo "erreur </br>";
-}
-
+  }
+  
+  if($requette==GetAllPosts){
+  	if ($aPosts = $oDelicious->GetAllPosts($aTag)){
+  		
+  		foreach ($aPosts as $aPost) { 
+  			$aUrl.=$aPost['url']."; ";
+  			$aDesc.=$aPost['desc']."; ";
+  			$aNote.=$aPost['notes']."; ";
+  			$aUdate.=$aPost['updated']."; ";
+  			foreach($aPost['tags'] as $aTags){
+  	    	$tag.=$aTags."; ";
+  	    	}
+  		
+  		
+  		}
+  	    
+  	    
+  	}else {
+	        echo $oDelicious->LastErrorString();
+	 }
+  echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+  }
+  
+ 
+  if($requette==GetPosts){
+  	if ($aPosts = $oDelicious->GetPosts($aTag,$sUrl,$sDate)){
+  	foreach ($aPosts as $aPost) { 
+  			$aUrl.=$aPost['url']."; ";
+  			$aDesc.=$aPost['desc']."; ";
+  			$aNote.=$aPost['notes']."; ";
+  			$aUdate.=$aPost['updated']."; ";
+  			$sTag.=$aPost['tag']."; ";
+  	    	}
+  		
+  		
+  		
+  	    
+  	    
+  	}else {
+	        echo $oDelicious->LastErrorString();
+	 }
+  echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+  }
+  
+if($requette==GetRecentPosts){
+  	if ($aPosts = $oDelicious->GetPosts($aTag,$iCount)){
+  	foreach ($aPosts as $aPost) { 
+  			$aUrl.=$aPost['url']."; ";
+  			$aDesc.=$aPost['desc']."; ";
+  			$aNote.=$aPost['notes']."; ";
+  			$aUdate.=$aPost['updated']."; ";
+  			$sTag.=$aPost['tag']."; ";
+  	    	}
+  	}else {
+	        echo $oDelicious->LastErrorString();
+	 }
+  echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+  }
+  	
  
 function Xpath($fonction){
 	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
