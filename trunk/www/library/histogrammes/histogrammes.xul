@@ -60,32 +60,51 @@
 		</vbox>
 		<vbox>
 			<groupbox orient="vertical">
+			    
 				<caption label="Données"/>
 				<label value="Données (séparées par des ;)"/>
 				<textbox id="donnees" value="250;325;412;256;547;123;251"/>
 				<label value="Nom des données (séparés par des ;)"/>
 				<textbox id="noms" value="mai;juin;juillet;août;septembre;octobre;novembre"/>
 			</groupbox>
-			<groupbox orient="vertical">
+			<groupbox>
 				<caption label="del.icio.us"/>
-				<label value="login"/>
-				<textbox id="login" value=""/>
-				<label value="password"/>
-				<textbox id="pwd" value=""/>
-				<label value="tag"/>
-				<textbox id="tag" value=""/>
-				<label value="requette"/><label id="selctreq" value="" hidden="true"/>
-				<menulist id="requette" oncommand="StartSelectMenu();">
-					<menupopup >
-						<menuitem label="Afficher tous les Tags " value="GetAllTags"/>
-						<menuitem label="Afficher les Posts recents" value="GetRecentPosts"/>
-						<menuitem label="Afficher tous les Posts" value="GetAllPosts"/>
-						<menuitem label="Afficher tous les Bundles" value="GetAllBundles"/>
-						
-					</menupopup>
-				</menulist>
+				<groupbox orient="vertical">
+					<caption label="Login"/>
+					<label value="login"/>
+					<textbox id="login" value=""/>
+					<label value="password"/>
+					<textbox id="pwd" value=""/>
+					
+				</groupbox>
+				
+				<groupbox >
+				
+					<caption label="Parmetres"/>
+				    <label value="tag"/>
+				    <textbox id="tag" value=""/>
+					<label value="date"/>
+					<textbox id="date" value=""/>
+					<label value="count"/>
+					<textbox id="count" value=""/>
+					
+				</groupbox>
+				<groupbox>
+					<caption label="requette"/>
+					<label id="selctreq" value="" hidden="true"/>
+					<menulist id="requette" oncommand="StartSelectMenu();">
+						<menupopup >
+							<menuitem label="Afficher tous les Tags " value="GetAllTags"/>
+							<menuitem label="Afficher les Posts recents" value="GetRecentPosts"/>
+							<menuitem label="Afficher le Posts" value="GetPosts"/>
+							<menuitem label="Afficher tous les Posts" value="GetAllPosts"/>
+							<menuitem label="Afficher tous les Bundles" value="GetAllBundles"/>
+							
+						</menupopup>
+					</menulist>
 				
 				</groupbox>
+			</groupbox>
 		</vbox>
 		<vbox>
 </vbox>
