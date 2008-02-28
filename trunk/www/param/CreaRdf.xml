@@ -93,8 +93,13 @@
 			</Query>
 			
 			<Query fonction="Ieml_Onto_Flux1">
-				<update> UPDATE ieml_onto_flux SET onto_flux_parents=-parentsFlux-</update>
-				<where> WHERE onto_flux_code=-enfant-</where>
+				<update> UPDATE ieml_onto_flux SET onto_flux_parents='-parentsFlux-'</update>
+				<where> WHERE onto_flux_code='-enfant-'</where>
+			</Query>
+			<Query fonction="Ieml_Onto_Flux2">
+				<select> SELECT onto_flux_parents </select>
+				<from>FROM ieml_onto_flux</from>
+				<where>WHERE onto_flux_code='-tag-'</where>
 			</Query>
 		</Querys>
 	</XmlParam>
