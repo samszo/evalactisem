@@ -80,7 +80,7 @@
 						<menuitem label="Afficher tous les Tags " value="GetAllTags"/>
 						<menuitem label="Afficher les Posts recents" value="GetRecentPosts"/>
 						<menuitem label="Afficher tous les Posts" value="GetAllPosts"/>
-						<menuitem label="Afficher tous les Bundles" value="GetAllBundeles"/>
+						<menuitem label="Afficher tous les Bundles" value="GetAllBundles"/>
 						
 					</menupopup>
 				</menulist>
