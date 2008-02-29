@@ -13,12 +13,12 @@
 
 	switch ($fonction) {
 		case 'AddTrad':
-			$resultat = AddTrad($_GET['idIeml'],$_GET['id10eF']);
+			$resultat = AddTrad($_GET['idIeml'],$_GET['idflux']);
 			break;
 	}
 	switch ($fonction) {
 		case 'SupTrad':
-			$resultat = SupTrad($_GET['idIeml'],$_GET['id10eF']);
+			$resultat = SupTrad($_GET['idIeml'],$_GET['idflux']);
 			break;
 	}
 
@@ -31,7 +31,7 @@
 		// requête pour vérifier l'existence de la traduction
 		$Xpath = "/EvalActiSem/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
-		$where = str_replace("-id10eF-", $id10eF, $Q[0]->where);
+		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
 		$where = str_replace("-idIeml-", $idIeml, $where);
 		$sql = $Q[0]->select.$Q[0]->from.$where;
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
@@ -45,7 +45,7 @@
 		//requête pour ajouter une traduction
 		$Xpath = "/EvalActiSem/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
-		$values = str_replace("-id10eF-", $id10eF, $Q[0]->values);
+		$values = str_replace("-idflux-", $idflux, $Q[0]->values);
 		$values = str_replace("-idIeml-", $idIeml, $values);
 		$sql = $Q[0]->insert.$values;
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
@@ -59,7 +59,7 @@
 		
 	}
 
-	function SupTrad($idIeml,$id10eF){
+	function SupTrad($idIeml,$idflux){
 	
 		global $objSite;
 		
@@ -67,7 +67,7 @@
 		$Xpath = "/EvalActiSem/Querys/Query[@fonction='ExeAjax-SupTrad-Delete']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
 		//echo $Q;
-		$where = str_replace("-id10eF-", $id10eF, $Q[0]->where);
+		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
 		$where = str_replace("-idIeml-", $idIeml, $where);
 		//echo $where;
 		$sql = $Q[0]->delete.$Q[0]->from.$where;
