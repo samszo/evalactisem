@@ -180,43 +180,35 @@
 	
 	
 	</XmlParam>
+	<XmlParam nom="AddActi" >
+		<Querys>
+			<Query fonction="Activité">
+				<insert> INSERT INTO ieml_acti ('acti_id', 'acti_code',' acti_desc')  </insert>
+				<values> VALUES ("", '-idActi-' , '-codeActi- ', '-descActi-')</values>
+			</Query>
+		</Querys>
+	
+	</XmlParam>
 	<XmlParam nom="MenuUrl">
-		<menu nom="Outils" >
-			<Sousmenu nom="Tradution">
-			<urlDesc nom="Ieml-10eF" src="http://localhost/evalactisem/overlay/iframMenu.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF" dst="http://localhost/mundilogiweb/ieml/traduction.xul"/>
-			<urlDesc nom="Ieml-APIGoogle" src="http://localhost/evalactisem/overlay/iframMenu.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIGoogle" dst=""/>
-			</Sousmenu>
-			<urlDesc nom="Processus" src="http://localhost/mundilogiweb/ieml/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/evalactisem/processus.php"/>
+		<menu nom="Outils" sMenu="true" >
+			<sMenu nom="Tradution" >
+				<urlDesc nom="Ieml-10eF" src="http://localhost/evalactisem/overlay/ifram.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF;" dst="http://localhost/evalactisem/traduction.xul"/>
+				<urlDesc nom="Ieml-APIDelicious" src="http://localhost/evalactisem/overlay/ifram.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIDelicious" dst=""/>
+			</sMenu>
+			<urlDesc nom="Processus" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/evalactisem/processus.php"/>
 		</menu>
-		<menu nom="Aide">
-			<urlDesc nom="aide 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide 10eF" dst="http://www.dixiemefamille.com/public/page/animation.php"/>
-			<urlDesc nom="aide IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide IEML" dst="http://www.ieml.org/french/elements.html"/>
+		<menu nom="Aide" sMenu="false">
+			<urlDesc  nom="aide 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide 10eF" dst="http://www.dixiemefamille.com/public/page/animation.php"/>
+			<urlDesc  nom="aide IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide IEML" dst="http://www.ieml.org/french/elements.html"/>
 		</menu>
-		<menu nom="Ontologie">
-			<urlDesc nom="Consulter 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter 10eF" dst="../ieml/onto.php?ParamNom=GetOntoTree1"/>
-			<urlDesc nom="Consulter IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter IEML" dst="../ieml/onto.php?ParamNom=GetOntoTree"/>
+		<menu nom="Ontologie" sMenu="false" >
+			<urlDesc  nom="Consulter 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter 10eF" dst="../ieml/onto.php?ParamNom=GetOntoTree1"/>
+			<urlDesc  nom="Consulter IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter IEML" dst="../ieml/onto.php?ParamNom=GetOntoTree"/>
 		</menu>
-		<menu nom="Cartographie">
-			<urlDesc nom="Afficher la carte" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Afficher la carte" dst="http://dixiemefamille.com/ieml/10eFCarto.php"/>
-			<urlDesc nom="Modifier les localisations" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Modifier les localisations" dst="http://dixiemefamille.com/ieml/geocoding.php"/>
+		<menu nom="Cartographie" sMenu="false">
+			<urlDesc  nom="Afficher la carte" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Afficher la carte" dst="http://dixiemefamille.com/ieml/10eFCarto.php"/>
+			<urlDesc  nom="Modifier les localisations" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Modifier les localisations" dst="http://dixiemefamille.com/ieml/geocoding.php"/>
 		</menu>
 	
 		</XmlParam>
 </XmlParams>
-<!--
-<overlay id="menubar"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<box id="menubar" >
-		<menubar id="menu-principal">
-			<spacer width="20"/>
-			<menu id="menu-admin" label="administration" style="font-size: 16px;">
-				<menupopup id="admin-popup">
-					<menuitem label="Options de l'application"/>
-					<menuitem label="Gestion des utilisateurs"/>
-				</menupopup>
-			</menu>
-			<spacer width="20"/>
-		</menubar>
-	</box>
-</overlay>
--->

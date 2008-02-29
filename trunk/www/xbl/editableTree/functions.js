@@ -118,6 +118,7 @@ function startSelect(tree, cellCoord)
 
     //alert('startSelect ! '+element);
 	type = tree.firstChild.getAttribute('typesource');
+	//alert("type="+type);
 	txtId = document.getElementById("id-trad-"+type);
 	txtCode = document.getElementById("code-trad-"+type);
 	txtLib = document.getElementById("lib-trad-"+type);
