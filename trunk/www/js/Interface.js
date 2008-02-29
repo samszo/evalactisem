@@ -4,12 +4,13 @@ function AddTrad()
 {
 	//récupération des valeurs
 	var idIeml = document.getElementById("id-trad-ieml");
-	var id10eF = document.getElementById("id-trad-10eF");
+	var idflux = document.getElementById("id-trad-flux");
+	alert(idflux.value);
 	//construction de la requete
-	url = urlExeAjax+"?f=AddTrad&idIeml="+idIeml.value+"&id10eF="+id10eF.value;
+	url = urlExeAjax+"?f=AddTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
     
 	//vérification des valeurs
-	if(idIeml.value=="" || id10eF.value=="")
+	if(idIeml.value=="" || idflux.value=="")
 		document.getElementById("trad-message").value = "Veuillez sélectionner une valeur pour chaque langage";
 	else
 		makeRequest(url,"trad-message");
@@ -19,13 +20,13 @@ function SupTrad()
 {
 	//récupération des valeurs
 	var idIeml = document.getElementById("id-trad-ieml");
-	var id10eF = document.getElementById("id-trad-10eF");
+	var idflux = document.getElementById("id-trad-flux");
     var listbox=document.getElementById("boxlist");
     var select=listbox.selectedIndex;
-	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&id10eF="+id10eF.value;
+	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
    
 	//vérification des valeursboxlistJ
-	if(idIeml.value=="" || id10eF.value=="")
+	if(idIeml.value=="" || idflux.value=="")
 		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
 	else
 		makeRequest(url,"trad-message");
@@ -167,16 +168,16 @@ var celldescpF = listbox.selectedItem.childNodes[3];
 
 txtIdieml=document.getElementById("id-trad-ieml");
 txtIdieml.value=cell.getAttribute('label');
-txtId10F=document.getElementById("id-trad-10eF");
+txtId10F=document.getElementById("id-trad-flux");
 txtId10F.value=cellF.getAttribute('label');
 
 txtCode = document.getElementById("code-trad-ieml");
 txtCode.value=cell.getAttribute('label');
 txtDescp= document.getElementById("lib-trad-ieml");
 txtDescp.value = celldescp.getAttribute('label');
-txtCodeF = document.getElementById("code-trad-10eF");
+txtCodeF = document.getElementById("code-trad-flux");
 txtCodeF.value=cellF.getAttribute('label');
-txtDescpF= document.getElementById("lib-trad-10eF");
+txtDescpF= document.getElementById("lib-trad-flux");
 txtDescpF.value = celldescpF.getAttribute('label');
 
 }
