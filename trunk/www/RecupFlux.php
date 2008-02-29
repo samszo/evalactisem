@@ -31,14 +31,9 @@
 			   $name =$aPost['name']." ";
                
                $Xpath=Xpath('Ieml_Onto_Flux2');
-               
-               
-               $Q=$objSite->XmlParam->GetElements($Xpath);
-               
-               $where=str_replace("-tag-",$aPost['name'],$Q[0]->where);
+			   $Q=$objSite->XmlParam->GetElements($Xpath);
+			   $where=str_replace("-tag-",$aPost['name'],$Q[0]->where);
 			   $sql=$Q[0]->select.$Q[0]->from." ".$where;
-	           
-			   echo $Q[0]->select.$Q[0]->from." ".$where;
 			   $req = $db->query($sql);
 			   
 			   if(@mysql_num_rows($req)==0){
@@ -52,7 +47,14 @@
 				    
 					$sql = $Q[0]->insert.$value;
 				    $req = $db->query($sql);
-		  	         
+		  	        $idparentflux=mysql_insert_id();
+				    
+		  	       $Xpath=Xpath('Flux_Foret');
+		           $Q=$objSite->XmlParam->GetElements($Xpath);
+		           $values=str_replace("-idFlux-",$idparentflux,$Q[0]->values);
+				   $values=str_replace("-idprentsFlux-",0,$values);
+				   $sql = $Q[0]->insert.$values;
+				   $req = $db->query($sql);
 		       
 			      $enfant=explode(" ",$tags);
 			   
@@ -67,23 +69,32 @@
 				   $res = $db->query($sql);
 				   $result=mysql_fetch_array($res);
 				   $parents=$result[0].$aPost['name'].";";
+				   $id=$result[1];
 				   
-		           if(@mysql_num_rows($res)==0){
+				   
+				   if(@mysql_num_rows($res)==0){
 					   
 				   	    $Xpath=Xpath('Ieml_Onto_Flux');
 
 				   	    $Q=$objSite->XmlParam->GetElements($Xpath);
-					  	$Q=$objSite->XmlParam->GetElements($Xpath);
+					  
 				   	    $value = str_replace("-descFlux-",$descFlux,$Q[0]->values);
 						$value = str_replace("-codeFlux-",$enfant[$i],$value );
 						$value = str_replace("-niveauFlux-",$niveauFlux,$value );
 						$value = str_replace("-parentsFlux-",$aPost['name'].";",$value );
 					    
+						$Xpath=Xpath('Flux_Foret');
 						$sql = $Q[0]->insert.$value;
-					    $req = $db->query($sql);
-					 
-				
-			        }else
+						$req = $db->query($sql);
+					    $idflux=mysql_insert_id();
+				        
+				        $Q=$objSite->XmlParam->GetElements($Xpath);
+				        $values=str_replace("-idFlux-",$idflux,$Q[0]->values);
+				        $values=str_replace("-idprentsFlux-",$idparentflux,$values);
+				        $sql = $Q[0]->insert.$values;
+				        $req = $db->query($sql);
+			             
+				   }else
 			        	if(@mysql_num_rows($res)!=0){
 			              $Xpath=Xpath('Ieml_Onto_Flux1');
 			              $Q=$objSite->XmlParam->GetElements($Xpath);
@@ -94,7 +105,17 @@
 			               $sql=$update.$where;
 			              
 			               $req = $db->query($sql);
-			        }
+			               
+			               $Xpath=Xpath('Flux_Foret');
+			               $Q=$objSite->XmlParam->GetElements($Xpath);
+				           $values=str_replace("-idFlux-",$id,$Q[0]->values);
+				           $values=str_replace("-idprentsFlux-",$idparentflux,$values);
+				           echo "======".$id."++++++".$idparentflux;
+				           $sql = $Q[0]->insert.$values;
+				           $req = $db->query($sql);
+			        	
+			        	
+			        	}
 			        
 		          }
 	           }
@@ -226,6 +247,16 @@ if($requette==GetRecentPosts){
 function Xpath($fonction){
 	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
 	 return $Xpath; 
+}
+
+function Existe($codeFlux){
+	
+	$Xpath=Xpath('Ieml_Onto_Flux2');
+    $Q=$objSite->XmlParam->GetElements($Xpath);
+    $where=str_replace("-tag-",$codeFlux,$Q[0]->where);
+    $sql=$Q[0]->select.$Q[0]->from." ".$where;
+	echo $Q[0]->select.$Q[0]->from." ".$where;
+    $req = $db->query($sql);
 }
 
  ?>
