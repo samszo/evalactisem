@@ -18,8 +18,12 @@ Class Sem{
 	public $Dst;
 	public $Tra;
 	private $site;
-
-	function __construct($So, $De="", $Tr="") {
+    
+	public $CodeAct;
+    public $DescAct;
+	
+    
+    function __construct($So, $De="", $Tr="") {
 	    $this->FicXml = $FicXml;
 		//echo "On charge les paramètres : ".$FicXml."<br/>\n";
 		if ($xml = simplexml_load_file($FicXml))
@@ -116,8 +120,24 @@ Class Sem{
 		
 		return $liste;
 	}
-
+    
+	public function AddActi($CodeAct,$DescAct){
+		
+		$Xpath = "/XmlParams/XmlParam[@nom='AddActi']/Querys/Query[@fonction='Activité']";
+		$Q=$objSite->XmlParam->GetElements($Xpath);
+		$values=str_replace("codeActi",$CodeAct,$Q[0]->values);
+		$values=str_replace("descActi",$DescAct ,$values);
+		
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	    $db->connect();
+	    
+	    $sql=$Q[0]->insert.$values;
+	    $req = $db->query($sql);
+	    
+	    $db->close();
+	}
 
 	
 }
+
 ?>

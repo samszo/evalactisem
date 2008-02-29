@@ -1,4 +1,5 @@
 <?php
+   require('library/Sem.php');
    require('library/XmlParam.php');
    require('library/php-delicious/php-delicious.inc.php');
    require('param/Constantes.php');
@@ -110,7 +111,6 @@
 			               $Q=$objSite->XmlParam->GetElements($Xpath);
 				           $values=str_replace("-idFlux-",$id,$Q[0]->values);
 				           $values=str_replace("-idprentsFlux-",$idparentflux,$values);
-				           echo "======".$id."++++++".$idparentflux;
 				           $sql = $Q[0]->insert.$values;
 				           $req = $db->query($sql);
 			        	
@@ -128,7 +128,11 @@
 	 }
 	
 	 echo $name.DELIM.$tags;
-   
+     
+	 $codeActi='GetBundles';
+	 $descActi='Recupperation des groupes de tags';
+	 $Actinté= new Sem($codeAvti,$descActi);
+	 $Actinté->AddActi($codeActi,$descActi);
    }
    
   if($requette==GetAllTags){

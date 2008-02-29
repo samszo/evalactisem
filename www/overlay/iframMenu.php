@@ -2,7 +2,7 @@
 	require_once ("../param/ParamPage.php");
 
 	//param de la description
-	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu/Sousmenu/urlDesc[@nom='".$objSite->scope['UrlNom']."']";
+	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu/menu/urlDesc[@nom='".$objSite->scope['UrlNom']."']";
 	$Desc = $objSite->XmlParam->GetElements($Xpath);
 	//print_r($Desc);
 

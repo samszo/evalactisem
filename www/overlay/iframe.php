@@ -1,8 +1,17 @@
 <?php
 	require_once ("../param/ParamPage.php");
 
+	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu/sMenu";
+	$sMenu=$objSite->XmlParam->GetElements($Xpath);
+	print_r($sMenu);
+	if(!empty($sMenu)){
+		$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu/menu/urlDesc[@nom='".$objSite->scope['UrlNom']."']";
+	}else{
+		$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu/urlDesc[@nom='".$objSite->scope['UrlNom']."']";
+	}
+	
 	//param de la description
-	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu/urlDesc[@nom='".$objSite->scope['UrlNom']."']";
+	
 	$Desc = $objSite->XmlParam->GetElements($Xpath);
 	//print_r($Desc);
 

@@ -21,7 +21,7 @@
 				echo('<menupopup id="onto-popup">');
 				foreach($Menu->urlDesc as $url)
 				{
-					foreach($Menu->Sousmenu as $Smenu)
+					foreach($Menu->sMenu as $Smenu)
 					{
 					
 					echo('<menu id="menu-onto" label="'.$Smenu["nom"].'">');
