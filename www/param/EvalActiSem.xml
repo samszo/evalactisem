@@ -24,16 +24,16 @@
 		<Query fonction="ExeAjax-AddTrad-VerifExist">
 			<select>SELECT COUNT(1) </select>
 			<from> FROM ieml_trad De  </from>
-			<where> WHERE 10ef_id = -id10eF- AND ieml_id = -idIeml- </where>
+			<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- </where>
 		</Query>
 		<Query fonction="ExeAjax-AddTrad-Insert">
-			<insert>INSERT INTO ieml_trad (10ef_id, ieml_id, trad_date)</insert>
-			<values> VALUES(-id10eF-, -idIeml-, now())  </values>
+			<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id, trad_date)</insert>
+			<values> VALUES(-idflux-, -idIeml-, now())  </values>
 		</Query>
 		<Query fonction="ExeAjax-SupTrad-Delete">
 			<delete>DELETE </delete>
 			<from> FROM ieml_trad </from>
-			<where> WHERE ieml_id =-idIeml- AND 10ef_id =-id10eF-   </where>
+			<where> WHERE ieml_id =-idIeml- AND onto_flux_id =-idflux-   </where>
 		</Query>
 		
 	
