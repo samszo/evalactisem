@@ -37,7 +37,7 @@ require_once ("../param/ParamPage.php");
 			</listcols>
 		
 		<?php
-			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='ieml-10eF']";
+			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='ieml-flux']";
 			$Q = $objSite->XmlParam->GetElements($Xpath);
 			$sql = $Q[0]->select.$Q[0]->from.$Q[0]->where;
 			//echo $sql."<br/>"; 
@@ -53,8 +53,8 @@ require_once ("../param/ParamPage.php");
 				echo('<listitem>');
 				echo('<listcell label="'.$r["ieml_id"].'"/>');
 				echo('<listcell label="'.$r["ieml_lib"].'"/>');
-				echo('<listcell label="'.$r["10ef_id"].'"/>');
-				echo('<listcell label="'.$r["10ef_desc"].'"/>');
+				echo('<listcell label="'.$r["onto_flux_id"].'"/>');
+				echo('<listcell label="'.$r["onto_flux_desc"].'"/>');
 				echo('</listitem>');
 			}		    			    
 		?>
