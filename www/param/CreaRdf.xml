@@ -190,22 +190,22 @@
 	
 	</XmlParam>
 	<XmlParam nom="MenuUrl">
-		<menu nom="Outils" sMenu="true" >
-			<sMenu nom="Tradution" >
-				<urlDesc nom="Ieml-10eF" src="http://localhost/evalactisem/overlay/ifram.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF;" dst="http://localhost/evalactisem/traduction.xul"/>
-				<urlDesc nom="Ieml-APIDelicious" src="http://localhost/evalactisem/overlay/ifram.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIDelicious" dst=""/>
-			</sMenu>
+		<menu nom="Outils" niv="1" SousMenu="false"  >
 			<urlDesc nom="Processus" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/evalactisem/processus.php"/>
 		</menu>
-		<menu nom="Aide" sMenu="false">
+		<menu nom="Tradution" niv="2" SousMenu="true">
+				<urlDesc nom="Ieml-10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF;" dst="http://localhost/evalactisem/traduction.xul"/>
+				<urlDesc nom="Ieml-APIDelicious" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIDelicious" dst="http://localhost/evalactisem/traduction.xul"/>
+		</menu>
+		<menu nom="Aide" niv="0" SousMenu="false">
 			<urlDesc  nom="aide 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide 10eF" dst="http://www.dixiemefamille.com/public/page/animation.php"/>
 			<urlDesc  nom="aide IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide IEML" dst="http://www.ieml.org/french/elements.html"/>
 		</menu>
-		<menu nom="Ontologie" sMenu="false" >
+		<menu nom="Ontologie" niv="0" SousMenu="false" >
 			<urlDesc  nom="Consulter 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter 10eF" dst="../ieml/onto.php?ParamNom=GetOntoTree1"/>
 			<urlDesc  nom="Consulter IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter IEML" dst="../ieml/onto.php?ParamNom=GetOntoTree"/>
 		</menu>
-		<menu nom="Cartographie" sMenu="false">
+		<menu nom="Cartographie" niv="0" SousMenu="false">
 			<urlDesc  nom="Afficher la carte" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Afficher la carte" dst="http://dixiemefamille.com/ieml/10eFCarto.php"/>
 			<urlDesc  nom="Modifier les localisations" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Modifier les localisations" dst="http://dixiemefamille.com/ieml/geocoding.php"/>
 		</menu>
