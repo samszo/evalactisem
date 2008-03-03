@@ -1,9 +1,9 @@
 <?php
-   require('library/Sem.php');
-   require('library/XmlParam.php');
-   require('library/php-delicious/php-delicious.inc.php');
-   require('param/Constantes.php');
-   require_once ("param/ParamPage.php");
+   
+   require('XmlParam.php');
+   require('php-delicious/php-delicious.inc.php');
+   require('../param/Constantes.php');
+   require_once ("../param/ParamPage.php");
    define('DELICIOUS_USER', "amelmaster");
    define('DELICIOUS_PASS', "lema1983");
    

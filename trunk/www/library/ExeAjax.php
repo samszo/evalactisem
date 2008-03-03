@@ -29,7 +29,7 @@
 		global $objSite;
 				
 		// requête pour vérifier l'existence de la traduction
-		$Xpath = "/EvalActiSem/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
+		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
 		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
 		$where = str_replace("-idIeml-", $idIeml, $where);
@@ -43,7 +43,7 @@
 			return "La traduction existe déjà !";
 			
 		//requête pour ajouter une traduction
-		$Xpath = "/EvalActiSem/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
+		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
 		$values = str_replace("-idflux-", $idflux, $Q[0]->values);
 		$values = str_replace("-idIeml-", $idIeml, $values);
