@@ -18,7 +18,7 @@ function Requette(){
 
     var req= document.getElementById("selctreq").value;
 	
-	AjaxRequest("http://localhost/evalactisem/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value+"&requette="+req,'SetDonnees','');
+	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value+"&requette="+req,'SetDonnees','');
 	alert(req);
 }
 

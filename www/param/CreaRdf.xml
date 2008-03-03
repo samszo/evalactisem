@@ -77,6 +77,21 @@
 				</from>
 				<where> </where>
 			</Query>
+		    <Query fonction="ExeAjax-AddTrad-VerifExist">
+				<select>SELECT COUNT(1) </select>
+				<from> FROM ieml_trad De  </from>
+				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- </where>
+			</Query>
+			<Query fonction="ExeAjax-AddTrad-Insert">
+				<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id, trad_date)</insert>
+				<values> VALUES(-idflux-, -idIeml-, now())  </values>
+			</Query>
+			<Query fonction="ExeAjax-SupTrad-Delete">
+			<delete>DELETE </delete>
+				<from> FROM ieml_trad </from>
+				<where> WHERE ieml_id =-idIeml- AND onto_flux_id =-idflux-   </where>
+			</Query>
+		
 		</Querys>
 		<rdfDesc urn="ieml"/>
 		<rdf tag="id_ieml"/>
