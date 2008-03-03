@@ -21,7 +21,7 @@
 
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");
 
-  define ("XML_CreaRdf",PathRoot."/param/CreaRdf.xml");
+  define ("XML_CreaRdf",PathRoot."/param/ParamXul.xml");
   define('EOL', "\r\n");
 
 $Site = array(
