@@ -30,7 +30,6 @@
 				
 		// requête pour vérifier l'existence de la traduction
 		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
-		
 		$Q = $objSite->XmlParam->GetElements($Xpath);
 		print_r($Q);
 		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
