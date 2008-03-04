@@ -1,5 +1,5 @@
 <?php
-   
+   require('Acti.php');
    require('XmlParam.php');
    require('php-delicious/php-delicious.inc.php');
    require('../param/Constantes.php');
@@ -53,7 +53,7 @@
 		  	       $Xpath=Xpath('Flux_Foret');
 		           $Q=$objSite->XmlParam->GetElements($Xpath);
 		           $values=str_replace("-idFlux-",$idparentflux,$Q[0]->values);
-				   $values=str_replace("-idprentsFlux-",0,$values);
+				   $values=str_replace("-idparentsFlux-",0,$values);
 				   $sql = $Q[0]->insert.$values;
 				   $req = $db->query($sql);
 		       
@@ -129,10 +129,11 @@
 	
 	 echo $name.DELIM.$tags;
      
-	 $codeActi='GetBundles';
+	 $codeActi='GetB';
 	 $descActi='Recupperation des groupes de tags';
-	 $Actinté= new Sem($codeAvti,$descActi);
-	 $Actinté->AddActi($codeActi,$descActi);
+	 
+	 $Activite->AddActi($codeActi,$descActi);
+     
    }
    
   if($requette==GetAllTags){

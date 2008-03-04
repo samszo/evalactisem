@@ -16,9 +16,11 @@
 	<popup id="colorpicker4">
 		<colorpicker onselect="pf_couleur('4', this.color);"/>
 	</popup>
+	
 	<label value="Histogrammes, camemberts, courbes, barres et nuages ....."/>
 	<hbox>
 		<vbox>
+		   
 			<groupbox orient="vertical">
 				<caption label="Titre"/>
 				<textbox persist="value" id="titre" value="Essai histogramme 3D"/>
