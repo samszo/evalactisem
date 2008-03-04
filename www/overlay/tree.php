@@ -1,7 +1,7 @@
 <?php
 
 require_once ("../param/ParamPage.php");
-require("../library/Xul.php");
+
 	//adresse de la datasource
 	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']";
 	$ds = $objSite->XmlParam->GetElements($Xpath);
