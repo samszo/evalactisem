@@ -304,7 +304,6 @@ class Xul{
 	
 	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
-		global $objSite;
 		
 		if($Cols==-1){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
@@ -313,12 +312,12 @@ class Xul{
 		}
 		
 		$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
-		$Q = $this->XmlParam->GetElements($Xpath);
+		$Q = $this->site->XmlParam->GetElements($Xpath);
 		//print_r($Q);
 		if($id==-1){
 			//récupère la valeur par defaut
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
-			$attrs = $this->XmlParam->GetElements($Xpath);
+			$attrs =$this->site->XmlParam->GetElements($Xpath);
 			//print_r( $attrs[0]["def"]);
 			
 			if($attrs[0]["niv"])
@@ -368,5 +367,5 @@ class Xul{
 	
 	
   }
-$objXul=new Xul($site);
+
   ?>
