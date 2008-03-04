@@ -2,7 +2,7 @@
 	$ajax = true;
 	require_once ("../param/ParamPage.php");
 	//charge le fichier de paramètrage
-	$objSite->XmlParam = new XmlParam(PathRoot."/param/EvalActiSem.xml");
+	$objSite->XmlParam = new XmlParam(PathRoot."/param/ParamXul.xml");
 
 	$resultat = "";
 	if(isset($_GET['f'])){
@@ -24,14 +24,14 @@
 
 	echo $resultat;	
 	
-	function AddTrad($idIeml,$id10eF){
+	function AddTrad($idIeml,$idflux){
 	
 		global $objSite;
 				
 		// requête pour vérifier l'existence de la traduction
 		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
-		print_r($Q);
+		
 		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
 		$where = str_replace("-idIeml-", $idIeml, $where);
 		$sql = $Q[0]->select.$Q[0]->from.$where;

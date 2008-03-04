@@ -123,7 +123,8 @@ function startSelect(tree, cellCoord)
 	txtCode = document.getElementById("code-trad-"+type);
 	txtLib = document.getElementById("lib-trad-"+type);
 
-	txtId.value = tree.getCell(cellCoord.row, 'id').getAttribute('label');
+	txtId.value = tree.getCell(cellCoord.row, 'treecol_id').getAttribute('label');
+	//alert(txtId.value);
 	txtCode.value = tree.getCell(cellCoord.row, 'treecol_code').getAttribute('label');
 	txtLib.value = tree.getCell(cellCoord.row, 'treecol_lib').getAttribute('label');
 
