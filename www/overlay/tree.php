@@ -1,5 +1,7 @@
 <?php
+
 require_once ("../param/ParamPage.php");
+
 	//adresse de la datasource
 	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']";
 	$ds = $objSite->XmlParam->GetElements($Xpath);
@@ -58,7 +60,7 @@ require_once ("../param/ParamPage.php");
 				<?php
 					//print_r($Cols);
 					
-					echo $objSite->GetTreeChildren($type, $Cols);
+					echo $objXul->GetTreeChildren($type, $Cols);
 				?>
 			</tree>
 

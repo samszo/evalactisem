@@ -236,6 +236,36 @@ class Site{
 		return $menu;
 	}
 	
+	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+	{
+	  $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
+	  $theValue = str_replace("'","''",$theValue);
+	  $theValue = str_replace("\"","''",$theValue);
+	  $theValue = htmlentities($theValue);
+	  //echo $theValue."<br/>";
+
+	  switch ($theType) {
+	    case "text":
+	      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+	      break;    
+	    case "long":
+	    case "int":
+	      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+	      break;
+	    case "double":
+	      $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
+	      break;
+	    case "date":
+	      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+	      break;
+	    case "defined":
+	      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+	      break;
+	  }
+	  return $theValue;
+	}
+
+
 	public function GetLien($url, $type_select, $new_val, $arrSup=false)
 	{
 		if($this->scope!=-1){		
@@ -354,7 +384,85 @@ class Site{
 		
 	}	
 	
+	function GetJs($Xpath, $arrParam)
+	{
+		$nodesJs = $this->XmlParam->GetElements($Xpath);		
+		$js = "";
+		$i = 0;
+		foreach($nodesJs as $nodeJs)
+		{
+			if($arrParam[$i])
+				$Param = $arrParam[$i];
+			$function = str_replace("-param".$i."-", $Param, $nodeJs["function"]);
+			$js .= " ".$nodeJs["evt"]."=\"".$function."\"";
+			$i ++;
+		}
+		return $js;
+	}
+	
+	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
+		if($Cols==-1){
+			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
+			$Cols = $this->XmlParam->GetElements($Xpath);	
+			//print_r($Cols);
+		}
+		
+		$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
+		$Q = $this->XmlParam->GetElements($Xpath);
+		//print_r($Q);
+		if($id==-1){
+			//récupère la valeur par defaut
+			$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
+			$attrs = $this->XmlParam->GetElements($Xpath);
+			//print_r( $attrs[0]["def"]);
+			
+			if($attrs[0]["niv"])
+				$id = $attrs[0]["niv"];
+			//echo $id." def<br/>";
+		}
+		
+		$from = str_replace("-parent-", $id, $Q[0]->from);
+		//ECHO $FROM;
+		$sql = $Q[0]->select.$from;
+		//echo $sql;
+		
+		$db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"], $dbOptions);
+		$db->connect();
+		$req = $db->query($sql);
+		$db->close();
+		$nb = mysql_num_rows($req);
+
+		$hierEnfant = "";
+		$tree = '<treechildren >'.EOL;
+		while($r = mysql_fetch_row($req))
+		{
+			$tree .= '<treeitem id="'.$type.'_'.$r[0].'" container="true" empty="false" >'.EOL;
+			$tree .= '<treerow>'.EOL;
+			$i= -1;
+			//colonne de l'identifiant
+			//$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
+			foreach($Cols as $Col)
+			{
+				$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
+				$i ++;
+			}
+			$tree .= '</treerow>'.EOL;
+			$tree .= $this->GetTreeChildren($type, $Cols, $r[0]);
+			$tree .= '</treeitem>'.EOL;
+		}
+
+		if($nb>0)
+			$tree .= '</treechildren>'.EOL;
+		else
+			$tree = '';
+		
+		return $tree;
+
+	}
+
+	
+	
   }
 
 
