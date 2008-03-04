@@ -67,7 +67,7 @@
 		<rdf tag="code" hidden="false"/>
 		<rdf tag="lib" hidden="false"/>
 	</XmlParam>
-	<XmlParam nom="GetOntoTrad" datasource="http://localhost/evalactisem/library/CreaRdfTable.php">
+	<XmlParam nom="GetOntoTrad" >
 		<Querys>
 			<Query fonction="ieml-flux">
 				<select>SELECT t.ieml_id,t.onto_flux_id,i.ieml_lib,f.onto_flux_desc </select>
@@ -119,7 +119,7 @@
 		   
 		    <Query fonction="Flux_Foret">
 				<insert> INSERT INTO flux_foret (onto_flux_id,onto_flux_parents)</insert>
-				<values> VALUES ('-idFlux-' , '-idprentsFlux- ')</values>
+				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
 			</Query>
 		</Querys>
 	
@@ -195,11 +195,11 @@
 	
 	
 	</XmlParam>
-	<XmlParam nom="AddActi" >
+	<XmlParam nom="Activite" >
 		<Querys>
-			<Query fonction="Activité">
-				<insert> INSERT INTO ieml_acti ('acti_id', 'acti_code',' acti_desc')  </insert>
-				<values> VALUES ("", '-idActi-' , '-codeActi- ', '-descActi-')</values>
+			<Query fonction="AddActi">
+				<insert> INSERT INTO ieml_acti (acti_id, acti_code,acti_desc)  </insert>
+				<values> VALUES ("", '-codeActi-','-descActi-')</values>
 			</Query>
 		</Querys>
 	
