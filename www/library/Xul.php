@@ -304,7 +304,7 @@ class Xul{
 	
 	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
-		
+		global $objSite;
 		
 		if($Cols==-1){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
@@ -368,5 +368,5 @@ class Xul{
 	
 	
   }
-
+$objXul=new Xul($site);
   ?>
