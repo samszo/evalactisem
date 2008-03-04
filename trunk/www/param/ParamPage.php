@@ -45,6 +45,6 @@ $scope = array(
 		);	
 
 $objSite = new Site($SITES, $site, $scope, false);
-
+$objXul = new Xul($site);
 
 ?>

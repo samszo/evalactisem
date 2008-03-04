@@ -2,19 +2,23 @@
 //require('XmlParam.php');
 
 class Acti{
-	Public $code_Acti;
-	Public $desc_Acti;
-	Public $id_Acti;
-
-	function AddActi($code_Acti,$desc_Acti){
+	Public $code;
+	Public $desc;
+	Public $id;
+    
+	function ___construct(){
+		
+	}
+	
+	function AddActi($code,$desc){
 		global $objSite;
 		
 		$Xpath = "/XmlParams/XmlParam[@nom='Activite']/Querys/Query[@fonction='AddActi']";
 		$Q=$objSite->XmlParam->GetElements($Xpath);
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		$db->connect();
-		$values=str_replace("-codeActi-",$code_Acti,$Q[0]->values);
-		$values=str_replace("-descActi-",$desc_Acti,$values);
+		$values=str_replace("-codeActi-",$code,$Q[0]->values);
+		$values=str_replace("-descActi-",$desc,$values);
 		
 		$sql=$Q[0]->insert.$values;
 		
@@ -28,5 +32,5 @@ class Acti{
 
 }
 
-$Activite= new Acti();
+
 ?>

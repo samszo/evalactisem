@@ -1,10 +1,13 @@
+
 <?php
+
+
 class Xul{
   public $id;
   public $XmlParam;
   public $trace;
   private $site;
-
+ 
   function __tostring() {
     return "Cette classe permet de définir et manipuler des grilles.<br/>";
     }
@@ -15,8 +18,7 @@ class Xul{
 
     $this->site = $site;
     $this->id = $id;
-	if($this->site->scope["FicXml"]!=-1)
-		$this->XmlParam = new XmlParam($this->site->scope["FicXml"]);
+	
 	
 	if($complet){
 	}
@@ -302,6 +304,8 @@ class Xul{
 	
 	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
+		
+		
 		if($Cols==-1){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
 			$Cols = $this->XmlParam->GetElements($Xpath);	
@@ -364,4 +368,5 @@ class Xul{
 	
 	
   }
-?>
+
+  ?>

@@ -10,6 +10,7 @@
    $requette= $_GET["requette"];
    $aTag=$_GET["tag"];
   
+   $Activite= new Acti();
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
 	
    if($requette==GetAllBundles ){
@@ -187,7 +188,12 @@
   	}else {
 	        echo $oDelicious->LastErrorString();
 	 }
-  	echo $tags.DELIM.$count;
+  	
+	 $codeActi='GetT';
+	 $descActi='Recupperation des tags';
+	 
+	 $Activite->AddActi($codeActi,$descActi);
+	 echo $tags.DELIM.$count;
   }
   
   if($requette==GetAllPosts){
@@ -209,7 +215,11 @@
   	}else {
 	        echo $oDelicious->LastErrorString();
 	 }
-  echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+     $codeActi='GetAP';
+	 $descActi='Recupperation de tous les Posts';
+	 
+	 $Activite->AddActi($codeActi,$descActi);
+	 echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
   }
   
  
@@ -230,7 +240,11 @@
   	}else {
 	        echo $oDelicious->LastErrorString();
 	 }
-  echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+     $codeActi='GetP';
+	 $descActi='Recupperation de  Posts';
+	 
+	 $Activite->AddActi($codeActi,$descActi);
+	 echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
   }
   
 if($requette==GetRecentPosts){
@@ -245,7 +259,12 @@ if($requette==GetRecentPosts){
   	}else {
 	        echo $oDelicious->LastErrorString();
 	 }
-  echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+     
+	 $codeActi='GetRP';
+	 $descActi='Recupperation de recent les Posts';
+	 
+	 $Activite->AddActi($codeActi,$descActi);
+	 echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
   }
   	
  
