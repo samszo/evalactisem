@@ -30,10 +30,13 @@
 				
 		// requête pour vérifier l'existence de la traduction
 		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
+		
 		$Q = $objSite->XmlParam->GetElements($Xpath);
+		print_r($Q);
 		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
 		$where = str_replace("-idIeml-", $idIeml, $where);
 		$sql = $Q[0]->select.$Q[0]->from.$where;
+		
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		$db->connect();
 		$result = $db->query($sql);
@@ -64,7 +67,7 @@
 		global $objSite;
 		
 		//requête pour Supprimer une traduction
-		$Xpath = "/EvalActiSem/Querys/Query[@fonction='ExeAjax-SupTrad-Delete']";
+		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete']";
 		$Q = $objSite->XmlParam->GetElements($Xpath);
 		//echo $Q;
 		$where = str_replace("-idflux-", $idflux, $Q[0]->where);
