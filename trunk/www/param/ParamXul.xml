@@ -125,7 +125,11 @@
 				<update> UPDATE flux_foret SET onto_flux_parents='-idparentsFlux-'</update>
 				<where> WHERE onto_flux_id='-idFlux-'</where>
 			</Query>
-		
+		    <Query fonction="foret_update_parent">
+				<select> SELECT onto_flux_parents</select>
+				<from> FROM flux_foret</from>
+				<where>	WHERE onto_flux_id=-Fluxid-</where>
+			</Query>
 		</Querys>
 	
 	</XmlParam>
