@@ -8,7 +8,7 @@
    define('DELICIOUS_PASS', "lema1983");
    
    $requette= $_GET["requette"];
-   $aTag=$_GET["tag"];
+  
   
    $Activite= new Acti();
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
@@ -25,14 +25,15 @@
 	$db->connect();
 	
 	
-	if ($aPosts = $oDelicious->GetAllBundles()) {
+   if ($aPosts = $oDelicious->GetAllBundles()) {
 		
 		foreach ($aPosts as $aPost) { 
 	           
 			   $tags=$aPost['tags']." ";
-			   $name =$aPost['name']." ";
+			   $name.=$aPost['name'].";";
                
-               $Xpath=Xpath('Ieml_Onto_Flux2');
+			   
+               $Xpath=Xpath('Ieml_Onto_existe');
 			   $Q=$objSite->XmlParam->GetElements($Xpath);
 			   $where=str_replace("-tag-",$aPost['name'],$Q[0]->where);
 			   $sql=$Q[0]->select.$Q[0]->from." ".$where;
@@ -62,7 +63,9 @@
 			   
 			     for($i=0;$i<sizeof($enfant)-1;$i++){				  
 			       
-			       $Xpath=Xpath('Ieml_Onto_Flux2');
+			     	
+			       
+			       $Xpath=Xpath('Ieml_Onto_existe');
 	               $Q=$objSite->XmlParam->GetElements($Xpath);
 	               
 	               $where=str_replace("-tag-",$enfant[$i],$Q[0]->where);
@@ -92,28 +95,32 @@
 				        
 				        $Q=$objSite->XmlParam->GetElements($Xpath);
 				        $values=str_replace("-idFlux-",$idflux,$Q[0]->values);
-				        $values=str_replace("-idprentsFlux-",$idparentflux,$values);
+				        $values=str_replace("-idparentsFlux-",$idparentflux,$values);
 				        $sql = $Q[0]->insert.$values;
+				       
 				        $req = $db->query($sql);
 			             
 				   }else
 			        	if(@mysql_num_rows($res)!=0){
 			              $Xpath=Xpath('Ieml_Onto_Flux1');
 			              $Q=$objSite->XmlParam->GetElements($Xpath);
-			         
+			               
 			               $where=str_replace("-enfant-",$enfant[$i],$Q[0]->where);
 			               $update=str_replace("-parentsFlux-",$parents,$Q[0]->update);
-			         
+			                
 			               $sql=$update.$where;
 			              
 			               $req = $db->query($sql);
 			               
-			               $Xpath=Xpath('Flux_Foret');
+			               $Xpath=Xpath('Ieml_Onto_foret_update');
 			               $Q=$objSite->XmlParam->GetElements($Xpath);
-				           $values=str_replace("-idFlux-",$id,$Q[0]->values);
-				           $values=str_replace("-idprentsFlux-",$idparentflux,$values);
-				           $sql = $Q[0]->insert.$values;
-				           $req = $db->query($sql);
+			               $where=str_replace("-idFlux-",$id,$Q[0]->where);
+			               $update=str_replace("-idparentsFlux-",$idparentflux,$Q[0]->update);
+			               $sql=$update.$where;
+                           echo "===".$sql;
+			               $req = $db->query($sql);
+			               
+			               
 			        	
 			        	
 			        	}
@@ -127,8 +134,8 @@
 	 else {
 	        echo $oDelicious->LastErrorString();
 	 }
-	
-	 echo $name.DELIM.$tags;
+   	 
+	 echo $name.DELIM.$sTag;
      
 	 $codeActi='GetB';
 	 $descActi='Recupperation des groupes de tags';
@@ -136,7 +143,6 @@
 	 $Activite->AddActi($codeActi,$descActi);
      
    }
-   
   if($requette==GetAllTags){
   	
   	$descFlux="tag";
@@ -150,9 +156,8 @@
 	           
 			   $tags.=$aPost['tag']." ";
 			   $count.=$aPost['count'].";";
-  	           
-	  }
-	$Xpath=Xpath('Ieml_Onto_Flux2');
+  	           $tag.=$aPost['tag']." ;";
+				$Xpath=Xpath('Ieml_Onto_existe');
                
                
                $Q=$objSite->XmlParam->GetElements($Xpath);
@@ -164,28 +169,31 @@
 			   $req = $db->query($sql);
 			   
 			   if(@mysql_num_rows($req)==0){
-				 
-			       $tag=explode(" ",$tags);
-			       echo "size=".sizeof($tag);
-			       for($i=0;$i<sizeof($tag)-1;$i++){				  
-
-				   	    $Xpath=Xpath('Ieml_Onto_Flux');
+				 		
+			   			$Xpath=Xpath('Ieml_Onto_Flux');
 						$Q=$objSite->XmlParam->GetElements($Xpath);
 					  	
 				   	    $value = str_replace("-descFlux-",$descFlux,$Q[0]->values);
-						$value = str_replace("-codeFlux-",$tag[$i],$value );
+						$value = str_replace("-codeFlux-",$aPost['tag'],$value );
 						$value = str_replace("-niveauFlux-",$niveauFlux,$value );
 						$value = str_replace("-parentsFlux-",$parentsFlux,$value );
 					    
 						$sql = $Q[0]->insert.$value;
 					    $req = $db->query($sql);
-					 
-				
-			        }
+					    $idflux=mysql_insert_id();
+				        $Xpath=Xpath('Flux_Foret');
+						$Q=$objSite->XmlParam->GetElements($Xpath);
+				        $values=str_replace("-idFlux-",$idflux,$Q[0]->values);
+				        $values=str_replace("-idparentsFlux-",-1,$values);
+				        $sql = $Q[0]->insert.$values;
+				        $req = $db->query($sql);
+			        
   
- 
+			   }
  		} 
-  	}else {
+  	
+	$db->close();
+	}else {
 	        echo $oDelicious->LastErrorString();
 	 }
   	
@@ -193,7 +201,10 @@
 	 $descActi='Recupperation des tags';
 	 
 	 $Activite->AddActi($codeActi,$descActi);
-	 echo $tags.DELIM.$count;
+
+	 
+	 echo $tag.DELIM.$count;
+	 
   }
   
   if($requette==GetAllPosts){
@@ -219,7 +230,7 @@
 	 $descActi='Recupperation de tous les Posts';
 	 
 	 $Activite->AddActi($codeActi,$descActi);
-	 echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+	 echo $tag.DELIM.$aDesc;
   }
   
  
@@ -264,7 +275,7 @@ if($requette==GetRecentPosts){
 	 $descActi='Recupperation de recent les Posts';
 	 
 	 $Activite->AddActi($codeActi,$descActi);
-	 echo $tag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+	 echo $tag.DELIM.$aDesc;
   }
   	
  

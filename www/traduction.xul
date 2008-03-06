@@ -25,7 +25,7 @@
 				<hbox >
 					<label value="Langage : ieml"/>
 				</hbox>
-				<label id="id-trad-ieml" hidden="false"/>
+				<label id="id-trad-ieml" hidden="true"/>
 				<hbox >
 					<label value="code :"/><label id="code-trad-ieml"  />
 				</hbox>
@@ -47,7 +47,7 @@
 				<hbox flex="1">
 					<label value="Langage : flux"/>
 				</hbox>
-					<label id="id-trad-flux" hidden="false"/>
+					<label id="id-trad-flux" hidden="true"/>
 					
 				<hbox >
 					<label value="code :"/><label id="code-trad-flux"  />

@@ -182,13 +182,5 @@ txtDescpF= document.getElementById("lib-trad-flux");
 txtDescpF.value = celldescpF.getAttribute('label');
 
 }
-function StartSelectMenu(){
-var menu= document.getElementById("requette");
-var selc=menu.selectedItem.value;
 
-var req=document.getElementById("selctreq");
-req.value=selc;
-//alert(req.value);
-
-}
 

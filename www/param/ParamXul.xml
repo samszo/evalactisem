@@ -111,7 +111,7 @@
 				<update> UPDATE ieml_onto_flux SET onto_flux_parents='-parentsFlux-'</update>
 				<where> WHERE onto_flux_code='-enfant-'</where>
 			</Query>
-			<Query fonction="Ieml_Onto_Flux2">
+			<Query fonction="Ieml_Onto_existe">
 				<select> SELECT onto_flux_parents,onto_flux_id </select>
 				<from>FROM ieml_onto_flux</from>
 				<where>WHERE onto_flux_code='-tag-'</where>
@@ -121,6 +121,11 @@
 				<insert> INSERT INTO flux_foret (onto_flux_id,onto_flux_parents)</insert>
 				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
 			</Query>
+		    <Query fonction="Ieml_Onto_foret_update">
+				<update> UPDATE flux_foret SET onto_flux_parents='-idparentsFlux-'</update>
+				<where> WHERE onto_flux_id='-idFlux-'</where>
+			</Query>
+		
 		</Querys>
 	
 	</XmlParam>
@@ -204,6 +209,30 @@
 		</Querys>
 	
 	</XmlParam>
+	<XmlParam nom="ParamQuery" >
+		<Querys>
+			<Query fonction="GetTags">
+			</Query>
+		    <Query fonction="GetPosts">
+		      <params>
+			       <param nom="tag"/>
+			       <param nom="url"/>
+			       <param nom="date"/>
+		      </params>
+			</Query>
+		    <Query fonction="GetRecentPosts">
+		    	<params>
+		    	<param nom="tag"/>
+		    	<param nom="count"/>
+		    	</params>
+		    </Query>
+		    <Query fonction="GetAllPosts">
+		    	<params>
+		    		<param nom="tag"/>
+		    	</params>
+		    </Query>
+		</Querys>
+	</XmlParam>	
 	<XmlParam nom="MenuUrl">
 		<menu nom="Outils" niv="1" SousMenu="false"  >
 			<urlDesc nom="Processus" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/evalactisem/processus.php"/>
