@@ -6,11 +6,13 @@ function pf_couleur(num, color){
 
 //ajout samszo
 function SetDonnees(result,param){
+	
 	arr = result.split("*");
 	document.getElementById("donnees").value = arr[1];
 	document.getElementById("noms").value = arr[0];
 	alert(result);
-
+	
+   
 }
 
 //fin ajout samszo
@@ -18,12 +20,13 @@ function Requette(){
 
     var req= document.getElementById("selctreq").value;
 	
-	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&tag="+document.getElementById("tag").value+"&requette="+req,'SetDonnees','');
-	alert(req);
+	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+req,'SetDonnees','');
 }
 
 function pf_dessin(dom_doc)
 {
+
+
 
 
 lien='stats.php?large='+escape(document.getElementById("large").value);
@@ -41,11 +44,12 @@ lien=lien+'&col2='+escape(document.getElementById("tb_02").value);
 lien=lien+'&col3='+escape(document.getElementById("tb_03").value);
 lien=lien+'&col4='+escape(document.getElementById("tb_04").value);
 document.getElementById("webFrame").setAttribute("src",lien);
+alert(lien);
 }
 function pf_init(){
 for (var i = 1 ; i < 5 ; i++)
 document.getElementById("tb_0" + i.toString()).inputField.style.backgroundColor=document.getElementById("tb_0" + i.toString()).value;
-pf_dessin()
+
 }
 
 function show_tooltip(evt)
@@ -67,4 +71,15 @@ function show_tooltip(evt)
 function hide_tooltip(evt)
 {
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
+}
+function StartSelectMenu(){
+var menu= document.getElementById("requette");
+var selc=menu.selectedItem.value;
+
+var req=document.getElementById("selctreq");
+req.value=selc;
+Requette();
+//AjaxRequest("http://localhost/evalactisem/overlay/groupbox.php?requette="+req.value,'','');
+//alert(req.value)
+
 }
