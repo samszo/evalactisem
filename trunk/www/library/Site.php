@@ -13,7 +13,7 @@ class Site{
 
   function __construct($sites, $id, $scope, $complet=true) {
 	//echo "new Site $sites, $id, $scope<br/>";
-
+    print_r($Site);
     $this->sites = $sites;
     $this->id = $id;
     $this->infos = $this->sites[$this->id];

@@ -34,7 +34,7 @@ function AjaxRequest(url,fonction_sortie,params) {
 
 		this.req.onreadystatechange = function () { processReqChange(); }
 
-		this.req.open("GET", this.url, true);
+		this.req.open("GET", this.url,true);
 		this.req.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
         this.req.send(null);
 
@@ -48,7 +48,7 @@ function AjaxRequest(url,fonction_sortie,params) {
 
         if (this.req) {
             this.req.onreadystatechange = this.req.onreadystatechange = function () { processReqChange(); }
-            this.req.open("GET", this.url, false);
+            this.req.open("GET", this.url,false);
 			this.req.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
             this.req.send();
 		}

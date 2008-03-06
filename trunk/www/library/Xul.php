@@ -14,7 +14,8 @@ class Xul{
 
   function __construct($site, $id=-1, $complet=true) {
 	//echo "new Site $sites, $id, $scope<br/>";
-	$this->trace = false;
+	print_r($this->Xul);
+  	$this->trace = false;
 
     $this->site = $site;
     $this->id = $id;
@@ -304,10 +305,11 @@ class Xul{
 	
 	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
+		global $objSite;
 		
 		if($Cols==-1){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
-			$Cols = $this->XmlParam->GetElements($Xpath);	
+			$Cols = $this->site->XmlParam->GetElements($Xpath);
 			//print_r($Cols);
 		}
 		
@@ -367,5 +369,5 @@ class Xul{
 	
 	
   }
-
+$objXul= new Xul($site);
   ?>
