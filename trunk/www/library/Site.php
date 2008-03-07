@@ -439,7 +439,7 @@ class Site{
 		{
 			$tree .= '<treeitem id="'.$type.'_'.$r[0].'" container="true" empty="false" >'.EOL;
 			$tree .= '<treerow>'.EOL;
-			$i= -1;
+			$i=-1;
 			//colonne de l'identifiant
 			//$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
 			foreach($Cols as $Col)

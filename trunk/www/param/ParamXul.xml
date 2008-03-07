@@ -130,6 +130,14 @@
 				<from> FROM flux_foret</from>
 				<where>	WHERE onto_flux_id=-Fluxid-</where>
 			</Query>
+		    <Query fonction="repres_graph_flux">
+				<select> SELECT i.onto_flux_code,f.onto_flux_parents</select>
+				<from> FROM from ieml_onto_flux i 
+				       INNER JOIN flux_foret f ON f.onto_flux_id=i.onto_flux_id AND f.onto_flux_parents!='0'</from>
+				<where></where>
+			</Query>
+		    
+		
 		</Querys>
 	
 	</XmlParam>
