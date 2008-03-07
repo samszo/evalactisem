@@ -13,13 +13,15 @@
    $Activite= new Acti();
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
    if($requette==GetAllBundles ){
-   	aGetAllBundles();
+   	$result=aGetAllBundles();
     aGetAllTags();
+    echo aGetAllBundles();
    }
    
   if($requette==GetAllTags){
-  	aGetAllTags();
+  	$result=aGetAllTags();
   	aGetAllBundles();
+    echo $result;
   }
   
   if($requette==GetAllPosts){
@@ -256,7 +258,8 @@ function aGetAllBundles(){
 	 }
    	 $sTag=explode(" ", $tag);
    	 $aTag=implode(";", $sTag);
-	 echo $name.DELIM. $aTag;
+	 return $name.DELIM. $aTag;
+   	 //echo $name.DELIM. $aTag;
      
 	 $codeActi='GetB';
 	 $descActi='Recupperation des groupes de tags';
@@ -327,7 +330,8 @@ function aGetAllTags(){
 	 $Activite->AddActi($codeActi,$descActi);
 
 	 
-	 echo $tag.DELIM.$count;
+	 //echo $tag.DELIM.$count;
+	 return $tag.DELIM.$count;
 	 
 }
 
