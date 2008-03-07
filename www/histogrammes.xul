@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href='overlay/groupbox.php?requette=' ?>
-
+<?xul-overlay href="overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux" ?>
+<?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?>
 <window id="histogrammes" title="Histogrammes" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="pf_init();">
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
@@ -38,7 +39,7 @@
 				<caption label="Type de graphique"/>
 				<menulist id="type">
 					<menupopup>
-						<menuitem label="Histogramme" value="histo"/>
+						<menuitem label="Tags en fonction des bundles" value="histo"/>
 						<menuitem label="Histogramme 3D" value="histo3d"/>
 						<menuitem label="Barres" value="barre"/>
 						<menuitem label="Barres 3D" value="barre3d"/>
@@ -89,11 +90,11 @@
 					<label id="selctreq" value="" hidden="true"/>
 					<menulist id="requette" oncommand="StartSelectMenu();">
 						<menupopup >
-							<menuitem label="Afficher tous les Tags " value="GetAllTags"/>
-							<menuitem label="Afficher les Posts recents" value="GetRecentPosts"/>
-							<menuitem label="Afficher le Posts" value="GetPosts"/>
-							<menuitem label="Afficher tous les Posts" value="GetAllPosts"/>
-							<menuitem label="Afficher tous les Bundles" value="GetAllBundles"/>
+							<menuitem label="Afficher tous les Tags "     value="GetAllTags"          oncommand="DelIiciousTree()"/>
+							<menuitem label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="DelIiciousTree()"/> 
+							<menuitem label="Afficher le Posts"           value="GetPosts"            oncommand="DelIiciousTree()"/>
+							<menuitem label="Afficher tous les Posts"     value="GetAllPosts"         oncommand="DelIiciousTree()"/>
+							<menuitem label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand="DelIiciousTree()"/>
 							
 						</menupopup>
 					</menulist>
@@ -106,7 +107,9 @@
 		
 		<vbox flex="1">
 			
-			<iframe id="webFrame" flex="1" src="http://www.google.fr"/>
+			<box flex="1" style="height:200px;width:300px;"><iframe id="webFrame" flex="1" src="http://www.google.fr "  /></box>
+		    <box flex="1" style="height:200px;width:800px;"><iframe id="treeReq" flex="1" src=""/></box>
 		</vbox>
+	    
 	</hbox>
 </window>

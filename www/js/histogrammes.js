@@ -10,7 +10,7 @@ function SetDonnees(result,param){
 	arr = result.split("*");
 	document.getElementById("donnees").value = arr[1];
 	document.getElementById("noms").value = arr[0];
-	alert(result);
+	res=result;
 	
    
 }
@@ -82,4 +82,22 @@ Requette();
 //AjaxRequest("http://localhost/evalactisem/overlay/groupbox.php?requette="+req.value,'','');
 //alert(req.value)
 
+}
+function DelIiciousTree(){
+	var menu= document.getElementById("requette");
+	var selct=menu.selectedItem.value;
+	alert(res);
+	alert(selct);
+	if(selct=="GetAllBundles"){
+		Tree= document.getElementById("treeReq");
+		Tree.setAttribute("src","overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux");
+	}else
+	if(selct=="GetAllPosts"){
+	
+		Tree= document.getElementById("treeReq");
+		Tree.setAttribute("src","overlay/tableFlux.php");
+	}else{
+		Tree= document.getElementById("treeReq");
+		Tree.setAttribute("src","http://www.msn.fr");
+	}
 }
