@@ -38,7 +38,7 @@ lien=lien+'&titre='+escape(document.getElementById("titre").value);
 //fin ajout samszo
 lien=lien+'&donnees='+escape(document.getElementById("donnees").value);
 lien=lien+'&noms='+escape(document.getElementById("noms").value);
-lien=lien+'&type='+escape(document.getElementById("type").value);
+lien=lien+'&type=nuage';
 lien=lien+'&col1='+escape(document.getElementById("tb_01").value);
 lien=lien+'&col2='+escape(document.getElementById("tb_02").value);
 lien=lien+'&col3='+escape(document.getElementById("tb_03").value);
@@ -72,15 +72,15 @@ function hide_tooltip(evt)
 {
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
 }
-function StartSelectMenu(){
-var menu= document.getElementById("requette");
+function StartSelectMenu(id){
+var menu= document.getElementById(id);
 var selc=menu.selectedItem.value;
 
 var req=document.getElementById("selctreq");
 req.value=selc;
+alert(selc);
 Requette();
-//AjaxRequest("http://localhost/evalactisem/overlay/groupbox.php?requette="+req.value,'','');
-//alert(req.value)
+
 
 }
 function DelIiciousTree(){
@@ -102,4 +102,10 @@ function DelIiciousTree(){
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","http://www.msn.fr");
 	}
+}
+function DeliciousRepres(){
+    var menu= document.getElementById("requette");
+	var selct=menu.selectedItem.value;
+	flux = res.split("*");
+	
 }

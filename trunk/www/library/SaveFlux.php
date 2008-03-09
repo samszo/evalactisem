@@ -110,8 +110,8 @@ class SauvFlux{
 					   }else
 				        	if(@mysql_num_rows($res)!=0){
 				              
-				        	    $Xpath=Xpath('Ieml_Onto_Flux1');
-				                $Q=$objSite->XmlParam->GetElements($Xpath);
+				        	   $Xpath=Xpath('Ieml_Onto_Flux1');
+				               $Q=$objSite->XmlParam->GetElements($Xpath);
 				               
 				               $where=str_replace("-enfant-",$enfant[$i],$Q[0]->where);
 				               $update=str_replace("-parentsFlux-",$parents,$Q[0]->update);
@@ -172,7 +172,7 @@ class SauvFlux{
 		 }
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
-		 return $name.DELIM. $aTag;
+		 return $name.DELIM.$aTag;
 	   	 
 	}
 	
@@ -252,5 +252,32 @@ function aGetPosts($aPosts){
 	 
  return $tag.DELIM.$aDesc.DELIM.$aUrl.DELIM.$aNote.DELIM.$aUdate;   
 }
+
+function GraphTagBund(){
+	global $objSite;
+	
+	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	$db->connect();
+	
+	$Xpath =Xpath("repres_graph_flux");
+	$Q=$objSite->XmlParam->GetElements($Xpath);
+	$sql=$Q[0]->select.$Q[0]->from;
+	$res = $db->query($sql);
+	
+	$result=mysql_fetch_array($res);
+	
+	
+	while($result=mysql_fetch_array($res)){
+		
+		$Donnees.=$result[1].";";
+		$nom.=$result[0].";";
+		
+	}
+	$db->close();
+	
+	return $nom.DELIM.$Donnees;
+	
+}
+
 }
 ?>

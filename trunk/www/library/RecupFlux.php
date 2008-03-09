@@ -75,16 +75,21 @@ if($requette==GetRecentPosts){
   	 $Activite->AddActi($codeActi,$descActi);
 	 echo $result;
 
-	 echo $tag.DELIM.$aDesc;
+	 
   }
-  	
+  if($requette=="tagsFbundles"){
+  	$result=$oSaveFlux->GraphTagBund();
+  	echo $result;
+  }
  
 
 function Xpath($fonction){
 	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
 	 return $Xpath; 
 }
-     echo $sTag.DELIM.$aDesc.DELIM.$aNote.DELIM.$aUdate;
+
+
+
     
 
  ?>
