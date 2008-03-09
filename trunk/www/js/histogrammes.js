@@ -86,16 +86,18 @@ Requette();
 function DelIiciousTree(){
 	var menu= document.getElementById("requette");
 	var selct=menu.selectedItem.value;
-	alert(res);
-	alert(selct);
-	if(selct=="GetAllBundles"){
+	
+	
+	flux = res.split("*");
+	
+	if((selct=="GetAllBundles")||(selct=="GetAllTags")){
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux");
 	}else
-	if(selct=="GetAllPosts"){
+	if((selct=="GetAllPosts")||(selct=="GetRecentPosts")||(selct=="GetPosts")){
 	
 		Tree= document.getElementById("treeReq");
-		Tree.setAttribute("src","overlay/tableFlux.php");
+		Tree.setAttribute("src","overlay/tableFlux.php?tag="+flux[0]+"&desc="+flux[1]+"&url="+flux[2]+"&date="+flux[3]+"&note="+flux[4]);
 	}else{
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","http://www.msn.fr");
