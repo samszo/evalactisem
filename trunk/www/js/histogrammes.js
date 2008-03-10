@@ -29,8 +29,8 @@ function pf_dessin(dom_doc)
 
 
 
-lien='stats.php?large='+escape(document.getElementById("large").value);
-lien=lien+'&haut='+escape(document.getElementById("haut").value);
+lien='stats.php?large='+escape("400");
+lien=lien+'&haut='+escape('300');
 lien=lien+'&titre='+escape(document.getElementById("titre").value);
 
 //deb ajout samszo
@@ -38,19 +38,15 @@ lien=lien+'&titre='+escape(document.getElementById("titre").value);
 //fin ajout samszo
 lien=lien+'&donnees='+escape(document.getElementById("donnees").value);
 lien=lien+'&noms='+escape(document.getElementById("noms").value);
-lien=lien+'&type=nuage';
-lien=lien+'&col1='+escape(document.getElementById("tb_01").value);
-lien=lien+'&col2='+escape(document.getElementById("tb_02").value);
-lien=lien+'&col3='+escape(document.getElementById("tb_03").value);
-lien=lien+'&col4='+escape(document.getElementById("tb_04").value);
+lien=lien+'&type=histo';
+lien=lien+'&col1='+escape('#FFCC33');
+lien=lien+'&col2='+escape('#33FFFF');
+lien=lien+'&col3='+escape('#000066');
+lien=lien+'&col4='+escape('#000000');
 document.getElementById("webFrame").setAttribute("src",lien);
 alert(lien);
 }
-function pf_init(){
-for (var i = 1 ; i < 5 ; i++)
-document.getElementById("tb_0" + i.toString()).inputField.style.backgroundColor=document.getElementById("tb_0" + i.toString()).value;
 
-}
 
 function show_tooltip(evt)
 {
@@ -72,20 +68,20 @@ function hide_tooltip(evt)
 {
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
 }
+
 function StartSelectMenu(id){
-var menu= document.getElementById(id);
-var selc=menu.selectedItem.value;
+ menu= document.getElementById(id);
+ selc=menu.selectedItem.value;
 
 var req=document.getElementById("selctreq");
 req.value=selc;
-alert(selc);
 Requette();
 
 
 }
 function DelIiciousTree(){
-	var menu= document.getElementById("requette");
-	var selct=menu.selectedItem.value;
+	 menu= document.getElementById("requette");
+	 selct=menu.selectedItem.value;
 	
 	
 	flux = res.split("*");
@@ -102,10 +98,4 @@ function DelIiciousTree(){
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","http://www.msn.fr");
 	}
-}
-function DeliciousRepres(){
-    var menu= document.getElementById("requette");
-	var selct=menu.selectedItem.value;
-	flux = res.split("*");
-	
 }

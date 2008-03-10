@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xul-overlay href='overlay/groupbox.php?requette=' ?>
 <?xul-overlay href="overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux" ?>
 <?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?>
-<window id="histogrammes" title="Histogrammes" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="pf_init();">
+<window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
+	<script src="js/groupbox.js"/>
 	<popup id="colorpicker1">
 		<colorpicker onselect="pf_couleur('1', this.color);"/>
 	</popup>
@@ -20,52 +20,13 @@
 		<colorpicker onselect="pf_couleur('4', this.color);"/>
 	</popup>
 	
-	<label value="Histogrammes, camemberts, courbes, barres et nuages ....."/>
+	<label value="traduction, semantique, ieml, delicious ....."/>
 	<hbox>
 		<vbox>
 		   
 			<groupbox orient="vertical">
 				<caption label="Titre"/>
-				<textbox persist="value" id="titre" value="Essai histogramme 3D"/>
-			</groupbox>
-			<groupbox orient="vertical">
-				<caption label="Dimensions"/>
-				<label value="Largeur SVG"/>
-				<textbox id="large" value="400"/>
-				<label value="Hauteur SVG"/>
-				<textbox id="haut" value="300"/>
-			</groupbox>
-			<groupbox orient="horizontal">
-				<caption label="Type de graphique"/>
-				<menulist id="type" oncommand="StartSelectMenu('type');">
-					<menupopup>
-						<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
-						<menuitem label="Tags en fonction de count" value="tagsFcount"/>
-						
-					</menupopup>
-				</menulist>
-			</groupbox>
-			<button id="bt_10" label="Voir" tooltiptext="Voir l'histogramme" onclick="pf_dessin()"/>
-			<groupbox orient="vertical">
-				<caption label="Couleurs"/>
-				<button id="bt_01" label="Fond" tooltiptext="Couleur du fond" popup="colorpicker1"/>
-				<textbox id="tb_01" value="#FFCC33"/>
-				<button id="bt_02" label="Remplissage" tooltiptext="Couleur de remplissage" popup="colorpicker2"/>
-				<textbox id="tb_02" value="#33FFFF"/>
-				<button id="bt_03" label="Tracé" tooltiptext="Couleur du tracé" popup="colorpicker3"/>
-				<textbox id="tb_03" value="#000066"/>
-				<button id="bt_04" label="Texte" tooltiptext="Couleur du texte" popup="colorpicker4"/>
-				<textbox id="tb_04" value="#000000"/>
-			</groupbox>
-		</vbox>
-		<vbox>
-			<groupbox orient="vertical">
-			    
-				<caption label="Données"/>
-				<label value="Flux "/>
-				<textbox id="donnees" value=""/>
-				<label value="Ieml "/>
-				<textbox id="noms" value=""/>
+				<textbox persist="value" id="titre" value="Traduction du Flux"/>
 			</groupbox>
 			<groupbox>
 				<caption label="del.icio.us"/>
@@ -81,15 +42,15 @@
 				
 				
 				<groupbox>
-					<caption label="requette"/>
+					<caption label="requete"/>
 					<label id="selctreq" value="" hidden="true"/>
 					<menulist id="requette" oncommand="StartSelectMenu('requette');">
 						<menupopup >
-							<menuitem label="Afficher tous les Tags "     value="GetAllTags"          oncommand="DelIiciousTree()"/>
-							<menuitem label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="DelIiciousTree()"/> 
-							<menuitem label="Afficher le Posts"           value="GetPosts"            oncommand="DelIiciousTree()"/>
-							<menuitem label="Afficher tous les Posts"     value="GetAllPosts"         oncommand="DelIiciousTree()"/>
-							<menuitem label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand="DelIiciousTree()"/>
+							<menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand="DelIiciousTree();"/>
+							<menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="DelIiciousTree();grpBox.CreatGrpBox();"/> 
+							<menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="DelIiciousTree();grpBox.CreatGrpBox();"/>
+							<menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand="DelIiciousTree()"/>
+							<menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand="DelIiciousTree()"/>
 							
 						</menupopup>
 					</menulist>
@@ -98,6 +59,28 @@
 				</groupbox>
 			
 			</groupbox>
+			<groupbox orient="horizontal">
+				<caption label="Type de graphique"/>
+				<menulist id="type" oncommand="StartSelectMenu('type');">
+					<menupopup>
+						<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
+						<menuitem label="Tags en fonction de count" value="GetAllTags" />
+						
+					</menupopup>
+				</menulist>
+			</groupbox>
+			<button id="bt_10" label="Voir" tooltiptext="Voir l'histogramme" onclick="pf_dessin()"/>
+			
+		</vbox>
+		<vbox>
+			<groupbox orient="vertical">
+				<caption label="Données"/>
+				<label value="Flux "/>
+				<textbox id="donnees" value=""/>
+				<label value="Ieml "/>
+				<textbox id="noms" value=""/>
+			</groupbox>
+			
 		</vbox>
 		
 		<vbox flex="1">
