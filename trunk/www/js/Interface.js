@@ -1,4 +1,5 @@
-	var urlExeAjax = "http://localhost/evalactisem/library/ExeAjax.php";
+var urlExeAjax = "http://localhost/evalactisem/library/ExeAjax.php";
+var xmlFlux;
 
 function AddTrad()
 {

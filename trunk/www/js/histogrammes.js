@@ -8,10 +8,17 @@ function pf_couleur(num, color){
 function SetDonnees(result,param){
 	
 	arr = result.split("*");
-	document.getElementById("donnees").value = arr[1];
-	document.getElementById("noms").value = arr[0];
-	res=result;
-	
+	var parser = new DOMParser();
+	xmlFlux = parser.parseFromString(result, "text/xml");
+
+	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null );
+  	nSec = iterSec.iterateNext();
+	for (var j = 0; j < nSec.childNodes.length; j++) {
+		if(nSec.childNodes[j].tagName=="nom")
+			document.getElementById("noms").value = nSec.childNodes[j].textContent;
+		if(nSec.childNodes[j].tagName=="nombre")
+			document.getElementById("donnees").value = nSec.childNodes[j].textContent;			
+	}
    
 }
 
