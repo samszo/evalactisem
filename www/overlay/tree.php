@@ -60,7 +60,8 @@ require_once ("../param/ParamPage.php");
 				<?php
 					//print_r($Cols);
 					
-					echo $objSite->GetTreeChildren($type, $Cols);
+					//echo $objSite->GetTreeChildren($type, $Cols);
+					echo $objXul->GetTreeChildren($type, $Cols);
 				?>
 			</tree>
 

@@ -1,3 +1,4 @@
+
 function pf_couleur(num, color){
     document.getElementById("colorpicker" + num).hidePopup();
     document.getElementById("tb_0" + num).value =color;
@@ -7,27 +8,57 @@ function pf_couleur(num, color){
 //ajout samszo
 function SetDonnees(result,param){
 	
-	arr = result.split("*");
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
-
-	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null );
+    alert(result);
+	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
+  	
   	nSec = iterSec.iterateNext();
+	
+	
 	for (var j = 0; j < nSec.childNodes.length; j++) {
-		if(nSec.childNodes[j].tagName=="nom")
+		if(nSec.childNodes[j].tagName=="nom"){
 			document.getElementById("noms").value = nSec.childNodes[j].textContent;
-		if(nSec.childNodes[j].tagName=="nombre")
-			document.getElementById("donnees").value = nSec.childNodes[j].textContent;			
+		    tag=nSec.childNodes[j].textContent;alert(nSec.childNodes[j].textContent);
+		}
+		if(nSec.childNodes[j].tagName=="nombre"){
+			document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
+		    	
+		}
+		if(nSec.childNodes[j].tagName=="description"){
+			desc = nSec.childNodes[j].textContent;
+		}	
+		if(nSec.childNodes[j].tagName=="url"){
+			url= nSec.childNodes[j].textContent;
+		}
+		if(nSec.childNodes[j].tagName=="date"){
+			date = nSec.childNodes[j].textContent;	
+		}	
 	}
+    
    
 }
 
 //fin ajout samszo
-function Requette(){
+function Requette(query){
 
-    var req= document.getElementById("selctreq").value;
-	
-	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+req,'SetDonnees','');
+  
+    
+	if((query=="GetAllTags")||(query=="GetAllBundles")||(query=="GetAllPosts")||(query=="tagsFbundles")){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'SetDonnees','');
+    }else
+    	if(query=="GetRecentPosts"){
+    		tag=document.getElementById("id-tag").value;
+    		count=document.getElementById("id-count").value;
+    		//alert(tag);
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&count="+count,'SetDonnees','');
+    }else
+        if(query=="GetPosts"){
+    		tag=document.getElementById("id-tag").value;
+    		url=document.getElementById("id-url").value;
+    		date=document.getElementById("id-date").value;
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&url="+url+"&date="+date,'SetDonnees','');
+    }
 }
 
 function pf_dessin(dom_doc)
@@ -76,33 +107,27 @@ function hide_tooltip(evt)
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
 }
 
-function StartSelectMenu(id){
- menu= document.getElementById(id);
- selc=menu.selectedItem.value;
-
-var req=document.getElementById("selctreq");
-req.value=selc;
-Requette();
+function StartSelectMenu(query){
+	
+	//query=document.getElementById(id).selectedItem.value;
+	//alert(query);
+	Requette(query);
 
 
 }
 function DelIiciousTree(){
-	 menu= document.getElementById("requette");
-	 selct=menu.selectedItem.value;
 	
+	query=document.getElementById("requette").selectedItem.value;
 	
-	flux = res.split("*");
-	
-	if((selct=="GetAllBundles")||(selct=="GetAllTags")){
+	if((query=="GetAllBundles")||(query=="GetAllTags")){
+		
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux");
 	}else
-	if((selct=="GetAllPosts")||(selct=="GetRecentPosts")||(selct=="GetPosts")){
+	if((query=="GetAllPosts")||(query=="GetRecentPosts")||(query=="GetPosts")){
 	
 		Tree= document.getElementById("treeReq");
-		Tree.setAttribute("src","overlay/tableFlux.php?tag="+flux[0]+"&desc="+flux[1]+"&url="+flux[2]+"&date="+flux[3]+"&note="+flux[4]);
-	}else{
-		Tree= document.getElementById("treeReq");
-		Tree.setAttribute("src","http://www.msn.fr");
+		Tree.setAttribute("src","overlay/tableFlux.php?tag="+tag+"&desc="+desc+"&url="+url+"&date="+date);
 	}
+	
 }

@@ -1,22 +1,11 @@
-
-var grpBox= new GroupBox('box1');
-
-function GroupBox(nomParent,req){
-
-	
-		this.boxParent=document.getElementById(nomParent);
-		//verfier que le box existe
-		
-		
-		    this.CreatGrpBox=function(){
-			req=document.getElementById("selctreq").value;
-			alert(req);
+function GroupBox(nomParent){
+			this.CreatGrpBox=function(){
+			req=document.getElementById("requette").selectedItem.value;
+			//alert(req);
 			
 			
 		 	if(req=="GetRecentPosts"){
-		 	    
-		 		
-		 		t=document.getElementById("box1");
+		 	    t=document.getElementById(nomParent);
 		        boxb=document.createElement("groupbox");
 				if(t.hasChildNodes()){
 					dernier=t.lastChild;
@@ -39,6 +28,7 @@ function GroupBox(nomParent,req){
 				
 				txtbox1=document.createElement("textbox");
 				txtbox1.setAttribute("value","");
+				txtbox1.setAttribute("id","id-tag");
 				boxb.appendChild(txtbox1);
 				
 				//creation de label
@@ -51,13 +41,14 @@ function GroupBox(nomParent,req){
 				
 				txtbox2=document.createElement("textbox");
 				txtbox2.setAttribute("value","");
+				txtbox2.setAttribute("id","id-count");
 				boxb.appendChild(txtbox2);
 				t.appendChild(boxb);
 				
 		 	 }else
 		 		
 		 		if(req=="GetPosts"){
-			 		t=document.getElementById("box1");
+			 		t=document.getElementById(nomParent);
 			        
 			        boxb=document.createElement("groupbox");
 					if(t.hasChildNodes()){
@@ -82,6 +73,7 @@ function GroupBox(nomParent,req){
 						
 						txtbox1=document.createElement("textbox");
 						txtbox1.setAttribute("value","");
+						txtbox1.setAttribute("id","id-tag");
 						boxb.appendChild(txtbox1);
 						
 						//creation de label
@@ -94,6 +86,7 @@ function GroupBox(nomParent,req){
 						
 						txtbox2=document.createElement("textbox");
 						txtbox2.setAttribute("value","");
+						txtbox2.setAttribute("id","id-date");
 						boxb.appendChild(txtbox2);
 				 		
 				 		//creation de label
@@ -106,17 +99,13 @@ function GroupBox(nomParent,req){
 						
 						txtbox3=document.createElement("textbox");
 						txtbox3.setAttribute("value","");
+						txtbox3.setAttribute("id","id-url");
 						boxb.appendChild(txtbox3);
 				 		
 				 		
 				 		t.appendChild(boxb);
-		 		
-		
-		
-		
-		
+		 		}
+	
+	
 		}
-	
-	
-}
 }

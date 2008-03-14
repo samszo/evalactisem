@@ -10,5 +10,5 @@ require_once (TT_CLASS_BASE.'EvalActiSem.php');
 require_once (TT_CLASS_BASE.'Sem.php');
 require_once (TT_CLASS_BASE.'Eval.php');
 require_once (TT_CLASS_BASE.'Site.php');
-
+require_once (TT_CLASS_BASE.'Xul.php');
 ?>

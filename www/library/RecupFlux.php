@@ -9,30 +9,34 @@
    define('DELICIOUS_PASS', "lema1983");
    
    $requette= $_GET["requette"];
-  
+   $tag=$_GET["tag"];
+   $count=$_GET["count"];
+   $url=$_GET["url"];
+   $date=$_GET["date"];
   
    $Activite= new Acti();
    $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
    $oSaveFlux= new SauvFlux(); 
    
-   if($requette==GetAllBundles ){
+   if($requette=="GetAllBundles" ){
    	
-    $oSaveFlux->aGetAllTags();
-    echo $oSaveFlux->aGetAllBundles();
+    $oSaveFlux->aGetAllTags($objSite,$oDelicious);
+    $result=$oSaveFlux->aGetAllBundles($objSite,$oDelicious);
+    echo $result;
     $codeActi='GetAB';
 	$descActi='Recupperation de tous les bundles';
    }
    
-  if($requette==GetAllTags){
+  if($requette=="GetAllTags"){
   	
-  	$oSaveFlux->aGetAllBundles();
-    echo $oSaveFlux->aGetAllTags();
+  	$oSaveFlux->aGetAllBundles($objSite,$oDelicious);
+    echo $oSaveFlux->aGetAllTags($objSite,$oDelicious);
   	$codeActi='GetAT';
 	$descActi='Recupperation de tous les tags';
   }
   
-  if($requette==GetAllPosts){
-  	if ($aPosts = $oDelicious->GetAllPosts($aTag)){
+  if($requette=="GetAllPosts"){
+  	if ($aPosts = $oDelicious->GetAllPosts()){
   		$result=$oSaveFlux->aGetPosts($aPosts);
   	    
   	 }else {
@@ -46,9 +50,9 @@
   }
   
  
-  if($requette==GetPosts){
+  if($requette=="GetPosts"){
   	
-  	if ($aPosts = $oDelicious->GetPosts()){
+  	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date)){
   	 	$result=$oSaveFlux->aGetPosts($aPosts);
 	 
   	}else {
@@ -62,23 +66,23 @@
 }
   	
   
-if($requette==GetRecentPosts){
-  	if ($aPosts = $oDelicious->GetRecentPosts($aTag,$iCount)){
+if($requette=="GetRecentPosts"){
+  	if ($aPosts = $oDelicious->GetRecentPosts($tag,$count)){
   	 $result=$oSaveFlux->aGetPosts($aPosts);
 	 
   	}else {
 	        echo $oDelicious->LastErrorString();
 	 }
 
-     $codeActi='GetP';
-	 $descActi='Recupperation de  Posts';
-  	 $Activite->AddActi($codeActi,$descActi);
-	 echo $result;
+	     $codeActi='GetP';
+		 $descActi='Recupperation de  Posts';
+	  	 $Activite->AddActi($codeActi,$descActi);
+		 echo $result;
 
 	 
   }
   if($requette=="tagsFbundles"){
-  	$result=$oSaveFlux->GraphTagBund();
+  	$result=$oSaveFlux->GraphTagBund($objSite);
   	echo $result;
   }
  

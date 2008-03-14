@@ -19,9 +19,8 @@ class SauvFlux{
 		
 	}
     
-	function aGetAllBundles(){
-		global $objSite;
-		global $oDelicious;
+	function aGetAllBundles($objSite,$oDelicious){
+		
 		$desc_Band="bundels";
 		$niv_Band=0;
 		$parent_Band="";
@@ -172,13 +171,12 @@ class SauvFlux{
 		 }
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
-		 return $name.DELIM.$aTag;
+		 return "<marque ieml='t.u.-'><nom ieml='n.u.-'>".$name."</nom><nombre ieml=\"t.u.-t.u.-'\">".$aTag."</nombre></marque>"; 
 	   	 
 	}
 	
-function aGetAllTags(){
-		global $objSite;
-		global $oDelicious;
+    function aGetAllTags($objSite,$oDelicious){
+		
 		
 		$desc="tag";
 		$niv=1;
@@ -229,13 +227,17 @@ function aGetAllTags(){
 		        echo $oDelicious->LastErrorString();
 		 }
 		 //echo $tag.DELIM.$count;
-		 return $tag.DELIM.$count;
 		 
+		 $result="<marque><nom ieml=\"n.u.-'\">".$tag."</nom><nombre ieml=\"n.u.-'\">".$count."</nombre></marque>"; 
+		
+
+		 $result=str_replace("(.*)&(.*)","et",$result);
+		 return $result;
 	}
 
 
 
-function aGetPosts($aPosts){
+    function aGetPosts($aPosts){
 
 		foreach ($aPosts as $aPost) { 
   			$aDesc.=$aPost['desc']."; ";
@@ -250,32 +252,44 @@ function aGetPosts($aPosts){
   		}
   		
 	 
- return $tag.DELIM.$aDesc.DELIM.$aUrl.DELIM.$aNote.DELIM.$aUdate;   
-}
-
-function GraphTagBund(){
-	global $objSite;
+        $result="<marque ieml='t.u.-'><nom ieml='n.u.-'>".$tag."</nom><description ieml=\"d.o.-b.o.-'\">".$aDesc."</description><url ieml=\"d.i.-l.i.-'t.u.-\">".$aUrl."</url><date ieml=\"t.o.-n.o.-'s.u.-\" >".$aUdate."</date>
+</marque>";
+  	
+    $result=str_replace("&","et",$result); 	   
+    return $result;
+    }
+ 
+   function GraphTagBund($objSite){
+	
 	
 	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 	$db->connect();
 	
 	$Xpath =Xpath("repres_graph_flux");
 	$Q=$objSite->XmlParam->GetElements($Xpath);
-	$sql=$Q[0]->select.$Q[0]->from;
-	$res = $db->query($sql);
+	$sql=$Q[0]->select.$Q[0]->from.$Q[0]->where;
 	
-	$result=mysql_fetch_array($res);
+	$reponse = $db->query($sql);
 	
+	while($result=mysql_fetch_array($reponse)){
+		$parents.=$result[0].";";
+		$Xpath=Xpath("repres_graph_flux1");
+		$Q=$objSite->XmlParam->GetElements($Xpath);
+		$where=str_replace("-parent-",$result[1],$Q[0]->where);
+		$sql=$Q[0]->select.$Q[0]->from.$where;
+		$res = $db->query($sql);
+		$resu=mysql_fetch_array($res);
+		$count.=$resu[0].";";
+		//echo $parents." ";
 	
-	while($result=mysql_fetch_array($res)){
-		
-		$Donnees.=$result[1].";";
-		$nom.=$result[0].";";
+	    
 		
 	}
-	$db->close();
 	
-	return $nom.DELIM.$Donnees;
+	
+	$db->close();
+	$result="<marque><nom ieml=\"n.u.-'\">".$parents."</nom><nombre ieml=\"n.u.-'\">".$count."</nombre></marque>";
+	return $result;
 	
 }
 
