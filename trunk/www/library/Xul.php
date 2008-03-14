@@ -1,18 +1,15 @@
-
 <?php
-
-
 class Xul{
   public $id;
   public $XmlParam;
   public $trace;
   private $site;
  
-  function __tostring() {
+    function __tostring() {
     return "Cette classe permet de définir et manipuler des grilles.<br/>";
     }
 
-  function __construct($site, $id=-1, $complet=true) {
+    function __construct($site, $id=-1, $complet=true) {
 	//echo "new Site $sites, $id, $scope<br/>";
 	print_r($this->Xul);
   	$this->trace = false;
@@ -108,7 +105,7 @@ class Xul{
 	}
 
 			
-  function GetForm($idDon, $idGrille) {
+    function GetForm($idDon, $idGrille) {
   
   
 		//requête pour récupérer les données de la grille
@@ -305,20 +302,19 @@ class Xul{
 	
 	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
-		global $objSite;
 		
 		if($Cols==-1){
-			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
+			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
 			$Cols = $this->site->XmlParam->GetElements($Xpath);
 			//print_r($Cols);
 		}
 		
-		$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
+		$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
 		//print_r($Q);
 		if($id==-1){
 			//récupère la valeur par defaut
-			$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
+			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
 			$attrs =$this->site->XmlParam->GetElements($Xpath);
 			//print_r( $attrs[0]["def"]);
 			
@@ -332,7 +328,7 @@ class Xul{
 		$sql = $Q[0]->select.$from;
 		//echo $sql;
 		
-		$db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"], $dbOptions);
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
 		$db->connect();
 		$req = $db->query($sql);
 		$db->close();
@@ -369,5 +365,4 @@ class Xul{
 	
 	
   }
-$objXul= new Xul($site);
-  ?>
+?>
