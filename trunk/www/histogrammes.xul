@@ -6,6 +6,7 @@
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
+	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
 	<script type="text/javascript" > var grpBox= new GroupBox('box1');  </script>
 	<popup id="colorpicker1">
@@ -54,7 +55,7 @@
 			   </menupopup>
 			</menulist>
 			<box id="box1" ></box>
-		    <button id="bt_10" label="Recupperer flux"  onclick="Requette(query);"/>
+		    <button id="bt_10" label="Recupperer flux"  onclick="Requette(query);recherchez('str=manger');"/>
 		</groupbox>
 		<groupbox orient="horizontal">
 			<caption label="Type de graphique"/>
