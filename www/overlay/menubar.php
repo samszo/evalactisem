@@ -4,13 +4,12 @@
 	//param de la description
 	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/menu";
 	$Menus = $objSite->XmlParam->GetElements($Xpath);
-   print_r($Menu);
+   	//print_r($Menu);
  
     header('Content-type: application/vnd.mozilla.xul+xml');
+	echo "<?xml version='1.0' encoding='ISO-8859-1' ?>";
 ?>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<overlay id="menubar"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="menubar" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 	<box id="menubar" >
 		<menubar id="menu-principal">

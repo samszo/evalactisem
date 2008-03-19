@@ -5,8 +5,11 @@
    require('../param/Constantes.php');
    require_once ("../param/ParamPage.php");
 
-   define('DELICIOUS_USER', "amelmaster");
-   define('DELICIOUS_PASS', "lema1983");
+   //define('DELICIOUS_USER', "amelmaster");
+   //define('DELICIOUS_PASS', "lema1983");
+   define('DELICIOUS_USER', "luckysemiosisr");
+   define('DELICIOUS_PASS', "Samszo0");
+
    
    $requette= $_GET["requette"];
    $tag=$_GET["tag"];

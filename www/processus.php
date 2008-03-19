@@ -1,4 +1,4 @@
-<?php
+<?php  
 	require_once ("param/ParamPage.php");
 
 	$sem = New Sem($objSite
