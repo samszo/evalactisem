@@ -1,13 +1,6 @@
-
-function recherchez(searchString) {
+function Traduction(){
+this.recherchez=function(searchString) {
  
-  var searchArray = searchString.split( '=');
-  if ( searchArray.length != 2) {
-    alert( "cha&#238;ne de caract&#232;res mal form&#233;e");
-    return; 
-  }
-  searchString = searchArray[ 1];
-
 //  var plusRE = new RegExp( "+", "g");  // can't make anything like this work in IE!
 //  searchString = searchString.replace( plusRE, " ");
   var wkStr = "";  // kluge around it
@@ -2243,12 +2236,14 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
   
 
 }
-syntaxe_ieml(dis);
-}
+this.syntaxe_ieml(dis);
 
-function syntaxe_ieml(source){
+
+}
+this.syntaxe_ieml=function(source){
 	var sour="";	
 	var s="";
+	var r=0;
 		syn=source.split(";");
 		  for(var i=0;i<syn.length; i++){
 		  	for(var j=0;j<syn[i].length;j++){
@@ -2275,20 +2270,28 @@ function syntaxe_ieml(source){
 		  sour="";
 		  syn=syn=source.split(";");
 		  for(var i=0;i<syn.length; i++){
+		  	
 		  	for(var j=0;j<syn[i].length;j++){
-		 		 if(((j%5)==0)&&(j!=0)){
-		 			sour=sour+syn[i].charAt(j)+"'";
+		 		 if(((j%5)==r)&&(j!=0)&&(sour.charAt(j+r-1)!="'")){
+		 			if(r<5){
+		 				sour=sour+syn[i].charAt(j)+"'";
+		 		        r++;
+		 		    }else
+		 		    	if(r==5)
+		 		     	r=0;
+		 		    
 		 		}else{
 		 			sour=sour+syn[i].charAt(j);
 		 		}
+		   
 		   }
 		   sour=sour+";";
 		   source=sour;
+		   r=0;
 		  }
 		  syn="";
 		  sour="";
 		  syn=source.split(";");
-		  alert(source);
 		  for(var i=0;i<syn.length; i++){
 		  	for(var j=0;j<syn[i].length;j++){
 		 		 if((syn[i].charAt(j)!= "-")&&(syn[i].charAt(j)!="'")){
@@ -2305,6 +2308,7 @@ function syntaxe_ieml(source){
 		   sour=sour+";"
 		  }
 		  
-		  
-alert(sour);
+	alert(sour);	  
+
+}
 }

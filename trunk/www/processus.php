@@ -1,24 +1,24 @@
 <?php  
-	require_once ("param/ParamPage.php");
-
+    require_once ("param/ParamPage.php");
+    
 	$sem = New Sem($objSite
 		, PathRoot."/param/EvalActiSem.xml"
 		, $objSite->scope['So']
 		,""
-		,""
 		,$objSite->scope['Trace']
 		);
 	$menu = $sem->GetChoixNavig($objSite->scope['So']); 		
-
+    print_r("menu=".$objSite->scope['site']);
 	
-    header('Content-type: application/vnd.mozilla.xul+xml');
+   header('Content-type: application/vnd.mozilla.xul+xml');
 
 ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <window id="ieml-global" title="IEML-10eF v0.1 - information economy meta language - Dixième Famille" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
 	<script language="JavaScript" type="application/x-javascript" src="js/interface.js"/>
 	<script language="JavaScript" type="application/x-javascript" src="js/processus.js"/>
 	<script language="JavaScript" type="application/x-javascript" src="js/ajax.js"/>
-	<script language="JavaScript" type="application/x-javascript" src="library/histogrammes/histogrammes.js"/>
+	<script language="JavaScript" type="application/x-javascript" src="js/histogrammes.js"/>
 
 
 				<hbox>

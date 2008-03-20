@@ -171,6 +171,7 @@ class SauvFlux{
 		 }
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
+	   	 
 		 return "<marque ieml='t.u.-'><nom ieml='n.u.-'><![CDATA[".$name."]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[".$aTag."]]></nombre></marque>"; 
 	   	 
 	}

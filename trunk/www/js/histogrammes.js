@@ -41,9 +41,6 @@ function SetDonnees(result,param){
 
 //fin ajout samszo
 function Requette(query){
-
-  
-    
 	if((query=="GetAllTags")||(query=="GetAllBundles")||(query=="GetAllPosts")||(query=="tagsFbundles")){
 		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'SetDonnees','');
     }else
@@ -63,10 +60,6 @@ function Requette(query){
 
 function pf_dessin(dom_doc)
 {
-
-
-
-
 lien='stats.php?large='+escape("400");
 lien=lien+'&haut='+escape('300');
 lien=lien+'&titre='+escape(document.getElementById("titre").value);
