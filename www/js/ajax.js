@@ -3,6 +3,16 @@
 //--------------------------------------------
 var urlExeAjax = "/evalactisem";
 
+
+
+
+function AfficheSvg(response,params) {
+   	alert(params+response);
+	document.getElementById(params).firstChild.data = response;
+	document.getElementById('proc-trace').value = response;
+}
+
+
 function AfficheResult(response,params) {
    	alert(params);
 	document.getElementById(params).value = response;

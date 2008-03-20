@@ -1,15 +1,4 @@
 <?php
-/*
-/////////////////////
-Nom du fichier : Sem.php
-
-Version : 1.0
-Auteur : samszo
-Date de modification : 29/11/2007
-
-////////////////////
-*/
-
 Class Sem{
 	public $Id;
 	public $Flux;
@@ -21,11 +10,13 @@ Class Sem{
     
 	public $CodeAct;
     public $DescAct;
+    public $FicXml;
 	
     
-    function __construct($So, $De="", $Tr="") {
+    function __construct($site,$FicXml,$So, $De="", $Tr="") {
 	    $this->FicXml = $FicXml;
-		//echo "On charge les paramètres : ".$FicXml."<br/>\n";
+		$this->site=$site;
+	    //echo "On charge les paramètres : ".$FicXml."<br/>\n";
 		if ($xml = simplexml_load_file($FicXml))
 			$this->xml = $xml;
 		
@@ -48,27 +39,31 @@ Class Sem{
 
 
 	function GetChoixNavig($So, $De="", $Tr="", $NumEtap=1) {
-	
 		//recupere les infos
 		if($De==""){
-			$Xpath = "/EvalActiSem/Querys/Query[@fonction='Sem->GetChoixNavig->infoSo']";
+			$Xpath = '/EvalActiSem/Querys/Query[@fonction="Sem-GetChoixNavig-infoSo"]';
 			$Q = $this->site->XmlParam->GetElements($Xpath);
+			print_r("q=".$Q);
 			$where = str_replace("-So-", $So, $Q[0]->where);
 			$sql = $Q[0]->select.$Q[0]->from.$where;
+		    echo "sql = ".$where."<br/>\n";
 		}else{
-			$Xpath = "/EvalActiSem/Querys/Query[@fonction='Sem->GetChoixNavig->infoDe']";
+			$Xpath = "/EvalActiSem/Querys/Query[@fonction='Sem-GetChoixNavig-infoDe']";
 			$Q = $this->site->XmlParam->GetElements($Xpath);
+			print_r($Q);
 			$where = str_replace("-De-", $De, $Q[0]->where);
 			$sql = $Q[0]->select.$Q[0]->from.$where;
+		    echo "sql = ".$where."<br/>\n";
 		}
 
 		//récupère la définition du layer
 		$Xpath = "/EvalActiSem/StarIEML/Mark[@layer=".$NumEtap."]";
 		$Mark = $this->site->XmlParam->GetElements($Xpath);
+		print_r($Mark);
 		$Xpath = "/EvalActiSem/StarIEML/Mark[@layer=".($NumEtap-1)."]";
 		$MarkParent = $this->site->XmlParam->GetElements($Xpath);
 		
-		//echo "sql = ".$sql."<br/>\n";
+	    
 
 		$liste="<ul>";
 		  	

@@ -1,6 +1,35 @@
 var urlExeAjax = "http://localhost/evalactisem/library/ExeAjax.php";
 var xmlFlux;
+function Parse(eSrc,eDst)
+{
+	//récupération des valeurs
+	src = document.getElementById(eSrc).value;
 
+	//construction de la requete
+	url = urlExeAjax+"?f=Parse&code="+src;
+
+	//vérification des valeurs
+	AjaxRequest(url,"AfficheResult",eDst);
+		
+}
+
+function GetGraph(eSrc,eDst)
+{
+	src=document.getElementById(eSrc).value;
+	  // reload() does not work ?
+	  // browser.reload();
+	  //src=browser.getAttribute("src");
+	  //browser.setAttribute("src","about:blank");
+  
+	//construction de la requete
+	url = urlExeAjax+"?f=GetGraph&code="+src;
+	document.getElementById('proc-trace').value = url;
+	document.getElementById("FrameSvg").setAttribute("src",url);
+	//AjaxRequest(url,"AfficheSvg",eDst);
+
+	//browser.setAttribute("src",url);
+		
+}
 function AddTrad()
 {
 	//récupération des valeurs
