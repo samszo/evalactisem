@@ -8,7 +8,7 @@
 		,$objSite->scope['Trace']
 		);
 	$menu = $sem->GetChoixNavig($objSite->scope['So']); 		
-    print_r("menu=".$objSite->scope['site']);
+    print_r("menu=".$objSite->scope['So']);
 	
    header('Content-type: application/vnd.mozilla.xul+xml');
 

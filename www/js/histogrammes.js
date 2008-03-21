@@ -1,4 +1,8 @@
 
+<script src="js/TradTagIeml.js">var TradIeml= new Traduction(); </script>
+
+
+
 function pf_couleur(num, color){
     document.getElementById("colorpicker" + num).hidePopup();
     document.getElementById("tb_0" + num).value =color;
@@ -123,4 +127,15 @@ function DelIiciousTree(){
 		Tree.setAttribute("src","overlay/tableFlux.php?tag="+tag+"&desc="+desc+"&url="+url+"&date="+date);
 	}
 	
+}
+function parser(result,param){
+alert(result);
+}
+function Trad_Pars_Ieml(){
+var trad;
+
+trad=TradIeml.recherchez('parler');
+alert(trad);
+ieml=trad.split(";");
+AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=Parse&code="+ieml[0],'parser','');
 }

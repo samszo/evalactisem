@@ -56,7 +56,7 @@
 			   </menupopup>
 			</menulist>
 			<box id="box1" ></box>
-		    <button id="bt_10" label="Recupperer flux"  onclick="Requette(query);TradIeml.recherchez('parler');"/>
+		    <button id="bt_10" label="Recupperer flux"  onclick="Requette(query);Trad_Pars_Ieml();"/>
 		</groupbox>
 		<groupbox orient="horizontal">
 			<caption label="Type de graphique"/>
