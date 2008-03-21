@@ -14,8 +14,8 @@
 		<Query fonction="Sem-GetChoixNavig-infoSo">
 			<select>SELECT	De.ieml_id Deid, De.ieml_code Decode, De.ieml_lib Delib, De.ieml_parent Detype</select>
 			<from>FROM ieml_onto De 
-					INNER JOIN ieml_onto So ON So.ieml_id = De.ieml_parent</from>
-			<where> WHERE So.ieml_code = '-So-' </where>
+					INNER JOIN ieml_foret So ON De.ieml_id = So.ieml_parent</from>
+			<where> WHERE De.ieml_code = '-So-' </where>
 		</Query>
 		<Query fonction="Sem-GetChoixNavig-infoDe">
 			<select>SELECT De.ieml_id Deid, De.ieml_code Decode, De.ieml_lib Delib, De.ieml_parent Detype</select>
