@@ -1,85 +1,68 @@
 
 <script src="js/TradTagIeml.js">var TradIeml= new Traduction(); </script>
 
-
-
 function pf_couleur(num, color){
     document.getElementById("colorpicker" + num).hidePopup();
     document.getElementById("tb_0" + num).value =color;
     document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
 }
 
-//ajout samszo
-function SetDonnees(result,param){
-	
-	var parser = new DOMParser();
-	xmlFlux = parser.parseFromString(result, "text/xml");
-    alert(result);
-	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
-  	
-  	nSec = iterSec.iterateNext();
-	
-	
-	for (var j = 0; j < nSec.childNodes.length; j++) {
-		if(nSec.childNodes[j].tagName=="nom"){
-			document.getElementById("noms").value = nSec.childNodes[j].textContent;
-		    tag=nSec.childNodes[j].textContent;alert(nSec.childNodes[j].textContent);
-		}
-		if(nSec.childNodes[j].tagName=="nombre"){
-			document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
-		    	
-		}
-		if(nSec.childNodes[j].tagName=="description"){
-			desc = nSec.childNodes[j].textContent;
-		}	
-		if(nSec.childNodes[j].tagName=="url"){
-			url= nSec.childNodes[j].textContent;
-		}
-		if(nSec.childNodes[j].tagName=="date"){
-			date = nSec.childNodes[j].textContent;	
-		}	
-	}
-    
-   
-}
 
-//fin ajout samszo
-function Requette(query){
-	if((query=="GetAllTags")||(query=="GetAllBundles")||(query=="GetAllPosts")||(query=="tagsFbundles")){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'SetDonnees','');
+function RecupDeliciusFlux(){
+	
+		query=document.getElementById("requette").selectedItem.value;
+	
+	if(query==""){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette=GetAllTags",'DelIiciousTree','');
+	}
+	if((query=="GetAllTags")||(query=="GetAllBundles")||(query=="GetAllPosts")){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'DelIiciousTree','');
     }else
     	if(query=="GetRecentPosts"){
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
     		//alert(tag);
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&count="+count,'SetDonnees','');
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&count="+count,'DelIiciousTree','');
     }else
         if(query=="GetPosts"){
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&url="+url+"&date="+date,'SetDonnees','');
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&url="+url+"&date="+date,'DelIiciousTree','');
     }
 }
 
-function pf_dessin(dom_doc)
+function pf_dessin(result, param)
 {
-lien='stats.php?large='+escape("400");
-lien=lien+'&haut='+escape('300');
-lien=lien+'&titre='+escape(document.getElementById("titre").value);
-
-//deb ajout samszo
-
-//fin ajout samszo
-lien=lien+'&donnees='+escape(document.getElementById("donnees").value);
-lien=lien+'&noms='+escape(document.getElementById("noms").value);
-lien=lien+'&type=histo';
-lien=lien+'&col1='+escape('#FFCC33');
-lien=lien+'&col2='+escape('#33FFFF');
-lien=lien+'&col3='+escape('#000066');
-lien=lien+'&col4='+escape('#000000');
-document.getElementById("webFrame").setAttribute("src",lien);
-alert(lien);
+var parser = new DOMParser();
+	xmlFlux = parser.parseFromString(result, "text/xml");
+    //alert(result);
+	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
+  	
+  	nSec = iterSec.iterateNext();
+	for (var j = 0; j < nSec.childNodes.length; j++) {
+		if(nSec.childNodes[j].tagName=="nom"){
+			document.getElementById("noms").value = nSec.childNodes[j].textContent;
+		    noms=nSec.childNodes[j].textContent;
+		}
+		if(nSec.childNodes[j].tagName=="nombre"){
+			donnees = nSec.childNodes[j].textContent;	
+		    	
+		}
+		
+	}
+	lien='library/stats.php?large='+escape("400");
+	lien=lien+'&haut='+escape('300');
+	lien=lien+'&titre='+escape(document.getElementById("titre").value);
+	lien=lien+'&donnees='+escape(donnees);
+	lien=lien+'&noms='+escape(noms);
+	lien=lien+'&type=histo';
+	lien=lien+'&col1='+escape('#FFCC33');
+	lien=lien+'&col2='+escape('#33FFFF');
+	lien=lien+'&col3='+escape('#000066');
+	lien=lien+'&col4='+escape('#000000');
+	document.getElementById("webFrame").setAttribute("src",lien);
+//alert(lien);
 }
 
 
@@ -104,38 +87,66 @@ function hide_tooltip(evt)
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
 }
 
-function StartSelectMenu(query){
+function RepresGraphFlux(){
 	
-	//query=document.getElementById(id).selectedItem.value;
-	//alert(query);
-	Requette(query);
-
-
+		query=document.getElementById("type").selectedItem.value;
+	if(query==" "){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette=GetAllTags",'pf_dessin','');
+	}else
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'pf_dessin','');
+	
 }
-function DelIiciousTree(){
+function DelIiciousTree(result,param){
 	
 	query=document.getElementById("requette").selectedItem.value;
+	var parser = new DOMParser();
+	xmlFlux = parser.parseFromString(result, "text/xml");
+    //alert(result);
+	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
+  	
+  	nSec = iterSec.iterateNext();
 	
-	if((query=="GetAllBundles")||(query=="GetAllTags")){
+	
+	for (var j = 0; j < nSec.childNodes.length; j++) {
+		if(nSec.childNodes[j].tagName=="nom"){
+			document.getElementById("noms").value = nSec.childNodes[j].textContent;
+		    tag=nSec.childNodes[j].textContent;
+		}
+		if(nSec.childNodes[j].tagName=="nombre"){
+			document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
+		    	
+		}
+		if(nSec.childNodes[j].tagName=="description"){
+			desc = nSec.childNodes[j].textContent;
+		}	
+		if(nSec.childNodes[j].tagName=="url"){
+			url= nSec.childNodes[j].textContent;
+		}
+		if(nSec.childNodes[j].tagName=="date"){
+			date = nSec.childNodes[j].textContent;	
+		}	
+	}
+	if((query=="GetAllBundles")||(query=="GetAllTags")||(query=="")){
 		
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux");
 	}else
 	if((query=="GetAllPosts")||(query=="GetRecentPosts")||(query=="GetPosts")){
-	
+	    //alert(query);
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","overlay/tableFlux.php?tag="+tag+"&desc="+desc+"&url="+url+"&date="+date);
 	}
 	
 }
+
 function parser(result,param){
-alert(result);
+document.getElementById("iemlhisto").setAttribute("src",result);
 }
 function Trad_Pars_Ieml(){
 var trad;
 
 trad=TradIeml.recherchez('parler');
-alert(trad);
+//alert(trad);
 ieml=trad.split(";");
-AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=Parse&code="+ieml[0],'parser','');
+AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml[3],'parser','');
 }

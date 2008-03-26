@@ -9,7 +9,6 @@ Date de modification : 29/11/2007
 
 ////////////////////
 */
-
 Class Sem{
 	public $Id;
 	public $Flux;
@@ -22,21 +21,23 @@ Class Sem{
 	public $XmlParam;
 	private $site;
 	private $trace;
-
+    public  $parse;
 	function __construct($Site, $FicXml, $So, $De="", $Tr="", $trace=false) {
 		
 		$this->trace = $trace;
-
+        
 		if($FicXml=="")
 			$FicXml==$Site->scope["FicXml"];
-		if($this->trace)
+		if($this->trace){
 			echo "On charge les paramètres : ".$FicXml."<br/>\n";
-		$this->XmlParam = new XmlParam($FicXml);
-
+			$this->XmlParam = new XmlParam($FicXml);
+		    
+		}
+        //$this->parse = $FicXml;
 		$this->site = $Site;	
 		$this->Src = $So;
 
-		$StarParam = $this->XmlParam->GetElements("/EvalActiSem/StarIEML");
+		$StarParam = $this->site->XmlParam->GetElements("/EvalActiSem/StarIEML");
 
 		$this->StarParam = array(
 			"full"=>$StarParam[0]->Seme[0]["full"]
@@ -150,16 +151,15 @@ Class Sem{
 		if($code=="")
 			$code=$this->Src;
 
-		$parse = $this->Parse($code);
-		//nettoie le résultat du parser
-		$parse = str_replace("<XMP>","",$parse);
-		$parse = str_replace("</XMP>","",$parse);
-		$parse = str_replace("<?xml version=\"1.0\"?>","",$parse);
-		//echo $parse; 
 		
-		//charge l'objet xml
+		$parse = $this->Parse($code);
+	
+		//nettoie le résultat du parser
+	    $parse = str_replace("<XMP>","",$parse);
+		$parse = str_replace("</XMP>","",$parse);
+		$parse = str_replace("<?xml version=\"1.0\"?>"," ",$parse);
 		$xml = simplexml_load_string($parse);
-
+		//echo $parse;
 		$genOps = $xml->xpath("//genOp");
 		$donnees = "";
 		$noms = "";
@@ -174,8 +174,8 @@ Class Sem{
 		    $donnees .= "0;";
 		}
 		
-		$lien= 'http://www.mundilogiweb.com/ieml/library/histogrammes/stats.php?large=500';
-		$lien.='&haut=600';
+		$lien= 'library/stats.php?large=350';
+		$lien.='&haut=300';
 		$lien.='&titre='.urlencode($code);
 		$lien.='&donnees='.$donnees;
 		$lien.='&noms='.$noms;
@@ -184,26 +184,25 @@ Class Sem{
 		$lien.='&col2=red';
 		$lien.='&col3=blue';
 		$lien.='&col4=black';
-		//echo $lien;
+		
 
-		$oCurl = curl_init($lien);
+		/*$oCurl = curl_init($lien);
 		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
 		$sResult = curl_exec($oCurl);
 		// close session
 		curl_close($oCurl);
 
-		header("Content-type: image/svg+xml");
-		return $sResult;
+		header("Content-type: image/svg+xml");*/
+		return $lien;
 	}
 
 	function Parse($code=""){
 	
 		if($code=="")
 			$code=$this->Src;
-		    echo "code=".$code;
-			$lien ="https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression=".$code."'";
-		
+		    $lien ="https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression=".$code."'";
+		    //echo "code=".$code;
 		$oCurl = curl_init($lien);
 		// set options
 	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
@@ -222,7 +221,7 @@ Class Sem{
 		// close session
 		curl_close($oCurl);
        
-		echo $sResult;
+		return $sResult;
 	}
 
 	function GetEventListener($id,$params){

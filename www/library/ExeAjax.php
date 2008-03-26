@@ -1,6 +1,7 @@
 <?php
 	$ajax = true;
 	require_once ("../param/ParamPage.php");
+	
 	//charge le fichier de paramètrage
 	$objSite->XmlParam = new XmlParam(PathRoot."/param/ParamXul.xml");
 
@@ -40,10 +41,10 @@
 			$resultat = SetOnto($_GET['type'],$_GET['col'],$_GET['id'],$_GET['value']);
 			break;
 		case 'Parse':
-			$resultat = Parse($id,$code,$desc);
+			$resultat = Parse($code);
 			break;
 		case 'GetGraph':
-			$resultat = GetGraph($id,$code,$desc);
+			$resultat = GetGraph($code);
 			break;
 			
 	}
@@ -110,7 +111,7 @@
 	}
 		
 	
-function SetOnto($type,$col,$id,$valeur){
+	function SetOnto($type,$col,$id,$valeur){
 	
 		global $objSite;
 				
@@ -160,7 +161,7 @@ function SetOnto($type,$col,$id,$valeur){
 		return $message;
 		
 	}
-function SetProc($id,$code,$desc){
+	function SetProc($id,$code,$desc){
 	
 		global $objSite;
 		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
@@ -172,11 +173,11 @@ function SetProc($id,$code,$desc){
 	
 		global $objSite;
 		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-		echo $sem->Parse($code);				
+		return $sem->Parse($code);				
 		
 	}
 
-	function GetGraph($id,$code,$desc){
+	function GetGraph($code){
 	
 		global $objSite;
 		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
