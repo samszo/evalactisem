@@ -8,7 +8,7 @@ function pf_couleur(num, color){
 }
 
 
-function RecupDeliciusFlux(){
+function RecupDeliciousFlux(){
 	
 		query=document.getElementById("requette").selectedItem.value;
 	
