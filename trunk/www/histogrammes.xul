@@ -46,7 +46,7 @@
 		 <groupbox>
 			<caption label="requete"/>
 			<label id="selctreq" value="" hidden="true"/>
-			<menulist id="requette" oncommand="query=this.selectedItem.value;">
+			<menulist id="requette" oncommand="">
 			   <menupopup >
 			     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand=""/>
 			     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
@@ -56,14 +56,15 @@
 			   </menupopup>
 			</menulist>
 			<box id="box1" ></box>
-		    <button id="bt_10" label="Recupperer flux"  onclick="Requette(query);Trad_Pars_Ieml();"/>
+		    <button id="bt_10" label="Recupperer flux"  onclick=" RecupDeliciusFlux();"/>
+		    <button id="bt_10" label="Traduction flux"  onclick="traduction.xul;"/>
 		</groupbox>
 		<groupbox orient="horizontal">
 			<caption label="Type de graphique"/>
-			<menulist id="type"  oncommand="StartSelectMenu(this.selectedItem.value)">
+			<menulist id="type"  >
 				<menupopup>
-					<menuitem label="Tags en fonction des bundles" value="tagsFbundles" />
-					<menuitem label="Tags en fonction de count" value="GetAllTags" />
+					<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
+					<menuitem label="Tags en fonction de count" value="GetAllTags"/>
 				</menupopup>
 			</menulist>
 		</groupbox>
@@ -74,11 +75,21 @@
 			<label value="Ieml "/>
 			<textbox id="noms" value=""/>
 		</groupbox>
-      <button id="bt_10" label="Voir" tooltiptext="Voir l'histogramme" onclick="DelIiciousTree();pf_dessin();"/>
+      <button id="bt_10" label="Voir" tooltiptext="Voir l'histogramme" onclick="RepresGraphFlux();Trad_Pars_Ieml();"/>
      </vbox>
-	 <vbox flex="1">
-		<box flex="1" style="height:300px;width:300px;"><iframe id="webFrame" flex="1" src="http://www.google.fr "  /></box>
-		<box flex="1" style="height:200px;width:800px;"><iframe id="treeReq" flex="1" src="http://www.google.fr"/></box>
+	 <vbox>
+	 	<hbox flex="1">
+			<box flex="1" style="height:300px;width:300px;"><iframe id="webFrame" flex="1" src="http://www.google.fr "  /></box>
+			<splitter collapse="before" resizeafter="farthest">
+				<grippy/>
+			</splitter>
+			<box flex="1" style="height:300px;width:300px;"><iframe id="iemlhisto" flex="1" src="http://www.msn.fr "  /></box>
+		</hbox>	
+		<splitter collapse="before" resizeafter="farthest">
+				<grippy/>
+		</splitter>
+		<box  style="height:200px;width:800px;"><iframe id="treeReq" flex="1" src="http://www.google.fr"/></box>
+	 
 	 </vbox>
  </hbox>
 </window>

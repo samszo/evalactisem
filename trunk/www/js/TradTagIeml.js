@@ -2248,7 +2248,6 @@ this.syntaxe_ieml=function(source){
 	var r=0;
 		
 		syn=source.split(";");
-		  alert("S="+syn.length);
 		  for(var i=0;i<syn.length-1; i++){
 		  	for(var j=0;j<syn[i].length;j++){
 		  		
@@ -2257,9 +2256,7 @@ this.syntaxe_ieml=function(source){
 		  		    
 		  		}else{
 		  	
-		  		     sour=sour+syn[i].charAt(j);
-		  	         
-		  	 
+		  		     sour=sour+syn[i].charAt(j);	 
 		  	}
 		 	
 		 }

@@ -16,7 +16,7 @@
 	?>
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 	<box id="box" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-		<listbox id="boxlist" onselect="startSelectTab();" flex="1">
+		<listbox id="boxlist"  flex="1">
 			
 			<listhead >
 				<listheader label="Tag"></listheader>

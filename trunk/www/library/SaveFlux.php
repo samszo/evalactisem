@@ -172,7 +172,7 @@ class SauvFlux{
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
 	   	 
-		 return "<marque ieml='t.u.-'><nom ieml='n.u.-'><![CDATA[".$name."]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[".$aTag."]]></nombre></marque>"; 
+		 return "<marque ieml='t.u.-'><nom ieml='n.u.-'><![CDATA[$name]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[$aTag]]></nombre></marque>"; 
 	   	 
 	}
 	
@@ -229,7 +229,7 @@ class SauvFlux{
 		 }
 		 //echo $tag.DELIM.$count;
 		 
-		 $result="<marque><nom ieml=\"n.u.-'\"><![CDATA[".$tag."]]></nom><nombre ieml=\"n.u.-'\"><![CDATA[".$count."]]></nombre></marque>"; 
+		 $result="<marque><nom ieml=\"n.u.-'\"><![CDATA[$tag]]></nom><nombre ieml=\"n.u.-'\"><![CDATA[$count]]></nombre></marque>"; 
 		
 
 		 //$result=str_replace("(.*)&(.*)","et",$result);
@@ -253,10 +253,10 @@ class SauvFlux{
   		}
   		
 	 
-        $result="<marque ieml='t.u.-'><nom ieml='n.u.-'><![CDATA[".$tag."]]></nom><description ieml=\"d.o.-b.o.-'\"><![CDATA[".$aDesc."]]></description><url ieml=\"d.i.-l.i.-'t.u.-\"><![CDATA[".$aUrl."]]></url><date ieml=\"t.o.-n.o.-'s.u.-\" ><![CDATA[".$aUdate."]]></date>
+        $result="<marque ieml='t.u.-'><nom ieml='n.u.-'><![CDATA[$tag]]></nom><description ieml=\"d.o.-b.o.-'\"><![CDATA[$aDesc]]></description><url ieml=\"d.i.-l.i.-'t.u.-\"><![CDATA[$aUrl]]></url><date ieml=\"t.o.-n.o.-'s.u.-\" ><![CDATA[$aUdate]]></date>
 </marque>";
   	
-    $result=str_replace("&","et",$result); 	   
+    //$result=str_replace("&","et",$result); 	   
     return $result;
     }
  
@@ -289,7 +289,7 @@ class SauvFlux{
 	
 	
 	$db->close();
-	$result="<marque><nom ieml=\"n.u.-'\"><![CDATA[".$parents."]]></nom><nombre ieml=\"n.u.-'\"><![CDATA[".$count."]]></nombre></marque>";
+	$result="<marque><nom ieml=\"n.u.-'\"><![CDATA[$parents]]></nom><nombre ieml=\"n.u.-'\"><![CDATA[$count]]></nombre></marque>";
 	return $result;
 	
 }
