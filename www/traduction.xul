@@ -8,8 +8,11 @@
 <window id="ieml-global" title="IEML-10eF v0.1 - information economy meta language - Dixième Famille" orient="horizontal" left="0" top="0" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
 	<script language="JavaScript" type="application/x-javascript" src="js/Interface.js"/>
     <script type="text/javascript" src="xbl/editableTree/functions.js" />
-
+    <script src="js/TradTagIeml.js"/>
+    <script src="js/histogrammes.js"/>
+    
 	<popupset id="popupset">
+	<script type="text/javascript" > var TradIeml= new Traduction(); </script>
 	</popupset>
 
 	<vbox id="box1" style="height:400px;width:300px;" ></vbox>
@@ -34,7 +37,7 @@
 			</vbox>
 			<vbox >
 				<hbox style="height:30px;width:400px;"  >
-					<button label="Ajouter une traduction" oncommand="AddTrad();"/>				
+					<button label="Ajouter une traduction" oncommand="AddTrad1();"/>				
 					<label id="trad-message" />
 				</hbox>
 				<hbox style="height:30px;width:400px;" >
@@ -56,10 +59,7 @@
 				</hbox>
 			</vbox>
 		</hbox>
-	<vbox style="height:100px;width:400px;">
-			<button label="Traduction Manuelle " oncommand=""/>
-	</vbox>
-	
+	    <hbox id="box"></hbox>
 	</vbox>
 	
 	

@@ -91,7 +91,11 @@
 				<from> FROM ieml_trad </from>
 				<where> WHERE ieml_id =-idIeml- AND onto_flux_id =-idflux-   </where>
 			</Query>
-		
+		    <Query fonction="ExeAjax-AddTrad">
+				<select>SELECT onto_flux_code  </select>
+				<from> FROM ieml_onto_flux De  </from>
+				<where>  </where>
+			</Query>
 		</Querys>
 		<rdfDesc urn="ieml"/>
 		<rdf tag="id_ieml"/>
