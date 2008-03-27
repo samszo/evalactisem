@@ -12,13 +12,13 @@
 	<popupset id="popupset">
 	</popupset>
 
-	<vbox id="box1" style="height:560px;width:400px;" ></vbox>
+	<vbox id="box1" style="height:400px;width:300px;" ></vbox>
 	
 	<splitter collapse="before" resizeafter="farthest">
 				<grippy/>
 	</splitter>
 	
-		<vbox id="box3" style="height:560px;width:400px;" >
+		<vbox id="box3" style="height:400px;width:300px;" >
 		<hbox >
 			<vbox >
 				<hbox >
@@ -67,7 +67,7 @@
 				<grippy/>
 	</splitter>
 	
-	<vbox id="box2" style="height:300px;width:400px;" >	</vbox>
+	<vbox id="box2" style="height:300px;width:300px;" >	</vbox>
 	
 	<vbox>
 		

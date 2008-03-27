@@ -1,4 +1,3 @@
-
 <script src="js/TradTagIeml.js">var TradIeml= new Traduction(); </script>
 
 function pf_couleur(num, color){
@@ -10,47 +9,35 @@ function pf_couleur(num, color){
 
 function RecupDeliciousFlux(){
 	
-		query=document.getElementById("requette").selectedItem.value;
+		query_flux=document.getElementById("requette").selectedItem.value;
+		query_graph=document.getElementById("type").selectedItem.value;
+	    
 	
-	if(query==""){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette=GetAllTags",'DelIiciousTree','');
+	if((query_flux=="")){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
 	}
-	if((query=="GetAllTags")||(query=="GetAllBundles")||(query=="GetAllPosts")){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'DelIiciousTree','');
+	if(query_graph=""){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&req=GetAllTags"+"&requette="+query_flux,'DelIiciousTreeGraph','');
+	}
+	if((query_flux=="GetAllTags")||(query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
-    	if(query=="GetRecentPosts"){
+    	if(query_flux=="GetRecentPosts"){
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
     		//alert(tag);
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&count="+count,'DelIiciousTree','');
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
-        if(query=="GetPosts"){
+        if(query_flux=="GetPosts"){
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query+"&tag="+tag+"&url="+url+"&date="+date,'DelIiciousTree','');
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
     }
 }
 
-function pf_dessin(result, param)
+function pf_dessin(noms, donnees)
 {
-var parser = new DOMParser();
-	xmlFlux = parser.parseFromString(result, "text/xml");
-    //alert(result);
-	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
-  	
-  	nSec = iterSec.iterateNext();
-	for (var j = 0; j < nSec.childNodes.length; j++) {
-		if(nSec.childNodes[j].tagName=="nom"){
-			document.getElementById("noms").value = nSec.childNodes[j].textContent;
-		    noms=nSec.childNodes[j].textContent;
-		}
-		if(nSec.childNodes[j].tagName=="nombre"){
-			donnees = nSec.childNodes[j].textContent;	
-		    	
-		}
-		
-	}
 	lien='library/stats.php?large='+escape("400");
 	lien=lien+'&haut='+escape('300');
 	lien=lien+'&titre='+escape(document.getElementById("titre").value);
@@ -62,7 +49,7 @@ var parser = new DOMParser();
 	lien=lien+'&col3='+escape('#000066');
 	lien=lien+'&col4='+escape('#000000');
 	document.getElementById("webFrame").setAttribute("src",lien);
-//alert(lien);
+    alert(lien);
 }
 
 
@@ -87,21 +74,14 @@ function hide_tooltip(evt)
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
 }
 
-function RepresGraphFlux(){
-	
-		query=document.getElementById("type").selectedItem.value;
-	if(query==" "){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette=GetAllTags",'pf_dessin','');
-	}else
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query,'pf_dessin','');
-	
-}
-function DelIiciousTree(result,param){
+
+function DelIiciousTreeGraph(result,param){
 	
 	query=document.getElementById("requette").selectedItem.value;
+	
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
-    //alert(result);
+    alert(result);
 	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	
   	nSec = iterSec.iterateNext();
@@ -124,8 +104,20 @@ function DelIiciousTree(result,param){
 		}
 		if(nSec.childNodes[j].tagName=="date"){
 			date = nSec.childNodes[j].textContent;	
-		}	
+		}
+		if(nSec.childNodes[j].tagName=="noms"){
+			document.getElementById("noms").value = nSec.childNodes[j].textContent;
+		    abscises=nSec.childNodes[j].textContent;
+		}
+		if(nSec.childNodes[j].tagName=="donnees"){
+			ordonnees = nSec.childNodes[j].textContent;	
+		    	
+		}
+			
+	
 	}
+
+    
 	if((query=="GetAllBundles")||(query=="GetAllTags")||(query=="")){
 		
 		Tree= document.getElementById("treeReq");
@@ -136,7 +128,8 @@ function DelIiciousTree(result,param){
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","overlay/tableFlux.php?tag="+tag+"&desc="+desc+"&url="+url+"&date="+date);
 	}
-	
+	pf_dessin(abscises, ordonnees);
+   
 }
 
 function parser(result,param){
@@ -149,4 +142,19 @@ trad=TradIeml.recherchez('parler');
 //alert(trad);
 ieml=trad.split(";");
 AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml[3],'parser','');
+}
+
+function Trad(){
+	alert("bonjour");
+	var box =document.getElementById("RepGraph");
+	childbox=box.firstChild;
+	while(childbox){
+		childbox=box.firstChild;
+		box.removeChild(childbox);
+		childbox=box.firstChild;
+    }
+    Tradframe=document.createElement("iframe");
+    Tradframe.setAttribute("flex",1);
+    Tradframe.setAttribute("src","Traduction.xul");
+    box.appendChild(Tradframe);
 }
