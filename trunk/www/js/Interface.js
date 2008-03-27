@@ -51,7 +51,7 @@ function SupTrad()
 	//récupération des valeurs
 	var idIeml = document.getElementById("id-trad-ieml");
 	var idflux = document.getElementById("id-trad-flux");
-    alert(idIeml.value);
+    
     var listbox=document.getElementById("boxlist");
     var select=listbox.selectedIndex;
 	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
@@ -212,5 +212,4 @@ txtDescpF= document.getElementById("lib-trad-flux");
 txtDescpF.value = celldescpF.getAttribute('label');
 
 }
-
 

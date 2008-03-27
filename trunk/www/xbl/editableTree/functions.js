@@ -115,7 +115,7 @@ function MoveBranche(TreeId, dir, event) {
 
 function startSelect(tree, cellCoord)
 {
-
+     
     //alert('startSelect ! '+element);
 	type = tree.firstChild.getAttribute('typesource');
 	//alert("type="+type);

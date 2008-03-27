@@ -139,13 +139,13 @@ function Trad_Pars_Ieml(){
 var trad;
 
 trad=TradIeml.recherchez('parler');
-//alert(trad);
+alert(trad);
 ieml=trad.split(";");
 AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml[3],'parser','');
 }
 
 function Trad(){
-	alert("bonjour");
+	//alert("bonjour");
 	var box =document.getElementById("RepGraph");
 	childbox=box.firstChild;
 	while(childbox){
@@ -157,4 +157,83 @@ function Trad(){
     Tradframe.setAttribute("flex",1);
     Tradframe.setAttribute("src","Traduction.xul");
     box.appendChild(Tradframe);
+}
+
+function AddTrad1()
+{
+	aTrad=document.getElementById("code-trad-flux").value;
+	rTrad=TradIeml.recherchez(aTrad);
+	if(rTrad==""){
+		document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
+	}
+	else{
+	 	
+	 	Trad=rTrad.split("*");
+	    CarIeml=Trad[0].split(";");
+	 	DiscIeml=Trad[1].split(";");
+	 	if(CarIeml.length >2){
+	 		alert("il existe plusieurs possibilité veuillez choisir la plus pertiente");
+	 		ChoixTrad(CarIeml,DiscIeml);
+	 		
+	 	}
+	}
+	//construction de la requete
+	//url = urlExeAjax+"?f=AddTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
+    //AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad1",'ServDictio','');
+}
+function ChoixTrad(CarIeml,DiscIeml){
+	var box =document.getElementById("box");
+	if(box.hasChildNodes()){
+		dernier=box.lastChild;
+		box.removeChild(dernier);
+	}
+		boxTrad=document.createElement("listbox");
+		boxTrad.setAttribute("id","Tradbox");
+		boxTrad.setAttribute("onclick","StartSelecTrad()");
+		listhead=document.createElement("listhead");
+		listheader1=document.createElement("listheader");
+		listheader1.setAttribute("label","Mot ieml");
+		listheader2=document.createElement("listheader");
+		listheader2.setAttribute("label","descripiton");
+		listhead.appendChild(listheader1);
+		listhead.appendChild(listheader2);
+		boxTrad.appendChild(listhead);
+		listcols=document.createElement("listcols");
+		listcol1=document.createElement("listcol");
+		listcol2=document.createElement("listcol");
+		listcols.appendChild(listcol1);
+		listcols.appendChild(listcol2);
+		boxTrad.appendChild(listcols);
+		
+		alert(CarIeml.length);
+		for(i=0;i<CarIeml.length;i++){
+			listitem=document.createElement("listitem");
+			cellcar=document.createElement("listcell");
+			cellcar.setAttribute("label",CarIeml[i]);
+			celldisc=document.createElement("listcell");
+			celldisc.setAttribute("label",DiscIeml[i]);
+			listitem.appendChild(cellcar);
+			listitem.appendChild(celldisc);
+			listitem.appendChild(cellcar);
+			listitem.appendChild(celldisc);
+			boxTrad.appendChild(listitem);
+		}
+		
+		
+		box.appendChild(boxTrad);
+	
+}
+function StartSelecTrad(){
+	var box=document.getElementById("Tradbox");
+	cellC=box.selectedItem.childNodes[0];
+	cellD=box.selectedItem.childNodes[1];
+	Carieml=cellC.getAttribute('label');
+	Discieml=cellD.getAttribute('label');
+	txtCode = document.getElementById("code-trad-ieml");
+	txtCode.value=cellC.getAttribute('label');
+	txtDescp= document.getElementById("lib-trad-ieml");
+	txtDescp.value = cellD.getAttribute('label');
+	
+	//alert(Carieml+";"+Discieml);
+	//return Carieml+";"+Discieml;
 }

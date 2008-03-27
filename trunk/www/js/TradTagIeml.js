@@ -4,6 +4,7 @@ this.recherchez=function(searchString) {
 //  var plusRE = new RegExp( "+", "g");  // can't make anything like this work in IE!
 //  searchString = searchString.replace( plusRE, " ");
   var wkStr = "";  // kluge around it
+  alert(searchString);
   for ( var i = 0; i < searchString.length; i++) {
     if ( searchString.charAt( i) ==  "+") {
       wkStr = wkStr + " ";
@@ -2237,8 +2238,8 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 
 }
  
-return this.syntaxe_ieml(source);
-
+source=this.syntaxe_ieml(source);
+return source+"*"+disc;
 }
 
 
@@ -2305,7 +2306,7 @@ this.syntaxe_ieml=function(source){
 		   sour=sour+";"
 		  }
 		 
-	    return sour;
+	   return sour;
 
 }
 }

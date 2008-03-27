@@ -24,7 +24,7 @@
 		$desc = -1;
 		
 		
-
+	
 	switch ($fonction) {
 		case 'AddTrad':
 			$resultat = AddTrad($_GET['idIeml'],$_GET['idflux']);
@@ -88,6 +88,8 @@
 		
 		
 	}
+	
+	
 
 	function SupTrad($idIeml,$idflux){
 	
