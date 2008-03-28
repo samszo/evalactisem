@@ -25,11 +25,12 @@ function RefreshResult(response, params) {
 	AjaxRequest(arrP[1],"AfficheResult",arrP[2])
 }
 
-function AjaxRequest(url,fonction_sortie,params) {
+function AjaxRequest(url,fonction_sortie,params,id) {
    
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
  	this.params = params;
+	this.id=id;
 	//alert(params);
 
 	var ajaxRequest = this;
@@ -91,8 +92,8 @@ function processReqChange() {
 			} catch (e) {}
 
 			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
-			eval(this.fonction_sortie+"(this.req.responseText,'"+this.params+"')");
-
+			eval(this.fonction_sortie+"(this.req.responseText,'"+this.params+"',+this.id)");
+            document.getElementById(this.id).value =this.req.responseText
 		} else {
 
 			alert("Il y avait un probleme avec le XML: " + this.req.statusText);
