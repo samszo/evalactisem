@@ -88,7 +88,7 @@ function ChargeBrower(id,url)
 }
 
 
-	function makeRequest(url,id) {
+	function makeRequest(url,fonction_sortie,id,param) {
 
         var httpRequest = false;
 
@@ -115,7 +115,7 @@ function ChargeBrower(id,url)
             alert('Abandon :( Impossible de créer une instance XMLHTTP');
             return false;
         }
-        httpRequest.onreadystatechange = function() { returnContents(httpRequest,id); };
+        httpRequest.onreadystatechange = function() { processReqChange(); };
         httpRequest.open('GET', url, true);
         httpRequest.send(null);
 
@@ -146,7 +146,35 @@ function ChargeBrower(id,url)
         }
 
     }
+	function processReqChange(httpRequest,fonction_sortie,id,param) {
 
+	try {
+	   	////console.log("state:"+this.req.readyState);
+	} catch (e) {}
+
+	if (httpRequest.readyState  == 4) {		// quand le fichier est chargé
+		
+
+		if (httpRequest.readyState  == 200) {			// detécter problèmes de format
+
+			try {
+    			netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+   			} catch (e) {}
+
+			try {
+	   			////console.log(this.req.responseText);
+			} catch (e) {}
+
+			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
+			eval(this.fonction_sortie+"(this.req.responseText,'"+this.params+"')");
+			document.getElementById(id).value = httpRequest.responseText;
+		} else {
+
+			alert("Il y avait un probleme avec le XML: " + httpRequest.statusText);
+
+		}
+	}
+}
 	
 function read(filepath) {
 //http://xulfr.org/wiki/RessourcesLibs/LectureFichierCodeAvecCommentaires
