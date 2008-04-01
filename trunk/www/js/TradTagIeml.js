@@ -2239,16 +2239,17 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 }
  
 //source=this.syntaxe_ieml(source);
-return source+"*"+disc;
+	
+	return source+"*"+disc;
 }
 
-
-this.syntaxe_ieml=function(source){
+// Fonction pour changer la syntaxe des motes ieml
+	this.syntaxe_ieml=function(source){
 	var sour="";	
 	var s="";
 	var r=0;
-		
-		syn=source.split(";");
+		result=source.split("*");
+		syn=result[0].split(";");
 		  for(var i=0;i<syn.length-1; i++){
 		  	for(var j=0;j<syn[i].length;j++){
 		  		
@@ -2308,5 +2309,5 @@ this.syntaxe_ieml=function(source){
 		 
 	   return sour;
 
-}
+	}
 }

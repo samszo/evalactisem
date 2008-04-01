@@ -15,13 +15,16 @@
 	<script type="text/javascript" > var TradIeml= new Traduction(); </script>
 	</popupset>
 
-	<vbox id="box1" style="height:400px;width:300px;" ></vbox>
+	
+	<vbox id="traduction"  style="height:600px;width:1000px;"> 
+	
+	<hbox>
+	<box id="box1" style="height:400px;width:300px;" ></box>
 	
 	<splitter collapse="before" resizeafter="farthest">
 				<grippy/>
 	</splitter>
-	
-		<vbox id="box3" style="height:400px;width:300px;" >
+	<vbox id="box3" style="height:400px;width:300px;" >
 		<hbox >
 			<vbox >
 				<hbox >
@@ -60,6 +63,7 @@
 			</vbox>
 		</hbox>
 	    <hbox id="box"></hbox>
+		
 	</vbox>
 	
 	
@@ -68,9 +72,9 @@
 	</splitter>
 	
 	<vbox id="box2" style="height:300px;width:300px;" >	</vbox>
-	
-	<vbox>
-		
+	</hbox>
+		<vbox style="height:30px;width:30px;">
+			<button label="Retoure" oncommand="Trad('traduction','histogrammes.xul');"/>
+		</vbox>
 	</vbox>
-	
 </window>

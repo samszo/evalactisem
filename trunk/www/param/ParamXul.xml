@@ -78,18 +78,23 @@
 				<where> </where>
 			</Query>
 		    <Query fonction="ExeAjax_Trad_VerifExist">
+				<select>SELECT ieml_id,ieml_code </select>
+				<from> FROM ieml_onto De  </from>
+				<where> WHERE ieml_lib = "-libflux-"  AND ieml_code="-codeIeml-"</where>
+			</Query>
+			<Query fonction="ExeAjax_Trad_VerifExist_P">
 				<select>SELECT ieml_id </select>
 				<from> FROM ieml_onto De  </from>
-				<where> WHERE ieml_lib = "-libflux-" </where>
+				<where> WHERE ieml_code = "-codeieml-" </where>
 			</Query>
 		    <Query fonction="ExeAjax-AddTrad-VerifExist">
 				<select>SELECT COUNT(1) </select>
 				<from> FROM ieml_trad De  </from>
-				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- </where>
+				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- AND code_trad= "-codetrad-" </where>
 			</Query>
 			<Query fonction="ExeAjax-AddTrad-Insert">
-				<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id, trad_date)</insert>
-				<values> VALUES(-idflux-, -idIeml-, now())  </values>
+				<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id,code_trad,trad_date)</insert>
+				<values> VALUES(-idflux-, -idIeml-,"-codetrad-", now())  </values>
 			</Query>
 			<Query fonction="AddTrad_Insert_onto_flux">
 				<insert>INSERT INTO ieml_onto (ieml_id, ieml_code, ieml_lib,ieml_niveau,ieml_parent,ieml_date)</insert>

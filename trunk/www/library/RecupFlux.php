@@ -5,8 +5,11 @@
    require('../param/Constantes.php');
    require_once ("../param/ParamPage.php");
 
-   define('DELICIOUS_USER', "amelmaster");
-   define('DELICIOUS_PASS', "lema1983");
+   $login=$_GET['login'];
+   $pwd=$_GET['pwd'];
+   
+   define('DELICIOUS_USER', $login);
+   define('DELICIOUS_PASS', $pwd);
    //define('DELICIOUS_USER', "luckysemiosisr");
    //define('DELICIOUS_PASS', "Samszo0");
 
