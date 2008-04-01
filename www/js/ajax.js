@@ -3,9 +3,6 @@
 //--------------------------------------------
 var urlExeAjax = "/evalactisem";
 
-
-
-
 function AfficheSvg(response,params) {
    	alert(params+response);
 	document.getElementById(params).firstChild.data = response;

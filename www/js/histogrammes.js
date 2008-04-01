@@ -25,7 +25,6 @@ function RecupDeliciousFlux(){
     	if(query_flux=="GetRecentPosts"){
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
-    		//alert(tag);
     		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
         if(query_flux=="GetPosts"){
@@ -49,7 +48,7 @@ function pf_dessin(noms, donnees)
 	lien=lien+'&col3='+escape('#000066');
 	lien=lien+'&col4='+escape('#000000');
 	document.getElementById("webFrame").setAttribute("src",lien);
-    alert(lien);
+    //alert(lien);
 }
 
 
@@ -85,8 +84,6 @@ function DelIiciousTreeGraph(result,param){
 	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	
   	nSec = iterSec.iterateNext();
-	
-	
 	for (var j = 0; j < nSec.childNodes.length; j++) {
 		if(nSec.childNodes[j].tagName=="nom"){
 			document.getElementById("noms").value = nSec.childNodes[j].textContent;
@@ -116,8 +113,6 @@ function DelIiciousTreeGraph(result,param){
 			
 	
 	}
-
-    
 	if((query=="GetAllBundles")||(query=="GetAllTags")||(query=="")){
 		
 		Tree= document.getElementById("treeReq");
@@ -133,58 +128,50 @@ function DelIiciousTreeGraph(result,param){
 }
 
 function parser(result,param){
-document.getElementById("iemlhisto").setAttribute("src",result);
-}
+	document.getElementById("iemlhisto").setAttribute("src",result);
+	}
+
 function Trad_Pars_Ieml(){
-var trad;
+	var trad;
 
-trad=TradIeml.recherchez('parler');
-alert(trad);
-ieml=trad.split(";");
-AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml[3],'parser','');
+	trad=TradIeml.recherchez('parler');
+	nouv_syn=TradIeml.syntaxe_ieml(trad);
+	ieml=nouv_syn.split(";");
+	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml[3],'parser','');
+
 }
 
-function Trad(){
-	//alert("bonjour");
-	var box =document.getElementById("RepGraph");
+function Trad(id,src){
+	
+	var box =document.getElementById(id);
+	
 	childbox=box.firstChild;
+	
 	while(childbox){
 		childbox=box.firstChild;
 		box.removeChild(childbox);
 		childbox=box.firstChild;
     }
+    
     Tradframe=document.createElement("iframe");
     Tradframe.setAttribute("flex",1);
-    Tradframe.setAttribute("src","Traduction.xul");
-    box.appendChild(Tradframe);
-}
-
-
-function AddTrad()
-{
-	//récupération des valeurs
-	var libflux = document.getElementById("code-trad-flux");
-	var idflux = document.getElementById("id-trad-flux");
-	
-	
+    Tradframe.setAttribute("src",src);
+    Tradbox=document.createElement("box");
+    Tradbox.setAttribute("flex",1);
+    Tradbox.appendChild(Tradframe);
+    box.appendChild(Tradbox);
     
-	//vérification des valeurs
-	if(idflux.value=="")
-		document.getElementById("trad-message").value = "Veuillez sélectionner une valeur pour chaque langage";
-	else
-		
-		AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad&idIeml="+libflux.value+"&idflux="+idflux.value,"AddTradDictio","","trad-message");
-		
 }
+
 
 function AddTradDictio(result,param){
-     alert(result);
-     if(result=="false"){
+        if(result=="false"){
 		aTrad=document.getElementById("code-trad-flux").value;
 		rTrad=TradIeml.recherchez(aTrad);
 		if(rTrad==" "){
 			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
-		}else{
+		}else {
+	 		
 	 		Trad=rTrad.split("*");
 	    	CarIeml=Trad[0].split(";");
 	 		DiscIeml=Trad[1].split(";");
@@ -194,17 +181,59 @@ function AddTradDictio(result,param){
 	 		}else
 	 		if(CarIeml.length ==2){
 	 			var codeIeml = document.getElementById("code-trad-ieml");
-				var libIeml=document.getElementById("lib-trad-ieml");
-                codeIeml.value=CarIeml[0];
-                libIeml.value=DiscIeml[0];
-	 			RequetteAddTrad();
+				//var libIeml=document.getElementById("lib-trad-ieml");
+                RequetteAddTrad();
 	 		}
 	}
-	//construction de la requete
-	//url = urlExeAjax+"?f=AddTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
-    //AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad1",'ServDictio','');
+	
+	}else{
+            aTrad=document.getElementById("code-trad-flux").value;
+		    rTrad=TradIeml.recherchez(aTrad);
+			Trad=rTrad.split("*");
+	    	CarIeml=Trad[0].split(";");
+	 		DiscIeml=Trad[1].split(";");
+	 		if(CarIeml.length >2){
+	 		alert("il existe plusieurs possibilités veuillez choisir une");
+	 		ChoixTrad(CarIeml,DiscIeml);
+	 		}else
+	 		if(CarIeml.length ==2){
+	 			var codeIeml = document.getElementById("code-trad-ieml");
+                RequetteAddTrad();
+	 		}
+
 }
 }
+
+//Ajouter une traduction
+
+function AddTrad(){
+	 
+	 var idflux = document.getElementById("id-trad-flux");
+	 var libIeml=document.getElementById("code-trad-flux");
+     aTrad=document.getElementById("code-trad-flux").value;
+	 rTrad=TradIeml.recherchez(aTrad);
+	 if(rTrad==" "){
+			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
+	 }else {
+	 		
+	 		Trad=rTrad.split("*");
+	    	CarIeml=Trad[0].split(";");
+	 		DiscIeml=Trad[1].split(";");
+	 		if(CarIeml.length >2){
+	 		alert("il existe plusieurs possibilités veuillez choisir une");
+	 		ChoixTrad(CarIeml,DiscIeml);
+	 		}else
+	 		if(CarIeml.length ==2){
+	 			document.getElementById("code-trad-ieml").value=CarIeml;
+				document.getElementById("lib-trad-ieml").value=document.getElementById("code-trad-flux").value;
+                RequetteAddTrad();
+	 		}
+	}
+
+}
+
+//Creation de la table des choix 
+
 function ChoixTrad(CarIeml,DiscIeml){
 	var box =document.getElementById("box");
 	if(box.hasChildNodes()){
@@ -229,7 +258,6 @@ function ChoixTrad(CarIeml,DiscIeml){
 		listcols.appendChild(listcol2);
 		boxTrad.appendChild(listcols);
 		
-		//alert(CarIeml.length);
 		for(i=0;i<CarIeml.length;i++){
 			listitem=document.createElement("listitem");
 			cellcar=document.createElement("listcell");
@@ -250,9 +278,11 @@ function ChoixTrad(CarIeml,DiscIeml){
 function test(result){
 alert(result);
 }
+
 function RequetteAddTrad(){
+	var libflux= document.getElementById("code-trad-flux");
 	var codeIeml = document.getElementById("code-trad-ieml");
-	var libIeml=document.getElementById("lib-trad-ieml");
+	var libIeml=document.getElementById("code-trad-flux");
 	var idflux = document.getElementById("id-trad-flux");
 	
 	//vérification des valeurs
@@ -260,10 +290,13 @@ function RequetteAddTrad(){
 		document.getElementById("trad-message").value = "Veuillez sélectionner une valeur pour chaque langage";
 	else
 		
-	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddDictio&idflux="+idflux.value+"&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value,"","","trad-message");
+	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad&idflux="+idflux.value+"&libflux="+libflux.value+"&codeIeml="+codeIeml.value,"","","trad-message");
 }
+
 function StartSelecTrad(){
+	
 	var box=document.getElementById("Tradbox");
+	
 	cellC=box.selectedItem.childNodes[0];
 	cellD=box.selectedItem.childNodes[1];
 	Carieml=cellC.getAttribute('label');
@@ -276,6 +309,9 @@ function StartSelecTrad(){
 	//alert(Carieml+";"+Discieml);
 	//return Carieml+";"+Discieml;
 }
+
+//Supression d'une traduction
+
 function SupTrad()
 {
 	//récupération des valeurs
@@ -295,24 +331,24 @@ function SupTrad()
 }
 function startSelectTab()
 { 
-var listbox=document.getElementById("boxlist");
-var cell = listbox.selectedItem.childNodes[0]; // suivant l'index de colonne que vous desirez
-var celldescp = listbox.selectedItem.childNodes[1];
-var cellF = listbox.selectedItem.childNodes[2];
-var celldescpF = listbox.selectedItem.childNodes[3];
+	var listbox=document.getElementById("boxlist");
+	var cell = listbox.selectedItem.childNodes[0]; // suivant l'index de colonne que vous desirez
+	var celldescp = listbox.selectedItem.childNodes[1];
+	var cellF = listbox.selectedItem.childNodes[2];
+	var celldescpF = listbox.selectedItem.childNodes[3];
 
-txtIdieml=document.getElementById("id-trad-ieml");
-txtIdieml.value=cell.getAttribute('label');
-txtId10F=document.getElementById("id-trad-flux");
-txtId10F.value=cellF.getAttribute('label');
-
-txtCode = document.getElementById("code-trad-ieml");
-txtCode.value=cell.getAttribute('label');
-txtDescp= document.getElementById("lib-trad-ieml");
-txtDescp.value = celldescp.getAttribute('label');
-txtCodeF = document.getElementById("code-trad-flux");
-txtCodeF.value=cellF.getAttribute('label');
-txtDescpF= document.getElementById("lib-trad-flux");
-txtDescpF.value = celldescpF.getAttribute('label');
+	txtIdieml=document.getElementById("id-trad-ieml");
+	txtIdieml.value=cell.getAttribute('label');
+	txtId10F=document.getElementById("id-trad-flux");
+	txtId10F.value=cellF.getAttribute('label');
+	
+	txtCode = document.getElementById("code-trad-ieml");
+	txtCode.value=cell.getAttribute('label');
+	txtDescp= document.getElementById("lib-trad-ieml");
+	txtDescp.value = celldescp.getAttribute('label');
+	txtCodeF = document.getElementById("code-trad-flux");
+	txtCodeF.value=cellF.getAttribute('label');
+	txtDescpF= document.getElementById("lib-trad-flux");
+	txtDescpF.value = celldescpF.getAttribute('label');
 
 }

@@ -24,7 +24,7 @@
 	</popup>
 	
 	<label value="traduction, semantique, ieml, delicious ....."/>
-	<hbox>
+	<hbox id="histogramme" flex="1">
 		<vbox>
 		   <groupbox>
 				<caption label="del.icio.us"/>
@@ -33,7 +33,7 @@
 					<label value="login"/>
 					<textbox id="login" value=""/>
 					<label value="password"/>
-					<textbox id="pwd" value=""/>
+					<textbox id="pwd" value="" type="password"/>
 				</groupbox>
 		   </groupbox>
 		  
@@ -57,7 +57,7 @@
 			</menulist>
 			<box id="box1" ></box>
 		    
-		    <button id="bt_10" label="Traduction flux"  onclick=" Trad();"/>
+		    <button id="bt_10" label="Traduction flux"  onclick="Trad('histogramme','traduction.xul');"/>
 		</groupbox>
 		<groupbox orient="horizontal">
 			<caption label="Type de graphique"/>
@@ -75,8 +75,8 @@
 			<label value="Ieml "/>
 			<textbox id="noms" value=""/>
 		</groupbox>
-      <button id="RecupFlux" label="Recupperer flux"  onclick="RecupDeliciousFlux()"/>
-      <button id="TypeGraphe" label="Voir" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml();"/>
+      <button id="RecupFlux" label="Recuperation flux"  onclick="RecupDeliciousFlux()"/>
+      <button id="TypeGraphe" label="Représentation Graphique" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml();"/>
      </vbox>
 	 <vbox id="RepGraph" flex="1">
 	 	<hbox  flex="1">
