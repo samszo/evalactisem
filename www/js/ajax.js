@@ -3,6 +3,37 @@
 //--------------------------------------------
 var urlExeAjax = "/evalactisem";
 
+function AppendResult(url,doc,ajoute) {
+  try {
+	dump("AppendResult IN "+url+"\n");
+	p = new XMLHttpRequest();
+	p.onload = null;
+	p.open("GET", url, false);
+	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	p.send(null);
+
+	if (p.status != "200" ){
+	      alert("Réception erreur " + p.status);
+	}else{
+	    response = p.responseText;
+		xulData="<box id='dataBox' flex='1'  " +
+	          "xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'>" +
+	          response + "</box>";
+		var parser=new DOMParser();
+		var resultDoc=parser.parseFromString(xulData,"text/xml");
+		if(!ajoute){
+			//vide le conteneur
+			while(doc.hasChildNodes())
+				doc.removeChild(doc.firstChild);
+		}
+		//ajoute le résultat
+		doc.appendChild(resultDoc.documentElement);
+	}
+	dump("AppendResult OUT \n");
+   } catch(ex2){alert(ex2);dump("::"+ex2);}
+}
+
+
 function AfficheSvg(response,params) {
    	alert(params+response);
 	document.getElementById(params).firstChild.data = response;

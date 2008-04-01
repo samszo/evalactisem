@@ -15,7 +15,7 @@ function GroupBox(nomParent){
 				//creation de caption 
 				
 				cap=document.createElement("caption");
-				cap.setAttribute("label","Parametres requete");
+				cap.setAttribute("label","Parametres");
 				boxb.appendChild(cap);
 				
 				//creation de label
