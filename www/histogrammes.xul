@@ -25,72 +25,69 @@
 	
 	<label value="traduction, semantique, ieml, delicious ....."/>
 	<hbox id="histogramme" flex="1">
-		<vbox>
+		<vbox hidden="true">
 		   <groupbox>
 				<caption label="del.icio.us"/>
 				<groupbox orient="vertical">
 					<caption label="Login"/>
 					<label value="login"/>
-					<textbox id="login" value=""/>
+					<textbox id="login" value="samszo"/>
 					<label value="password"/>
-					<textbox id="pwd" value="" type="password"/>
+					<textbox id="pwd" value="Lucky71" type="password"/>
 				</groupbox>
 		   </groupbox>
 		  
 	   </vbox>
-	   <vbox>
-	   	 <groupbox orient="vertical">
-		    <caption label="Titre"/>
-			<textbox persist="value" id="titre" value="Traduction du Flux"/>
-		 </groupbox>
-		 <groupbox>
-			<caption label="requete"/>
-			<label id="selctreq" value="" hidden="true"/>
-			<menulist id="requette" oncommand="">
-			   <menupopup >
-			     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand=""/>
-			     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
-			     <menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="grpBox.CreatGrpBox('box1');"/>
-			     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand=""/>
-			     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand=""/>
-			   </menupopup>
-			</menulist>
-			<box id="box1" ></box>
-		    
-		    <button id="bt_10" label="Traduction flux"  onclick="Trad('histogramme','traduction.xul');"/>
+	   <vbox flex="1">
+
+		 <groupbox orient="horizontal">
+			<caption label="del.icio.us"/>
+				<groupbox orient="horizontal">
+					<caption label="Graphique"/>
+						<vbox>
+				<label id="selctreq" value="" hidden="true"/>
+				<label value="requête" />
+				<menulist id="requette" oncommand="">
+				   <menupopup >
+				     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand=""/>
+				     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
+				     <menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="grpBox.CreatGrpBox('box1');"/>
+				     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand=""/>
+				     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand=""/>
+				   </menupopup>
+				</menulist>
+				<box id="box1" ></box>		    
+					    <label value="Titre"/>
+						<textbox persist="value" id="titre" value="Traduction du Flux"/>
+						<label value="Type "/>
+						<menulist id="type"  >
+							<menupopup>
+								<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
+								<menuitem label="Tags en fonction de count" value="GetAllTags"/>
+							</menupopup>
+						</menulist>
+					    <button id="RecupFlux" label="Affichage du graphique"  onclick="RecupDeliciousFlux()"/>
+						</vbox>
+				</groupbox>
+				<iframe id="webFrame" flex="1" src="http://www.google.fr "  />
+				<iframe id="treeReq" flex="1" src="http://www.google.fr"/>
 		</groupbox>
-		<groupbox orient="horizontal">
-			<caption label="Type de graphique"/>
-			<menulist id="type"  >
-				<menupopup>
-					<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
-					<menuitem label="Tags en fonction de count" value="GetAllTags"/>
-				</menupopup>
-			</menulist>
+		<groupbox orient="vertical" flex="1">
+			<caption label="IEML"/>
+			<hbox>
+     			<button id="bt_10" label="Traduction de TAG"  onclick="Trad('traduction','traduction.xul');"/>
+    			<button id="TypeGraphe" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml();"/>
+			</hbox>
+			<hbox flex="1">
+				<iframe id="iemlhisto" flex="1" src="http://www.ieml.org"  />
+				<splitter collapse="before" resizeafter="farthest">
+							<grippy/>
+				</splitter>
+				<hbox id="traduction" flex="1"/>
+			</hbox>
 		</groupbox>
-		<groupbox orient="vertical">
-			<caption label="Données"/>
-			<label value="Flux "/>
-			<textbox id="donnees" value=""/>
-			<label value="Ieml "/>
-			<textbox id="noms" value=""/>
-		</groupbox>
-      <button id="RecupFlux" label="Recuperation flux"  onclick="RecupDeliciousFlux()"/>
-      <button id="TypeGraphe" label="Représentation Graphique" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml();"/>
-     </vbox>
-	 <vbox id="RepGraph" flex="1">
-	 	<hbox  flex="1">
-			<box flex="1" style="height:300px;width:300px;"><iframe id="webFrame" flex="1" src="http://www.google.fr "  /></box>
-			<splitter collapse="before" resizeafter="farthest">
-				<grippy/>
-			</splitter>
-			<box flex="1" style="height:300px;width:300px;"><iframe id="iemlhisto" flex="1" src="http://www.msn.fr "  /></box>
-		</hbox>	
-		<splitter collapse="before" resizeafter="farthest">
-				<grippy/>
-		</splitter>
-		<box  style="height:200px;width:800px;"><iframe id="treeReq" flex="1" src="http://www.google.fr"/></box>
-	 
-	 </vbox>
+
+	</vbox>
+     
  </hbox>
 </window>
