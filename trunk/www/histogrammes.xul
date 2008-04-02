@@ -31,9 +31,9 @@
 				<groupbox orient="vertical">
 					<caption label="Login"/>
 					<label value="login"/>
-					<textbox id="login" value="samszo"/>
-					<label value="password"/>
-					<textbox id="pwd" value="Lucky71" type="password"/>
+					<textbox id="login" value=""/>
+					<label value=""/>
+					<textbox id="pwd" value="" type="password"/>
 				</groupbox>
 		   </groupbox>
 		  
@@ -72,6 +72,9 @@
 				<iframe id="webFrame" flex="1" src="http://www.google.fr "  />
 				<iframe id="treeReq" flex="1" src="http://www.google.fr"/>
 		</groupbox>
+		<splitter collapse="before" resizeafter="farthest">
+							<grippy/>
+		</splitter>
 		<groupbox orient="vertical" flex="1">
 			<caption label="IEML"/>
 			<hbox>
