@@ -52,7 +52,7 @@ function pf_dessin(noms, donnees)
 }
 
 
-function show_tooltip(evt)
+/*function show_tooltip(evt)
 {
 	var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
 	var  decale_x = matrix.e 
@@ -66,8 +66,7 @@ function show_tooltip(evt)
 		evt.target.ownerDocument.getElementById("tooltip_text").firstChild.data = values[numero]
 		evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "visible")
 	}
-}
-
+}*/
 function hide_tooltip(evt)
 {
 	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
@@ -80,17 +79,18 @@ function DelIiciousTreeGraph(result,param){
 	
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
-    alert(result);
+    //alert(result);
 	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	
   	nSec = iterSec.iterateNext();
 	for (var j = 0; j < nSec.childNodes.length; j++) {
 		if(nSec.childNodes[j].tagName=="nom"){
-			document.getElementById("noms").value = nSec.childNodes[j].textContent;
+			//document.getElementById("noms").value = nSec.childNodes[j].textContent;
+		    
 		    tag=nSec.childNodes[j].textContent;
 		}
 		if(nSec.childNodes[j].tagName=="nombre"){
-			document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
+			//document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
 		    	
 		}
 		if(nSec.childNodes[j].tagName=="description"){
@@ -103,7 +103,7 @@ function DelIiciousTreeGraph(result,param){
 			date = nSec.childNodes[j].textContent;	
 		}
 		if(nSec.childNodes[j].tagName=="noms"){
-			document.getElementById("noms").value = nSec.childNodes[j].textContent;
+			//document.getElementById("noms").value = nSec.childNodes[j].textContent;
 		    abscises=nSec.childNodes[j].textContent;
 		}
 		if(nSec.childNodes[j].tagName=="donnees"){
