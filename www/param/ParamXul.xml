@@ -158,8 +158,19 @@
 				<from>  FROM flux_foret</from>
 				<where> WHERE onto_flux_parents =-parent-</where>
 			</Query>
-		    
-		
+		    <Query fonction="flux_utilisateur">
+				<insert> INSERT INTO ieml_uti_flux (uti_id,flux_id)</insert>
+				<values> VALUES ('-idflux-' , '-iduti-')</values>
+			</Query>
+			<Query fonction="Exist_Utilisateur">
+				<insert> INSERT INTO ieml_uti (uti_id,uti_login,maj)</insert>
+				<values> VALUES ('' , '-login-',now())</values>
+			</Query>
+		    <Query fonction="foret_update_parent">
+				<select> SELECT count( uti_login)</select>
+				<from> FROM ieml_uti</from>
+				<where>	WHERE uti_login=-login-</where>
+			</Query>
 		</Querys>
 	
 	</XmlParam>

@@ -4,16 +4,11 @@
    require('php-delicious/php-delicious.inc.php');
    require('../param/Constantes.php');
    require_once ("../param/ParamPage.php");
-
-   $login=$_GET['login'];
-   $pwd=$_GET['pwd'];
+   session_start();
+  
+   $oDelicious=$_SESSION['Delicious'];
    
-   define('DELICIOUS_USER', $login);
-   define('DELICIOUS_PASS', $pwd);
-   //define('DELICIOUS_USER', "luckysemiosisr");
-   //define('DELICIOUS_PASS', "Samszo0");
-
-   
+   $login=$_SESSION['loginSess'];
    $requette= $_GET["requette"];
    $requete_g=$_GET["req"];
    $tag=$_GET["tag"];
@@ -22,14 +17,17 @@
    $date=$_GET["date"];
   
    $Activite= new Acti();
-   $oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
-    $oSaveFlux= new SauvFlux(); 
+   //$oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
+   $oSaveFlux= new SauvFlux(); 
+
+   $iduti=$oSaveFlux->utilisateur($objSite,$login);
    
-   $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious))  ;
+   $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti))  ;
   
    
+   
    if($requette=="GetAllBundles" ){
-    $oSaveFlux->aGetAllTags($objSite,$oDelicious);
+    $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious);
     Donneegraph($result_F,$AllTag,$requete_g);
     $codeActi='GetAB';
@@ -37,7 +35,8 @@
    }
    
   if($requette=="GetAllTags"){
- 
+    $oSaveFlux->aGetAllBundles($objSite,$oDelicious);
+    $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F="<nom ieml='n.u.-'><![CDATA[$AllTag[0]]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[$AllTag[1]]]></nombre>";
     Donneegraph($result_F,$AllTag,$requete_g);
     
