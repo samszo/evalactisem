@@ -1,12 +1,37 @@
 <script src="js/TradTagIeml.js">var TradIeml= new Traduction(); </script>
 
+function show_tooltip(evt)
+{
+        var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
+        var  decale_x = matrix.e 
+        var  decale_y = matrix.f
+        var values = res.split(";")
+        var barre = evt.target.getAttributeNS(null , "id")
+        var numero = parseInt(barre.substring(4 , barre.length)) - 1
+        if (numero >= 0)
+        {       
+                evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "transform", "translate(" + (evt.clientX - decale_x - 70) + "," + (evt.clientY - decale_y - 20))
+                evt.target.ownerDocument.getElementById("tooltip_text").firstChild.data = values[numero]
+                evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "visible")
+        }
+}
+
+
+function hide_tooltip(evt)
+{
+        evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
+}
+
 function pf_couleur(num, color){
     document.getElementById("colorpicker" + num).hidePopup();
     document.getElementById("tb_0" + num).value =color;
     document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
 }
 
-
+function SetDonnee(){
+	
+	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'','');
+}
 function RecupDeliciousFlux(){
 	
 		query_flux=document.getElementById("requette").selectedItem.value;
@@ -14,24 +39,24 @@ function RecupDeliciousFlux(){
 	    
 	
 	if((query_flux=="")){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
 	}
 	if(query_graph=""){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&req=GetAllTags"+"&requette="+query_flux,'DelIiciousTreeGraph','');
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?req=GetAllTags"+"&requette="+query_flux,'DelIiciousTreeGraph','');
 	}
 	if((query_flux=="GetAllTags")||(query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
     	if(query_flux=="GetRecentPosts"){
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
         if(query_flux=="GetPosts"){
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?login="+document.getElementById("login").value+"&pwd="+document.getElementById("pwd").value+"&requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
+    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
     }
 }
 
@@ -52,31 +77,9 @@ function pf_dessin(noms, donnees)
 }
 
 
-/*function show_tooltip(evt)
-{
-	var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
-	var  decale_x = matrix.e 
-	var  decale_y = matrix.f
-	var values = document.getElementById("donnees").value.split(";")
-	var barre = evt.target.getAttributeNS(null , "id")
-	var numero = parseInt(barre.substring(4 , barre.length)) - 1
-	if (numero >= 0)
-	{	
-		evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "transform", "translate(" + (evt.clientX - decale_x - 70) + "," + (evt.clientY - decale_y - 20))
-		evt.target.ownerDocument.getElementById("tooltip_text").firstChild.data = values[numero]
-		evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "visible")
-	}
-}*/
-function hide_tooltip(evt)
-{
-	evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
-}
-
-
 function DelIiciousTreeGraph(result,param){
 	
 	query=document.getElementById("requette").selectedItem.value;
-	
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
     //alert(result);
@@ -91,7 +94,7 @@ function DelIiciousTreeGraph(result,param){
 		}
 		if(nSec.childNodes[j].tagName=="nombre"){
 			//document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
-		    	
+		    
 		}
 		if(nSec.childNodes[j].tagName=="description"){
 			desc = nSec.childNodes[j].textContent;
@@ -108,7 +111,7 @@ function DelIiciousTreeGraph(result,param){
 		}
 		if(nSec.childNodes[j].tagName=="donnees"){
 			ordonnees = nSec.childNodes[j].textContent;	
-		    	
+		    res=nSec.childNodes[j].textContent;	
 		}
 			
 	

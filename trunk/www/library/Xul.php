@@ -1,4 +1,5 @@
 <?php
+session_start();
 class Xul{
   public $id;
   public $XmlParam;
@@ -300,10 +301,10 @@ class Xul{
 	}
 	
 	
-	function GetTreeChildren($type, $Cols=-1, $id=-1){
+	function GetTreeChildren($type, $Cols=-2, $id=-2){
 
 		
-		if($Cols==-1){
+		if($Cols==-2){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
 			$Cols = $this->site->XmlParam->GetElements($Xpath);
 			//print_r($Cols);
@@ -311,22 +312,24 @@ class Xul{
 		
 		$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
-		//print_r($Q);
-		if($id==-1){
+		if($id==-2){
+			
 			//récupère la valeur par defaut
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
 			$attrs =$this->site->XmlParam->GetElements($Xpath);
-			//print_r( $attrs[0]["def"]);
+			
 			
 			if($attrs[0]["niv"])
 				$id = $attrs[0]["niv"];
-			//echo $id." def<br/>";
+			
 		}
 		
 		$from = str_replace("-parent-", $id, $Q[0]->from);
-		//ECHO $FROM;
+		if($type=="flux"){
+			$from = str_replace("-iduti-", $_SESSION['iduti'], $from);
+		}
 		$sql = $Q[0]->select.$from;
-		//echo $sql;
+		
 		
 		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
 		$db->connect();
@@ -341,8 +344,6 @@ class Xul{
 			$tree .= '<treeitem id="'.$type.'_'.$r[0].'" container="true" empty="false" >'.EOL;
 			$tree .= '<treerow>'.EOL;
 			$i= -1;
-			//colonne de l'identifiant
-			//$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
 			foreach($Cols as $Col)
 			{
 				$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
@@ -353,10 +354,16 @@ class Xul{
 			$tree .= '</treeitem>'.EOL;
 		}
 
-		if($nb>0)
+		if($nb>0){
+		 	
 			$tree .= '</treechildren>'.EOL;
-		else
-			$tree = '';
+		}	
+		else{
+			
+			$tree='';
+		   
+		}
+			
 		
 		return $tree;
 

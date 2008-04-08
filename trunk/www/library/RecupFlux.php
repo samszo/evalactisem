@@ -17,42 +17,41 @@
    $date=$_GET["date"];
   
    $Activite= new Acti();
-   //$oDelicious = new PhpDelicious(DELICIOUS_USER, DELICIOUS_PASS);
    $oSaveFlux= new SauvFlux(); 
 
    $iduti=$oSaveFlux->utilisateur($objSite,$login);
-   
+   $_SESSION['iduti']=$iduti;
    $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti))  ;
   
    
    
    if($requette=="GetAllBundles" ){
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
-    $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious);
+    $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     Donneegraph($result_F,$AllTag,$requete_g);
     $codeActi='GetAB';
-	$descActi='Recupperation de tous les bundles';
+	$descActi='Recuperation de tous les bundles';
    }
    
   if($requette=="GetAllTags"){
-    $oSaveFlux->aGetAllBundles($objSite,$oDelicious);
+    $oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F="<nom ieml='n.u.-'><![CDATA[$AllTag[0]]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[$AllTag[1]]]></nombre>";
-    Donneegraph($result_F,$AllTag,$requete_g);
+    Donneegraph($result_F,$AllTag,$requete_g,$iduti);
     
   	$codeActi='GetAT';
-	$descActi='Recupperation de tous les tags';
+	$descActi='Recuperation de tous les tags';
   }
   
   if($requette=="GetAllPosts"){
   	if ($aPosts = $oDelicious->GetAllPosts()){
   		$result_F=$oSaveFlux->aGetPosts($aPosts);
-	  	Donneegraph($result_F,$AllTag,$requete_g);
+	  	Donneegraph($result_F,$AllTag,$requete_g,$iduti);
   	 }else {
 	        echo $oDelicious->LastErrorString();
 	 }
      $codeActi='GetAP';
-	 $descActi='Recupperation de tous les Posts';
+	 $descActi='Recuperation de tous les Posts';
 	 
 	 $Activite->AddActi($codeActi,$descActi);
 	 
@@ -63,7 +62,7 @@
   	
   	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date)){
   	 	$result_F=$oSaveFlux->aGetPosts($aPosts);
-	  	Donneegraph($result_F,$AllTag,$requete_g);
+	  	Donneegraph($result_F,$AllTag,$requete_g,$iduti);
 	 
   	}else {
 	        echo $oDelicious->LastErrorString();
@@ -79,7 +78,7 @@
 if($requette=="GetRecentPosts"){
   	if ($aPosts = $oDelicious->GetRecentPosts($tag,$count)){
   	 $result_F=$oSaveFlux->aGetPosts($aPosts);
-	  Donneegraph($result_F,$AllTag,$requete_g);
+	  Donneegraph($result_F,$AllTag,$requete_g,$iduti);
 	 
   	}else {
 	        echo $oDelicious->LastErrorString();
@@ -92,15 +91,16 @@ if($requette=="GetRecentPosts"){
   
  
 
+	
 function Xpath($fonction){
 	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
 	 return $Xpath; 
 }
-function Donneegraph($result_F,$AllTag,$requete_g){
+function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
 	global $oSaveFlux;
 	global $objSite;
 	if($requete_g=="tagsFbundles"){
-    	$result_G=$oSaveFlux->GraphTagBund($objSite);
+    	$result_G=$oSaveFlux->GraphTagBund($objSite,$iduti);
     	echo $result="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
     }else{
     	$result_G="<noms ieml=\"n.u.-'\"><![CDATA[$AllTag[0]]]></noms><donnees ieml=\"n.u.-'\"><![CDATA[$AllTag[1]]]></donnees>";
