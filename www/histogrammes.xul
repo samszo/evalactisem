@@ -2,7 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href="overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux" ?>
 <?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?>
-<window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+<window id="trad_flux" title="traduction Flux" onload='alert("hillow");SetDonnee();' xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"  >
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
@@ -24,7 +24,7 @@
 	</popup>
 	
 	<label value="traduction, semantique, ieml, delicious ....."/>
-	<hbox id="histogramme" flex="1">
+	<hbox id="histogramme" flex="1" onload='SetDonnee()'>
 		<vbox hidden="true">
 		   <groupbox>
 				<caption label="del.icio.us"/>

@@ -22,9 +22,9 @@ function ChercheAbo ()
 		$mdp=$_POST['mdp_uti'];
    	   	
 		if(($login!="")&&($mdp!="")){
-	    	$_SESSION['loginSess']=$login;
+	    	$oDelicious = new PhpDelicious($login, $mdp);
+			$_SESSION['loginSess']=$login;
 			$_SESSION['Delicious']=$oDelicious;
-			$oDelicious = new PhpDelicious($login, $mdp);
 			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
 			$con=$oDelicious->LastError();
 			if ($con==2)
@@ -80,11 +80,11 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 		   </groupbox>
 		  
 	   </vbox>
-	   <vbox flex="1">
+	   <vbox flex="1" onload='SetDonnee();'>
 
 		 <groupbox orient="horizontal">
 			<caption label="del.icio.us"/>
-				<groupbox orient="horizontal">
+				<groupbox orient="horizontal" >
 					<caption label="Graphique"/>
 						<vbox>
 				<label id="selctreq" value="" hidden="true"/>

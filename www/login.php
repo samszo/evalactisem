@@ -55,7 +55,7 @@ session_start();
 			<input name="mdp_uti" type="password" id="mdp_uti">
 			</p>
 			<p align="center">
-			<input type="submit" name="Submit" value="Envoyer">
+			<input type="submit" name="Submit" value="Connexion">
 			</p>
 			</form>
 		</div>

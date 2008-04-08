@@ -1,6 +1,7 @@
 <?php
 require_once ("../param/ParamPage.php");
-	
+	session_start();
+	$idacteur=$_SESSION['iduti'];
 	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']";
 	$ds = $objSite->XmlParam->GetElements($Xpath);
 	
@@ -39,8 +40,9 @@ require_once ("../param/ParamPage.php");
 		<?php
 			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='ieml-flux']";
 			$Q = $objSite->XmlParam->GetElements($Xpath);
-			$sql = $Q[0]->select.$Q[0]->from.$Q[0]->where;
-			//echo $sql."<br/>"; 
+			$where=str_replace("-idacteur-",$idacteur,$Q[0]->where);
+			$sql = $Q[0]->select.$Q[0]->from.$where;
+		    //echo $sql."<br/>"; 
 
 			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 			$db->connect();
@@ -52,11 +54,13 @@ require_once ("../param/ParamPage.php");
 			{
 				echo('<listitem>');
 				echo('<listcell label="'.$r["ieml_id"].'"/>');
-				echo('<listcell label="'.$r["ieml_lib"].'"/>');
 				echo('<listcell label="'.$r["onto_flux_id"].'"/>');
-				echo('<listcell label="'.$r["onto_flux_desc"].'"/>');
+				echo('<listcell label="'.$r["ieml_code"].'"/>');
+				echo('<listcell label="'.$r["ieml_lib"].'"/>');
 				echo('</listitem>');
 			}		    			    
+		
+		
 		?>
 		</listbox>
 	</box>
