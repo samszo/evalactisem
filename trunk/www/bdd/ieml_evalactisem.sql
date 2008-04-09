@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Dim 06 Avril 2008 à 12:58
+-- Généré le : Mer 09 Avril 2008 à 13:53
 -- Version du serveur: 5.0.45
 -- Version de PHP: 5.2.4
 
@@ -31,16 +31,16 @@ CREATE TABLE `flux_foret` (
 --
 
 INSERT INTO `flux_foret` (`onto_flux_id`, `onto_flux_parents`) VALUES
-(1, -1),
-(2, -1),
-(3, -1),
+(1, 0),
+(2, 0),
+(3, 0),
 (4, 11),
-(5, -1),
-(6, -1),
-(7, -1),
-(8, 11),
-(8, 12),
-(9, -1),
+(5, 0),
+(6, 0),
+(7, 11),
+(7, 12),
+(8, 0),
+(9, 0),
 (10, 12),
 (11, 0),
 (12, 0);
@@ -806,12 +806,15 @@ CREATE TABLE `ieml_acti` (
   `acti_code` text NOT NULL,
   `acti_desc` varchar(255) NOT NULL,
   PRIMARY KEY  (`acti_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `ieml_acti`
 --
 
+INSERT INTO `ieml_acti` (`acti_id`, `acti_code`, `acti_desc`) VALUES
+(1, 'GetP', 'Recupperation de  Posts'),
+(2, 'GetP', 'Recupperation de  Posts');
 
 -- --------------------------------------------------------
 
@@ -1057,7 +1060,7 @@ CREATE TABLE `ieml_onto` (
   `ieml_parent` text NOT NULL,
   `ieml_date` date NOT NULL,
   PRIMARY KEY  (`ieml_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cette table est utilisée pour stocker l’ontologie IEML.' AUTO_INCREMENT=287 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cette table est utilisée pour stocker l’ontologie IEML.' AUTO_INCREMENT=293 ;
 
 --
 -- Contenu de la table `ieml_onto`
@@ -1253,14 +1256,12 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (194, 'loto', 'voyage', 3, '-1', '0000-00-00'),
 (196, 's.y.-wa.e.-|doee-R', 'Choix d un savoir pour un membre', 1, '198', '2008-01-13'),
 (197, 's.y.-wa.e.-|doee-R', 'TEST', 1, '198', '2008-01-12'),
-(198, 'l.o.-t.o.-we.b.-', 'navigation système d''information', 1, 'ieml_10eF', '2008-01-02'),
-(280, 'uulosy', 'semantique', 1, '-1', '2008-03-31'),
-(281, 'senu', 'semantique', 1, '-1', '2008-03-31'),
-(282, 'uulo', 'semantique', 1, '-1', '2008-03-31'),
-(283, 'betuwae,', 'programmation', 1, '-1', '2008-03-31'),
-(284, 'uulo', '4', 1, '-1', '2008-04-01'),
-(285, 'senu', '4', 1, '-1', '2008-04-01'),
-(286, 'uulosy', '4', 1, '-1', '2008-04-01');
+(287, 'uulosy', 'semantique', 1, '-1', '2008-04-08'),
+(288, 'betuwae,', 'programmation', 1, '-1', '2008-04-08'),
+(289, 'senu', 'semantique', 1, '-1', '2008-04-08'),
+(290, 'uulo', 'semantique', 1, '-1', '2008-04-08'),
+(291, 'iemlWord', 'ieml', 1, '-1', '2008-04-08'),
+(292, 'wex', 'system', 1, '-1', '2008-04-09');
 
 -- --------------------------------------------------------
 
@@ -1288,9 +1289,9 @@ INSERT INTO `ieml_onto_flux` (`onto_flux_id`, `onto_flux_code`, `onto_flux_desc`
 (4, 'ieml', 'tag ', 1, 'semantique;'),
 (5, 'mail', 'tag ', 1, ''),
 (6, 'manuel', 'tag ', 1, ''),
-(7, 'mes', 'tag ', 1, ''),
-(8, 'ontologie', 'tag ', 1, 'semantique;programmation;'),
-(9, 'system', 'tag ', 1, ''),
+(7, 'ontologie', 'tag ', 1, 'semantique;programmation;'),
+(8, 'system', 'tag ', 1, ''),
+(9, 'system:unfiled', 'tag ', 1, ''),
 (10, 'xul', 'tag ', 1, 'programmation;'),
 (11, 'semantique', 'bundels ', 0, ''),
 (12, 'programmation', 'bundels ', 0, '');
@@ -1305,7 +1306,7 @@ CREATE TABLE `ieml_trad` (
   `ieml_id` int(11) NOT NULL,
   `onto_flux_id` int(11) NOT NULL,
   `trad_date` date NOT NULL,
-  `code_trad` varchar(50) NOT NULL,
+  `acteur_id` int(11) NOT NULL,
   PRIMARY KEY  (`ieml_id`,`onto_flux_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1313,11 +1314,10 @@ CREATE TABLE `ieml_trad` (
 -- Contenu de la table `ieml_trad`
 --
 
-INSERT INTO `ieml_trad` (`ieml_id`, `onto_flux_id`, `trad_date`, `code_trad`) VALUES
-(280, 1, '2008-04-01', 'uulosy'),
-(280, 8, '2008-04-03', 'uulosy'),
-(281, 1, '2008-04-01', 'senu'),
-(283, 4, '2008-03-31', 'betuwae,');
+INSERT INTO `ieml_trad` (`ieml_id`, `onto_flux_id`, `trad_date`, `acteur_id`) VALUES
+(287, 11, '2008-04-08', 1),
+(288, 12, '2008-04-08', 1),
+(292, 8, '2008-04-09', 1);
 
 -- --------------------------------------------------------
 
@@ -1330,17 +1330,14 @@ CREATE TABLE `ieml_uti` (
   `uti_login` varchar(225) NOT NULL,
   `maj` varchar(225) NOT NULL,
   PRIMARY KEY  (`uti_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Contenu de la table `ieml_uti`
 --
 
 INSERT INTO `ieml_uti` (`uti_id`, `uti_login`, `maj`) VALUES
-(1, 'amelmaster', '2008-04-04 11:55:50'),
-(2, 'amelmaster', '2008-04-04 11:56:34'),
-(3, 'amelmaster', '2008-04-04 11:56:41'),
-(4, 'amelmaster', '2008-04-04 11:56:48');
+(1, 'amelmaster', '2008-04-08 17:47:31');
 
 -- --------------------------------------------------------
 
@@ -1359,12 +1356,14 @@ CREATE TABLE `ieml_uti_flux` (
 
 INSERT INTO `ieml_uti_flux` (`uti_id`, `flux_id`) VALUES
 (1, 1),
-(2, 1),
-(3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
-(7, 1),
-(8, 1),
-(9, 1),
-(10, 1);
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12);
