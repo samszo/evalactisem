@@ -121,7 +121,7 @@ function processReqChange() {
 
 			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
 			eval(this.fonction_sortie+"(this.req.responseText,'"+this.params+"',+this.id)");
-            document.getElementById(this.id).value =this.req.responseText
+            //document.getElementById(this.id).value =this.req.responseText
 		} else {
 
 			alert("Il y avait un probleme avec le XML: " + this.req.statusText);
