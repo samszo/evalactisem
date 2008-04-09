@@ -1,4 +1,3 @@
-<script src="js/TradTagIeml.js">var TradIeml= new Traduction(); </script>
 
 function show_tooltip(evt)
 {
@@ -86,6 +85,8 @@ function DelIiciousTreeGraph(result,param){
 	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	
   	nSec = iterSec.iterateNext();
+  	if(!nSec)
+  		return;
 	for (var j = 0; j < nSec.childNodes.length; j++) {
 		if(nSec.childNodes[j].tagName=="nom"){
 			//document.getElementById("noms").value = nSec.childNodes[j].textContent;
@@ -136,7 +137,7 @@ function parser(result,param){
 
 function Trad_Pars_Ieml(){
 	var trad;
-
+	alert(xmlFlux);
 	trad=TradIeml.recherchez('parler');
 	nouv_syn=TradIeml.syntaxe_ieml(trad);
 	ieml=nouv_syn.split(";");

@@ -1,8 +1,53 @@
-<?xml version="1.0" encoding="ISO-8859-15"?>
-<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xul-overlay href="overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux" ?>
-<?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?>
-<window id="trad_flux" title="traduction Flux" onload='alert("hillow");SetDonnee();' xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"  >
+<?php
+require('library/php-delicious/php-delicious.inc.php');
+define('DELICIOUS_USER', $_POST['login_uti']);
+define('DELICIOUS_PASS', $_POST['mdp_uti']);
+
+session_start();
+extract($_SESSION,EXTR_OVERWRITE);
+extract($_POST,EXTR_OVERWRITE);
+
+
+
+
+	
+
+
+function ChercheAbo ()
+	{
+		// connexion a delicious
+		global $con;
+		
+		$login=$_POST['login_uti'];
+		$mdp=$_POST['mdp_uti'];
+   	   	
+		if(($login!="")&&($mdp!="")){
+	    	$oDelicious = new PhpDelicious($login, $mdp);
+			$_SESSION['loginSess']=$login;
+			$_SESSION['Delicious']=$oDelicious;
+			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
+			$con=$oDelicious->LastError();
+			if ($con==2)
+			{
+				echo "Incorrect del.icio.us username or password";
+				include("login.php");
+				exit;
+			}
+			}else{
+				include("login.php");
+				exit;
+		}
+}
+
+ChercheAbo ();
+
+header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
+header ("title: Saisi des diagnosics d'accessibilité");
+echo '<' . '?xml version="1.0" encoding="iso-8859-15" ?' . '>';
+echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
+echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
+?>
+<window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
@@ -10,21 +55,18 @@
 	<script src="js/groupbox.js"/>
 	
 	<script type="text/javascript" > var grpBox= new GroupBox('box1'); var TradIeml= new Traduction(); </script>
-	<popup id="colorpicker1">
-		<colorpicker onselect="pf_couleur('1', this.color);"/>
-	</popup>
-	<popup id="colorpicker2">
-		<colorpicker onselect="pf_couleur('2', this.color);"/>
-	</popup>
-	<popup id="colorpicker3">
-		<colorpicker onselect="pf_couleur('3', this.color);"/>
-	</popup>
-	<popup id="colorpicker4">
-		<colorpicker onselect="pf_couleur('4', this.color);"/>
-	</popup>
-	
-	<label value="traduction, semantique, ieml, delicious ....."/>
-	<hbox id="histogramme" flex="1" onload='SetDonnee()'>
+    <label value="<?php if($con==1){
+							echo 'Connection to del.icio.us failed.';
+                         }elseif($con==3){
+		             		
+		             			echo 'Del.icio.us API access throttled.' ;
+		             	 }else{  
+			         	 	echo'traduction, semantique, ieml, delicious .....'; 
+			            }
+			           ?>"/>
+
+	<label value="logout" onclick="window.location.replace('exit.php') ; " style=" margin-left:1200px"/>
+	<hbox id="histogramme" flex="1">
 		<vbox hidden="true">
 		   <groupbox>
 				<caption label="del.icio.us"/>
@@ -38,11 +80,11 @@
 		   </groupbox>
 		  
 	   </vbox>
-	   <vbox flex="1">
+	   <vbox flex="1" onload='SetDonnee();'>
 
 		 <groupbox orient="horizontal">
 			<caption label="del.icio.us"/>
-				<groupbox orient="horizontal">
+				<groupbox orient="horizontal" >
 					<caption label="Graphique"/>
 						<vbox>
 				<label id="selctreq" value="" hidden="true"/>
@@ -94,3 +136,4 @@
      
  </hbox>
 </window>
+
