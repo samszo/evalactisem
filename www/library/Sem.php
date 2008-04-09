@@ -22,7 +22,7 @@ Class Sem{
 	private $site;
 	private $trace;
     public  $parse;
-	function __construct($Site, $FicXml, $So, $De="", $Tr="", $trace=false) {
+	function __construct($Site, $FicXml, $So, $De="", $Tr="", $trace=true) {
 		
 		$this->trace = $trace;
         
@@ -159,7 +159,8 @@ Class Sem{
 		$parse = str_replace("</XMP>","",$parse);
 		$parse = str_replace("<?xml version=\"1.0\"?>"," ",$parse);
 		$xml = simplexml_load_string($parse);
-		//echo $parse;
+		if($this->trace)
+			echo "Sem.php:GetSvgBarre:parse".$parse."<br/>";
 		$genOps = $xml->xpath("//genOp");
 		$donnees = "";
 		$noms = "";
