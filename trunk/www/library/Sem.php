@@ -22,7 +22,7 @@ Class Sem{
 	private $site;
 	private $trace;
     public  $parse;
-	function __construct($Site, $FicXml, $So, $De="", $Tr="", $trace=true) {
+	function __construct($Site, $FicXml, $So, $De="", $Tr="", $trace=false) {
 		
 		$this->trace = $trace;
         
@@ -150,22 +150,27 @@ Class Sem{
 	function GetSvgBarre($code){
 		if($code=="")
 			$code=$this->Src;
-
+		if($this->trace)
+			echo "Sem.php:GetSvgBarre:code".$code."<br/>";
+			
 		
 		$parse = $this->Parse($code);
-	
-		//nettoie le résultat du parser
-	    $parse = str_replace("<XMP>","",$parse);
-		$parse = str_replace("</XMP>","",$parse);
-		$parse = str_replace("<?xml version=\"1.0\"?>"," ",$parse);
-		$xml = simplexml_load_string($parse);
 		if($this->trace)
 			echo "Sem.php:GetSvgBarre:parse".$parse."<br/>";
-		$genOps = $xml->xpath("//genOp");
+		
+		//nettoie le résultat du parser
+	    $parse = str_replace("<XMP>","",$parse);
+	    $parse = str_replace("</XMP>","",$parse);
+	    $parse = str_replace("<?xml version=\"1.0\"?>"," ",$parse);
+	    $xml = simplexml_load_string($parse);
+		if($this->trace)
+			echo "Sem.php:GetSvgBarre:xml".print_r($xml)."<br/>";
 		$donnees = "";
 		$noms = "";
-		while(list( , $node) = each($genOps)) {
-			$a = $node[0]->attributes();
+		foreach($xml->xpath("//genOp") as $genOps){
+			if($this->trace)
+				echo "Sem.php:GetSvgBarre:genOps".print_r($genOps)."<br/>";
+			$a = $genOps->attributes();
 			//print_r($a);
 		    $noms .= $a->layer."_".$a->role."_first:".$a->first.";";
 		    $donnees .= $a->first.";";
@@ -202,9 +207,10 @@ Class Sem{
 	
 		if($code=="")
 			$code=$this->Src;
-		    $lien ="https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression=".$code."'";
-		    //echo "code=".$code;
-		$oCurl = curl_init($lien);
+	    $lien ="https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression=".$code."'";
+		if($this->trace)
+			echo "Sem.php:Parse:lien".$lien."<br/>";
+	    $oCurl = curl_init($lien);
 		// set options
 	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
 		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
@@ -221,7 +227,9 @@ Class Sem{
 		$sResult = curl_exec($oCurl);
 		// close session
 		curl_close($oCurl);
-       
+		if($this->trace)
+			echo "Sem.php:Parse:sResult".$sResult."<br/>";
+		
 		return $sResult;
 	}
 
