@@ -404,11 +404,13 @@
          if (!$oCache->Check()) {
             if ($aResult = $this->DeliciousRequest('tags/bundles/all')) {
                $aBundles = array();
-               foreach ($aResult['items'] as $aCurBundle) {
-                  $aBundles[] = array(
-                     'name' => $aCurBundle['attributes']['NAME'],
-                     'tags' => $aCurBundle['attributes']['TAGS']
-                  );
+               if($aResult['items']){
+	               foreach ($aResult['items'] as $aCurBundle) {
+	                  $aBundles[] = array(
+	                     'name' => $aCurBundle['attributes']['NAME'],
+	                     'tags' => $aCurBundle['attributes']['TAGS']
+	                  );
+	               }
                }
                $oCache->Set($aBundles);
             } else {

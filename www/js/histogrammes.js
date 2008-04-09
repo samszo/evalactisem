@@ -28,7 +28,6 @@ function pf_couleur(num, color){
 }
 
 function SetDonnee(){
-	
 	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'','');
 }
 function RecupDeliciousFlux(){

@@ -7,12 +7,6 @@ session_start();
 extract($_SESSION,EXTR_OVERWRITE);
 extract($_POST,EXTR_OVERWRITE);
 
-
-
-
-	
-
-
 function ChercheAbo ()
 	{
 		// connexion a delicious
@@ -54,7 +48,11 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
 	
-	<script type="text/javascript" > var grpBox= new GroupBox('box1'); var TradIeml= new Traduction(); </script>
+	<script type="text/javascript" > 
+		var grpBox= new GroupBox('box1'); 
+		var TradIeml= new Traduction(); 
+		var xmlFlux;
+	</script>
     <label value="<?php if($con==1){
 							echo 'Connection to del.icio.us failed.';
                          }elseif($con==3){
@@ -80,7 +78,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 		   </groupbox>
 		  
 	   </vbox>
-	   <vbox flex="1" onload='SetDonnee();'>
+	   <vbox flex="1" >
 
 		 <groupbox orient="horizontal">
 			<caption label="del.icio.us"/>
@@ -135,5 +133,9 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 	</vbox>
      
  </hbox>
+ <script type="text/javascript">
+ 	//récupération des flux
+ 	SetDonnee();
+ </script>
 </window>
 
