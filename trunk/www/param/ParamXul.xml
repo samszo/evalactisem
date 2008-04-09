@@ -137,24 +137,24 @@
 			</Query>
 		   
 		    <Query fonction="Flux_Foret">
-				<insert> INSERT INTO flux_foret (onto_flux_id,onto_flux_parents)</insert>
+				<insert> INSERT INTO ieml_foret_flux (onto_flux_id,onto_flux_parents)</insert>
 				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
 			</Query>
 		    <Query fonction="Ieml_Onto_foret_update">
-				<update> UPDATE flux_foret SET onto_flux_parents='-idparentsFlux-'</update>
+				<update> UPDATE ieml_foret_flux SET onto_flux_parents='-idparentsFlux-'</update>
 				<where> WHERE onto_flux_id='-idFlux-'</where>
 			</Query>
 		    <Query fonction="foret_update_parent">
 				<select> SELECT onto_flux_parents</select>
-				<from> FROM flux_foret</from>
+				<from> FROM ieml_foret_flux</from>
 				<where>	WHERE onto_flux_id=-Fluxid-</where>
 			</Query>
 		    <Query fonction="Ieml_Onto_foret_update">
-				<update> UPDATE flux_foret SET onto_flux_parents='-idparentsFlux-'</update>
+				<update> UPDATE ieml_foret_flux SET onto_flux_parents='-idparentsFlux-'</update>
 				<where> WHERE onto_flux_id='-idFlux-'</where>
 			</Query>
 		    <Query fonction="Ieml_foret_update">
-				<update> UPDATE flux_foret SET onto_flux_parents='0'</update>
+				<update> UPDATE ieml_foret_flux SET onto_flux_parents='0'</update>
 				<where> WHERE onto_flux_parents='-1'</where>
 			</Query>
 		    <Query fonction="repres_graph_flux">
@@ -166,7 +166,7 @@
 			</Query>
 		    <Query fonction="repres_graph_flux1">
 				<select> SELECT count( onto_flux_parents ) </select>
-				<from>  FROM flux_foret</from>
+				<from>  FROM ieml_foret_flux</from>
 				<where> WHERE onto_flux_parents =-parent-</where>
 			</Query>
 		    <Query fonction="flux_utilisateur">
@@ -174,13 +174,17 @@
 				<values> VALUES ( '-iduti-','-idflux-')</values>
 			</Query>
 			<Query fonction="Enrg_Utilisateur">
-				<insert> INSERT INTO ieml_uti (uti_id,uti_login,maj)</insert>
+				<insert> INSERT INTO ieml_uti_onto (uti_id,uti_login,maj)</insert>
 				<values> VALUES ('' , '-login-',now())</values>
 			</Query>
 		    <Query fonction="Verif_Exist_Utilisateur">
 				<select> SELECT  uti_id</select>
-				<from> FROM ieml_uti</from>
+				<from> FROM ieml_uti_onto</from>
 				<where>	WHERE uti_login='-login-'</where>
+			</Query>
+			<Query fonction="ieml_uti_onto_flux">
+				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
+				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
 			</Query>
 		</Querys>
 	
@@ -228,6 +232,8 @@
 		
 		</Query>	
 	    
+	  
+	  
 	   <!-- tree du Flux delicious -->
 		
 		<Query fonction="GetTreeChildren_flux" >
@@ -241,7 +247,7 @@
 			<select>SELECT oe.onto_flux_id id, oe.onto_flux_code code, oe.onto_flux_desc lib, oe.onto_flux_niveau niveau, oe.onto_flux_parents type </select>
 			
 				<from niv="0"> FROM ieml_onto_flux oe
-                               INNER JOIN flux_foret op ON oe.onto_flux_id = op.onto_flux_id AND op.onto_flux_parents =-parent-
+                               INNER JOIN ieml_foret_flux op ON oe.onto_flux_id = op.onto_flux_id AND op.onto_flux_parents =-parent-
 				               INNER JOIN ieml_uti_flux u ON u.uti_id='-iduti-' AND oe.onto_flux_id=u.flux_id
 				</from>
 				
@@ -251,7 +257,7 @@
 	   	<Query>	
 	   		<select>SELECT i.onto_flux_id, i.onto_flux_code, i.onto_flux_desc, i.onto_flux_niveau,i.onto_flux_parents </select>
 			<from > FROM ieml_onto_flux i
-                    INNER JOIN flux_foret f ON f.onto_flux_parents = -1 AND i.onto_flux_id = f.onto_flux_id
+                    INNER JOIN ieml_foret_flux f ON f.onto_flux_parents = -1 AND i.onto_flux_id = f.onto_flux_id
 		   </from>
 		  <where></where>
 		  </Query>	
