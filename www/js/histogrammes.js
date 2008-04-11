@@ -136,11 +136,33 @@ function parser(result,param){
 
 function Trad_Pars_Ieml(){
 	var trad;
-	alert(xmlFlux);
-	trad=TradIeml.recherchez('parler');
-	nouv_syn=TradIeml.syntaxe_ieml(trad);
-	ieml=nouv_syn.split(";");
-	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml[3],'parser','');
+    //alert(result);
+	iterSec = xmlFlux.evaluate("/marque/nom", xmlFlux, null, XPathResult.ANY_TYPE, null );
+  	
+  	nSec = iterSec.iterateNext();
+  	if(!nSec)
+  		return;
+	var arrNom = nSec.textContent;
+	arrNom = arrNom.split(";");
+	for (var j = 0; j < arrNom.length; j++) {
+		//alert("trad:'"+trad+"'");
+		trad=TradIeml.recherchez(arrNom[j]);
+		if(!trad){
+			document.getElementById("iemlnotrad").value+=arrNom[j]+";";
+		}else{
+			arrTrad=trad.split(";");
+			if(arrTrad.length>2){
+				document.getElementById("iemlmultitrad").value+=arrNom[j]+"[";
+				for (var i = 0; i < arrTrad.length; i++) {					
+					document.getElementById("iemlmultitrad").value+=arrTrad[i]+";";
+				}
+				document.getElementById("iemlmultitrad").value+="];";
+			}else
+				document.getElementById("iemlsingletrad").value+=arrNom[j]+";";			
+		}
+	}
+	var ieml = "";
+	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml,'parser','');
 
 }
 
