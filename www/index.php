@@ -126,7 +126,14 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 				<splitter collapse="before" resizeafter="farthest">
 							<grippy/>
 				</splitter>
-				<hbox id="traduction" flex="1"/>
+				<vbox>
+					<label id="iemlnotrad" value="Pas de trad : "/>
+					<label id="iemlmultitrad" value="Plusieurs trad : "/>
+					<label id="iemlsingletrad" value="Une trad : "/>
+				</vbox>
+				<vbox>				
+					<hbox id="traduction" flex="1"/>
+				</vbox>
 			</hbox>
 		</groupbox>
 
