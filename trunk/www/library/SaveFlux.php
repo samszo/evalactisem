@@ -193,7 +193,7 @@ class SauvFlux{
 		           
 				   $tags.=$aPost['tag']." ";
 				   $count.=$aPost['count'].";";
-	  	           $tag.=$aPost['tag']." ;";
+	  	           $tag.=$aPost['tag'].";";
 				   
 	  	           $Xpath=Xpath('Ieml_Onto_existe');
 	               $Q=$objSite->XmlParam->GetElements($Xpath);
@@ -340,6 +340,7 @@ class SauvFlux{
 		$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 		$values=str_replace("-idflux-",$flux_id,$values);
 		$sql=$Q[0]->insert.$values;
+		echo $sql;
 		$reponse = $db->query($sql);
 	}
 }

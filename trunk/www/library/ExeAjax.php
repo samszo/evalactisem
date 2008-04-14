@@ -123,13 +123,12 @@
                              
                }
         	
-        function AddTrad_onto_trad($idflux,$idIeml,$idacteur){
+        function AddTrad_onto_trad($idflux,$idIeml){
         	 	global $objSite;
         		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
                 $values = str_replace("-idflux-", $idflux, $Q[0]->values);
                 $values = str_replace("-idIeml-", $idIeml, $values);
-                $values= str_replace("-idacteur-",$idacteur,$values);
                 $sql = $Q[0]->insert.$values;
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
                 $db->connect();
@@ -156,7 +155,7 @@
                 	
                 	return VerifExist_onto_trad($idflux,$row[0],$iduti);
                 	
-                	return AddTrad_onto_trad($idflux,$row[0],$iduti);
+                	return AddTrad_onto_trad($idflux,$row[0]);
                 	
           
                 }
@@ -166,7 +165,7 @@
         	$values = str_replace("-codeIeml-", $codeIeml, $Q[0]->values);
             $values = str_replace("-libIeml-", $libIeml, $values);	
         	$values = str_replace("-nivIeml-", 1, $values);
-        	$values = str_replace("-parentIeml-", -1, $values);
+        	$values = str_replace("-parentIeml-",0, $values);
         	$sql = $Q[0]->insert.$values;
         	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
             $db->connect();
@@ -174,7 +173,8 @@
             $idIeml=mysql_insert_id();
             $message = mysql_affected_rows()." traduction ajoutée";
             $db->close();
-            return AddTrad_onto_trad($idflux,$idIeml,$idacteur);
+            ieml_uti_onto($objSite,$iduti,$idIeml,$db);
+            return AddTrad_onto_trad($idflux,$idIeml);
             
        }
         function SupTrad($idIeml,$idflux){
@@ -276,7 +276,16 @@
                 
         }
         
-        
+		function ieml_uti_onto($objSite,$uti_id,$ieml_id,$db){
+		
+			$Xpath=Xpath('ieml_uti_onto_flux');
+			$Q=$objSite->XmlParam->GetElements($Xpath);
+			$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
+			$values=str_replace("-idieml-",$ieml_id,$values);
+			$sql=$Q[0]->insert.$values;
+			echo $sql;
+			$reponse = $db->query($sql);
+	}
         
         
         
