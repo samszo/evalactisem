@@ -28,7 +28,7 @@
    if($requette=="GetAllBundles" ){
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
-    Donneegraph($result_F,$AllTag,$requete_g);
+    Donneegraph($result_F,$AllTag,$requete_g,$iduti);
     $codeActi='GetAB';
 	$descActi='Recuperation de tous les bundles';
    }
