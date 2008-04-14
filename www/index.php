@@ -42,16 +42,16 @@ echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>'
 echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 ?>
 <window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+	<script type="text/javascript" src="../xbl/editableTree/functions.js" />
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
-	
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
-		var xmlFlux;
+		var deliciousFlux;
 	</script>
     <label value="<?php if($con==1){
 							echo 'Connection to del.icio.us failed.';
@@ -64,6 +64,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 			           ?>"/>
 
 	<label value="logout" onclick="window.location.replace('exit.php') ; " style=" margin-left:1200px"/>
+	<label id="tradu" hidden="true" value=""/>
 	<hbox id="histogramme" flex="1">
 		<vbox hidden="true">
 		   <groupbox>
@@ -126,14 +127,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 				<splitter collapse="before" resizeafter="farthest">
 							<grippy/>
 				</splitter>
-				<vbox>
-					<label id="iemlnotrad" value="Pas de trad : "/>
-					<label id="iemlmultitrad" value="Plusieurs trad : "/>
-					<label id="iemlsingletrad" value="Une trad : "/>
-				</vbox>
-				<vbox>				
-					<hbox id="traduction" flex="1"/>
-				</vbox>
+				<hbox id="traduction" flex="1"/>
 			</hbox>
 		</groupbox>
 
