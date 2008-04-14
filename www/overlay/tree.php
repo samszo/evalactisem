@@ -14,7 +14,7 @@ require_once ("../param/ParamPage.php");
 
     header('Content-type: application/vnd.mozilla.xul+xml');
 ?>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <overlay id="oTree"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -58,9 +58,7 @@ require_once ("../param/ParamPage.php");
 				?>
 				</treecols>
 				<?php
-					//print_r($Cols);
 					
-					//echo $objSite->GetTreeChildren($type, $Cols);
 					echo $objXul->GetTreeChildren($type, $Cols);
 				?>
 			</tree>
