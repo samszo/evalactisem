@@ -1,4 +1,9 @@
-
+function testbdd(){
+AjaxRequest("http://localhost/evalactisem/overlay/tree.php","res","");
+}
+function res(result,param){
+alert(result);
+}
 function show_tooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
@@ -88,9 +93,10 @@ function DelIiciousTreeGraph(result,param){
   		return;
 	for (var j = 0; j < nSec.childNodes.length; j++) {
 		if(nSec.childNodes[j].tagName=="nom"){
-			//document.getElementById("noms").value = nSec.childNodes[j].textContent;
+			nom = nSec.childNodes[j].textContent;
 		    
 		    tag=nSec.childNodes[j].textContent;
+		    
 		}
 		if(nSec.childNodes[j].tagName=="nombre"){
 			//document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
@@ -108,10 +114,12 @@ function DelIiciousTreeGraph(result,param){
 		if(nSec.childNodes[j].tagName=="noms"){
 			//document.getElementById("noms").value = nSec.childNodes[j].textContent;
 		    abscises=nSec.childNodes[j].textContent;
+			//alert(abscises);
 		}
 		if(nSec.childNodes[j].tagName=="donnees"){
 			ordonnees = nSec.childNodes[j].textContent;	
 		    res=nSec.childNodes[j].textContent;	
+		    //alert(ordonnees);
 		}
 			
 	
@@ -136,33 +144,56 @@ function parser(result,param){
 
 function Trad_Pars_Ieml(){
 	var trad;
-    //alert(result);
+	var synIeml;
+	var Ieml;
+	var FluxN="";
+	var FluxM="";
+	var FluxS="";
+	var MultiTrad="";
+	var SignlTrad="";
+	var iemlTrad;
 	iterSec = xmlFlux.evaluate("/marque/nom", xmlFlux, null, XPathResult.ANY_TYPE, null );
-  	
   	nSec = iterSec.iterateNext();
   	if(!nSec)
   		return;
-	var arrNom = nSec.textContent;
-	arrNom = arrNom.split(";");
-	for (var j = 0; j < arrNom.length; j++) {
-		//alert("trad:'"+trad+"'");
-		trad=TradIeml.recherchez(arrNom[j]);
-		if(!trad){
-			document.getElementById("iemlnotrad").value+=arrNom[j]+";";
-		}else{
-			arrTrad=trad.split(";");
-			if(arrTrad.length>2){
-				document.getElementById("iemlmultitrad").value+=arrNom[j]+"[";
-				for (var i = 0; i < arrTrad.length; i++) {					
-					document.getElementById("iemlmultitrad").value+=arrTrad[i]+";";
-				}
-				document.getElementById("iemlmultitrad").value+="];";
+	var arrNoms = nSec.textContent;
+	arrNom = arrNoms.split(";");
+	
+	for(i=0;i<arrNom.length-1;i++){
+		
+		trad=TradIeml.recherchez(arrNom[i]);
+		if(trad!="*"){
+			ieml=trad.split("*");
+			iemlTrad=ieml[0].split(";");
+			alert(arrNom[i]+"++ "+ieml.length);
+			if(iemlTrad.length>2){
+				nouv_syn=TradIeml.syntaxe_ieml(ieml[0]);
+			    synIeml+=nouv_syn+"*";
+			    MultiTrad+=ieml[0]+"*";
+			    
+			    FluxM+=arrNom[i]+";";
+			   
+			   // alert("il existe plusieurs traduction"+nouv_syn);
 			}else
-				document.getElementById("iemlsingletrad").value+=arrNom[j]+";";			
-		}
+			    if(iemlTrad.length==2){
+				nouv_syn=TradIeml.syntaxe_ieml(ieml[0]);
+				synIeml+=nouv_syn+"*";
+				SignlTrad+=ieml[0];
+				FluxS+=arrNom[i]+";";
+				//alert("il existe qu 'une seul traduction: "+FluxS);
+				
+			}
+			
+		}else
+			   
+			//alert("il n'existe pas de traduction");
+		    FluxN+=arrNom[i]+";";
+		    synIeml+="vide*";
+		    Ieml+="vide*";
 	}
-	var ieml = "";
-	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=GetGraph&code="+ieml,'parser','');
+	frame=document.getElementById("iemlhisto");
+	frame.setAttribute("src","overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN);
+	//AjaxRequest("http://localhost/evalactisem/library/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN,'');
 
 }
 
@@ -193,7 +224,7 @@ function AddTradDictio(result,param){
         if(result=="false"){
 		aTrad=document.getElementById("code-trad-flux").value;
 		rTrad=TradIeml.recherchez(aTrad);
-		if(rTrad==" "){
+		if(rTrad=="*"){
 			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
 		}else {
 	 		
@@ -342,7 +373,7 @@ function SupTrad()
 	//récupération des valeurs
 	var idIeml = document.getElementById("id-trad-ieml");
 	var idflux = document.getElementById("id-trad-flux");
-    
+    alert(idflux.value);
     var listbox=document.getElementById("boxlist");
     var select=listbox.selectedIndex;
 	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
@@ -358,14 +389,14 @@ function startSelectTab()
 { 
 	var listbox=document.getElementById("boxlist");
 	var cell = listbox.selectedItem.childNodes[0]; // suivant l'index de colonne que vous desirez
-	var celldescp = listbox.selectedItem.childNodes[1];
-	var cellF = listbox.selectedItem.childNodes[2];
+	var celldescp = listbox.selectedItem.childNodes[2];
+	var cellF = listbox.selectedItem.childNodes[1];
 	var celldescpF = listbox.selectedItem.childNodes[3];
 
 	txtIdieml=document.getElementById("id-trad-ieml");
 	txtIdieml.value=cell.getAttribute('label');
-	txtId10F=document.getElementById("id-trad-flux");
-	txtId10F.value=cellF.getAttribute('label');
+	txtIdFlux=document.getElementById("id-trad-flux");
+	txtIdFlux.value=cellF.getAttribute('label');
 	
 	txtCode = document.getElementById("code-trad-ieml");
 	txtCode.value=cell.getAttribute('label');
