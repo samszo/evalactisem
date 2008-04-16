@@ -419,7 +419,7 @@ function strat(id){
   var parentItem=tree.contentView.getItemAtIndex(parent);
   var txtcode_ieml = document.getElementById("code-trad-ieml");
   var txtcode_flux=document.getElementById("code-trad-flux");
-  txtcode_ieml.value= selection.firstChild.firstChild.getAttribute("label");
+  txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
   txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
   }
   		 
