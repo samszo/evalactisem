@@ -260,10 +260,18 @@ function AddTradDictio(result,param){
 
 }
 }
+function AddTrad(){
+	var libIeml=document.getElementById("lib-trad-ieml");
+    var codeIeml=document.getElementById("code-trad-ieml");
+    var codeFlux=document.getElementById("code-trad-flux");
+	alert(libIeml.value);
+	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
+
+}   
 
 //Ajouter une traduction
 
-function AddTrad(){
+function AddTrad1(){
 	 
 	 var idflux = document.getElementById("id-trad-flux");
 	 var libIeml=document.getElementById("code-trad-flux");
@@ -419,8 +427,10 @@ function strat(id){
   var parentItem=tree.contentView.getItemAtIndex(parent);
   var txtcode_ieml = document.getElementById("code-trad-ieml");
   var txtcode_flux=document.getElementById("code-trad-flux");
+  var txtlib_ieml=document.getElementById("lib-trad-ieml");
   txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
   txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
+  txtlib_ieml.value=selection.firstChild.firstChild.getAttribute("label");
   }
   		 
  catch(e){}
