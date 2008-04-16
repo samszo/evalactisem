@@ -4,7 +4,7 @@ this.recherchez=function(searchString) {
 //  var plusRE = new RegExp( "+", "g");  // can't make anything like this work in IE!
 //  searchString = searchString.replace( plusRE, " ");
   var wkStr = "";  // kluge around it
-  //alert(searchString);
+ // alert("=="+searchString+"==");
   for ( var i = 0; i < searchString.length; i++) {
     if ( searchString.charAt( i) ==  "+") {
       wkStr = wkStr + " ";
@@ -2237,10 +2237,10 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
   
 
 }
- 	//mise à jour avec la nouvelle syntaxe
-	source=this.syntaxe_ieml(source);
+ 
+//source=this.syntaxe_ieml(source);
 	
-	return source;
+	return source+"*"+disc;
 }
 
 // Fonction pour changer la syntaxe des motes ieml
@@ -2248,8 +2248,9 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 	var sour="";	
 	var s="";
 	var r=0;
-		
+		 
 		syn=source.split(";");
+	    
 		  for(var i=0;i<syn.length-1; i++){
 		  	for(var j=0;j<syn[i].length;j++){
 		  		
@@ -2263,8 +2264,10 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		 	
 		 }
 		  sour=sour+";"
+		 
 		 }
 		  source=sour;
+		 
 		  syn="";
 		  sour="";
 		  syn=syn=source.split(";");
@@ -2283,6 +2286,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		 		}
 		   
 		   }
+		    
 		   sour=sour+";";
 		   source=sour;
 		   r=0;
@@ -2306,7 +2310,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		   }
 		   sour=sour+";"
 		  }
-		 
+		
 	   return sour;
 
 	}
