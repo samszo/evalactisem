@@ -53,6 +53,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 		var TradIeml= new Traduction(); 
 		var deliciousFlux;
 	</script>
+	<hbox>
     <label value="<?php if($con==1){
 							echo 'Connection to del.icio.us failed.';
                          }elseif($con==3){
@@ -63,7 +64,10 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 			            }
 			           ?>"/>
 
+
+	<label value="Utilisateur connecter : <?php echo $login; ?>" style=" padding-left:1000px"/>
 	<label value="logout" onclick="window.location.replace('exit.php') ; " style=" margin-left:1200px"/>
+	</hbox>
 	<label id="tradu" hidden="true" value=""/>
 	<hbox id="histogramme" flex="1">
 		<vbox hidden="true">
