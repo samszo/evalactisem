@@ -35,7 +35,7 @@
         }
         switch ($fonction) {
                 case 'AddTrad':
-                        $resultat = AddTrad($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml'],$_GET['libIeml']);
+                        $resultat = AddTrad($_GET['libIeml'],$_GET['codeFlux'],$_GET['codeIeml']);
                         break;
         }
         switch ($fonction) {
@@ -59,18 +59,25 @@
         
         echo $resultat; 
         // Ajouter une traduction dans la table ieml_onto et onto_trad
-        function AddTrad($libflux,$idflux,$codeIeml,$libIeml){
+        function AddTrad($libIeml,$codeflux,$codeIeml){
         $iduti=$_SESSION['iduti'];
                 global $objSite;
-                       
-                // requête pour vérifier l'existence de la traduction
+
+                	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+                    $db->connect();
+                	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Get_Id_Flux']";  
+                	$Q = $objSite->XmlParam->GetElements($Xpath);
+                	$where= str_replace("-codeflux-", $codeflux, $Q[0]->where);
+                	$sql = $Q[0]->select.$Q[0]->from.$where;
+                	$result = $db->query($sql);
+                	$res=mysql_fetch_array($result);
+                    $idflux=$res[0];
+                	// requête pour vérifier l'existence de la traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_Trad_VerifExist']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where = str_replace("-libflux-", $libflux, $Q[0]->where);
+                $where = str_replace("-libIeml-", $libIeml, $Q[0]->where);
                 $where = str_replace("-codeIeml-", $codeIeml, $where);
                 $sql = $Q[0]->select.$Q[0]->from.$where;
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-                $db->connect();
                 $result = $db->query($sql);
                 $db->close();
                 $row = mysql_fetch_array($result);
@@ -80,7 +87,7 @@
                 	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='AddTrad_Insert_onto_flux']";
 		        	$Q = $objSite->XmlParam->GetElements($Xpath);
 		        	$values = str_replace("-codeIeml-", $codeIeml, $Q[0]->values);
-		            $values = str_replace("-libIeml-", $libflux, $values);	
+		            $values = str_replace("-libIeml-", $libIeml, $values);	
 		        	$values = str_replace("-nivIeml-", 1, $values);
 		        	$values = str_replace("-parentIeml-", -1, $values);
 		        	$sql = $Q[0]->insert.$values;
@@ -92,9 +99,8 @@
 		            $db->close();
                 }
                 if($row[0]!=0){ 
-                	    
+               
                 	$exist=VerifExist_onto_trad($idflux,$row[0],$iduti);
-                    
                 	if($exist=="true"){
                     	echo $exit;
                     	return "La traduction existe deja !";
