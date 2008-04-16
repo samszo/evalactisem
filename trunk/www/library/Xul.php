@@ -368,7 +368,63 @@ class Xul{
 		return $tree;
 
 	}
-
+    
+function Tree($flux,$trad,$type,$primary){
+    	echo'<hbox  style="background-color:blue;">';
+	  	echo'<tree context="clipmenu"			
+			enableColumnDrag="true"
+			fctStart="startEditable"
+			fctSave="saveEditable"
+			fctInsert="startInsert"
+			fctDelete="startDelete"
+			fctSelect="startSelect"
+			typesource="'.$type.'"	
+			id="'.$type.'"
+			onselect="strat(\''.$type.'\');">'; 
+			
+	  		echo'<treecols >';
+	  			echo'<treecol id="treecol_'.$type.'"  label="'.$type.'" primary="'.$primary.'" width="120" />';
+	  		echo'</treecols>';
+	  		echo'<treechildren>';    
+                    for($i=0;$i<sizeof($flux)-1;$i++){
+                        echo'<treeitem container="true" open="false">';
+                        	 	 echo'<treerow>';
+                        	 		 echo'<treecell label="'.$flux[$i].'"/>' ;
+                        	  	echo'</treerow>';
+                        	  	if($type=="Singl_Trad"){
+                        	  		echo'<treechildren>';
+                        	  			echo'<treeitem >';	
+                        	  				echo'<treerow>';
+                        	 		 			echo'<treecell label="'.$trad[$i].'"/>' ;
+                        	  				echo'</treerow>';
+                        	  			echo'</treeitem>';
+                        	  		echo'</treechildren>';
+                        	  	}
+                        	  	if($type=="Multi_Trad"){
+                        	  		echo'<treechildren>';
+                        	  		$Tradexp=explode(";",$trad[$i]);
+                        	  		for($j=0;$j<sizeof($Tradexp)-1;$j++){
+                        	  			echo'<treeitem >';	
+                        	  				echo'<treerow>';
+                        	 		 			echo'<treecell  label="'.$Tradexp[$j].'"/>' ;
+                        	  				echo'</treerow>';
+                        	  			echo'</treeitem>';
+                        	  		
+                        	  	}
+                        	  	
+                        	  		
+                        	  		echo'</treechildren>';
+                        	  	}
+                        	  	echo'</treeitem>';
+                        }
+	  					
+	  			echo'</treechildren>';
+	  		echo'</tree>';
+	  echo'</hbox>';
+      
+    }
+	
+	
 	
 	
   }
