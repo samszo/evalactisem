@@ -151,7 +151,7 @@ function Trad_Pars_Ieml(){
 	var FluxS="";
 	var MultiTrad="";
 	var SignlTrad="";
-	var iemlTrad;
+	var iemlTrad;var synIemlM; var synIemlS
 	iterSec = xmlFlux.evaluate("/marque/nom", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	nSec = iterSec.iterateNext();
   	if(!nSec)
@@ -162,22 +162,21 @@ function Trad_Pars_Ieml(){
 	for(i=0;i<arrNom.length-1;i++){
 		
 		trad=TradIeml.recherchez(arrNom[i]);
+		
 		if(trad!="*"){
 			ieml=trad.split("*");
 			iemlTrad=ieml[0].split(";");
-			alert(arrNom[i]+"++ "+ieml.length);
-			if(iemlTrad.length>2){
-				nouv_syn=TradIeml.syntaxe_ieml(ieml[0]);
-			    synIeml+=nouv_syn+"*";
+			
+				if(iemlTrad.length>2){
+			    synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+"*";
+			    //alert(TradIeml.syntaxe_ieml(ieml[0]));
 			    MultiTrad+=ieml[0]+"*";
-			    
 			    FluxM+=arrNom[i]+";";
 			   
 			   // alert("il existe plusieurs traduction"+nouv_syn);
 			}else
 			    if(iemlTrad.length==2){
-				nouv_syn=TradIeml.syntaxe_ieml(ieml[0]);
-				synIeml+=nouv_syn+"*";
+				synIemlS+=TradIeml.syntaxe_ieml(ieml[0])+"*";
 				SignlTrad+=ieml[0];
 				FluxS+=arrNom[i]+";";
 				//alert("il existe qu 'une seul traduction: "+FluxS);
@@ -188,11 +187,12 @@ function Trad_Pars_Ieml(){
 			   
 			//alert("il n'existe pas de traduction");
 		    FluxN+=arrNom[i]+";";
-		    synIeml+="vide*";
-		    Ieml+="vide*";
+		   
 	}
+	
+	
 	frame=document.getElementById("iemlhisto");
-	frame.setAttribute("src","overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN);
+	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN);
 	//AjaxRequest("http://localhost/evalactisem/library/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN,'');
 
 }
@@ -407,4 +407,21 @@ function startSelectTab()
 	txtDescpF= document.getElementById("lib-trad-flux");
 	txtDescpF.value = celldescpF.getAttribute('label');
 
+}
+
+function strat(id){
+  try{
+  var tree = document.getElementById(id);
+  var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
+  
+  var parent=tree.contentView.getParentIndex(tree.currentIndex);
+  var parentItem=tree.contentView.getItemAtIndex(parent);
+  var txtcode_ieml = document.getElementById("code-trad-ieml");
+  var txtcode_flux=document.getElementById("code-trad-flux");
+  txtcode_ieml.value= selection.firstChild.firstChild.getAttribute("label");
+  txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
+  }
+  		 
+ catch(e){}
+  
 }
