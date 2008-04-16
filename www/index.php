@@ -42,7 +42,7 @@ echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>'
 echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 ?>
 <window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
-	<script type="text/javascript" src="../xbl/editableTree/functions.js" />
+	
 	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
@@ -51,9 +51,9 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
-		var deliciousFlux;
+		
 	</script>
-	<hbox>
+	<hbox  >
     <label value="<?php if($con==1){
 							echo 'Connection to del.icio.us failed.';
                          }elseif($con==3){
@@ -65,7 +65,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 			           ?>"/>
 
 
-	<label value="Utilisateur connecter : <?php echo $login; ?>" style=" padding-left:1000px"/>
+	<vbox align="center" flex="1" ><label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/></vbox>
 	<label value="logout" onclick="window.location.replace('exit.php') ; " style=" margin-left:1200px"/>
 	</hbox>
 	<label id="tradu" hidden="true" value=""/>
