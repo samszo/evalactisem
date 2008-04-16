@@ -144,14 +144,16 @@ function parser(result,param){
 
 function Trad_Pars_Ieml(){
 	var trad;
-	var synIeml;
+	var synIeml="";
 	var Ieml;
 	var FluxN="";
 	var FluxM="";
 	var FluxS="";
 	var MultiTrad="";
 	var SignlTrad="";
-	var iemlTrad;var synIemlM; var synIemlS
+	var descpM="";
+	var descpS="";
+	var iemlTrad;var synIemlM=""; var synIemlS="";
 	iterSec = xmlFlux.evaluate("/marque/nom", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	nSec = iterSec.iterateNext();
   	if(!nSec)
@@ -168,17 +170,18 @@ function Trad_Pars_Ieml(){
 			iemlTrad=ieml[0].split(";");
 			
 				if(iemlTrad.length>2){
-			    synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+"*";
-			    //alert(TradIeml.syntaxe_ieml(ieml[0]));
-			    MultiTrad+=ieml[0]+"*";
-			    FluxM+=arrNom[i]+";";
-			   
+				    synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+"*";
+				    MultiTrad+=ieml[0]+"*";
+				    FluxM+=arrNom[i]+";";
+				    descpM+=ieml[1]+"*";
+				    
 			   // alert("il existe plusieurs traduction"+nouv_syn);
 			}else
 			    if(iemlTrad.length==2){
 				synIemlS+=TradIeml.syntaxe_ieml(ieml[0])+"*";
 				SignlTrad+=ieml[0];
 				FluxS+=arrNom[i]+";";
+				descpS+=ieml[1];
 				//alert("il existe qu 'une seul traduction: "+FluxS);
 				
 			}
@@ -189,11 +192,9 @@ function Trad_Pars_Ieml(){
 		    FluxN+=arrNom[i]+";";
 		   
 	}
-	
-	
 	frame=document.getElementById("iemlhisto");
-	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN);
-	//AjaxRequest("http://localhost/evalactisem/library/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&FluxN="+FluxN,'');
+	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
+	AjaxRequest("http://localhost/evalactisem/overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&descpS="+descpS+"&FluxN="+FluxN,'');
 
 }
 
