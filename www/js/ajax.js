@@ -72,7 +72,7 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 	   	} catch (e) {}
 
 		this.req.onreadystatechange = function () { processReqChange(); }
-
+        
 		this.req.open("GET", this.url,true);
 		this.req.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
         this.req.send(null);
@@ -121,7 +121,10 @@ function processReqChange() {
 
 			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
 			eval(this.fonction_sortie+"(this.req.responseText,'"+this.params+"',+this.id)");
-            //document.getElementById(this.id).value =this.req.responseText
+            try{
+	            if(this.req.responseText)
+	            		document.getElementById(this.id).value =this.req.responseText
+	            } catch(e){}
 		} else {
 
 			alert("Il y avait un probleme avec le XML: " + this.req.statusText);
