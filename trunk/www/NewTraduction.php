@@ -5,11 +5,16 @@ $FluxM=$_GET["FluxM"];
 	$FluxS=$_GET["FluxS"];
 	$SignlTrad=$_GET["SignlTrad"];
 	$FluxN=$_GET["FluxN"];
+	$DescpM=$_GET["descpM"];
+	$DescpS=$_GET["descpS"];
 	$mFlux=explode(";",$FluxM);
 	$mTrad=explode("*",$MultiTrad);
 	$sFlux=explode(";",$FluxS);
 	$sTrad=explode(";",$SignlTrad);
 	$nFlux=explode(";",$FluxN);
+	
+	$sDescp=explode(";",$DescpS);
+    $mDescp=explode("*",$DescpM);
     header('Content-type: application/vnd.mozilla.xul+xml');
     //print_r($nFlux);
 	?>
@@ -29,13 +34,13 @@ $FluxM=$_GET["FluxM"];
 			<hbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"  style="background-color:blue;">
 	      		<?php
 		       		if(sizeof($sFlux)>1){
-				     	$objXul->Tree($sFlux,$sTrad,"Singl_Trad","true");
+				     	$objXul->Tree($sFlux,$sTrad,$sDescp,"Singl_Trad","true");
 			         }
 			         if(sizeof($mFlux)>1){
-				    	 $objXul->Tree($mFlux,$mTrad,"Multi_Trad","true");
+				    	 $objXul->Tree($mFlux,$mTrad,$mDescp,"Multi_Trad","true");
 			         }
 			         if(sizeof($nFlux)>1){
-				    	$objXul->Tree($nFlux,"","No_Trad","false");
+				    	$objXul->Tree($nFlux,"","","No_Trad","false");
 					}
 		        ?>
 			</hbox>	
