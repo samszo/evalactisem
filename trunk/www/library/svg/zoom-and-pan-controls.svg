@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Original code written by Jonathan Watt (http://jwatt.org/), Aug. 2005 -->
+<svg version="1.1"
+     baseProfile="full"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:ev="http://www.w3.org/2001/xml-events"
+     width="100%"
+     height="100%"
+     onzoom="handleZoom(evt);"
+     onscroll="handlePan(evt);"
+     onload="handleLoad(evt);"
+     id="svg2">
+  <defs
+     id="defs4">
+    <path id="arrow" d="M0,10 h20 v-10 l20,30 l-20,30 v-10 h-20 z" fill="green" />
+  </defs>
+  <script type="text/ecmascript">
+    <![CDATA[
+
+if (!window)
+  window = this;
+
+function handleLoad(evt)
+{
+  if (!document)
+    window.document = evt.target.ownerDocument;
+}
+
+/**
+ * Event handlers to change the current user space for the zoom and pan
+ * controls to make them appear to be scale invariant.
+ */
+
+function handleZoom(evt)
+{
+  try {
+    if (evt.newScale === undefined) throw 'bad interface';
+    // update the transform list that adjusts for zoom and pan
+    var tlist = document.getElementById('zoomControls').transform.baseVal;
+    tlist.getItem(0).setScale(1/evt.newScale, 1/evt.newScale);
+    tlist.getItem(1).setTranslate(-evt.newTranslate.x, -evt.newTranslate.y);
+  }
+  catch (e) {
+    // work around difficiencies in non-moz implementations (some don't
+    // implement the SVGZoomEvent or SVGAnimatedTransform interfaces)
+    var de = document.documentElement;
+    var tform = 'scale(' + 1/de.currentScale + ') ' +
+                'translate(' + (-de.currentTranslate.x) + ', ' + (-de.currentTranslate.y) + ')';
+    document.getElementById('zoomControls').setAttributeNS(null, 'transform', tform);
+  }
+}
+
+function handlePan(evt)
+{
+  var ct = document.documentElement.currentTranslate;
+  try {
+    // update the transform list that adjusts for zoom and pan
+    var tlist = document.getElementById('zoomControls').transform.baseVal;
+    tlist.getItem(1).setTranslate(-ct.x, -ct.y);
+  }
+  catch (e) {
+    // work around difficiencies in non-moz implementations (some don't
+    // implement the SVGAnimatedTransform interface)
+    var tform = 'scale(' + 1/document.documentElement.currentScale + ') ' +
+                'translate(' + (-ct.x) + ', ' + (-ct.y) + ')';
+    document.getElementById('zoomControls').setAttributeNS(null, 'transform', tform);
+  }
+}
+
+/**
+ * Functions to do zoom and pan.
+ */
+
+function zoom(type)
+{
+  var de = document.documentElement;
+//  de.suspendRedraw();
+
+  // zoom:
+
+  var oldScale = de.currentScale;
+  var oldTranslate = { x: de.currentTranslate.x, y: de.currentTranslate.y };
+  var s = 2;
+  if (type == 'in')
+    de.currentScale *= s;
+  if (type == 'out')
+    de.currentScale /= s;
+
+  // correct currentTranslate so zooming is to the center of the viewport:
+
+  var vp_width, vp_height;
+  try {
+    vp_width = de.viewport.width;
+    vp_height = de.viewport.height;
+  }
+  catch (e) {
+    // work around difficiency in moz ('viewport' property not implemented)
+    vp_width = window.innerWidth;
+    vp_height = window.innerHeight;
+  }
+  de.currentTranslate.x = vp_width/2 - (de.currentScale/oldScale) * (vp_width/2 - oldTranslate.x);
+  de.currentTranslate.y = vp_height/2 - (de.currentScale/oldScale) * (vp_height/2 - oldTranslate.y);
+
+//  de.unsuspendRedraw();
+//  de.forceRedraw();
+}
+
+function pan(type)
+{
+  var de = document.documentElement;
+//  de.suspendRedraw();
+
+  var ct = de.currentTranslate;
+  var t = 30;
+  if (type == 'right')
+    ct.x += t;
+  if (type == 'down')
+    ct.y += t;
+  if (type == 'left')
+    ct.x -= t;
+  if (type == 'up')
+    ct.y -= t;
+
+//  de.unsuspendRedraw();
+//  de.forceRedraw();
+}
+
+    ]]>
+  </script>
+
+  <rect x="0" y="0" width="100%" height="100%" fill="lightblue" />
+
+  <g
+     id="layer1">
+    <path
+       d="M 297.14286,92.362183 C 297.14286,101.31422 297.14286,128.99466 297.14286,146.64790 C 297.14286,160.93361 297.14286,175.21933 297.14286,189.50504 C 297.14286,199.98123 297.14286,210.45742 297.14286,220.93361"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1308" />
+    <path
+       d="M 257.14286,100.93361 C 257.14286,121.97239 298.96122,95.219325 320.00000,95.219325 C 339.04762,95.219325 358.09524,95.219325 377.14286,95.219325 C 379.04762,95.219325 380.95238,95.219325 382.85714,95.219325"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1310" />
+    <path
+       d="M 377.14286,178.07647 C 388.44107,178.07647 406.50043,195.02279 428.57143,189.50504 C 443.53436,185.76431 448.57143,176.03167 448.57143,160.93361 C 448.57143,147.09057 424.86381,146.64790 411.42857,146.64790 C 390.15209,146.64790 384.01843,148.34375 371.42857,160.93361 C 368.99903,163.36316 362.85714,183.65966 362.85714,206.64790 C 362.85714,215.70217 384.26752,227.35309 388.57143,229.50504 C 400.34270,235.39067 420.39107,232.36218 434.28571,232.36218"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1312" />
+    <path
+       d="M 508.57143,160.93361 C 518.09524,160.93361 485.71429,168.55266 485.71429,178.07647 C 485.71429,186.13705 518.14869,207.65373 525.71429,215.21933 C 543.34148,232.84652 528.00367,235.21933 508.57143,235.21933 C 498.45182,235.21933 494.62214,232.53039 488.57143,229.50504"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1314" />
+    <path
+       d="M 571.42857,123.79075 C 561.36279,123.79075 580.75061,172.50747 582.85714,180.93361 C 586.17534,194.20639 599.33963,205.98753 608.57143,215.21933 C 621.96390,228.61180 631.86446,229.06915 642.85714,218.07647 C 644.36299,216.57062 640.95238,214.26694 640.00000,212.36218"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1316" />
+    <path
+       d="M 548.57143,155.21933 C 555.87583,147.91492 603.92700,152.36218 622.85714,152.36218"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1318" />
+    <path
+       d="M 57.142857,320.93361 C 67.444432,310.63204 52.104840,349.65711 48.571429,363.79075 C 46.440772,372.31338 55.384568,351.26333 62.857143,343.79075 C 73.457780,333.19012 72.828077,330.58373 88.571429,326.64790 C 101.53962,323.40585 91.428571,353.28059 91.428571,366.64790 C 91.428571,377.75447 100.71789,345.93000 108.57143,338.07647 C 125.81303,320.83487 128.57143,355.15054 128.57143,363.79075 C 128.57143,378.07487 152.79020,372.36218 165.71429,372.36218 C 185.80147,372.36218 188.82221,369.25426 200.00000,358.07647 C 214.49315,343.58332 195.77450,334.87724 185.71429,332.36218 C 163.78270,326.87929 165.71429,349.36936 165.71429,363.79075 C 165.71429,376.16560 185.61375,385.16906 194.28571,389.50504 C 195.98939,390.35688 198.09524,389.50504 200.00000,389.50504"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1320" />
+    <path
+       d="M 237.14286,298.07647 C 241.95693,300.48351 240.00000,335.72468 240.00000,349.50504"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1322" />
+    <path
+       d="M 242.85714,392.36218 L 240.00000,386.64790"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1324" />
+    <path
+       d="M 328.57143,312.36218 C 333.38930,314.77112 365.33437,312.36218 380.00000,312.36218 C 397.63329,312.36218 407.17581,314.15614 422.85714,318.07647 C 438.53701,321.99644 398.26889,339.43223 388.57143,352.36218 C 379.01344,365.10617 359.52587,372.83631 351.42857,380.93361 C 335.70951,396.65268 340.00000,394.22466 340.00000,400.93361 C 340.00000,419.02885 376.19048,400.93361 394.28571,400.93361 C 410.16225,400.93361 418.62549,403.51585 434.28571,406.64790"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1326" />
+    <path
+       d="M 488.57143,378.07647 C 499.21937,378.07647 460.00000,381.71424 460.00000,392.36218 C 460.00000,404.43521 495.01141,395.75219 497.14286,395.21933 C 510.99973,391.75511 501.22071,378.07647 488.57143,378.07647 z "
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1328" />
+    <path
+       d="M 548.57143,375.21933 C 561.44050,372.00206 514.64584,376.63597 511.42857,389.50504 C 506.94948,407.42139 532.56257,402.79297 540.00000,400.93361 C 554.50017,397.30857 555.24466,391.90241 548.57143,375.21933 z "
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1330" />
+    <path
+       d="M 571.42857,372.36218 C 574.34280,371.63362 566.36932,418.31349 574.28571,386.64790 C 577.88327,372.25768 600.00000,362.34915 600.00000,389.50504 C 600.00000,400.44633 604.93284,384.18148 617.14286,378.07647 C 629.19724,372.04928 630.98152,389.05799 637.14286,395.21933"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1332" />
+    <path
+       d="M 65.714286,498.07647 C 73.934608,506.29679 37.142857,506.45118 37.142857,518.07647 C 37.142857,534.50771 42.858283,532.36218 62.857143,532.36218 C 88.215407,532.36218 66.815483,471.05269 80.000000,523.79075 C 83.841030,539.15487 103.57739,530.57349 111.42857,526.64790 C 122.29640,521.21398 120.00000,493.79402 120.00000,526.64790 C 120.00000,534.01180 135.74179,513.06271 142.85714,509.50504 C 161.73759,500.06481 162.85714,520.05311 162.85714,532.36218 C 162.85714,544.29167 191.49443,531.63143 200.00000,529.50504 C 211.16407,526.71402 222.22244,522.12392 231.42857,515.21933 C 240.11562,508.70404 207.67834,516.11241 200.00000,523.79075 C 184.43252,539.35823 230.86361,533.21771 234.28571,532.36218 C 246.65839,529.26901 245.71429,502.86615 245.71429,492.36218 C 245.71429,469.57748 245.71429,461.35538 245.71429,489.50504 C 245.71429,507.04602 254.06206,519.60847 260.00000,529.50504 C 261.18354,531.47760 264.94929,534.45433 265.71429,535.21933"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1334" />
+    <path
+       d="M 388.57143,549.50504 C 388.57143,547.60028 388.57143,545.69552 388.57143,543.79075 C 388.57143,526.43418 386.78733,484.62679 382.85714,478.07647 C 382.85714,493.43315 414.83599,465.49447 428.57143,472.36218 C 447.46117,481.80706 418.85442,501.50640 414.28571,503.79075 C 408.68907,506.58907 398.32190,507.48694 394.28571,509.50504"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1336" />
+    <path
+       d="M 462.85714,529.50504 C 443.57939,539.14392 435.40292,525.53069 422.85714,538.07647 C 418.31481,542.61880 440.94189,550.47840 448.57143,535.21933 C 450.86507,530.63205 458.09524,531.40980 462.85714,529.50504 C 469.98630,526.65338 458.03595,552.36218 465.71429,552.36218 C 482.92309,552.36218 496.31436,548.49072 505.71429,543.79075 C 514.88975,539.20302 517.14286,504.11447 517.14286,535.21933 C 517.14286,557.65794 519.19165,536.02768 528.57143,526.64790 C 547.66898,507.55035 545.71429,533.70688 545.71429,546.64790 C 545.71429,551.09278 563.08557,549.50504 565.71429,549.50504"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+       id="path1338" />
+  </g>
+  <!--
+    Reverse the effect of currentTranslate and currentScale to make the zoom
+    and pan controls scale invariant (not using a viewBox to simplify matters).
+  -->
+  <g id="zoomControls" transform="scale(1) translate(0,0)">
+    <rect x="20" y="20" width="160" height="160" fill="#ffff00" stroke="none"/>
+    <circle cx="100" cy="100" r="20" fill="red" onclick="zoom('in');"/>
+    <circle cx="100" cy="100" r="9" fill="green" onclick="zoom('out');"/>
+    <use x="120" y="70" xlink:href="#arrow" onclick="pan('left');"/>
+    <use x="120" y="70" xlink:href="#arrow" transform="rotate(90,100,100)" onclick="pan('up');"/>
+    <use x="120" y="70" xlink:href="#arrow" transform="rotate(180,100,100)" onclick="pan('right');"/>
+    <use x="120" y="70" xlink:href="#arrow" transform="rotate(270,100,100)" onclick="pan('down');"/>
+  </g>
+</svg>
