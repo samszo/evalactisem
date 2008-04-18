@@ -1,0 +1,113 @@
+<svg version="1.1" id="SVGglobal" xmlns="http://www.w3.org/2000/svg">
+	<!-- agent proportionnel au nombre d'ancre : 
+		r_agent=50 x ancre
+	<circle id="agent" onclick="alert('1');" cx="200" cy="200" r="100" stroke="black" stroke-width="2" fill="red"/>
+	-->
+	<rect id="agent" onclick="alert('1');" x="100" y="100" width="200" height="200" stroke="black" stroke-width="2" fill="red"/>
+	<text x="110" y="120" style="stroke:black;fill:black;font-size:10pt;">Nom de la page : </text>
+	
+	<!-- tronc intérieur proportionnelle au nombre d'ancre : 
+		width_tronc= nb ancre 
+		height_tronc= r_agent / 2
+		y_tronc= cy_agent + height_tronc
+		x_tronc= cx_agent - width_tronc + 1
+	<rect id="tronc" x="199" y="250" width="2" height="50" rx="10" fill="none" stroke="black" stroke-width="30"/>
+	-->
+	
+	<!-- ligne branche ancre 1 gauche de la périphérie au centre 
+		strocke_lien1g = statut
+		x1_lien1g= x2_lien1d = cx_agent - (stroke-width_lien + 1)
+		y1_lien1g= agent_cy + agent_r 
+		y2_lien1g= agent_cy - tronc_height
+	-->
+	<line id="lien1g" x1="197" y1="300" x2="197" y2="250" stroke="yellow" stroke-width="2"/>
+	<!-- A FAIRE ligne branche ancre 1 droite de la périphérie au centre 
+		strocke_lien1d = statut
+		x1_lien1d= x2_lien1d = cx_agent + (stroke-width_lien + 1)
+		y1_lien1d= agent_cy + agent_r 
+		y2_lien1d= agent_cy - tronc_height
+	-->
+	<line id="lien1gho" x1="197" y1="300" x2="0" y2="300" stroke="green" stroke-width="6"/>
+	<!-- ligne branche ancre 1 droite de la périphérie au centre 
+		strocke_lien1d = statut
+		x1_lien1d= x2_lien1d = cx_agent + (stroke-width_lien + 1)
+		y1_lien1d= agent_cy + agent_r 
+		y2_lien1d= agent_cy - tronc_height
+	-->
+	<line id="lien1d" x1="203" y1="300" x2="203" y2="250" stroke="yellow" stroke-width="2"/>
+	<!-- A FAIRE ligne branche ancre 1 droite de la périphérie au centre 
+		strocke_lien1d = statut
+		x1_lien1d= x2_lien1d = cx_agent + (stroke-width_lien + 1)
+		y1_lien1d= agent_cy + agent_r 
+		y2_lien1d= agent_cy - tronc_height
+	-->
+	<line id="lien1dho" x1="203" y1="300" x2="400" y2="300" stroke="green" stroke-width="6"/>
+	<!-- cercle  fin tronc
+		cx_fin_tronc_int = cx_agent
+		cy_fin_tronc_int = y_tronc
+		r_fin_tronc_int = (nbLien+1) x stroke-width_lien
+	-->
+	<circle id="fin_tronc_int" cx="200" cy="250" r="6" stroke="yellow" stroke-width="2" fill="black"/>
+	<!-- cercle  deb tronc
+		cx_deb_tronc_int = cx_agent
+		cy_deb_tronc_int = cx_agent + r_agent
+		r_deb_tronc_int = (nbLien+1) x stroke-width_lien
+	-->
+	<circle id="deb_tronc_int" cx="200" cy="300" r="6" stroke="yellow" stroke-width="2" fill="black"/>
+	
+	
+		<!-- placement d'un nouvel agent --> 
+	<g transform="translate(0,600) rotate(180)">
+		<!-- agent proportionnel au nombre d'ancre : 
+		r_agent=50 x ancre
+	-->
+		<circle id="agent" onclick="alert('1');" cx="200" cy="200" r="100" stroke="black" stroke-width="2" fill="red"/>
+		<!-- tronc intérieur proportionnelle au nombre d'ancre : 
+		width_tronc= nb ancre 
+		height_tronc= r_agent / 2
+		y_tronc= cy_agent + height_tronc
+		x_tronc= cx_agent - width_tronc + 1
+	-->
+		<rect id="tronc" x="199" y="250" width="2" height="50" rx="10" fill="none" stroke="purple" stroke-width="30"/>
+		<!-- ligne branche ancre 1 gauche de la périphérie au centre 
+		strocke_lien1g = statut
+		x1_lien1g= x2_lien1d = cx_agent - (stroke-width_lien + 1)
+		y1_lien1g= agent_cy + agent_r 
+		y2_lien1g= agent_cy - tronc_height
+	-->
+		<line id="lien1g" x1="197" y1="300" x2="197" y2="250" stroke="yellow" stroke-width="2"/>
+		<!-- A FAIRE ligne branche ancre 1 droite de la périphérie au centre 
+		strocke_lien1d = statut
+		x1_lien1d= x2_lien1d = cx_agent + (stroke-width_lien + 1)
+		y1_lien1d= agent_cy + agent_r 
+		y2_lien1d= agent_cy - tronc_height
+	-->
+		<line id="lien1gho" x1="197" y1="300" x2="0" y2="300" stroke="green" stroke-width="3"/>
+		<!-- ligne branche ancre 1 droite de la périphérie au centre 
+		strocke_lien1d = statut
+		x1_lien1d= x2_lien1d = cx_agent + (stroke-width_lien + 1)
+		y1_lien1d= agent_cy + agent_r 
+		y2_lien1d= agent_cy - tronc_height
+	-->
+		<line id="lien1d" x1="203" y1="300" x2="203" y2="250" stroke="yellow" stroke-width="2"/>
+		<!-- A FAIRE ligne branche ancre 1 droite de la périphérie au centre 
+		strocke_lien1d = statut
+		x1_lien1d= x2_lien1d = cx_agent + (stroke-width_lien + 1)
+		y1_lien1d= agent_cy + agent_r 
+		y2_lien1d= agent_cy - tronc_height
+	-->
+		<line id="lien1dho" x1="203" y1="300" x2="400" y2="300" stroke="green" stroke-width="3"/>
+		<!-- cercle  fin tronc
+		cx_fin_tronc_int = cx_agent
+		cy_fin_tronc_int = y_tronc
+		r_fin_tronc_int = (nbLien+1) x stroke-width_lien
+	-->
+		<circle id="fin_tronc_int" cx="200" cy="250" r="6" stroke="yellow" stroke-width="2" fill="black"/>
+		<!-- cercle  deb tronc
+		cx_deb_tronc_int = cx_agent
+		cy_deb_tronc_int = cx_agent + r_agent
+		r_deb_tronc_int = (nbLien+1) x stroke-width_lien
+	-->
+		<circle id="deb_tronc_int" cx="200" cy="300" r="6" stroke="yellow" stroke-width="2" fill="black"/>
+	</g>
+</svg>
