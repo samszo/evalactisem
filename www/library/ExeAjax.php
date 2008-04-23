@@ -40,7 +40,7 @@
         }
         switch ($fonction) {
                 case 'SupTrad':
-                        $resultat = SupTrad($_GET['idIeml'],$_GET['idflux']);
+                        $resultat = SupTrad($_GET['codeIeml'],$_GET['codeflux']);
                         break;
                                 case 'SetProc':
                         $resultat = SetProc($_GET['id'],$_GET['code'],$_GET['desc']);
@@ -54,7 +54,11 @@
                 case 'GetGraph':
                         $resultat = GetGraph($code);
                         break;
-                        
+               case 'BDD':
+                        $resultat=BDD();
+                        break;
+               case 'insert_BDD':
+               	     $resultat=insert_BDD($_GET['trad']);
         }
         
         echo $resultat; 
@@ -63,25 +67,18 @@
         $iduti=$_SESSION['iduti'];
                 global $objSite;
 
-                	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-                    $db->connect();
-                	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Get_Id_Flux']";  
-                	$Q = $objSite->XmlParam->GetElements($Xpath);
-                	$where= str_replace("-codeflux-", $codeflux, $Q[0]->where);
-                	$sql = $Q[0]->select.$Q[0]->from.$where;
-                	$result = $db->query($sql);
-                	$res=mysql_fetch_array($result);
-                    $idflux=$res[0];
+                	
+                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
                 	// requête pour vérifier l'existence de la traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_Trad_VerifExist']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where = str_replace("-libIeml-", $libIeml, $Q[0]->where);
-                $where = str_replace("-codeIeml-", $codeIeml, $where);
-                $sql = $Q[0]->select.$Q[0]->from.$where;
+                $where = str_replace("-codeflux-", $codeflux, $Q[0]->where);
+                $from = str_replace("-iduti-", $iduti, $Q[0]->from);
+                $sql = $Q[0]->select.$from.$where;
                 $result = $db->query($sql);
                 $db->close();
-                $row = mysql_fetch_array($result);
-               
+                $row=mysql_fetch_row($result);
                 if($row[0]==0){
                 	
                 	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='AddTrad_Insert_onto_flux']";
@@ -94,19 +91,18 @@
 		        	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		            $db->connect();
 		            $result = $db->query($sql);
-		            $row[0]=mysql_insert_id();
+		            $idieml=mysql_insert_id();
+		            ieml_uti_onto($objSite,$iduti,$idieml,$db);
 		            $message = mysql_affected_rows()." traduction ajoutée";
 		            $db->close();
+                    return AddTrad_onto_trad( $codeflux,$idieml);	
                 }
-                if($row[0]!=0){ 
-               
-                	$exist=VerifExist_onto_trad($idflux,$row[0],$iduti);
-                	if($exist=="true"){
+                if($row!=0){ 
                     	echo $exit;
                     	return "La traduction existe deja !";
-                    }	
+                    	
                 }
-                return AddTrad_onto_trad($idflux,$row[0],$iduti);	
+                
                 
  }
         //verifier si une traduction existe deja dans onto_trad
@@ -129,15 +125,23 @@
                              
                }
         	
-        function AddTrad_onto_trad($idflux,$idIeml){
+        function AddTrad_onto_trad( $codeflux,$idIeml){
         	 	global $objSite;
-        		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
+        		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Get_Id_Flux']";
+        		$Q = $objSite->XmlParam->GetElements($Xpath);
+        		$where = str_replace("-codeflux-", $codeflux, $Q[0]->where);
+        	 	$sql = $Q[0]->select.$Q[0]->from.$where;
+        	 	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+                $db->connect();
+                $result = $db->query($sql);
+                $idflux=mysql_fetch_array($result);
+        		echo "idflux=".$idflux[0];
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
-                $values = str_replace("-idflux-", $idflux, $Q[0]->values);
+                $values = str_replace("-idflux-", $idflux[0], $Q[0]->values);
                 $values = str_replace("-idIeml-", $idIeml, $values);
                 $sql = $Q[0]->insert.$values;
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-                $db->connect();
+                
                 $result = $db->query($sql);
                 $message = mysql_affected_rows()." traduction ajoutee";
                 $db->close();
@@ -183,20 +187,28 @@
             return AddTrad_onto_trad($idflux,$idIeml);
             
        }
-        function SupTrad($idIeml,$idflux){
+        function SupTrad($codeIeml,$codeflux){
         
                 global $objSite;
-                
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
+                $from=str_replace("-codeIeml-", $codeIeml, $from);
+                $from=str_replace("-Iemllib-", $codeflux, $from);
+                $sql = $Q[0]->select.$from.$Q[0]->where;
+                echo $sql;
+                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+                $db->connect();
+                $result = $db->query($sql);
+                $res=mysql_fetch_array($result);
                 //requête pour Supprimer une traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
                 //echo $Q;
-                $where = str_replace("-idflux-", $idflux, $Q[0]->where);
-                $where = str_replace("-idIeml-", $idIeml, $where);
+                $where = str_replace("-idflux-", $res[0], $Q[0]->where);
+                $where = str_replace("-idIeml-", $res[1], $where);
                 //echo $where;
                 $sql = $Q[0]->delete.$Q[0]->from.$where;
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-                $db->connect();
                 $result = $db->query($sql);
                 $message = mysql_affected_rows()." traduction supprime";
                 $db->close();
@@ -284,14 +296,46 @@
         
 		function ieml_uti_onto($objSite,$uti_id,$ieml_id,$db){
 		
-			$Xpath=Xpath('ieml_uti_onto_flux');
-			$Q=$objSite->XmlParam->GetElements($Xpath);
+			$Xpath="/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
+			$Q = $objSite->XmlParam->GetElements($Xpath);
 			$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 			$values=str_replace("-idieml-",$ieml_id,$values);
 			$sql=$Q[0]->insert.$values;
-			echo $sql;
 			$reponse = $db->query($sql);
 	}
+	function BDD(){
+        global $objSite;	
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+            $db->connect();
+            $sql="select ieml_code from ieml_onto";
+            $result = $db->query($sql);
+            while($reponse=mysql_fetch_array($result)){
+            	$reponse=mysql_fetch_array($result);
+            	 $Tab.=$reponse[0].";";
+            	
+            }
+          
+           return $Tab;
+        }
+      
+        function insert_BDD($trad){
+    	global $objSite;
+        $i=0;
+    	echo $trad;
+        $t=explode(";",$trad);
+    	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+        $db->connect();
+        $sql="select ieml_code from ieml_onto";
+       
+        $result = $db->query($sql);
+        while($reponse=mysql_fetch_array($result)){
+        
+        $sql="update ieml_onto set ieml_code='".$t[$i]."' where ieml_code='".$reponse[0]."'";
+    	$result = $db->query($sql);
+        $i++;
+        }
+       return "ok";
+    }
         
         
         
