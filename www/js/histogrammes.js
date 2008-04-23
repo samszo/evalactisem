@@ -1,9 +1,11 @@
-function testbdd(){
-AjaxRequest("http://localhost/evalactisem/overlay/tree.php","res","");
-}
+urlAjax="http://localhost/evalactisem/";
 function res(result,param){
 alert(result);
 }
+function testbdd(){
+AjaxRequest(urlAjax+'library/ExeAjax.php?f=BDD','SaveFlux','');
+}
+
 function show_tooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
@@ -33,7 +35,8 @@ function pf_couleur(num, color){
 }
 
 function SetDonnee(){
-	AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'','');
+	
+	AjaxRequest("library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'SaveFlux','');
 }
 function RecupDeliciousFlux(){
 	
@@ -42,25 +45,27 @@ function RecupDeliciousFlux(){
 	    
 	
 	if((query_flux=="")){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllBundles"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
 	}
 	if(query_graph=""){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?req=GetAllTags"+"&requette="+query_flux,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?req=GetAllTags"+"&requette="+query_flux,'DelIiciousTreeGraph','');
 	}
 	if((query_flux=="GetAllTags")||(query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
-		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
     	if(query_flux=="GetRecentPosts"){
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+    		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
     }else
         if(query_flux=="GetPosts"){
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
-    		AjaxRequest("http://localhost/evalactisem/library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
+    		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
     }
+
+
 }
 
 function pf_dessin(noms, donnees)
@@ -138,8 +143,12 @@ function DelIiciousTreeGraph(result,param){
    
 }
 
-function parser(result,param){
-	document.getElementById("iemlhisto").setAttribute("src",result);
+function SaveFlux(result,param){
+	AjaxRequest(urlAjax+'library/ExeAjax.php?f=insert_BDD&trad='+TradIeml.syntaxe_ieml(result),'','');
+	alert(result);
+	Flux=result;
+	
+	
 	}
 
 function Trad_Pars_Ieml(){
@@ -154,7 +163,9 @@ function Trad_Pars_Ieml(){
 	var descpM="";
 	var descpS="";
 	var iemlTrad;var synIemlM=""; var synIemlS="";
-	iterSec = xmlFlux.evaluate("/marque/nom", xmlFlux, null, XPathResult.ANY_TYPE, null );
+    var parser = new DOMParser();
+	FluxXML = parser.parseFromString(Flux, "text/xml");
+	iterSec = FluxXML.evaluate("/marque/nom",FluxXML, null, XPathResult.ANY_TYPE, null );
   	nSec = iterSec.iterateNext();
   	if(!nSec)
   		return;
@@ -194,7 +205,7 @@ function Trad_Pars_Ieml(){
 	}
 	frame=document.getElementById("iemlhisto");
 	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-	AjaxRequest("http://localhost/evalactisem/overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+MultiTrad+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+SignlTrad+"&descpS="+descpS+"&FluxN="+FluxN,'');
+	AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN,'');
 
 }
 
@@ -265,7 +276,7 @@ function AddTrad(){
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
 	alert(libIeml.value);
-	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
 
 }   
 
@@ -355,7 +366,7 @@ function RequetteAddTrad(){
 		document.getElementById("trad-message").value = "Veuillez sélectionner une valeur pour chaque langage";
 	else
 		
-	AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=AddTrad&idflux="+idflux.value+"&libflux="+libflux.value+"&codeIeml="+codeIeml.value,"","","trad-message");
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddTrad&idflux="+idflux.value+"&libflux="+libflux.value+"&codeIeml="+codeIeml.value,"","","trad-message");
 }
 
 function StartSelecTrad(){
@@ -380,19 +391,18 @@ function StartSelecTrad(){
 function SupTrad()
 {
 	//récupération des valeurs
-	var idIeml = document.getElementById("id-trad-ieml");
-	var idflux = document.getElementById("id-trad-flux");
-    alert(idflux.value);
+	var codeIeml = document.getElementById("code-trad-ieml");
+	var codeflux = document.getElementById("code-trad-flux");
     var listbox=document.getElementById("boxlist");
-    var select=listbox.selectedIndex;
-	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
+   alert(codeIeml.value);
+	url = urlExeAjax+"?f=SupTrad&codeIeml="+codeIeml.value+"&codeflux="+codeflux.value;
    
 	//vérification des valeursboxlistJ
-	if(idIeml.value=="" || idflux.value=="")
+	if(codeIeml.value=="" || codeflux.value=="")
 		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
 	else
-		AjaxRequest("http://localhost/evalactisem/library/ExeAjax.php?f=SupTrad&idIeml="+idIeml.value+"&idflux="+idflux.value,""," ","trad-message");
-		listbox.removeItemAt(select);
+		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&codeflux="+codeflux.value,""," ","trad-message");
+		
 }
 function startSelectTab()
 { 
@@ -417,22 +427,32 @@ function startSelectTab()
 	txtDescpF.value = celldescpF.getAttribute('label');
 
 }
-
-function strat(id){
+function Select_NoTrad(id){
+	var tree = document.getElementById(id);
+  	var txtcode_flux=document.getElementById("code-trad-flux");
+  	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
+  	txtcode_flux.value=selection.firstChild.firstChild.getAttribute("label");
+    var txtlib_ieml=document.getElementById("lib-trad-ieml");
+    txtlib_ieml.value=selection.firstChild.firstChild.getAttribute("label");
+    
+}
+function Select_Trad(id){
   try{
   var tree = document.getElementById(id);
   var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   
-  var parent=tree.contentView.getParentIndex(tree.currentIndex);
-  var parentItem=tree.contentView.getItemAtIndex(parent);
-  var txtcode_ieml = document.getElementById("code-trad-ieml");
-  var txtcode_flux=document.getElementById("code-trad-flux");
-  var txtlib_ieml=document.getElementById("lib-trad-ieml");
-  txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
-  txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
-  txtlib_ieml.value=selection.firstChild.firstChild.getAttribute("label");
+ 	  var parent=tree.contentView.getParentIndex(tree.currentIndex);
+	  var parentItem=tree.contentView.getItemAtIndex(parent);
+	  var txtcode_ieml = document.getElementById("code-trad-ieml");
+	  var txtcode_flux=document.getElementById("code-trad-flux");
+	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
+	  txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
+	  txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
+	  txtlib_ieml.value=parentItem.firstChild.firstChild.getAttribute("label");
+  
   }
   		 
  catch(e){}
   
 }
+
