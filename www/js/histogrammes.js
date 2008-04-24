@@ -30,7 +30,7 @@ function pf_couleur(num, color){
 
 function SetDonnee(){
 	
-	AjaxRequest("library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'SaveFlux','');
+	AjaxRequest("library/RecupFlux.php?requette=GetAllTags"+"&req=tagsFbundles" ,'SaveFlux','');
 }
 function RecupDeliciousFlux(){
 	
@@ -39,10 +39,10 @@ function RecupDeliciousFlux(){
 	    
 	
 	if((query_flux=="")){
-		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req=GetAllTags",'DelIiciousTreeGraph','');
 	}
 	if(query_graph=""){
-		AjaxRequest(urlAjax+"library/RecupFlux.php?req=GetAllTags"+"&requette="+query_graph,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?req=GetAllTags"+"&requette=GetAllTags",'DelIiciousTreeGraph','');
 	}
 	if((query_flux=="GetAllTags")||(query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
 		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
@@ -175,7 +175,7 @@ function Trad_Pars_Ieml(){
 		}
 	}
 		
-	
+	alert(arrNoms);
 	arrNom = arrNoms.split(";");
 	
 	for(i=0;i<arrNom.length-1;i++){
