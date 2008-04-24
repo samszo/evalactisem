@@ -107,11 +107,11 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 						<label value="Type "/>
 						<menulist id="type"  >
 							<menupopup>
-								<menuitem label="Tags en fonction des bundles" value="GetAllTags"/>
+								<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
 								<menuitem label="Tags en fonction de count" value="GetAllTags"/>
 							</menupopup>
 						</menulist>
-					    <button id="RecupFlux" label="Affichage du graphique"  onclick="RecupDeliciousFlux()"/>
+					    <button id="RecupFlux" label="Affichage du graphique"  onclick="RecupDeliciousFlux();"/>
 						</vbox>
 				</groupbox>
 				<iframe id="webFrame" flex="1" src="http://www.google.fr "  />
