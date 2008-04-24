@@ -51,18 +51,18 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
-		
+		var Flux;
 	</script>
 	<hbox  >
-    <label value="<?php if($con==1){
-							echo 'Connection to del.icio.us failed.';
+    <label value=<?php if($con==1){
+							echo '"Connection to del.icio.us failed." style="color:red;size=10"';
                          }elseif($con==3){
 		             		
-		             			echo 'Del.icio.us API access throttled.' ;
+		             			echo '"Del.icio.us API access throttled."' ;
 		             	 }else{  
-			         	 	echo'traduction, semantique, ieml, delicious .....'; 
+			         	 	echo'"traduction, semantique, ieml, delicious ....." style="color:blue;size:20px"'; 
 			            }
-			           ?>"/>
+			           ?> />
 
 
 	<vbox align="center" flex="1" ><label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/></vbox>
@@ -107,7 +107,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 						<label value="Type "/>
 						<menulist id="type"  >
 							<menupopup>
-								<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
+								<menuitem label="Tags en fonction des bundles" value="GetAllTags"/>
 								<menuitem label="Tags en fonction de count" value="GetAllTags"/>
 							</menupopup>
 						</menulist>
