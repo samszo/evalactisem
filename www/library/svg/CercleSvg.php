@@ -13,7 +13,7 @@ function make_svg_head ($title, $abstract) {
 }
 $Nbr=$_POST["Nbr"];
 function CordCercles($r,$Nbr,$cx,$cy){
-	$a=360/($Nbr);
+	$a=360/($Nbr+1);
 	for($i=0;$i<$Nbr;$i++){
 		$angle=$a*($i+1);
 		if($angle<=90){
@@ -50,7 +50,7 @@ make_svg_head ($title, $abstract);
     Cercle(600,250,200,"red");
 	$Cord=CordCercles(200,$Nbr,600,250);
 	for($i=0;$i<$Nbr;$i++){
-		Cercle($Cord[$i][1],$Cord[$i][2],20,"green");
+		Cercle($Cord[$i][1],$Cord[$i][2],10,"green");
 		Text($Cord[$i][1],$Cord[$i][2],$i);
 	}
    
@@ -61,6 +61,6 @@ function Cercle($cx,$cy,$r,$color){
 	
 }
 Function Text($x,$y,$text){
-	echo '<text x="'.$x.'" y="'.$y.'" font-family="Verdana" font-size="55" fill="blue" >'.$text.'</text>';
+	echo '<text x="'.$x.'" y="'.$y.'" font-family="Verdana" font-size="15" fill="yellow" >'.$text.'</text>';
 }
 ?>
