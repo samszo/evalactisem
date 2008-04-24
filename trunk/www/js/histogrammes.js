@@ -1,10 +1,4 @@
 urlAjax="http://localhost/evalactisem/";
-function res(result,param){
-alert(result);
-}
-function testbdd(){
-AjaxRequest(urlAjax+'library/ExeAjax.php?f=BDD','SaveFlux','');
-}
 
 function show_tooltip(evt)
 {
@@ -45,10 +39,10 @@ function RecupDeliciousFlux(){
 	    
 	
 	if((query_flux=="")){
-		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllBundles"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
 	}
 	if(query_graph=""){
-		AjaxRequest(urlAjax+"library/RecupFlux.php?req=GetAllTags"+"&requette="+query_flux,'DelIiciousTreeGraph','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?req=GetAllTags"+"&requette="+query_graph,'DelIiciousTreeGraph','');
 	}
 	if((query_flux=="GetAllTags")||(query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
 		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
@@ -144,7 +138,7 @@ function DelIiciousTreeGraph(result,param){
 }
 
 function SaveFlux(result,param){
-	AjaxRequest(urlAjax+'library/ExeAjax.php?f=insert_BDD&trad='+TradIeml.syntaxe_ieml(result),'','');
+	
 	alert(result);
 	Flux=result;
 	
@@ -164,12 +158,24 @@ function Trad_Pars_Ieml(){
 	var descpS="";
 	var iemlTrad;var synIemlM=""; var synIemlS="";
     var parser = new DOMParser();
-	FluxXML = parser.parseFromString(Flux, "text/xml");
-	iterSec = FluxXML.evaluate("/marque/nom",FluxXML, null, XPathResult.ANY_TYPE, null );
-  	nSec = iterSec.iterateNext();
+	FluxTag = parser.parseFromString(Flux, "text/xml");
+	iterSecTag = FluxTag.evaluate("/marque",FluxTag, null, XPathResult.ANY_TYPE, null );
+  	nSecTag = iterSecTag.iterateNext();
+  
   	if(!nSec)
   		return;
-	var arrNoms = nSec.textContent;
+  	for (var j = 0; j < nSec.childNodes.length; j++) {
+		if(nSec.childNodes[j].tagName=="nom"){
+			arrNoms = nSec.childNodes[j].textContent;
+		}
+		if(nSec.childNodes[j].tagName=="noms"){
+			
+		   arrNoms+=nSec.childNodes[j].textContent;
+			
+		}
+	}
+		
+	
 	arrNom = arrNoms.split(";");
 	
 	for(i=0;i<arrNom.length-1;i++){
@@ -199,7 +205,7 @@ function Trad_Pars_Ieml(){
 			
 		}else
 			   
-			//alert("il n'existe pas de traduction");
+			
 		    FluxN+=arrNom[i]+";";
 		   
 	}
@@ -350,9 +356,6 @@ function ChoixTrad(CarIeml,DiscIeml){
 		
 		box.appendChild(boxTrad);
 	
-}
-function test(result){
-alert(result);
 }
 
 function RequetteAddTrad(){
