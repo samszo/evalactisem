@@ -76,12 +76,21 @@
 					   INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id 
 				        
 				</from>
-				<where>WHERE t.acteur_id = '-idacteur-' </where>
+				<where></where>
 			</Query>
 		    <Query fonction="ExeAjax_Trad_VerifExist">
-				<select>SELECT ieml_id,ieml_code </select>
-				<from> FROM ieml_onto De  </from>
-				<where> WHERE ieml_lib = "-libflux-"  AND ieml_code="-codeIeml-"</where>
+				<select>SELECT f.onto_flux_id,o.ieml_code </select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON f.onto_flux_id= t.onto_flux_id  
+				       INNER JOIN ieml_uti_onto u ON u.uti_id='-iduti-' AND t.ieml_id=u.ieml_id  
+				       INNER JOIN ieml_onto o ON o.ieml_id=t.ieml_id AND  f.onto_flux_code=o.ieml_code	 
+				</from>
+				<where> WHERE f.onto_flux_code='-codeflux-'</where>
+			</Query>
+			<Query fonction="Get_Id_Flux">
+				<select>SELECT onto_flux_id</select>
+				<from> FROM ieml_onto_flux   </from>
+				<where> WHERE onto_flux_code = "-codeflux-"</where>
 			</Query>
 			<Query fonction="ExeAjax_Trad_VerifExist_P">
 				<select>SELECT ieml_id </select>
@@ -91,15 +100,22 @@
 		    <Query fonction="ExeAjax-AddTrad-VerifExist">
 				<select>SELECT COUNT(1) </select>
 				<from> FROM ieml_trad De  </from>
-				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- AND acteur_id= "-idacteur-" </where>
+				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- </where>
 			</Query>
 			<Query fonction="ExeAjax-AddTrad-Insert">
-				<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id,acteur_id,trad_date)</insert>
-				<values> VALUES(-idflux-, -idIeml-,-idacteur-, now())  </values>
+				<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id,trad_date)</insert>
+				<values> VALUES(-idflux-, -idIeml-, now())  </values>
 			</Query>
 			<Query fonction="AddTrad_Insert_onto_flux">
 				<insert>INSERT INTO ieml_onto (ieml_id, ieml_code, ieml_lib,ieml_niveau,ieml_parent,ieml_date)</insert>
 				<values> VALUES(" ", "-codeIeml-","-libIeml-",-nivIeml-,-parentIeml-, now())  </values>
+			</Query>
+			<Query fonction="ExeAjax-SupTrad">
+				<select>SELECT f.onto_flux_id,i.ieml_id </select>
+				<from> FROM ieml_onto_flux f  
+				       INNER JOIN ieml_onto i ON f.onto_flux_code="-codeFlux-" AND i.ieml_code="-codeIeml-" AND i.ieml_lib="-codeFlux-"
+				 </from>
+				<where> </where>
 			</Query>
 			<Query fonction="ExeAjax-SupTrad-Delete">
 			<delete>DELETE </delete>
@@ -110,6 +126,18 @@
 				<select>SELECT onto_flux_code  </select>
 				<from> FROM ieml_onto_flux De  </from>
 				<where>  </where>
+			</Query>
+			<Query fonction="ieml_uti_onto">
+				<insert> INSERT INTO ieml_uti_onto (uti_id,ieml_id)</insert>
+				<values> VALUES ('-iduti-' , '-idieml-')</values>
+			</Query>
+			<Query fonction="Tree_dynamique">
+				<select> SELECT f.onto_flux_code, i.ieml_code</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id
+                </from>
 			</Query>
 		</Querys>
 		<rdfDesc urn="ieml"/>
@@ -170,7 +198,7 @@
 				<where> WHERE onto_flux_parents =-parent-</where>
 			</Query>
 		    <Query fonction="flux_utilisateur">
-				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,flux_id)</insert>
+				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
 				<values> VALUES ( '-iduti-','-idflux-')</values>
 			</Query>
 			<Query fonction="Enrg_Utilisateur">
