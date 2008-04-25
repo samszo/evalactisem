@@ -1,0 +1,4 @@
+@import url("chrome://global/skin");
+
+treechildren::-moz-tree-row(utilisateur){background-color: green;}
+treechildren::-moz-tree-row(dictio){background-color: yellow;}
