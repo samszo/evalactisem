@@ -9,6 +9,8 @@
 	// Include the class files.
 	require_once(TT_CLASS_BASE."AllClass.php");
 
+  define ("TRACE", false);
+	
   define ("DEFSITE", "local");
 
   $DB_OPTIONS = array (
