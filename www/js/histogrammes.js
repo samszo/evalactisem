@@ -10,6 +10,7 @@ function show_tooltip(evt)
         var numero = parseInt(barre.substring(4 , barre.length)) - 1
         if (numero >= 0)
         {       
+        
                 evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "transform", "translate(" + (evt.clientX - decale_x - 70) + "," + (evt.clientY - decale_y - 20))
                 evt.target.ownerDocument.getElementById("tooltip_text").firstChild.data = values[numero]
                 evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "visible")
