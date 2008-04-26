@@ -12,10 +12,8 @@
 			</vbox>
 		</tooltip>
 		<popup id="clipmenu" onpopupshowing="javascript:;">
-			<menuitem label="Move Up" oncommand="MoveBranche(TreeId, 'up', event);"/>
-			<menuitem label="Move Down" oncommand="MoveBranche(TreeId, 'down', event);"/>
-			<menuitem label="Delete" oncommand="startDelete(0);"/>
-			<menuitem label="Add" oncommand="startInsert(event);"/>
+			<menuitem label="parser" oncommand="Parser();"/>
+			
 		</popup>
 	</popupset>
 
