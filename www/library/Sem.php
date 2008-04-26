@@ -207,9 +207,9 @@ Class Sem{
 	
 		if($code=="")
 			$code=$this->Src;
-	    $lien ="https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression=".$code."'";
-		if($this->trace)
-			echo "Sem.php:Parse:lien".$lien."<br/>";
+	    $lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.stripslashes ($code);
+		
+			
 	    $oCurl = curl_init($lien);
 		// set options
 	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
