@@ -18,7 +18,7 @@
         else
                 $id = -1;
         if(isset($_GET['code']))
-                $code = $_GET['code'];
+                $code = stripslashes ($_GET['code']);
         else
                 $code = -1;
         if(isset($_GET['desc']))
@@ -54,11 +54,7 @@
                 case 'GetGraph':
                         $resultat = GetGraph($code);
                         break;
-               case 'BDD':
-                        $resultat=BDD();
-                        break;
-               case 'insert_BDD':
-               	     $resultat=insert_BDD($_GET['trad']);
+               
         }
         
         echo $resultat; 
@@ -303,39 +299,8 @@
 			$sql=$Q[0]->insert.$values;
 			$reponse = $db->query($sql);
 	}
-	function BDD(){
-        global $objSite;	
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-            $db->connect();
-            $sql="select ieml_code from ieml_onto";
-            $result = $db->query($sql);
-            while($reponse=mysql_fetch_array($result)){
-            	$reponse=mysql_fetch_array($result);
-            	 $Tab.=$reponse[0].";";
-            	
-            }
-          
-           return $Tab;
-        }
-      
-        function insert_BDD($trad){
-    	global $objSite;
-        $i=0;
-    	echo $trad;
-        $t=explode(";",$trad);
-    	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-        $db->connect();
-        $sql="select ieml_code from ieml_onto";
-       
-        $result = $db->query($sql);
-        while($reponse=mysql_fetch_array($result)){
-        
-        $sql="update ieml_onto set ieml_code='".$t[$i]."' where ieml_code='".$reponse[0]."'";
-    	$result = $db->query($sql);
-        $i++;
-        }
-       return "ok";
-    }
+	
+   
         
         
         
