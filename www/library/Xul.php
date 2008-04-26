@@ -475,14 +475,13 @@ class Xul{
                 $db->close();
     			while($reponse=mysql_fetch_array($result)){
     				$Trad.=$reponse[1].";";
-    				$Desc.=$reponse[0].";";
-    				
+    				$Desc.=$reponse[2].";";
+    				$Tag.=$reponse[0].";";
     			}
     			
-    			return $Trad."*".$Desc;
+    			return $Trad."*".$Desc."*".$Tag;
                
-     }
-	
+     }     
 	
 	
   }
