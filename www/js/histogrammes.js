@@ -196,10 +196,11 @@ function Trad_Pars_Ieml(){
 			   // alert("il existe plusieurs traduction"+nouv_syn);
 			}else
 			    if(iemlTrad.length==2){
-				synIemlS+=TradIeml.syntaxe_ieml(ieml[0])+"*";
+				synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
 				SignlTrad+=ieml[0];
 				FluxS+=arrNom[i]+";";
 				descpS+=ieml[1];
+				alert(FluxS+descpS+synIemlS);
 				//alert("il existe qu 'une seul traduction: "+FluxS);
 				
 			}
@@ -437,7 +438,7 @@ function Select_NoTrad(id){
   	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   	txtcode_flux.value=selection.firstChild.firstChild.getAttribute("label");
     var txtlib_ieml=document.getElementById("lib-trad-ieml");
-    txtlib_ieml.value=selection.firstChild.firstChild.getAttribute("label");
+    txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_descp"));
     
 }
 function Select_Trad(id){
@@ -451,12 +452,21 @@ function Select_Trad(id){
 	  var txtcode_flux=document.getElementById("code-trad-flux");
 	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
 	  txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
+	  txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_descp"));
 	  txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
-	  txtlib_ieml.value=parentItem.firstChild.firstChild.getAttribute("label");
+	  
   
   }
   		 
  catch(e){}
   
 }
-
+function Parser(){
+    var tree = document.getElementById("Signl_Trad");
+    Iemlcode=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_Signl_Trad"));
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode,"Afficher"," ","");
+	
+}
+function Afficher(result,prarm){
+	alert(result);
+}
