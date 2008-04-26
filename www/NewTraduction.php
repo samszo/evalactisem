@@ -22,6 +22,7 @@ require_once ("param/ParamPage.php");
 	$T=array();      
 	      $chaine=explode("*",$objXul->VerifExist_onto_trad($iduti));
 		  $Desc=explode(";",$chaine[1]);
+		  $Tag=explode(";",$chaine[2]);
 		  $Trad=array();
 		  $Trad=explode(";",$chaine[0]);
 		  $j=0;
@@ -32,32 +33,35 @@ require_once ("param/ParamPage.php");
 		  	}
 		  	
 		  }
-		
+		 
 		  $r=0;
           
 		  if(sizeof($T)==0){
           	for($i=0;$i<sizeof($mFlux)-1;$i++){
 	           $sT=explode(";",$mTrad[$i]);
 	           $sD=explode(";",$mDescp[$i]);
-	           $mT="";
+          	   $mT="";
           	   $mD="";
-          	 for($j=0;$j<sizeof($sT)-1;$j++){
+	           for($j=0;$j<sizeof($sT)-1;$j++){
 	                $mT.=$sT[$j].";";
 		            $mD.=$sD[$j].";";
+		            
 		     }
           	 $M=explode(";",$mT);
 	         $D=explode(";",$mD);
 	         for($j=0;$j<sizeof($M)-1;$j++){
-	           $mTra[$r][$j]=$M[$j];
-	           $mDesc[$r][$j]=$D[$j];
+	           $mTra[$i][$j]=$M[$j];
+	           $mDesc[$i][$j]=$D[$j];
 	         }
-             $r++;
-          }
+          
+        }
         }else{
 		    
         	for($i=0;$i<sizeof($mFlux)-1;$i++){
 	           		$sT=explode(";",$mTrad[$i]);
 	                $sD=explode(";",$mDescp[$i]);
+	                $mT="";
+          	        $mD="";
 	                for($j=0;$j<sizeof($sT)-1;$j++){
 	                	if(!in_array($sT[$j],$T)){
 	                		    $mT.=$sT[$j].";";
@@ -72,7 +76,8 @@ require_once ("param/ParamPage.php");
 	                    		$r--;
 	                    	    break;
 	                    	}  
-	           }
+                     
+	                }
 	           
 	           if($exist=="false"){
 	           	$M=explode(";",$mT);
@@ -85,10 +90,12 @@ require_once ("param/ParamPage.php");
 	        $r++;
 		  
 		 }
+        
         }
+          
           $j=0;
 		 for($i=0;$i<sizeof($mFlux)-1;$i++){
-          	if(!in_array($mFlux[$i],$Desc)) {
+          	if(!in_array($mFlux[$i],$Tag)) {
           		$mflux[$j]= $mFlux[$i]; 
           		$j++;       
           	}
@@ -106,7 +113,7 @@ require_once ("param/ParamPage.php");
 		  array_pop($sDescp);
 		  $Des=array_merge($sDescp,$Desc);
 		  $sTra=array_merge($sTrad,$T);
-		  $sflux= array_merge($sFlux,$Desc);
+		  $sflux= array_merge($sFlux,$Tag);
 		  array_pop($sflux);
 	header('Content-type: application/vnd.mozilla.xul+xml');
     
