@@ -1,10 +1,6 @@
 <?php
         $ajax = true;
         require_once ("../param/ParamPage.php");
-        require_once ("BookMarke.php");
-        require_once ("Post.php");
-        require_once ("AgentOnto.php");
-		require_once("svg/Svg.php");
         session_start();
         
         
