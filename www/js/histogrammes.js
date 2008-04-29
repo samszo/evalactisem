@@ -82,6 +82,8 @@ function pf_dessin(noms, donnees)
 
 function DelIiciousTreeGraph(result,param){
 	
+	SaveFlux(result,param);
+
 	query=document.getElementById("requette").selectedItem.value;
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
@@ -140,13 +142,13 @@ function DelIiciousTreeGraph(result,param){
 
 function SaveFlux(result,param){
 	
-	alert(result);
+	//alert(result);
 	Flux=result;
 	
 	
 	}
 
-function Trad_Pars_Ieml(){
+function Trad_Pars_Ieml(dst){
 	var trad;
 	var synIeml="";
 	var Ieml;
@@ -176,7 +178,11 @@ function Trad_Pars_Ieml(){
 		}
 	}
 		
+<<<<<<< .mine
+	//alert(arrNoms);
+=======
 	
+>>>>>>> .theirs
 	arrNom = arrNoms.split(";");
 	
 	for(i=0;i<arrNom.length-1;i++){
@@ -200,7 +206,11 @@ function Trad_Pars_Ieml(){
 				SignlTrad+=ieml[0];
 				FluxS+=arrNom[i]+";";
 				descpS+=ieml[1];
+<<<<<<< .mine
+				//alert(FluxS+descpS+synIemlS);
+=======
 				
+>>>>>>> .theirs
 				//alert("il existe qu 'une seul traduction: "+FluxS);
 				
 			}
@@ -217,6 +227,15 @@ function Trad_Pars_Ieml(){
     bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
     AjaxRequest(urlAjax+"library/ExeAjax.php?f=GraphGet&bookmark="+bookmark,'FluxGraphe');
     
+<<<<<<< .mine
+	//frame=document.getElementById(dst);
+	//frame.setAttribute("src",url);
+
+=======
+
+
+
+>>>>>>> .theirs
 }
 function FluxGraphe(result,param){
 	alert(result);

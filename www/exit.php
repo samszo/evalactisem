@@ -19,7 +19,7 @@ session_destroy ();
 </SCRIPT>
 
 <script language='Javascript'>
-location.href = 'index1.php'
+location.href = 'index.php'
 </script>
 </body>
 </html>

@@ -312,6 +312,8 @@
 	
         function GraphGet($mbook){
         	$bookmark=new BookMark($mbook);
+        	if(TRACE)
+        		echo "ExeAjax:GraphGet:bookmark".$bookmark."<br/>";
         	$AgentOnto= new AgentOnto($bookmark);
         	
         	//$bookmark->GetInfos();
