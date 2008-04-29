@@ -1,5 +1,5 @@
 <?php
-class AgentSite {
+class AgentOnto {
   private $site;
   private $DB;
   private $trace;
@@ -17,22 +17,22 @@ class AgentSite {
     return "Cette classe permet de définir et manipuler une page.<br/>";
     }
 
-  function __construct($site) {
-  	$this->site = $site;
+  function __construct($bookmark) {
+  	$this->bookmark = $bookmark;
     $this->trace = TRACE;		
   }
 
 
 
-  function svgSite($id) {
+  function svgBookmark() {
 
-	$this->site->GetInfos($id);
-  	
+	$this->bookmark->GetInfos();
+  	//site sera remplacé par bookmark
 	//calcul la taille
-	$nbPage = $this->site->GetNbPage();
+	$nbPage = $this->bookmark->GetNbPost();//GetNbPage sera remplacé PAR GetNbPosts;
 	$xMaxSvg = $nbPage*($this->width_page+$this->xentre_page);
 	$yMaxSvg = 800;
-	$xSite = ($this->marge+$xMaxSvg)/2;
+	$xBookmark = ($this->marge+$xMaxSvg)/2;
 		
   	//$svg = new SvgDocument("", "","","0 0 ".$xMaxSvg." ".$yMaxSvg,"xMidYMin meet","SVGglobal");
   	$svg = new SvgDocument("100%", "100%","","","","SVGglobal","onzoom=\"handleZoom(evt);\" onscroll=\"handlePan(evt);\" onload=\"handleLoad(evt);\""); 	
@@ -44,43 +44,42 @@ class AgentSite {
 
   	//ajoute un svg global
   	//$svg = new SvgFragment("100%", "100%","","","","","","GroupeGlobal","onzoom=\"handleZoom(evt);\" onscroll=\"handlePan(evt);\" onload=\"handleLoad(evt);\""); 	
-  	
-	$site = new SvgRect($xSite, $this->marge, $this->width_page+($nbPage*8), $this->heigth_page+($nbPage*4)
+  	//Déssiner le rectangle de bookmark
+	$bookmark = new SvgRect($xBookmark, $this->marge, $this->width_page+($nbPage*8), $this->heigth_page+($nbPage*4)
   		,"stroke:black;stroke-width:".$this->stroke_width_lien.";fill:red;"
   		,""
-  		, "onclick=\"VoirSelectPage('".$this->site->idSite."');\"");
-  	$svg->addChild($site);
-  	//ajoute le nom du site 
-  	$svg->addChild(new SvgText($site->mX+10,$site->mY+20,$this->site->titre,"fill:black;font-size:".$this->font_size."pt;"));
+  		, "onclick=\"VoirSelectPage('".$this->bookmark->id."');\"");
+  	$svg->addChild($bookmark);
+  	//ajoute le login de l'utilisateur
+  	$svg->addChild(new SvgText($bookmark->mX+10,$bookmark->mY+20,$this->bookmark->titre,"fill:black;font-size:".$this->font_size."pt;"));
 	//construction du tronc
-	$xDebTronc = $site->mX+($site->mWidth/2);
-	$yDebTronc = $site->mY+($site->mHeight);
-  	
-  	//récupère les pages du site
+	$xDebTronc = $site->mX+($bookmark->mWidth/2);
+	$yDebTronc = $site->mY+($bookmark->mHeight);
+  	//Déssiner les cercles qui représentes les Posts a l'interieur de rectangle Bookmarke
   	$i=0;
   	$j=0;
-  	while($this->site->pages[$i])
+  	while($this->bookmark->Posts[$i])
 	{
-		$page = $this->site->pages[$i];
-		if($page->idParent==0){		
-			//ajoute la page et calcul la translation
-	  		$svg->addChild($this->svgPage($page,true,1,$j+1));
+		$post = $this->bookmark->Posts[$i];
+		
+	  		$svg->addChild($this->svgPost($post,true,1,$j+1));
+	  		//Ajoute le lien entre l'urls et Tags ou bundles 
 	  		//ajoute le lien entre le site et la page
 	  		$svg->addChild(new SvgLine(
-	  			$xDebTronc
+	  			 $xDebTronc
 	  			,$yDebTronc
 	  			,$this->xTrans+($this->width_page/2)
 	  			,$this->yTrans
 	  			,"stroke:black;stroke-width:".$this->stroke_width_lien.";fill:black;"
 	  			,""
-	  			,"SVGLien_site_".$id."_page_".$page->id
-	  			)
-	  		);
+	  			,"SVGLien_bookmark_".$id."_post_".$post->id
+	  			));
+	  		
 	  		$j++;
-		}
+		
   		$i++;
 	}
-  	$tronc = $this->svgTronc("_site_".$id,$site);
+  	$tronc = $this->svgTronc("_bookmark_".$id,$bookmark);
 	$svg->addChild($tronc);
   	
   	//ajoute la navigation zoom pan
@@ -132,30 +131,31 @@ class AgentSite {
 	*/
       }
 
-  function svgPage($page, $doc=false, $niv=1, $ordre=1) {
+  function svgPost($post, $doc=false, $niv=1, $ordre=1) {
 
-  	if(!is_object($page))
-  		$page = new Page($this->site,$page);
+  	//if(!is_object($post))
+  		//$post = new Post($this->bookmark,$post);
+  		
   	//calcul la place du svg
   	$this->xTrans = (($this->width_page+$this->xentre_page)*$ordre)+$this->marge-$this->heigth_page;
   	$this->yTrans = ($this->heigth_page*$niv)+$this->yentre_page;
   	$trans = "translate(".$this->xTrans.",".$this->yTrans." )";
   	if($doc){
-  		$svg = new SvgGroup("",$trans,"SVGpage_".$page->id);
+  		$svg = new SvgGroup("",$trans,"SVGpost_".$post->id);
    	}else{
-  		$svg = new SvgDocument("", "","","","","SVGpage_".$page->id);
+  		$svg = new SvgDocument("", "","","","","SVGpage_".$post->id);
    	}
   	$svgP = new SvgRect(0, 0, $this->width_page,$this->heigth_page 
   		,"stroke:black;stroke-width:".$this->width_lien.";fill:red;"
   		,""
-  		, "onclick=\"VoirSelectPage('".$page->id."');\""
-  		,"SVGpagerect_".$page->id
+  		, "onclick=\"VoirSelectPage('".$post->id."');\""
+  		,"SVGpagerect_".$post->id
   		);
   	$svg->addChild($svgP);
   	//ajoute le nom du site 
-  	$svg->addChild(new SvgText($svgP->mX+10,$svgP->mY+20,$page->id." - ".$page->titre,"fill:black;font-size:".$this->font_size."pt;"));
+  	$svg->addChild(new SvgText($svgP->mX+10,$svgP->mY+20,$post->id." - ".$post->titre,"fill:black;font-size:".$this->font_size."pt;"));
 	//construction du tronc		
-	$svg->addChild($this->svgTronc("_page_".$page->id,$svgP,$page));
+	$svg->addChild($this->svgTronc("_page_".$post->id,$svgP,$post));
   	
 	//entrée de la page
   	$svg->addChild(new SvgCircle(
@@ -165,16 +165,16 @@ class AgentSite {
   		,"stroke:yellow;stroke-width:".$this->width_lien.";fill:black;"
   		,""
   		,""
-  		,"SVGpageentree_".$page->id
+  		,"SVGpageentree_".$post->id
   		)
   	);
 	//création des pages enfants
 	$xDebTronc = $svgP->mX+($svgP->mWidth/2);
 	$yDebTronc = $svgP->mY+($svgP->mHeight);
   	$i=0;
-  	while($page->PageEnfs[$i])
+  	while($page->Tags[$i])
 	{
-		$svg->addChild($this->svgPage($page->PageEnfs[$i],true,$niv*0.8,$i));
+		$svg->addChild($this->svgPost($post->Tags[$i],true,$niv*0.8,$i));
 
   		//ajoute le lien entre le site et la page
   		$svg->addChild(new SvgLine(
@@ -184,7 +184,7 @@ class AgentSite {
   			,$this->yTrans
   			,"stroke:black;stroke-width:".$this->stroke_width_lien.";fill:black;"
   			,""
-  			,"SVGLien_site_".$id."_page_".$page->id
+  			,"SVGLien_site_".$id."_page_".$post->id
   			)
   		);
 		
@@ -205,18 +205,18 @@ class AgentSite {
   	
   	//vérifie si on dessine le tronc d'une page ou d'un site
   	if($page=="-1"){
-  		$arrLiens = $this->site->pages;
-		$nbPage = $this->site->GetNbPage();
+  		$arrLiens = $this->bookmark->Posts;
+		$nbPost = $this->bookmark->GetNbPost();
    	}else{
-  		$arrLiens = $page->PageEnfs;
-		$nbPage = count($arrLiens);
+  		$arrLiens = $post->Tags;
+		$nbPost = $this->bookmark->GetNbPost();
    	}
   	
   	$xDebTronc = $svgP->mX+($svgP->mWidth/2);
 	$yDebTronc = $svgP->mY+($svgP->mHeight);
 	$xFinTronc = $xDebTronc;
 	$yFinTronc = $svgP->mY+($svgP->mHeight/1.5);
-  	$wTronc = $this->width_lien*$nbPage;
+  	$wTronc = $this->width_lien*$nbPost;                                       
 	
   	$svg = new SvgGroup("","","SVGtronc".$id);
 	  	
@@ -233,10 +233,7 @@ class AgentSite {
 
 	  	//vérifie si on dessine le tronc d'une page ou d'un site
 	  	$verif = true;
-	  	if($page=="-1"){
-	  		if($this->site->pages[$i]->idParent!=0)
-		  		$verif = false;
-	  	}
+	  	
 	  	
 	  	if($verif)
 		  	//ajoute le lien entre les ancres et les pages
@@ -247,7 +244,7 @@ class AgentSite {
 	  			,$yFinTronc
 	  			,"stroke:black;stroke-width:".$this->width_lien.";fill:black;"
 	  			,""
-	  			,"SVGLienTronc".$id."_page_".$arrLiens[$i]->id
+	  			,"SVGLienTronc".$id."_post_".$arrLiens[$i]->id
 	  			)
 	  		);
   		
@@ -256,7 +253,7 @@ class AgentSite {
 	
 	if($i>0){
 		//ajoute les éléments en arc
-	  	$svg->addChild($this->svgOnArcElements($id,$xFinTronc,$yFinTronc,6,180,180,false,true,$page));
+	  	$svg->addChild($this->svgOnArcElements($id,$xFinTronc,$yFinTronc,6,180,180,false,true,$post));
 	
 	  	//début du tronc
 	  	$svg->addChild(new SvgCircle(
