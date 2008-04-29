@@ -9,7 +9,7 @@ class SvgPolygon extends SvgElement
 {
     var $mPoints;
     
-    function SvgPolygon($points=0, $style="", $transform="")
+    function SvgPolygon($points=0, $style="", $transform="", $js="", $id="")
     {
         // Call the parent class constructor.
         $this->SvgElement();
@@ -17,6 +17,8 @@ class SvgPolygon extends SvgElement
         $this->mPoints = $points;
         $this->mStyle = $style;
         $this->mTransform = $transform;
+        $this->mJs = $js;
+        $this->mId = $id;
         
     }
     
@@ -28,6 +30,8 @@ class SvgPolygon extends SvgElement
             
             $this->printStyle();
             $this->printTransform();
+            $this->printJs();
+            $this->printId();
             print(">\n");
             parent::printElement();
             print("</polygon>\n");
@@ -36,6 +40,8 @@ class SvgPolygon extends SvgElement
             
             $this->printStyle();
             $this->printTransform();
+            $this->printJs();
+            $this->printId();
             print("/>\n");
             
         } // end else

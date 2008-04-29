@@ -1,7 +1,6 @@
 <?php
 class AgentOnto {
   private $site;
-  private $DB;
   private $trace;
   public $marge=10;
   public $xentre_page=64;
@@ -12,6 +11,7 @@ class AgentOnto {
   public $width_lien=2;
   public $xTrans;
   public $yTrans;
+  public $bookmark;
   
   function __tostring() {
     return "Cette classe permet de définir et manipuler une page.<br/>";
@@ -38,17 +38,26 @@ class AgentOnto {
   	$svg = new SvgDocument("100%", "100%","","","","SVGglobal","onzoom=\"handleZoom(evt);\" onscroll=\"handlePan(evt);\" onload=\"handleLoad(evt);\""); 	
   	
   	//ajoute les liens avec les scripts
-  	$svg->addChild(new SvgScript(jsPathRoot."svgAgentSite.js"));
-  	$svg->addChild(new SvgScript(xulPathRoot."js/ajax.js"));
+  	$svg->addChild(new SvgScript(jsPathWeb."svgAgentSite.js"));
+  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
   	
 
   	//ajoute un svg global
-  	//$svg = new SvgFragment("100%", "100%","","","","","","GroupeGlobal","onzoom=\"handleZoom(evt);\" onscroll=\"handlePan(evt);\" onload=\"handleLoad(evt);\""); 	
-  	//Déssiner le rectangle de bookmark
-	$bookmark = new SvgRect($xBookmark, $this->marge, $this->width_page+($nbPage*8), $this->heigth_page+($nbPage*4)
+  	//Déssiner l'exagone de bookmark
+  	/*
+  	$bookmark = new SvgRect($xBookmark, $this->marge, $this->width_page+($nbPage*8), $this->heigth_page+($nbPage*4)
   		,"stroke:black;stroke-width:".$this->stroke_width_lien.";fill:red;"
   		,""
   		, "onclick=\"VoirSelectPage('".$this->bookmark->id."');\"");
+	*/
+  	$bookmark = new SvgPolygon("958,262.5 850,325 742,262.6 742,137.5 850,75 958,137.5 "
+  		, "stroke:black;stroke-width:".$this->stroke_width_lien.";fill:red;"
+  		, " translate(100,200) scale(0.2)"
+  		, "onclick=\"alert('".$this->bookmark->id."');\""
+  		, "SVGbookmark".$this->bookmark->id
+  		);
+  		
+  		
   	$svg->addChild($bookmark);
   	//ajoute le login de l'utilisateur
   	$svg->addChild(new SvgText($bookmark->mX+10,$bookmark->mY+20,$this->bookmark->titre,"fill:black;font-size:".$this->font_size."pt;"));
@@ -381,7 +390,8 @@ class AgentOnto {
   
   function svgZoomPan($svg){
   	
-  	$svg->addChild(new SvgScript(jsPathRoot."svgZoomPan.js"));  	
+  	$svg->addChild(new SvgScript(jsPathWeb."svgZoomPan.js"));  	
+  	
 	//ajoute la forme fléche
   	$def = new SvgDefs("","","FlechePan");
   	$def->addChild(new SvgPath("M0,10 h20 v-10 l20,30 l-20,30 v-10 h-20 z","fill:green","","","arrow"));

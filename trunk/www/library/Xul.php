@@ -459,6 +459,90 @@ class Xul{
       
     }
 	
+    function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
+    	echo'<vbox  style="background-color:blue;" align="center">';	
+    	echo'<label value="'.$type.'" style="font:arial;size:10;color:yellow" />';
+    	echo'<tree context="clipmenu"			
+			enableColumnDrag="true"
+			typesource="'.$type.'"	
+			id="'.$type.'" ';
+			if($type=="No_Trad"){
+				echo ' onselect="Select_NoTrad(\''.$type.'\');">'; 
+			}else{
+				echo ' onselect="Select_Trad(\''.$type.'\');">';
+			}
+			
+    		if($type=="No_Trad"){
+    			echo'<treecols >';
+	  			 echo'<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"   persist="width ordinal hidden" />';
+	  		     echo'<splitter class="tree-splitter"/>';
+                 echo'</treecols>';
+	  		   echo'<treechildren>';  
+	  		   for($i=0;$i<sizeof($flux);$i++){
+                    echo'<treeitem >';
+                        echo'<treerow>';
+                        echo'<treecell label="'.$flux[$i].'"/>' ;
+                        echo'</treerow>';
+	  		        echo'</treeitem>'; 
+	  		   }
+	  		   echo'</treechildren>';
+	  		   echo'</tree>';
+            }else{
+		  		echo'<treecols >';
+		  			 echo'<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"  persist="width ordinal hidden"  />';
+		  		     echo'<splitter class="tree-splitter"/>';
+		  			 echo'<treecol id="treecol_descp"  label="Description"  persist="width ordinal hidden" />';
+		  			 echo'<splitter class="tree-splitter"/>';
+		  			 echo'<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />';
+	  		    echo'</treecols>';
+	  		echo'<treechildren>';    
+                    for($i=0;$i<sizeof($flux);$i++){
+                    	echo'<treeitem container="true" open="true">';
+                        	 	 echo'<treerow>';
+                        	 	 echo'<treecell label="'.$flux[$i].'"/>' ;
+                        	  	 echo'</treerow>';
+                        	  	 if($type=="Signl_Trad"){
+                        	  		//echo $type;
+                        	  		echo'<treechildren>';
+                        	  			echo'<treeitem >';	
+                        	  			  if(in_array($trad[$i],$bdd)){
+                        	  			  	$prop="utilisateur";
+                        	  			  }else{
+                        	  			  	$prop="dictio";
+                        	  			  }
+                        	  			  echo'<treerow properties="'.$prop.'">';
+                        	  					echo'<treecell label=""  />' ;	
+                        	  				    echo'<treecell label="'.$descp[$i].'"/>' ;	
+                        	  				  	echo'<treecell label="'.$trad[$i].'"/>' ;
+                        	  				  echo'</treerow>';
+                        	  			echo'</treeitem>';
+                        	  		echo'</treechildren>';
+                        	  	}
+                        	  	if($type=="Multi_Trad"){
+                        	  		echo'<treechildren>';
+                        	  		for($j=0;$j<sizeof($trad[$i]);$j++){
+                        	  			echo'<treeitem >';	
+                        	  				echo'<treerow>';
+                        	 		 			echo'<treecell label=""/>' ;	
+                        	  				    echo'<treecell  label="'.$descp[$i][$j].'" />' ;	
+                        	  					echo'<treecell  label="'.$trad[$i][$j].'"/>' ;
+                        	  			    echo'</treerow>';
+                        	  			echo'</treeitem>';
+                        	  		
+                        	  		}
+                        	  		echo'</treechildren>';
+                        	  	}
+                        	  	echo'</treeitem>';
+                        }
+	  					
+	  			echo'</treechildren>';
+	  		echo'</tree>';
+            }
+	    echo'</box>';
+	  	echo'</vbox>';
+      
+    }
+	
     
     
     function VerifExist_onto_trad($iduti){
