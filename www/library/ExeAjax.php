@@ -1,6 +1,10 @@
 <?php
         $ajax = true;
         require_once ("../param/ParamPage.php");
+        require_once ("BookMarke.php");
+        require_once ("Post.php");
+        require_once ("AgentOnto.php");
+		require_once("svg/Svg.php");
         session_start();
         
         
@@ -25,7 +29,11 @@
                 $desc = $_GET['desc'];
         else
                 $desc = -1;
-                
+        if(isset($_GET['bookmark']))
+                $mbook = stripslashes($_GET['bookmark']);
+         else
+         		$mbook="toto";
+       
                 
 
 		switch ($fonction) {
@@ -54,6 +62,9 @@
                 case 'GetGraph':
                         $resultat = GetGraph($code);
                         break;
+                case 'GraphGet':
+                	    $resultat=GraphGet($mbook);
+                	    break;
                
         }
         
@@ -300,7 +311,14 @@
 			$reponse = $db->query($sql);
 	}
 	
-   
+        function GraphGet($mbook){
+        	$bookmark=new BookMark($mbook);
+        	$AgentOnto= new AgentOnto($bookmark);
+        	
+        	//$bookmark->GetInfos();
+        	return $AgentOnto->svgBookmark();
+        	
+        }
         
         
         
