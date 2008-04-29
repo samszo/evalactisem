@@ -6,7 +6,9 @@
   
 	// *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/");
-	// Include the class files.
+	// *** Define the path to the SVG class dir. ***
+	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
+  // Include the class files.
 	require_once(TT_CLASS_BASE."AllClass.php");
 
   define ("TRACE", false);
@@ -20,7 +22,8 @@
   define ("MaxMarker", 300);
   define ("DELIM",'*');
   define ("jsPathRoot",PathRoot."/js/");
-
+  define ("jsPathWeb","http://localhost/evalactisem/js/");
+  
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");
 
   define ("XML_CreaRdf",PathRoot."/param/ParamXul.xml");

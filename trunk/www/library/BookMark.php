@@ -4,6 +4,8 @@ class BookMark{
 	private $trace;
 	public $id;
 	public $Posts;
+	public $NbPost;
+	public $Tags = array();
 	public $login;
 	public $titre;
 	public $url;
@@ -11,7 +13,10 @@ class BookMark{
 	
 	
 	function __tostring() {
-    	return "Cette classe permet de définir des BookMarks.<br/>";
+    	$s = "Cette classe permet de définir des BookMarks.<br/>";
+    	$s .= $this->id."<br/>";
+    	$s .= $this->bookmark."<br/>";
+    	return $s;
     }
 	function __construct($bookmark){
 		$this->trace=TRACE;
@@ -24,39 +29,31 @@ class BookMark{
 	}
 	
 	function GetInfos(){
+
+			//récupère les infos du bookmark
+			$idbook = $this->xml->xpath("/bookmark");
+			$this->id=$idbook[0]['id'] ;
+			$this->titre=$idbook[0]['id'];
+
+			//récupère les post du bookmark
 			$i=0;
-			foreach($this->xml->xpath("/bookmark") as $idbook){
-				$id=$idbook['id'] ;
-				$this->titre=$idbook['id'];
-			}
-			
 			foreach($this->xml->xpath("//post") as $post){ 
-				$ids[$i]=$post['id'];
-				$i++;
-				
+				$idP = $post['id'];
+				$url = $post->url;
+				$this->Posts[$i]= new Post($this->bookmark,$idP,$url);
+				$j=0;
+				//récupère les tags du bookmark
+				foreach($post->Tags->tag as $tag){
+					$this->Posts[$i]->Tags[$j]=$tag;
+					//ajoute les tag distinct au niveau du bookmark
+					if(!in_array($tag,$this->Tags))
+						array_push($this->Tags,$tag."");
+					$j++;	 
+				}				
+			    $i++;
 			}
-			$i=0;
-			foreach($this->xml->xpath("//post/url") as $post){
-				
-				$urls[$i]=$post;
-				$i++;
-				
-			}
-		 	
-			for($i=0;$i<sizeof($ids);$i++){
-				$this->Posts[$i]= new Post($this->bookmark,$ids[$i],$urls[$i]);
-			    $this->Posts[$i]->GetInfos($ids[$i]);
-				
-			}
-				
+			$this->NbPost = $i;
 			
-	}
-	function GetNbPost(){
-		
-		foreach($this->xml->xpath("//post") as $post){
-			$nb++;
-		}
-		return $nb;
 	}
 	
 }

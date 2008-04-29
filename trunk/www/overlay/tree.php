@@ -31,7 +31,7 @@ require_once ("../param/ParamPage.php");
 	<box id="<?php echo $objSite->scope["box"]; ?>"  class="editableTree" >
 		<tree id="tree<?php echo $type;?>"
 			width="300" height="400"
-			context="clipmenu"			
+			context="iemlmenu"			
 			enableColumnDrag="true"
 			fctStart="startEditable"
 			fctSave="saveEditable"

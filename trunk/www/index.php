@@ -53,8 +53,16 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 		var TradIeml= new Traduction(); 
 		var Flux;
 	</script>
+
+		<popupset id="popupset">
+		<popup id="iemlmenu" onpopupshowing="javascript:;">
+			<menuitem label="Parser" oncommand="startInsert(event);"/>
+		</popup>
+	</popupset>
+
+
 	<hbox  >
-    <label value=<?php if($con==1){
+	    <label value=<?php if($con==1){
 							echo '"Connection to del.icio.us failed." style="color:red;size=10"';
                          }elseif($con==3){
 		             		
@@ -65,8 +73,8 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 			           ?> />
 
 
-	<vbox align="center" flex="1" ><label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/></vbox>
-	<label value="logout" onclick="window.location.replace('exit.php') ; " style=" margin-left:1200px"/>
+		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
+		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
 	<label id="tradu" hidden="true" value=""/>
 	<hbox id="histogramme" flex="1">
@@ -86,61 +94,54 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 	   <vbox flex="1" >
 
 		 <groupbox orient="horizontal">
-			<caption label="del.icio.us"/>
-				<groupbox orient="horizontal" >
-					<caption label="Graphique"/>
-						<vbox>
-				<label id="selctreq" value="" hidden="true"/>
-				<label value="requête" />
-				<menulist id="requette" oncommand="">
-				   <menupopup >
-				     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand=""/>
-				     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
-				     <menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="grpBox.CreatGrpBox('box1');"/>
-				     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand=""/>
-				     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand=""/>
-				   </menupopup>
-				</menulist>
-				<box id="box1" ></box>		    
-					    <label value="Titre"/>
-						<textbox persist="value" id="titre" value="Traduction du Flux"/>
-						<label value="Type "/>
-						<menulist id="type"  >
-							<menupopup>
-								<menuitem label="Tags en fonction des bundles" value="tagsFbundles"/>
-								<menuitem label="Tags en fonction de count" value="GetAllTags"/>
-							</menupopup>
-						</menulist>
-					    <button id="RecupFlux" label="Affichage du graphique"  onclick="RecupDeliciousFlux();"/>
-						</vbox>
-				</groupbox>
-				<iframe id="webFrame" flex="1" src="http://www.google.fr "  />
-				<iframe id="treeReq" flex="1" src="http://www.google.fr"/>
-		</groupbox>
-		<splitter collapse="before" resizeafter="farthest">
-							<grippy/>
-		</splitter>
-		<groupbox orient="vertical" flex="1">
-			<caption label="IEML"/>
-			<hbox>
-     			<button id="bt_10" label="Traduction de TAG"  onclick="Trad('traduction','traduction.xul');"/>
-    			<button id="TypeGraphe" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml();"/>
-			</hbox>
-			<hbox flex="1">
-				<iframe id="iemlhisto" flex="1" src="http://www.ieml.org"  />
-				<splitter collapse="before" resizeafter="farthest">
-							<grippy/>
-				</splitter>
-				<hbox id="traduction" flex="1"/>
-			</hbox>
-		</groupbox>
+			<caption label="Visualisation des graphiques"/>
+				<vbox>
+					<groupbox orient="vertical" >
+						<caption label="Flux del.icio.us"/>
+							<label id="selctreq" value="" hidden="true"/>
+							<label value="requête" />
+							<menulist id="requette" oncommand="">
+							   <menupopup >
+							     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand=""/>
+							     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
+							     <menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="grpBox.CreatGrpBox('box1');"/>
+							     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand=""/>
+							     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand=""/>
+							   </menupopup>
+							</menulist>
+							<box id="box1" ></box>		    
+					</groupbox>
+					<groupbox orient="vertical" flex="1">
+						<caption label="IEML"/>
+						
+			     			<button id="bt_10" label="Traduction de TAG"  onclick="Trad('traduction','traduction.xul');"/>
+			    			<button id="TypeGraphe" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml('webFrame');"/>
 
-	</vbox>
-     
+					</groupbox>
+
+					<groupbox orient="vertical" >
+						<caption label="Graphique"/>
+						    <label value="Titre"/>
+							<textbox persist="value" id="titre" value="Traduction du Flux"/>
+							<label value="Type "/>
+							<menulist id="type"  >
+								<menupopup>
+									<menuitem label="Nombre de Tags" value="GetAllTags"/>
+									<menuitem label="Tags par Bundles" value="tagsFbundles"/>
+								</menupopup>
+							</menulist>
+						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
+					</groupbox>
+				</vbox>
+				<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
+			</groupbox>
+			<hbox id="traduction" flex="1"/>
+			<iframe  id="treeReq" flex="1" src=""/>
+		</vbox> 
  </hbox>
  <script type="text/javascript">
  	//récupération des flux
- 	SetDonnee();
+ 	RecupDeliciousFlux();
  </script>
 </window>
 
