@@ -176,7 +176,7 @@ function Trad_Pars_Ieml(){
 		}
 	}
 		
-	alert(arrNoms);
+	
 	arrNom = arrNoms.split(";");
 	
 	for(i=0;i<arrNom.length-1;i++){
@@ -200,7 +200,7 @@ function Trad_Pars_Ieml(){
 				SignlTrad+=ieml[0];
 				FluxS+=arrNom[i]+";";
 				descpS+=ieml[1];
-				alert(FluxS+descpS+synIemlS);
+				
 				//alert("il existe qu 'une seul traduction: "+FluxS);
 				
 			}
@@ -213,10 +213,14 @@ function Trad_Pars_Ieml(){
 	}
 	frame=document.getElementById("iemlhisto");
 	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-	AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN,'');
-
+	//AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN,'FluxGraphe');
+    bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
+    AjaxRequest(urlAjax+"library/ExeAjax.php?f=GraphGet&bookmark="+bookmark,'FluxGraphe');
+    
 }
-
+function FluxGraphe(result,param){
+	alert(result);
+}
 function Trad(id,src){
 	
 	var box =document.getElementById(id);
