@@ -40,17 +40,13 @@
                 case 'AddDictio':
                         $resultat = AddDictio($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml']);
                         break;
-        }
-        switch ($fonction) {
                 case 'AddTrad':
                         $resultat = AddTrad($_GET['libIeml'],$_GET['codeFlux'],$_GET['codeIeml']);
                         break;
-        }
-        switch ($fonction) {
                 case 'SupTrad':
                         $resultat = SupTrad($_GET['codeIeml'],$_GET['codeflux']);
                         break;
-                                case 'SetProc':
+                case 'SetProc':
                         $resultat = SetProc($_GET['id'],$_GET['code'],$_GET['desc']);
                         break;
                 case 'SetOnto':
@@ -69,6 +65,13 @@
         }
         
         echo $resultat; 
+
+        
+
+        
+        
+        
+        
         // Ajouter une traduction dans la table ieml_onto et onto_trad
         function AddTrad($libIeml,$codeflux,$codeIeml){
         $iduti=$_SESSION['iduti'];
