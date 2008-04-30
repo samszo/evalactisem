@@ -5,11 +5,11 @@
  * Description : demo of editable tree javascript functions
  * Note : Edutice is a brand of Novatice Technologies SAS 
  */
-var TreeId = "treeRing";
+var TreeId = "treeieml";
  
 //ajout lsd variable global pour gérer les multi-tri
 function initTree(nomTree) {
-	//alert(nomTree);
+	alert(nomTree);
 	TreeId = nomTree;
 	var vbTreeRing = document.getElementById(TreeId).parentNode;
 }  
@@ -20,7 +20,7 @@ function startEditable(event, col) {
 	vbTreeRing = document.getElementById(TreeId).parentNode;
 
     //definition of edtion type for each column to edit
-	//alert(col);
+	
 	//toute les colonnes sont éditable
 	if(col.substr(0,8)=='treecol_'){
 		var tbAge = vbTreeRing.updateByTextbox("([A-Za-z0-9])", "tipBadValue");
@@ -30,7 +30,7 @@ function startEditable(event, col) {
     }
 
     switch (col) {
-		case 'per_community':
+		case '':
             //update by checkbox
             vbTreeRing.updateByCb(event);
             break;
@@ -40,8 +40,9 @@ function startEditable(event, col) {
             vbTreeRing.updateByRadio();
             break;
 
-        case 'per_race':
+        case 'code':
             //update by list
+            
             var pop = document.createElement('menupopup');
             var it1 = document.createElement('menuitem');
             it1.setAttribute('label', 'Elfe');

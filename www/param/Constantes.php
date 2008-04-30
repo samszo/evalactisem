@@ -60,7 +60,7 @@ $SiteThyp = array(
 	
   $SITES = array(
 	"local" => $Site,
-	"thyp" => $SiteThyp
+	
   );
 
 ?>

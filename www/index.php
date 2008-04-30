@@ -59,9 +59,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 			<menuitem label="Parser" oncommand="startInsert(event);"/>
 		</popup>
 	</popupset>
-
-
-	<hbox  >
+	<hbox >
 	    <label value=<?php if($con==1){
 							echo '"Connection to del.icio.us failed." style="color:red;size=10"';
                          }elseif($con==3){
@@ -114,8 +112,8 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 					<groupbox orient="vertical" flex="1">
 						<caption label="IEML"/>
 						
-			     			<button id="bt_10" label="Traduction de TAG"  onclick="Trad('traduction','traduction.xul');"/>
-			    			<button id="TypeGraphe" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="Trad_Pars_Ieml('webFrame');"/>
+			     			<button id="bt_10" label="Traduction de TAG"  onclick="Trad('traduction','NewTraduction.php');"/>
+			    			<button id="TypeGraphe" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
 
 					</groupbox>
 
@@ -135,13 +133,15 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 				</vbox>
 				<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
 			</groupbox>
-			<hbox id="traduction" flex="1"/>
-			<iframe  id="treeReq" flex="1" src=""/>
+			<box id="traduction" flex="1"></box>
+			<iframe  id="treeReq" flex="1"/>
 		</vbox> 
  </hbox>
  <script type="text/javascript">
  	//récupération des flux
+ 	
  	RecupDeliciousFlux();
+ 	
  </script>
 </window>
 

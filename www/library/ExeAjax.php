@@ -57,7 +57,8 @@
                 case 'GraphGet':
                 	    $resultat=GraphGet($mbook);
                 	    break;
-               
+                case 'Recup_onto_trad':
+                	$resultat=Recup_onto_trad();
         }
         
         echo $resultat; 
@@ -320,6 +321,29 @@
         	return $AgentOnto->svgBookmark();
         	
         }
+        
+        function Recup_onto_trad(){
+    	global $objSite;	
+    	
+                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
+                	// requête pour vérifier l'existence de la traduction
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+                $sql = $Q[0]->select.$from;
+               
+                $result = $db->query($sql);
+                $db->close();
+    			while($reponse=mysql_fetch_array($result)){
+    				$Trad.=$reponse[1].";";
+    				$Desc.=$reponse[2].";";
+    				$Tag.=$reponse[0].";";
+    			}
+    			
+    			return $Trad."*".$Desc."*".$Tag;
+               
+     }     
         
         
         
