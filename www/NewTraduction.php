@@ -32,7 +32,7 @@ require_once ("param/ParamPage.php");
     <script src="js/histogrammes.js"/>
     <popupset id="popupset">
 	</popupset>
-	<vbox id="trad"  style="height:600px;width:1000px;" > 
+	<vbox id="trad" > 
 		<hbox >
 			<hbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"  style="background-color:blue;">
 	      		<?php
@@ -86,7 +86,7 @@ require_once ("param/ParamPage.php");
 	<splitter collapse="before" resizeafter="farthest">
 			<grippy/>
 	</splitter>
-	<box id="box1" flex="1" style="height:400px;width:300px;" ></box>
+	<box id="box1" flex="1"  ></box>
 	</hbox>
 </vbox>
 		

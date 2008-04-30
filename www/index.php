@@ -127,9 +127,9 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 						<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
 					</groupbox>
 					<splitter />
-					<groupbox orient="horizontal" id="traduction" >
+					<groupbox orient="horizontal" >
 						<caption label="Visualisation des données"/>
-						<box hidden="true">
+						<box id="contDonnee"  >
 						    <label id="id-trad-ieml" hidden="true"/>
 							<label value="code :"/><label id="code-trad-ieml"  />
 							<label value="descriptif : "/><label id="lib-trad-ieml"  />
