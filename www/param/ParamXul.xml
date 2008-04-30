@@ -83,7 +83,7 @@
 				<from> FROM ieml_onto_flux f
 					   INNER JOIN ieml_trad t ON f.onto_flux_id= t.onto_flux_id  
 				       INNER JOIN ieml_uti_onto u ON u.uti_id='-iduti-' AND t.ieml_id=u.ieml_id  
-				       INNER JOIN ieml_onto o ON o.ieml_id=t.ieml_id AND  f.onto_flux_code=o.ieml_code	 
+				       INNER JOIN ieml_onto o ON o.ieml_id=t.ieml_id 	 
 				</from>
 				<where> WHERE f.onto_flux_code='-codeflux-'</where>
 			</Query>

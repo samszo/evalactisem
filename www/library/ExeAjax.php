@@ -96,18 +96,21 @@
         
         // Ajouter une traduction dans la table ieml_onto et onto_trad
         function AddTrad($libIeml,$codeflux,$codeIeml){
-        $iduti=$_SESSION['iduti'];
+
+        		$iduti=$_SESSION['iduti'];
                 global $objSite;
 
                 	
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		        $db->connect();   
-                	// requête pour vérifier l'existence de la traduction
+                // requête pour vérifier l'existence de la traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_Trad_VerifExist']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
                 $where = str_replace("-codeflux-", $codeflux, $Q[0]->where);
                 $from = str_replace("-iduti-", $iduti, $Q[0]->from);
                 $sql = $Q[0]->select.$from.$where;
+                if(TRACE)
+                	echo "ExeAjax:AddTrad:$sql.<br/>";
                 $result = $db->query($sql);
                 $db->close();
                 $row=mysql_fetch_row($result);
@@ -120,6 +123,8 @@
 		        	$values = str_replace("-nivIeml-", 1, $values);
 		        	$values = str_replace("-parentIeml-", -1, $values);
 		        	$sql = $Q[0]->insert.$values;
+	                if(TRACE)
+	                	echo "ExeAjax:AddTrad:$sql.<br/>";
 		        	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		            $db->connect();
 		            $result = $db->query($sql);

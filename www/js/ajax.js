@@ -16,7 +16,7 @@ function AppendResult(url,doc,ajoute) {
 	      alert("Réception erreur " + p.status);
 	}else{
 	    response = p.responseText;
-	    alert(response);
+	    //alert(response);
 		xulData="<box id='dataBox' flex='1'  " +
 	          "xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'>" +
 	          response + "</box>";

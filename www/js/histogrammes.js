@@ -242,10 +242,18 @@ function Trad_Pars_Ieml(result, param){
     
     
 	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
+
+	//affiche les infos de traduction
+	document.getElementById('infosTrad').setAttribute("hidden","false");
+	//affiche le iframe
+	document.getElementById('treeReq').setAttribute("hidden","true");
+	
 	//affiche le tree des singles trad
 	var doc = document.getElementById('contDonnee');
-	var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=false&bdd="+Trad;
-	AppendResult(url,doc,true);
+	doc.setAttribute("hidden","false");
+	
+	var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+Trad;
+	AppendResult(url,doc,false);
 
 	//ajoute le tree des multi trad
 	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+MultiTrad+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+Trad;
@@ -336,44 +344,20 @@ function AddTradDictio(result,param){
                 RequetteAddTrad();
 	 		}
 
+	}
 }
-}
+
 function AddTrad(){
 	var libIeml=document.getElementById("lib-trad-ieml");
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
 	alert(libIeml.value);
 	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
-
+	SetDonnee();
 }   
 
-//Ajouter une traduction
 
-function AddTrad1(){
-	 
-	 var idflux = document.getElementById("id-trad-flux");
-	 var libIeml=document.getElementById("code-trad-flux");
-     aTrad=document.getElementById("code-trad-flux").value;
-	 rTrad=TradIeml.recherchez(aTrad);
-	 if(rTrad==" "){
-			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
-	 }else {
-	 		
-	 		Trad=rTrad.split(E);
-	    	CarIeml=Trad[0].split(P);
-	 		DiscIeml=Trad[1].split(P);
-	 		if(CarIeml.length >2){
-	 		alert("il existe plusieurs possibilités veuillez choisir une");
-	 		ChoixTrad(CarIeml,DiscIeml);
-	 		}else
-	 		if(CarIeml.length ==2){
-	 			document.getElementById("code-trad-ieml").value=CarIeml;
-				document.getElementById("lib-trad-ieml").value=document.getElementById("code-trad-flux").value;
-                RequetteAddTrad();
-	 		}
-	}
 
-}
 
 //Creation de la table des choix 
 
