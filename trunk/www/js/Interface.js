@@ -30,7 +30,7 @@ function GetGraph(eSrc,eDst)
 	//browser.setAttribute("src",url);
 		
 }
-function AddTrad()
+function VerifAddTrad()
 {
 	//récupération des valeurs
 	var idIeml = document.getElementById("id-trad-ieml");

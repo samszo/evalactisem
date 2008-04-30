@@ -48,7 +48,8 @@ header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
 header ("title: Saisi des diagnosics d'accessibilité");
 echo '<' . '?xml version="1.0" encoding="iso-8859-15" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
-echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
+echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
+
 ?>
 <window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 	
@@ -64,10 +65,10 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 	</script>
 
 		<popupset id="popupset">
-		<popup id="iemlmenu" onpopupshowing="javascript:;">
-			<menuitem label="Parser" oncommand="startInsert(event);"/>
-		</popup>
-	</popupset>
+			<popup id="clipmenu" onpopupshowing="javascript:;">
+				<menuitem label="Parser" oncommand="Parser();"/>
+			</popup>
+		</popupset>
 	<hbox >
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
@@ -129,19 +130,28 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 					<splitter />
 					<groupbox orient="horizontal" >
 						<caption label="Visualisation des données"/>
-						<box id="contDonnee"  >
-						    <label id="id-trad-ieml" hidden="true"/>
-							<label value="code :"/><label id="code-trad-ieml"  />
-							<label value="descriptif : "/><label id="lib-trad-ieml"  />
-										<label id="trad-Sup-message" />			
-										<label id="trad-message" />
-										<label id="trad-Sup-message" />			
-										<label id="trad-message" />
-										<button label="Ajouter une traduction" oncommand="AddTrad();"/>	
-										<button label="Supprimer une traduction" oncommand="SupTrad();"/>				
-						</box>
-						<splitter />
 						<iframe  id="treeReq" flex="1" />
+						<vbox id="infosTrad" hidden="true"  >
+							<groupbox  >
+								<caption label="Langage du flux"/>
+							    <label id="id-trad-flux" hidden="true"/>
+								<label value="code :"/><label id="code-trad-flux" style="background-color:green" />
+							    <label value="descriptif : "/><label id="lib-trad-flux" style="background-color:green" />
+							</groupbox>
+							<groupbox >
+								<caption label="Langage IEML"/>
+							    <label id="id-trad-ieml" hidden="true"/>
+								<label value="code :"/><label id="code-trad-ieml" style="background-color:green" />
+								<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:green" />
+							</groupbox>
+							<label id="trad-Sup-message" />			
+							<label id="trad-message" />
+							<label id="trad-Sup-message" />			
+							<label id="trad-message" />
+							<button label="Ajouter une traduction" oncommand="AddTrad();"/>	
+							<button label="Supprimer une traduction" oncommand="SupTrad();"/>				
+						</vbox>
+						<box id="contDonnee" flex="1" hidden="true" />
 					</groupbox>
 				</vbox>
 			</groupbox>
