@@ -394,7 +394,7 @@ class Xul{
 	  		     $ihm .= '<splitter class="tree-splitter"/>';
                  $ihm .= '</treecols>';
 	  		   $ihm .= '<treechildren>';  
-	  		   for($i=0;$i<sizeof($flux);$i++){
+	  		   for($i=0;$i<sizeof($flux)-1;$i++){
                     $ihm .= '<treeitem >';
                         $ihm .= '<treerow>';
                         $ihm .= '<treecell label="'.$flux[$i].'"/>' ;

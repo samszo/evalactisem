@@ -266,19 +266,22 @@ function Trad_Pars_Ieml(result, param){
 	
 	//affiche le tree des singles trad
 	var doc = document.getElementById('contDonnee');
-	doc.setAttribute("hidden","false");
-	
-	var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+Trad;
-	AppendResult(url,doc,false);
-
+		doc.setAttribute("hidden","false");
+	if(FluxS.length>2){
+		
+		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+Trad;
+		AppendResult(url,doc,false);
+	}
 	//ajoute le tree des multi trad
-	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+Trad;
-	AppendResult(url,doc,true);
-
+	if(FluxM.length>2){
+		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+Trad;
+		AppendResult(url,doc,true);
+    }
 	//ajoute le tree des no trad
-	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+Trad;
-	AppendResult(url,doc,true);
-
+	if(if(FluxN.length>2){
+		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+Trad;
+		AppendResult(url,doc,true);
+	}
 	//frame=document.getElementById('treeReq');
 	//frame.setAttribute("src",url);
 	//AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);

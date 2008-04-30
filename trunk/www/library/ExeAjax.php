@@ -106,7 +106,7 @@
                 // requête pour vérifier l'existence de la traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_Trad_VerifExist']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where = str_replace("-codeflux-", $codeflux, $Q[0]->where);
+                $where = str_replace("-iemllib-", $libIeml, $Q[0]->where);
                 $from = str_replace("-iduti-", $iduti, $Q[0]->from);
                 $sql = $Q[0]->select.$from.$where;
                 if(TRACE)
