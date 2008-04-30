@@ -140,6 +140,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 										<button label="Ajouter une traduction" oncommand="AddTrad();"/>	
 										<button label="Supprimer une traduction" oncommand="SupTrad();"/>				
 						</box>
+						<splitter />
 						<iframe  id="treeReq" flex="1" />
 					</groupbox>
 				</vbox>

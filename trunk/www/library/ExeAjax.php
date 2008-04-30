@@ -60,8 +60,8 @@
                 case 'Recup_onto_trad':
         	        	$resultat=Recup_onto_trad();
                 	    break;
-                case 'Recup_tree_trad':
-        	        	$resultat=Recup_tree_trad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
+                case 'GetTreeTrad':
+        	        	$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
                 	    break;
 		}
         
@@ -70,7 +70,7 @@
         
 
         
-        function Recup_tree_trad($flux,$trad,$descp,$type,$primary,$bdd){
+        function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 			
         	global $objSite;
 
@@ -78,10 +78,11 @@
 			$arrFlux=explode(";",$Flux);
 			$arrTrad=explode("*",$trad);
 		    $arrDescp=explode(";",$descp);
-        	
+		    $arrBdd=explode(";",$bdd);
+		    
         	$objXul = new Xul($objSite);
         	
-        	$objXul->Tree_Trad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$bdd);  
+        	$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
 
         }
         

@@ -242,11 +242,18 @@ function Trad_Pars_Ieml(result, param){
     
     
 	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
-	//récupération des single trad
+	//affiche le tree des singles trad
 	var doc = document.getElementById('contDonnee');
-	var url = urlAjax+"library/ExeAjax.php?f=Recup_tree_trad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=false&bdd="+Trad;
-	AppendResult(url,doc,false);
+	var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=false&bdd="+Trad;
+	AppendResult(url,doc,true);
 
+	//ajoute le tree des multi trad
+	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+MultiTrad+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+Trad;
+	AppendResult(url,doc,true);
+
+	//ajoute le tree des no trad
+	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+Trad;
+	AppendResult(url,doc,true);
 
 	//frame=document.getElementById('treeReq');
 	//frame.setAttribute("src",url);
