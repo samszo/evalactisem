@@ -152,7 +152,7 @@ function SaveFlux(result,param){
 	}
 
 function Trad_Pars_Ieml(result, param){
-	 var trad;
+	 	var trad;
         var synIeml="";
         var Ieml;
         var FluxN="";
@@ -241,10 +241,17 @@ function Trad_Pars_Ieml(result, param){
       
     
     
-	frame=document.getElementById(webFrame);
-	//frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-	AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-    bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
+	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
+	//récupération des single trad
+	var doc = document.getElementById('contDonnee');
+	var url = urlAjax+"library/ExeAjax.php?f=Recup_tree_trad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=false&bdd="+Trad;
+	AppendResult(url,doc,false);
+
+
+	//frame=document.getElementById('treeReq');
+	//frame.setAttribute("src",url);
+	//AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
+    //bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
     //AjaxRequest(urlAjax+"library/ExeAjax.php?f=GraphGet&bookmark="+bookmark,'FluxGraphe');
     
 
