@@ -252,10 +252,8 @@ function Trad_Pars_Ieml(result, param){
     
     
 
-	frame=document.getElementById("webFrame");
-	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-	AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-    bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
+	
+    //bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
 
 	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
 
@@ -269,7 +267,7 @@ function Trad_Pars_Ieml(result, param){
 		doc.setAttribute("hidden","false");
 	if(FluxS.length>2){
 		
-		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+SignlTrad+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+Trad;
+		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+Trad;
 		AppendResult(url,doc,false);
 	}
 	//ajoute le tree des multi trad
@@ -278,7 +276,7 @@ function Trad_Pars_Ieml(result, param){
 		AppendResult(url,doc,true);
     }
 	//ajoute le tree des no trad
-	if(if(FluxN.length>2){
+	if(FluxN.length>2){
 		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+Trad;
 		AppendResult(url,doc,true);
 	}
