@@ -125,7 +125,7 @@ require_once ("../param/ParamPage.php");
 		  $sTra=array_merge($sTrad,$T);
 		  $sflux= array_merge($sFlux,$Tag);
 		  //echo implode(";",$sFlux)."*".implode(";",$sTra)."*".implode(";",$Des);
-           print_r($mFlux) ;
+           print_r($mDesc) ;
     //_________________________________________________
        
 	   if(sizeof($sflux)>=1){

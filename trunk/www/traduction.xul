@@ -62,7 +62,7 @@
 				</hbox>
 			</vbox>
 		</hbox>
-	    <hbox id="box"></hbox>
+	    <hbox id="box" ></hbox>
 		
 	</vbox>
 	
@@ -70,11 +70,11 @@
 	<splitter collapse="before" resizeafter="farthest">
 				<grippy/>
 	</splitter>
+	<box id="box2" style="height:400px;width:300px;"></box>
 	
-	<vbox  style="height:300px;width:300px;" ><iframe id="iemlhisto" flex="1" src="http://www.ieml.org"  /></vbox>
 	</hbox>
 		<vbox style="height:30px;width:30px;">
-			<button label="Retoure" oncommand="Trad('traduction','histogrammes.xul');"/>
+			<button label="Retoure" oncommand="Trad('traduction','index.php');"/>
 		</vbox>
 	</vbox>
 </window>
