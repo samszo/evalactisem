@@ -34,13 +34,14 @@ function SetDonnee(){
 	
 	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 }
+
 function RecupDeliciousFlux(){
 	
 		query_flux=document.getElementById("requette").selectedItem.value;
 		query_graph=document.getElementById("type").selectedItem.value;
 	    
 	
-	if((query_flux=="")){
+	if(query_flux==""){
 		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req=GetAllTags",'DelIiciousTreeGraph','');
 	}
 	if(query_graph=""){
@@ -252,7 +253,6 @@ function Trad_Pars_Ieml(result, param){
     
     
 
-	
     //bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
 
 	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
@@ -263,11 +263,11 @@ function Trad_Pars_Ieml(result, param){
 	document.getElementById('treeReq').setAttribute("hidden","true");
 	
 	//affiche le tree des singles trad
+	var url ;
 	var doc = document.getElementById('contDonnee');
 		doc.setAttribute("hidden","false");
 	if(FluxS.length>2){
-		
-		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+T[0];
+		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+T[0];
 		AppendResult(url,doc,false);
 	    
 	}
