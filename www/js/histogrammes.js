@@ -164,6 +164,11 @@ function Trad_Pars_Ieml(result, param){
         var descpS="";
         var iemlTrad;var synIemlM=""; var synIemlS="";
         var in_array="true";
+        var T=new Array();
+        var Descp=new Array();
+        var Trad=new Array();
+        var  Tag=new Array();
+        
     var parser = new DOMParser();
         FluxTag = parser.parseFromString(Flux, "text/xml");
         iterSecTag = FluxTag.evaluate("/marque",FluxTag, null, XPathResult.ANY_TYPE, null );
@@ -181,10 +186,15 @@ function Trad_Pars_Ieml(result, param){
                 
        
         arrNom = arrNoms.split(P);
+        if(result!=1){
         T=result.split(E);
         Descp=T[1].split(P);
         Trad=T[0].split(P);
         Tag=T[2].split(P);
+        }else{
+        	
+        
+        }
        for(i=0;i<arrNom.length-1;i++){
                 
                 trad=TradIeml.recherchez(arrNom[i]);
@@ -203,9 +213,9 @@ function Trad_Pars_Ieml(result, param){
 		                         }
 		                            if(in_array=="false"){
 		                            synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+E;
-		                            MultiTrad+=ieml[0]+P;
+		                            MultiTrad+=ieml[0]+E;
 		                           	FluxM+=arrNom[i]+P;
-		                            descpM+=ieml[1]+P;
+		                            descpM+=ieml[1]+E;
 		                                
 		                              
                                   }
@@ -213,9 +223,9 @@ function Trad_Pars_Ieml(result, param){
                         }else
                             if(iemlTrad.length==2){
                                 synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
-                                SignlTrad+=ieml[0]+P;
+                                SignlTrad+=ieml[0];
                                 FluxS+=arrNom[i]+P;
-                                descpS+=ieml[1]+P;
+                                descpS+=ieml[1];
                                 
                                 //alert("il existe qu 'une seul traduction: "+FluxS);
                                 
@@ -235,12 +245,18 @@ function Trad_Pars_Ieml(result, param){
              }
         }
         synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
-        SignlTrad+=Trad;
-        FluxS+=Tag;
-        descpS+=Descp;
-      
+        synIemlS+=T[0];
+        FluxS+=T[2];
+        descpS+=T[1];
+        //alert( MultiTrad);
     
     
+
+	frame=document.getElementById("webFrame");
+	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
+	AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
+    bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
+
 	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
 
 	//affiche les infos de traduction
@@ -256,7 +272,7 @@ function Trad_Pars_Ieml(result, param){
 	AppendResult(url,doc,false);
 
 	//ajoute le tree des multi trad
-	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+MultiTrad+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+Trad;
+	url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+Trad;
 	AppendResult(url,doc,true);
 
 	//ajoute le tree des no trad
@@ -267,6 +283,7 @@ function Trad_Pars_Ieml(result, param){
 	//frame.setAttribute("src",url);
 	//AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
     //bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
+
     //AjaxRequest(urlAjax+"library/ExeAjax.php?f=GraphGet&bookmark="+bookmark,'FluxGraphe');
     
 
