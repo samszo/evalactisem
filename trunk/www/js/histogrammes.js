@@ -1,11 +1,12 @@
 urlAjax="http://localhost/evalactisem/";
-
+E="*";
+P=";";
 function show_tooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
         var  decale_x = matrix.e 
         var  decale_y = matrix.f
-        var values = res.split(";")
+        var values = res.split(P)
         var barre = evt.target.getAttributeNS(null , "id")
         var numero = parseInt(barre.substring(4 , barre.length)) - 1
         if (numero >= 0)
@@ -31,7 +32,7 @@ function pf_couleur(num, color){
 
 function SetDonnee(){
 	
-	AjaxRequest("library/RecupFlux.php?requette=GetAllTags"+"&req=tagsFbundles" ,'SaveFlux','');
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 }
 function RecupDeliciousFlux(){
 	
@@ -44,6 +45,8 @@ function RecupDeliciousFlux(){
 	}
 	if(query_graph=""){
 		AjaxRequest(urlAjax+"library/RecupFlux.php?req=GetAllTags"+"&requette=GetAllTags",'DelIiciousTreeGraph','');
+		
+		
 	}
 	if((query_flux=="GetAllTags")||(query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
 		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
@@ -148,98 +151,112 @@ function SaveFlux(result,param){
 	
 	}
 
-function Trad_Pars_Ieml(dst){
-	var trad;
-	var synIeml="";
-	var Ieml;
-	var FluxN="";
-	var FluxM="";
-	var FluxS="";
-	var MultiTrad="";
-	var SignlTrad="";
-	var descpM="";
-	var descpS="";
-	var iemlTrad;var synIemlM=""; var synIemlS="";
+function Trad_Pars_Ieml(result, param){
+	 var trad;
+        var synIeml="";
+        var Ieml;
+        var FluxN="";
+        var FluxM="";
+        var FluxS="";
+        var MultiTrad="";
+        var SignlTrad="";
+        var descpM="";
+        var descpS="";
+        var iemlTrad;var synIemlM=""; var synIemlS="";
+        var in_array="true";
     var parser = new DOMParser();
-	FluxTag = parser.parseFromString(Flux, "text/xml");
-	iterSecTag = FluxTag.evaluate("/marque",FluxTag, null, XPathResult.ANY_TYPE, null );
-  	nSecTag = iterSecTag.iterateNext();
-  
-  	if(!nSec)
-  		return;
-  	for (var j = 0; j < nSec.childNodes.length; j++) {
-		if(nSec.childNodes[j].tagName=="nom"){
-			arrNoms = nSec.childNodes[j].textContent;
-		}
-		if(nSec.childNodes[j].tagName=="noms"){
-			
-		   arrNoms+=nSec.childNodes[j].textContent;
-			
-		}
-	}
-		
-<<<<<<< .mine
-	//alert(arrNoms);
-=======
-	
->>>>>>> .theirs
-	arrNom = arrNoms.split(";");
-	
-	for(i=0;i<arrNom.length-1;i++){
-		
-		trad=TradIeml.recherchez(arrNom[i]);
-		
-		if(trad!="*"){
-			ieml=trad.split("*");
-			iemlTrad=ieml[0].split(";");
-			
-				if(iemlTrad.length>2){
-				    synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+"*";
-				    MultiTrad+=ieml[0]+"*";
-				    FluxM+=arrNom[i]+";";
-				    descpM+=ieml[1]+"*";
-				    
-			   // alert("il existe plusieurs traduction"+nouv_syn);
-			}else
-			    if(iemlTrad.length==2){
-				synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
-				SignlTrad+=ieml[0];
-				FluxS+=arrNom[i]+";";
-				descpS+=ieml[1];
-<<<<<<< .mine
-				//alert(FluxS+descpS+synIemlS);
-=======
-				
->>>>>>> .theirs
-				//alert("il existe qu 'une seul traduction: "+FluxS);
-				
-			}
-			
-		}else
-			   
-			
-		    FluxN+=arrNom[i]+";";
-		   
-	}
-	frame=document.getElementById("iemlhisto");
-	frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
-	//AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN,'FluxGraphe');
-    bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
-    AjaxRequest(urlAjax+"library/ExeAjax.php?f=GraphGet&bookmark="+bookmark,'FluxGraphe');
+        FluxTag = parser.parseFromString(Flux, "text/xml");
+        iterSecTag = FluxTag.evaluate("/marque",FluxTag, null, XPathResult.ANY_TYPE, null );
+        nSecTag = iterSecTag.iterateNext();
+       
+        if(!nSec)
+                return;
+        for (var j = 0; j < nSec.childNodes.length; j++) {
+                if(nSec.childNodes[j].tagName=="nom"){
+                        arrNoms= nSec.childNodes[j].textContent;
+                        
+                }
+                
+        }
+                
+       
+        arrNom = arrNoms.split(P);
+        T=result.split(E);
+        Descp=T[1].split(P);
+        Trad=T[0].split(P);
+        Tag=T[2].split(P);
+       for(i=0;i<arrNom.length-1;i++){
+                
+                trad=TradIeml.recherchez(arrNom[i]);
+                
+                if(trad!=E){
+                        ieml=trad.split(E);
+                        iemlTrad=ieml[0].split(P);
+                                 
+                                if(iemlTrad.length>2){
+                                in_array="false";
+                                    for(j=0;j<Descp.length;j++){
+                                    	if(arrNom[i]==Tag[j]){
+		                                    in_array="true";
+		                                   
+		                                }
+		                         }
+		                            if(in_array=="false"){
+		                            synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+E;
+		                            MultiTrad+=ieml[0]+P;
+		                           	FluxM+=arrNom[i]+P;
+		                            descpM+=ieml[1]+P;
+		                                
+		                              
+                                  }
+                           // alert("il existe plusieurs traduction"+nouv_syn);
+                        }else
+                            if(iemlTrad.length==2){
+                                synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
+                                SignlTrad+=ieml[0]+P;
+                                FluxS+=arrNom[i]+P;
+                                descpS+=ieml[1]+P;
+                                
+                                //alert("il existe qu 'une seul traduction: "+FluxS);
+                                
+                        }
+                        
+                }else{
+                    in_array="false";       
+                    for(j=0;j<Descp.length;j++){
+                        if(arrNom[i]==Tag[j]){
+		                 in_array="true";
+		                }    
+		            }
+		            if(in_array=="false"){
+		            	FluxN+=arrNom[i]+P;
+		            }
+		                
+             }
+        }
+        synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
+        SignlTrad+=Trad;
+        FluxS+=Tag;
+        descpS+=Descp;
+      
     
-<<<<<<< .mine
+    
+	frame=document.getElementById(webFrame);
+	//frame.setAttribute("src","NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
+	AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
+    bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
+    //AjaxRequest(urlAjax+"library/ExeAjax.php?f=GraphGet&bookmark="+bookmark,'FluxGraphe');
+    
+
 	//frame=document.getElementById(dst);
 	//frame.setAttribute("src",url);
-
-=======
-
-
-
->>>>>>> .theirs
 }
+
+
 function FluxGraphe(result,param){
 	alert(result);
 }
+
 function Trad(id,src){
 	
 	var box =document.getElementById(id);
@@ -271,9 +288,9 @@ function AddTradDictio(result,param){
 			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
 		}else {
 	 		
-	 		Trad=rTrad.split("*");
-	    	CarIeml=Trad[0].split(";");
-	 		DiscIeml=Trad[1].split(";");
+	 		Trad=rTrad.split(e);
+	    	CarIeml=Trad[0].split(P);
+	 		DiscIeml=Trad[1].split(P);
 	 		if(CarIeml.length >2){
 	 		alert("il existe plusieurs possibilités veuillez choisir une");
 	 		ChoixTrad(CarIeml,DiscIeml);
@@ -288,9 +305,9 @@ function AddTradDictio(result,param){
 	}else{
             aTrad=document.getElementById("code-trad-flux").value;
 		    rTrad=TradIeml.recherchez(aTrad);
-			Trad=rTrad.split("*");
-	    	CarIeml=Trad[0].split(";");
-	 		DiscIeml=Trad[1].split(";");
+			Trad=rTrad.split(E);
+	    	CarIeml=Trad[0].split(P);
+	 		DiscIeml=Trad[1].split(P);
 	 		if(CarIeml.length >2){
 	 		alert("il existe plusieurs possibilités veuillez choisir une");
 	 		ChoixTrad(CarIeml,DiscIeml);
@@ -323,9 +340,9 @@ function AddTrad1(){
 			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
 	 }else {
 	 		
-	 		Trad=rTrad.split("*");
-	    	CarIeml=Trad[0].split(";");
-	 		DiscIeml=Trad[1].split(";");
+	 		Trad=rTrad.split(E);
+	    	CarIeml=Trad[0].split(P);
+	 		DiscIeml=Trad[1].split(P);
 	 		if(CarIeml.length >2){
 	 		alert("il existe plusieurs possibilités veuillez choisir une");
 	 		ChoixTrad(CarIeml,DiscIeml);

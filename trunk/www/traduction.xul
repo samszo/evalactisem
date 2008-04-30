@@ -7,7 +7,7 @@
 
 <window id="ieml-global" title="IEML-10eF v0.1 - information economy meta language - Dixième Famille" orient="horizontal" left="0" top="0" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
 	<script language="JavaScript" type="application/x-javascript" src="js/ajax.js"/>
-    <script type="text/javascript" src="xbl/editableTree/functions.js" />
+   
     <script src="js/TradTagIeml.js"/>
     <script src="js/histogrammes.js"/>
     
@@ -18,7 +18,7 @@
 	
 	<vbox id="traduction"  style="height:600px;width:1000px;"> 
 	
-	<hbox>
+	<hbox >
 	<box id="box1" style="height:400px;width:300px;" ></box>
 	
 	<splitter collapse="before" resizeafter="farthest">
@@ -71,7 +71,7 @@
 				<grippy/>
 	</splitter>
 	
-	<vbox id="box2" style="height:300px;width:300px;" >	</vbox>
+	<vbox  style="height:300px;width:300px;" ><iframe id="iemlhisto" flex="1" src="http://www.ieml.org"  /></vbox>
 	</hbox>
 		<vbox style="height:30px;width:30px;">
 			<button label="Retoure" oncommand="Trad('traduction','histogrammes.xul');"/>

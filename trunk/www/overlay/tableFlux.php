@@ -29,9 +29,13 @@
 			</listhead>
 			<listcols>
 				<listcol flex="1"></listcol>
+				<splitter class="tree-splitter"/>
 				<listcol flex="1"></listcol>
+				<splitter class="tree-splitter"/>
 				<listcol flex="1"></listcol>
+				<splitter class="tree-splitter"/>
 				<listcol flex="1"></listcol>
+				<splitter class="tree-splitter"/>
 				<listcol flex="1"></listcol>
 				
 			</listcols>

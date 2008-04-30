@@ -21,9 +21,10 @@ class BookMark{
 	function __construct($bookmark){
 		$this->trace=TRACE;
 		$this->bookmark=$bookmark;
+		
 		$this->xml = simplexml_load_string($this->bookmark);
 		foreach($this->xml->xpath("/bookmark") as $idbook){
-				$id=$idbook['id'] ;
+				$this->id=$idbook['id'] ;
 		}
 		
 	}

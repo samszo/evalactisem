@@ -369,7 +369,7 @@ class Xul{
 
 	}
     
-    function Tree($flux,$trad,$descp,$type,$primary,$bdd){
+    function Tree_Trad($flux,$trad,$descp,$type,$primary,$bdd){
     	echo'<vbox  style="background-color:blue;" align="center">';	
     	echo'<label value="'.$type.'" style="font:arial;size:10;color:yellow" />';
     	echo'<box style="height:400px;width:100px;">';
@@ -545,27 +545,7 @@ class Xul{
 	
     
     
-    function VerifExist_onto_trad($iduti){
-    	global $objSite;	
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		        $db->connect();   
-                	// requête pour vérifier l'existence de la traduction
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $from = str_replace("-iduti-", $iduti, $Q[0]->from);
-                $sql = $Q[0]->select.$from;
-               
-                $result = $db->query($sql);
-                $db->close();
-    			while($reponse=mysql_fetch_array($result)){
-    				$Trad.=$reponse[1].";";
-    				$Desc.=$reponse[2].";";
-    				$Tag.=$reponse[0].";";
-    			}
-    			
-    			return $Trad."*".$Desc."*".$Tag;
-               
-     }     
+   
 	
 	
   }

@@ -15,107 +15,9 @@ require_once ("param/ParamPage.php");
     $sDescp=explode(";",$DescpS);
     $mDescp=explode("*",$DescpM);
 	$iduti=$_SESSION['iduti'];
-	array_pop ($sFlux);
-	$D=array();
-	$Desc=array();
-	$Del=array();
-	$T=array();      
-	      $chaine=explode("*",$objXul->VerifExist_onto_trad($iduti));
-		  $Desc=explode(";",$chaine[1]);
-		  $Tag=explode(";",$chaine[2]);
-		  $Trad=array();
-		  $Trad=explode(";",$chaine[0]);
-		  $j=0;
-		  for($i=0;$i<sizeof($Trad);$i++){
-		  	if($Trad[$i]!=""){
-		  		$T[$j]=$Trad[$i];
-		  		$j++;
-		  	}
-		  	
-		  }
-		 
-		  $r=0;
-          
-		  if(sizeof($T)==0){
-          	for($i=0;$i<sizeof($mFlux)-1;$i++){
-	           $sT=explode(";",$mTrad[$i]);
-	           $sD=explode(";",$mDescp[$i]);
-          	   $mT="";
-          	   $mD="";
-	           for($j=0;$j<sizeof($sT)-1;$j++){
-	                $mT.=$sT[$j].";";
-		            $mD.=$sD[$j].";";
-		            
-		     }
-          	 $M=explode(";",$mT);
-	         $D=explode(";",$mD);
-	         for($j=0;$j<sizeof($M)-1;$j++){
-	           $mTra[$i][$j]=$M[$j];
-	           $mDesc[$i][$j]=$D[$j];
-	         }
-          
-        }
-        }else{
-		    
-        	for($i=0;$i<sizeof($mFlux)-1;$i++){
-	           		$sT=explode(";",$mTrad[$i]);
-	                $sD=explode(";",$mDescp[$i]);
-	                $mT="";
-          	        $mD="";
-	                for($j=0;$j<sizeof($sT)-1;$j++){
-	                	if(!in_array($sT[$j],$T)){
-	                		    $mT.=$sT[$j].";";
-		                		$mD.=$sD[$j].";";
-		                		$exist="false";
-	           			        
-	                    }else{ 
-	                    		$In[$r]=$mFlux[$i];	
-	                    		$exist="true";
-	                    		$mT="";
-	                            $mD="";
-	                    		$r--;
-	                    	    break;
-	                    	}  
-                     
-	                }
-	           
-	           if($exist=="false"){
-	           	$M=explode(";",$mT);
-	           	$D=explode(";",$mD);
-	           	for($j=0;$j<sizeof($M)-1;$j++){
-	           		$mTra[$r][$j]=$M[$j];
-	           		$mDesc[$r][$j]=$D[$j];
-	           	}
-	           }
-	        $r++;
-		  
-		 }
-        
-        }
-          
-          $j=0;
-		 for($i=0;$i<sizeof($mFlux)-1;$i++){
-          	if(!in_array($mFlux[$i],$Tag)) {
-          		$mflux[$j]= $mFlux[$i]; 
-          		$j++;       
-          	}
-          }
-          
-          $j=0;
-          for($i=0;$i<sizeof($nFlux)-1;$i++){
-          	if(!in_array($nFlux[$i],$Desc)) {
-          		$nflux[$j]= $nFlux[$i]; 
-          		$j++;       
-          	}
-          }
-         
-          array_pop($sTrad);
-		  array_pop($sDescp);
-		  $Des=array_merge($sDescp,$Desc);
-		  $sTra=array_merge($sTrad,$T);
-		  $sflux= array_merge($sFlux,$Tag);
-		  array_pop($sflux);
-	header('Content-type: application/vnd.mozilla.xul+xml');
+	    
+	      
+	//header('Content-type: application/vnd.mozilla.xul+xml');
     
 	?>
 <?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -130,19 +32,19 @@ require_once ("param/ParamPage.php");
     <script src="js/histogrammes.js"/>
     <popupset id="popupset">
 	</popupset>
-	<vbox id="traduction"  style="height:600px;width:1000px;"> 
+	<vbox id="trad"  style="height:600px;width:1000px;" > 
 		<hbox >
 			<hbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"  style="background-color:blue;">
 	      		<?php
 					if(sizeof($sflux)>=1){
-	   					$objXul->Tree($sflux,$sTra,$Des,"Signl_Trad","true",$T);  
+	   					$objXul->Tree_Trad($sFlux,$sTrad,$sDescp,"Signl_Trad","true",$T);  
 					}
         
-                   	if(sizeof($mflux)>=1){
-	    	 			$objXul->Tree($mflux,$mTra,$mDesc,"Multi_Trad","true",$T);
+                   	if(sizeof($mFlux)>=1){
+	    	 			$objXul->Tree_Trad($mFlux,$mTrad,$mDescp,"Multi_Trad","true",$T);
         		   	}
         		  	if(sizeof($nflux)>1){
-	    				$objXul->Tree($nflux,"","","No_Trad","false",$T);
+	    				$objXul->Tree_Trad($nFlux,"","","No_Trad","false",$T);
 				  	}
 	     
 		        ?>
@@ -184,7 +86,7 @@ require_once ("param/ParamPage.php");
 	<splitter collapse="before" resizeafter="farthest">
 			<grippy/>
 	</splitter>
-	<box id="box1" style="height:400px;width:300px;" ></box>
+	<box id="box1" flex="1" style="height:400px;width:300px;" ></box>
 	</hbox>
 </vbox>
 		
