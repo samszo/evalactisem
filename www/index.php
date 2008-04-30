@@ -33,7 +33,16 @@ function ChercheAbo ()
 		}
 }
 
+
 ChercheAbo ();
+
+if($con==1){
+	$lbl = "label='Connection to del.icio.us failed.' style='color:red;size=10'";
+}elseif($con==3){
+	$lbl = "label='Del.icio.us API access throttled.'" ;
+}else{  
+	$lbl = "label='traduction, semantique, ieml, delicious .....' style='color:blue;size:20px'"; 
+}
 
 header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
 header ("title: Saisi des diagnosics d'accessibilité");
@@ -60,39 +69,15 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 		</popup>
 	</popupset>
 	<hbox >
-	    <label value=<?php if($con==1){
-							echo '"Connection to del.icio.us failed." style="color:red;size=10"';
-                         }elseif($con==3){
-		             		
-		             			echo '"Del.icio.us API access throttled."' ;
-		             	 }else{  
-			         	 	echo'"traduction, semantique, ieml, delicious ....." style="color:blue;size:20px"'; 
-			            }
-			           ?> />
-
-
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
 	<label id="tradu" hidden="true" value=""/>
 	<hbox id="histogramme" flex="1">
-		<vbox hidden="true">
-		   <groupbox>
-				<caption label="del.icio.us"/>
-				<groupbox orient="vertical">
-					<caption label="Login"/>
-					<label value="login"/>
-					<textbox id="login" value=""/>
-					<label value=""/>
-					<textbox id="pwd" value="" type="password"/>
-				</groupbox>
-		   </groupbox>
-		  
-	   </vbox>
 	   <vbox flex="1" >
 
-		 <groupbox orient="horizontal">
-			<caption label="Visualisation des graphiques"/>
+		 <groupbox orient="horizontal" flex="1" >
+			<caption <?php echo $lbl;?> />
 				<vbox>
 					<groupbox orient="vertical" >
 						<caption label="Flux del.icio.us"/>
@@ -109,14 +94,7 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 							</menulist>
 							<box id="box1" ></box>		    
 					</groupbox>
-					<groupbox orient="vertical" flex="1">
-						<caption label="IEML"/>
-						
-			     			<button id="bt_10" label="Traduction de TAG"  onclick="Trad('traduction','NewTraduction.php');"/>
-			    			<button id="TypeGraphe" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
-
-					</groupbox>
-
+					
 					<groupbox orient="vertical" >
 						<caption label="Graphique"/>
 						    <label value="Titre"/>
@@ -130,11 +108,42 @@ echo ('<' . '?xml-stylesheet href="onada.css" type="text/css"?' . '>' . "\n");
 							</menulist>
 						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
 					</groupbox>
+					
+					<groupbox orient="vertical" >
+						<caption label="IEML"/>
+						
+			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
+			    			<button id="TypeGraph" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
+			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
+
+					</groupbox>
+					
 				</vbox>
-				<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
+				<splitter />
+				
+				<vbox flex="1">
+					<groupbox flex="1" >
+						<caption label="Visualisation des graphiques"/>
+						<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
+					</groupbox>
+					<splitter />
+					<groupbox orient="horizontal" id="traduction" >
+						<caption label="Visualisation des données"/>
+						<box hidden="true">
+						    <label id="id-trad-ieml" hidden="true"/>
+							<label value="code :"/><label id="code-trad-ieml"  />
+							<label value="descriptif : "/><label id="lib-trad-ieml"  />
+										<label id="trad-Sup-message" />			
+										<label id="trad-message" />
+										<label id="trad-Sup-message" />			
+										<label id="trad-message" />
+										<button label="Ajouter une traduction" oncommand="AddTrad();"/>	
+										<button label="Supprimer une traduction" oncommand="SupTrad();"/>				
+						</box>
+						<iframe  id="treeReq" flex="1" />
+					</groupbox>
+				</vbox>
 			</groupbox>
-			<box id="traduction" flex="1"></box>
-			<iframe  id="treeReq" flex="1"/>
 		</vbox> 
  </hbox>
  <script type="text/javascript">

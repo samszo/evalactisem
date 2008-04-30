@@ -16,7 +16,15 @@
 	?>
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 	<box id="box" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-		<listbox id="boxlist"  flex="1">
+    <script >
+    	function ChargeUrl(src){
+	    	alert(src);
+	    	var iFrame =parent.document.getElementById('webFrame');
+    		iFrame.setAttribute("src",src);
+    	}
+    </script>
+    
+		<listbox id="boxlist"  flex="1" onselect="ChargeUrl(this.selectedItem.childNodes[2].getAttribute('label'));">
 			
 			<listhead >
 				<listheader label="Tag"></listheader>
