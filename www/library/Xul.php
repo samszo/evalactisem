@@ -422,7 +422,9 @@ class Xul{
                         	  		//echo $type;
                         	  		$ihm .= '<treechildren>';
                         	  			$ihm .= '<treeitem >';	
-                        	  			  if(in_array($trad[$i],$bdd)){
+                        	  			if($this->trace)
+                        	  			echo "Xul:GetTreeTrad:".print_r($bdd)."<br/>";  
+                        	  			if(in_array($trad[$i],$bdd)){
                         	  			  	$prop="utilisateur";
                         	  			  }else{
                         	  			  	$prop="dictio";
@@ -437,9 +439,6 @@ class Xul{
                         	  	}
                         	  	if($type=="Multi_Trad"){
                         	  		$ihm .= '<treechildren>';
-                        	  		
-                        	  		if($this->trace)
-                        	  			echo "Xul:GetTreeTrad:".print_r($trad[$i])."<br/>";
                         	  		$arrDescp = explode(";",$descp[$i]);
                         	  		$arrTrad = explode(";",$trad[$i]);
                         	  		
