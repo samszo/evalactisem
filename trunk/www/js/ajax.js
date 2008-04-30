@@ -3,6 +3,29 @@
 //--------------------------------------------
 var urlExeAjax = "/evalactisem";
 
+
+function GetResult(url) {
+  try {
+	dump("GetResult IN "+url+"\n");
+    response = "";
+	p = new XMLHttpRequest();
+	p.onload = null;
+	//p.open("GET", urlExeAjax+"?f=GetCurl&url="+url, false);
+	p.open("GET", url, false);
+	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	p.send(null);
+
+	if (p.status != "200" ){
+	      alert("Réception erreur " + p.status);
+	}else{
+	    response = p.responseText;
+	}
+	return response;
+	dump("GetResult OUT \n");
+   } catch(ex2){alert(ex2);dump("::"+ex2);}
+}
+
+
 function AppendResult(url,doc,ajoute) {
   try {
 	dump("AppendResult IN "+url+"\n");

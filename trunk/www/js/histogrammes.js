@@ -526,8 +526,12 @@ function Select_Trad(id){
 function Parser(){
     var tree = document.getElementById("Signl_Trad");
     Iemlcode=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_Signl_Trad"));
-	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode,"Afficher"," ","");
-	
+	//var url = urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode;
+	//AjaxRequest(url,"Afficher"," ","");
+	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode;
+	url = GetResult(url);
+	Trad('webFrame',url)
+
 }
 function Afficher(result,prarm){
 	alert(result);
