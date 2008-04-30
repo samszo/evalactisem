@@ -74,16 +74,22 @@
 			
         	global $objSite;
 
-        	
-			$arrFlux=explode(";",$Flux);
-			$arrTrad=explode("*",$trad);
-		    $arrDescp=explode(";",$descp);
-		    $arrBdd=explode(";",$bdd);
+        	if($type=="Signl_Trad"){
+			
+				$arrTrad=explode(";",$trad);
+			    $arrDescp=explode(";",$descp);
+        	}elseif($type=="Multi_Trad"){
+        		$arrTrad=explode("*",$trad);
+			    $arrDescp=explode("*",$descp);
+        	}
 		    
+        	$arrBdd=explode(";",$bdd);
+		    
+        	$arrFlux=explode(";",$flux);
         	$objXul = new Xul($objSite);
         	
-        	$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
-
+        	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
+            return $ihm;
         }
         
         

@@ -17,7 +17,7 @@ require_once ("param/ParamPage.php");
 	$iduti=$_SESSION['iduti'];
 	    
 	      
-	//header('Content-type: application/vnd.mozilla.xul+xml');
+	header('Content-type: application/vnd.mozilla.xul+xml');
     
 	?>
 <?xml version="1.0" encoding="ISO-8859-1" ?>
