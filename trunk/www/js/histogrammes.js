@@ -73,7 +73,7 @@ function pf_dessin(noms, donnees)
 	lien=lien+'&titre='+escape(document.getElementById("titre").value);
 	lien=lien+'&donnees='+escape(donnees);
 	lien=lien+'&noms='+escape(noms);
-	lien=lien+'&type=histo';
+	lien=lien+'&type=pie';
 	lien=lien+'&col1='+escape('#FFCC33');
 	lien=lien+'&col2='+escape('#33FFFF');
 	lien=lien+'&col3='+escape('#000066');
@@ -259,6 +259,10 @@ function FluxGraphe(result,param){
 
 function Trad(id,src){
 	
+	var iFrame =document.getElementById(id);
+    iFrame.setAttribute("src",src);
+
+	/*
 	var box =document.getElementById(id);
 	
 	childbox=box.firstChild;
@@ -276,6 +280,7 @@ function Trad(id,src){
     Tradbox.setAttribute("flex",1);
     Tradbox.appendChild(Tradframe);
     box.appendChild(Tradbox);
+    */
     
 }
 
