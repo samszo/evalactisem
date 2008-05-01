@@ -74,10 +74,8 @@
 			
         	global $objSite;
 
-        	if(TRACE)
-        		echo "ExeAjax:GetTreeTrad:bdd=".$bdd."<br/>";
-        	
         	if($type=="Signl_Trad"){
+			
 				$arrTrad=explode(";",$trad);
 			    $arrDescp=explode(";",$descp);
         	}elseif($type=="Multi_Trad"){
@@ -86,8 +84,6 @@
         	}
 		    
         	$arrBdd=explode(";",$bdd);
-        	if(TRACE)
-        		echo "ExeAjax:GetTreeTrad:bdd=".$bdd."<br/>";
 		    
         	$arrFlux=explode(";",$flux);
         	$objXul = new Xul($objSite);
