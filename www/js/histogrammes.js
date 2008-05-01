@@ -468,6 +468,7 @@ function SupTrad()
 	else
 		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
 		SetDonnee();
+		SetDonnee();
 }
 function startSelectTab()
 { 
