@@ -22,9 +22,9 @@ Class Sem{
 	private $site;
 	private $trace;
     public  $parse;
-	function __construct($Site, $FicXml, $So, $De="", $Tr="", $trace=false) {
+	function __construct($Site, $FicXml, $So, $De="", $Tr="") {
 		
-		$this->trace = $trace;
+		$this->trace = TRACE;
         
 		if($FicXml=="")
 			$FicXml==$Site->scope["FicXml"];
@@ -207,8 +207,10 @@ Class Sem{
 	
 		if($code=="")
 			$code=$this->Src;
-	    $lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.stripslashes ($code);
-		
+		$code = stripslashes ($code);
+	    $lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.$code;
+		if($this->trace)
+			echo "Sem:Parse:code=".$code."<br/>";
 			
 	    $oCurl = curl_init($lien);
 		// set options

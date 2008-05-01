@@ -34,14 +34,13 @@ function SetDonnee(){
 	
 	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 }
-
 function RecupDeliciousFlux(){
 	
 		query_flux=document.getElementById("requette").selectedItem.value;
 		query_graph=document.getElementById("type").selectedItem.value;
 	    
 	
-	if(query_flux==""){
+	if((query_flux=="")){
 		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req=GetAllTags",'DelIiciousTreeGraph','');
 	}
 	if(query_graph=""){
@@ -192,10 +191,8 @@ function Trad_Pars_Ieml(result, param){
         Descp=T[1].split(P);
         Trad=T[0].split(P);
         Tag=T[2].split(P);
-        }else{
-        	
-        
         }
+       
        for(i=0;i<arrNom.length-1;i++){
                 
                 trad=TradIeml.recherchez(arrNom[i]);
@@ -209,7 +206,7 @@ function Trad_Pars_Ieml(result, param){
                                     for(j=0;j<Descp.length;j++){
                                     	if(arrNom[i]==Tag[j]){
 		                                    in_array="true";
-		                                   
+		                                    
 		                                }
 		                         }
 		                            if(in_array=="false"){
@@ -245,14 +242,15 @@ function Trad_Pars_Ieml(result, param){
 		                
              }
         }
-        synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
+       
         synIemlS+=T[0];
         FluxS+=T[2];
         descpS+=T[1];
-        //alert( MultiTrad);
+      
     
     
 
+	
     //bookmark='<bookmark id="login"><posts><post id="post_1"><url>www.delicious.dz</url><Tags><tag>ieml</tag><tag>ontologie</tag></Tags></post></posts></bookmark>';
 
 	//var url = "NewTraduction.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN;
@@ -263,11 +261,11 @@ function Trad_Pars_Ieml(result, param){
 	document.getElementById('treeReq').setAttribute("hidden","true");
 	
 	//affiche le tree des singles trad
-	var url ;
 	var doc = document.getElementById('contDonnee');
 		doc.setAttribute("hidden","false");
 	if(FluxS.length>2){
-		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+T[0];
+		
+		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+T[0];
 		AppendResult(url,doc,false);
 	    
 	}
@@ -449,8 +447,7 @@ function StartSelecTrad(){
 	txtDescp= document.getElementById("lib-trad-ieml");
 	txtDescp.value = cellD.getAttribute('label');
 	
-	//alert(Carieml+";"+Discieml);
-	//return Carieml+";"+Discieml;
+
 }
 
 //Supression d'une traduction
@@ -458,18 +455,19 @@ function StartSelecTrad(){
 function SupTrad()
 {
 	//récupération des valeurs
-	var codeIeml = document.getElementById("code-trad-ieml");
-	var codeflux = document.getElementById("code-trad-flux");
-    var listbox=document.getElementById("boxlist");
+	var libIeml=document.getElementById("lib-trad-ieml");
+    var codeIeml=document.getElementById("code-trad-ieml");
+    var codeFlux=document.getElementById("code-trad-flux");
+   
    alert(codeIeml.value);
-	url = urlExeAjax+"?f=SupTrad&codeIeml="+codeIeml.value+"&codeflux="+codeflux.value;
+	url = urlExeAjax+"?f=SupTrad&codeIeml="+codeIeml.value+"libIeml="+libIeml.value+"&codeflux="+codeFlux.value;
    
 	//vérification des valeursboxlistJ
-	if(codeIeml.value=="" || codeflux.value=="")
+	if(codeIeml.value=="" || codeFlux.value=="")
 		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
 	else
-		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&codeflux="+codeflux.value,""," ","trad-message");
-		
+		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
+		SetDonnee();
 }
 function startSelectTab()
 { 
@@ -526,13 +524,67 @@ function Select_Trad(id){
 function Parser(){
     var tree = document.getElementById("Signl_Trad");
     Iemlcode=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_Signl_Trad"));
+    //prise en compte de la sélection multiple
+    Iemlcode=GetIemlTreeExp("Signl_Trad", 2);
 	//var url = urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode;
 	//AjaxRequest(url,"Afficher"," ","");
 	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode;
 	url = GetResult(url);
 	Trad('webFrame',url)
-
+	
 }
+
+
+function GetIemlTreeExp(idTree, col){
+
+  try {
+
+	var tree;
+	var cell = "(";
+	var c;
+	var i;
+	var val;
+	
+  	if (window.parent != self) 
+		tree = parent.document.getElementById(idTree);
+	else
+		tree = document.getElementById(idTree);
+	
+	//pour gérer la multisélection
+	var numRanges = tree.view.selection.getRangeCount();
+	for (var t = 0; t < numRanges; t++){
+		tree.view.selection.getRangeAt(t,start,end);
+		i=0;	
+		for (var v = start.value; v <= end.value; v++){
+			c = tree.treeBoxObject.columns[col];
+			val = tree.view.getCellText(v,c);
+			if(val!=""){
+				cell += val;
+				if(i==2){
+					//ajoute une virgule et un opérateur toute les 3 expressions
+					cell += ",|"  
+					i=-1;
+				}
+				i++;
+				alert(cell);
+			}
+		}
+	}
+	//vérifie si la dernière virgule est bien mise
+	if(i==0)
+		//supprime le dernier opérateur
+		cell = cell.substring(0, cell.length-1)
+	else  	
+		cell += ","
+	alert(cell);
+	//finalise l'expression
+	cell += ")";
+	alert(cell);
+	return cell;
+  } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" cell="+cell); }
+}
+
+
 function Afficher(result,prarm){
 	alert(result);
 }

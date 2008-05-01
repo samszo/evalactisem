@@ -113,14 +113,24 @@
 			<Query fonction="ExeAjax-SupTrad">
 				<select>SELECT f.onto_flux_id,i.ieml_id </select>
 				<from> FROM ieml_onto_flux f  
-				       INNER JOIN ieml_onto i ON f.onto_flux_code="-codeFlux-" AND i.ieml_code="-codeIeml-" AND i.ieml_lib="-codeFlux-"
+				       INNER JOIN ieml_onto i ON f.onto_flux_code="-codeFlux-" AND i.ieml_code="-codeIeml-" AND i.ieml_lib="-Iemllib-"
 				 </from>
 				<where> </where>
 			</Query>
-			<Query fonction="ExeAjax-SupTrad-Delete">
+			<Query fonction="ExeAjax-SupTrad-Delete_ieml_Trad">
 			<delete>DELETE </delete>
 				<from> FROM ieml_trad </from>
 				<where> WHERE ieml_id =-idIeml- AND onto_flux_id =-idflux-   </where>
+			</Query>
+		    <Query fonction="ExeAjax-SupTrad-Delete_ieml_onto">
+			<delete>DELETE </delete>
+				<from> FROM ieml_onto </from>
+				<where> WHERE ieml_id =-idIeml-    </where>
+			</Query>
+			<Query fonction="ExeAjax-SupTrad-Delete_ieml_uti_onto">
+			<delete>DELETE </delete>
+				<from> FROM ieml_uti_onto </from>
+				<where> WHERE ieml_id =-idIeml-    </where>
 			</Query>
 		    <Query fonction="ExeAjax-AddTrad">
 				<select>SELECT onto_flux_code  </select>
