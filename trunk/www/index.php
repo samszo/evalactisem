@@ -58,6 +58,7 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 	<script src="js/ajax.js"/>
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
+	<script src="js/tree.js"/>
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
@@ -135,14 +136,14 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 							<groupbox  >
 								<caption label="Langage du flux"/>
 							    <label id="id-trad-flux" hidden="true"/>
-								<label value="code :"/><label id="code-trad-flux" style="background-color:green" />
-							    <label value="descriptif : "/><label id="lib-trad-flux" style="background-color:green" />
+								<label value="code :"/><label id="code-trad-flux" style="background-color:yellow" />
+							    <label value="descriptif : "/><label id="lib-trad-flux" style="background-color:yellow" />
 							</groupbox>
 							<groupbox >
 								<caption label="Langage IEML"/>
 							    <label id="id-trad-ieml" hidden="true"/>
-								<label value="code :"/><label id="code-trad-ieml" style="background-color:green" />
-								<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:green" />
+								<label value="code :"/><label id="code-trad-ieml" style="background-color:yellow" />
+								<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:yellow" />
 							</groupbox>
 							<label id="trad-Sup-message" />			
 							<label id="trad-message" />

@@ -372,14 +372,24 @@ class Xul{
 
     function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 
-   		if($type=="No_Trad")
+		$flex = "flex='3'";
+		$splitter = "<splitter />";
+    	if($type=="No_Trad"){
     		$label = "Aucunne traduction";
-    	if($type=="Multi_Trad")
+			$flex = "flex='1'";
+    		$splitter = "";
+    	}
+    	if($type=="Multi_Trad"){
     		$label = "Plusieurs traductions";
-    	if($type=="Signl_Trad")
+			$flex = "flex='2'";
+			$splitter = "";
+    	}
+    	if($type=="Signl_Trad"){
     		$label = "Une traduction";
+			$splitter = "";
+    	}
     	
-    	$ihm = '<vbox  style="background-color:blue;" align="center">';	
+    	$ihm = '<vbox '.$flex.' style="background-color:blue;" >';	
     	$ihm .= '<label value="'.$label.'" style="font:arial;size:10;color:yellow" />';
     	$ihm .= '<tree context="clipmenu"			
 			enableColumnDrag="true"
@@ -408,7 +418,7 @@ class Xul{
             	$ihm .= '<treecols >';
 		  			 $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"  persist="width ordinal hidden"  />';
 		  		     $ihm .= '<splitter class="tree-splitter"/>';
-		  			 $ihm .= '<treecol id="treecol_descp"  label="Description"  persist="width ordinal hidden" />';
+		  			 $ihm .= '<treecol id="treecol_descp" flex="1" label="Description"  persist="width ordinal hidden" />';
 		  			 $ihm .= '<splitter class="tree-splitter"/>';
 		  			 $ihm .= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />';
 	  		    $ihm .= '</treecols>';
@@ -460,7 +470,7 @@ class Xul{
 	  			$ihm .= '</treechildren>';
 	  		$ihm .= '</tree>';
             }
-	  	$ihm .= '</vbox>';
+	  	$ihm .= '</vbox>'.$splitter;
     	return $ihm;   	
     }
 	

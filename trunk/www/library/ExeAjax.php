@@ -40,7 +40,7 @@
                         $resultat = AddTrad($_GET['libIeml'],$_GET['codeFlux'],$_GET['codeIeml']);
                         break;
                 case 'SupTrad':
-                        $resultat = SupTrad($_GET['codeIeml'],$_GET['codeflux']);
+                        $resultat = SupTrad($_GET['codeIeml'],$_GET['libIeml'],$_GET['codeflux']);
                         break;
                 case 'SetProc':
                         $resultat = SetProc($_GET['id'],$_GET['code'],$_GET['desc']);
@@ -74,8 +74,10 @@
 			
         	global $objSite;
 
+        	if(TRACE)
+        		echo "ExeAjax:GetTreeTrad:bdd=".$bdd."<br/>";
+        	
         	if($type=="Signl_Trad"){
-			
 				$arrTrad=explode(";",$trad);
 			    $arrDescp=explode(";",$descp);
         	}elseif($type=="Multi_Trad"){
@@ -84,6 +86,8 @@
         	}
 		    
         	$arrBdd=explode(";",$bdd);
+        	if(TRACE)
+        		echo "ExeAjax:GetTreeTrad:bdd=".$bdd."<br/>";
 		    
         	$arrFlux=explode(";",$flux);
         	$objXul = new Xul($objSite);
@@ -224,27 +228,38 @@
             return AddTrad_onto_trad($idflux,$idIeml);
             
        }
-        function SupTrad($codeIeml,$codeflux){
+        function SupTrad($codeIeml,$libIeml,$codeflux){
         
                 global $objSite;
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
                 $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
                 $from=str_replace("-codeIeml-", $codeIeml, $from);
-                $from=str_replace("-Iemllib-", $codeflux, $from);
+                $from=str_replace("-Iemllib-", $libIeml, $from);
                 $sql = $Q[0]->select.$from.$Q[0]->where;
-                echo $sql;
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
                 $db->connect();
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
                 //requête pour Supprimer une traduction
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete']";
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
                 //echo $Q;
                 $where = str_replace("-idflux-", $res[0], $Q[0]->where);
                 $where = str_replace("-idIeml-", $res[1], $where);
-                //echo $where;
+                
+                $sql = $Q[0]->delete.$Q[0]->from.$where;
+                $result = $db->query($sql);
+                //suppression de la traduction de la table ieml_onto;
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_onto']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $where = str_replace("-idIeml-", $res[1], $Q[0]->where);
+                $sql = $Q[0]->delete.$Q[0]->from.$where;
+                echo $sql;
+                $result = $db->query($sql);
+                //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
                 $sql = $Q[0]->delete.$Q[0]->from.$where;
                 $result = $db->query($sql);
                 $message = mysql_affected_rows()." traduction supprime";
