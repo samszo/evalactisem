@@ -2250,7 +2250,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 	var r=0;
 		 
 		syn=source.split(";");
-	    
+	    //l'ajout de tiré
 		  for(var i=0;i<syn.length-1; i++){
 		  	for(var j=0;j<syn[i].length;j++){
 		  		
@@ -2271,22 +2271,35 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		  syn="";
 		  sour="";
 		  syn=syn=source.split(";");
+		 //ajout de l'apostrophe
+		  r=0;
 		  for(var i=0;i<syn.length-1; i++){
 		  	for(var j=0;j<syn[i].length;j++){
-		 		 if(((j%5)==r)&&(j!=0)&&(sour.charAt(j+r-1)!="'")){
+		 		
+		 		 if(((j%5)==r)&&(j!=0)&&(syn[i].charAt(j+1)=="")){
 		 			if(r<5){
-		 				sour=sour+syn[i].charAt(j)+"'";
+		 				 
+		 				 sour=sour+syn[i].charAt(j)+"'";
 		 		        r++;
 		 		    }else
 		 		    	if(r==5)
 		 		     	r=0;
+		 		    
+		 		}else
+		 			if(((j%8)==r)&&(j!=0)&&(sour.charAt(j+r-1)!="'")){
+		 				if(r<7){
+		 					sour=sour+syn[i].charAt(j)+"'";
+		 		        	r++;
+		 		    	}else
+		 		    		if(r==8)
+		 		     		r=0;
 		 		    
 		 		}else{
 		 			sour=sour+syn[i].charAt(j);
 		 		}
 		   
 		   }
-		    
+		  
 		   sour=sour+";";
 		   source=sour;
 		   r=0;
@@ -2295,6 +2308,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		  sour="";
 		 
 		  syn=source.split(";");
+		  //l'ajout de point 
 		  for(var i=0;i<syn.length-1; i++){
 		  	for(var j=0;j<syn[i].length;j++){
 		 		 if((syn[i].charAt(j)!= "-")&&(syn[i].charAt(j)!="'")){
