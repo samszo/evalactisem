@@ -2248,20 +2248,23 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 	var sour="";	
 	var s="";
 	var r=0;
-		 
+    var compt=0;		 
 		syn=source.split(";");
 	    //l'ajout de tiré
 		  for(var i=0;i<syn.length-1; i++){
+		  	
 		  	for(var j=0;j<syn[i].length;j++){
-		  		
-		  		if(( (j%2)==1)){
+		  		if(syn[i].charAt(j-1)=="w"){
+		 		 	compt=j-1;
+		 		 }
+		 		 if(( (compt%2)==1)){
 		  	 		sour=sour+syn[i].charAt(j)+"-";
 		  		    
 		  		}else{
 		  	
 		  		     sour=sour+syn[i].charAt(j);	 
 		  	}
-		 	
+		 	compt++;
 		 }
 		  sour=sour+";"
 		 
@@ -2273,20 +2276,24 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		  syn=syn=source.split(";");
 		 //ajout de l'apostrophe
 		  r=0;
+		  
 		  for(var i=0;i<syn.length-1; i++){
+		    compt=0;
 		  	for(var j=0;j<syn[i].length;j++){
-		 		
-		 		 if(((j%5)==r)&&(j!=0)&&(syn[i].charAt(j+1)=="")){
+		 		 if(syn[i].charAt(j-1)=="w"){
+		 		 	compt=j-1;
+		 		 }
+		 		 if(((compt%5)==r)&&(compt!=r)&&(syn[i].charAt(compt+1)=="")){
 		 			if(r<5){
 		 				 
 		 				 sour=sour+syn[i].charAt(j)+"'";
-		 		        r++;
+		 		         r++;
 		 		    }else
 		 		    	if(r==5)
 		 		     	r=0;
 		 		    
 		 		}else
-		 			if(((j%8)==r)&&(j!=0)&&(sour.charAt(j+r-1)!="'")){
+		 			if(((compt%8)==r)&&(compt!=r)&&(sour.charAt(j+r-1)!="'")){
 		 				if(r<7){
 		 					sour=sour+syn[i].charAt(j)+"'";
 		 		        	r++;
@@ -2297,9 +2304,9 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		 		}else{
 		 			sour=sour+syn[i].charAt(j);
 		 		}
-		   
+		        compt++;
 		   }
-		  
+		   
 		   sour=sour+";";
 		   source=sour;
 		   r=0;
@@ -2310,8 +2317,10 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		  syn=source.split(";");
 		  //l'ajout de point 
 		  for(var i=0;i<syn.length-1; i++){
+		  	
 		  	for(var j=0;j<syn[i].length;j++){
-		 		 if((syn[i].charAt(j)!= "-")&&(syn[i].charAt(j)!="'")){
+		  	     
+		 		 if((syn[i].charAt(j)!= "-")&&(syn[i].charAt(j)!="'")&&(syn[i].charAt(j)!="w")){
 		 			sour=sour+syn[i].charAt(j)+".";
 		 		   
 		 		}else
@@ -2322,7 +2331,8 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		 			sour=sour+syn[i].charAt(j);
 		 		}
 		   }
-		   sour=sour+";"
+		 
+		   alert(sour=sour+";");
 		  }
 		
 	   return sour;
