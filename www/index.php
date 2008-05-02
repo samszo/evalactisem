@@ -123,15 +123,16 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 					</groupbox>
 					
 				</vbox>
-				<splitter />
 				
 				<vbox flex="1">
-					<groupbox flex="1" >
+					<groupbox flex="3" >
 						<caption label="Visualisation des graphiques"/>
 						<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
 					</groupbox>
-					<splitter />
-					<groupbox orient="horizontal" >
+			        <splitter collapse="after" resizeafter="farthest">
+						<grippy/>
+					</splitter>
+					<groupbox flex="1" orient="horizontal" >
 						<caption label="Visualisation des données"/>
 						<iframe  id="treeReq" flex="1" />
 						<vbox id="infosTrad" hidden="true"  >
@@ -147,12 +148,15 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 								<label value="code :"/><label id="code-trad-ieml" style="background-color:yellow" />
 								<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:yellow" />
 							</groupbox>
-							<label id="trad-Sup-message" />			
-							<label id="trad-message" />
-							<label id="trad-Sup-message" />			
-							<label id="trad-message" />
-							<button label="Ajouter une traduction" oncommand="AddTrad();"/>	
-							<button label="Supprimer une traduction" oncommand="SupTrad();"/>				
+							<groupbox >
+								<caption label="Actions de traduction"/>
+								<button label="Ajouter" oncommand="AddTrad();"/>	
+								<button label="Supprimer" oncommand="SupTrad();"/>
+								<label id="trad-Sup-message" />			
+								<label id="trad-message" />
+								<label id="trad-Sup-message" />			
+								<label id="trad-message" />
+							</groupbox>				
 						</vbox>
 						<box id="contDonnee" flex="1" hidden="true" />
 					</groupbox>
