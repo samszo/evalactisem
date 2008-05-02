@@ -203,6 +203,115 @@ Class Sem{
 		return $lien;
 	}
 
+	function GetSvgPie($code){
+		if($code=="")
+			$code=$this->Src;
+		if($this->trace)
+			echo "Sem.php:GetSvgPie:code".$code."<br/>";
+			
+		
+		$parse = $this->Parse($code);
+		if($this->trace)
+			echo "Sem.php:GetSvgPie:parse".$parse."<br/>";
+		
+		//nettoie le résultat du parser
+		$parse = str_replace("<XMP>","",$parse);
+	    $parse = str_replace("</XMP>","",$parse);
+	    $parse = str_replace("<?xml version=\"1.0\"?>"," ",$parse);
+		$xml = simplexml_load_string($parse);
+		//$xml = simplexml_load_file("../param/ReponseParser.xml");
+		
+		if($this->trace)
+			echo "Sem.php:GetSvgPie:xml".print_r($xml)."<br/>";
+
+		//charge les paramètres du layers
+		$xmlEvent = simplexml_load_file("../param/events.xml");
+		$arrPrims =array();
+		$arrEvents = array();
+		//construction des tableauc du nombre d'occurrence
+		foreach($xml->xpath("/ieml/group//genOp[@layer='event']") as $genOps){
+			if($this->trace)
+				echo "Sem.php:GetSvgPie:genOps".print_r($genOps)."<br/>";
+			$a = $genOps->attributes();
+			foreach ($genOps->children() as $tag=>$val) {
+				if(array_key_exists($tag,$arrEvents)){
+					$arrEvents[$tag]=$arrEvents[$tag]+1;
+				}else{
+					$arrEvents[$tag]=1;
+				}
+				if($this->trace)
+					echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
+				//récupére les paramètres du tag
+				$event = $xmlEvent->xpath("//event[@compact='".$tag.".']");
+				//calcul le tableau des éléments
+				$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
+				foreach ($prims as $prim) {
+					if(array_key_exists($prim,$arrPrims)){
+						$arrPrims[$prim]=$arrPrims[$prim]+1;
+					}else{
+						$arrPrims[$prim]=1;
+					}				
+				}
+					
+			}
+		}
+		if($this->trace)
+			echo "Sem.php:GetSvgPie:arrEvents=".print_r($arrEvents)."<br/>";
+		if($this->trace)
+			echo "Sem.php:GetSvgPie:arrPrims=".print_r($arrPrims)."<br/>";
+			
+		
+		//construction des données de event
+		$donnees = "";
+		$noms = "";
+		foreach ($arrEvents as $tag=>$val) {
+			$event = $xmlEvent->xpath("//event[@compact='".$tag.".']");
+			$noms .= $event[0]["descriptor"].";";
+		    $donnees .= $val.";";	
+		}
+		
+		$lien= PathWeb.'library/stats.php?large=300';
+		$lien.='&haut=300';
+		$lien.='&titre='.$code;
+		$lien.='&donnees='.$donnees;
+		$lien.='&noms='.$noms;
+		$lien.='&type=pie';
+		$lien.='&col1=yellow';
+		$lien.='&col2=red';
+		$lien.='&col3=blue';
+		$lien.='&col4=black';
+		
+		$arrResult = array();
+		$arrResult["GraphEvent"]=$lien;
+
+		//construction des données de l'event
+		$donnees = "";
+		$noms = "";
+		foreach ($arrPrims as $tag=>$val) {
+			if($tag!="."){
+				$noms .= $tag.";";
+			    $donnees .= $val.";";	
+			}
+		}
+		
+		$lien= PathWeb.'library/stats.php?large=300';
+		$lien.='&haut=300';
+		$lien.='&titre='.$code;
+		$lien.='&donnees='.$donnees;
+		$lien.='&noms='.$noms;
+		$lien.='&type=pie';
+		$lien.='&col1=yellow';
+		$lien.='&col2=red';
+		$lien.='&col3=blue';
+		$lien.='&col4=black';
+		
+		$arrResult["GraphPrimitive"]=$lien;
+		
+		return $arrResult;
+		
+	}
+	
+	
 	function Parse($code=""){
 	
 		if($code=="")
