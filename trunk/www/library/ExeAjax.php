@@ -341,10 +341,10 @@
                 
                 $liens = $sem->GetSvgPie($code);                                
                 
-                $svg = $objSite->GetCurl($liens["GraphPrimitive"]);
+                //$svg = $objSite->GetCurl($liens["GraphPrimitive"]);
                 //header("Content-Type: image/svg+xml");
                 
-                return $svg;
+                return $liens["GraphPrimitive"];
 
         }
         
