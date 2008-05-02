@@ -338,8 +338,14 @@
         
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-                return $sem->GetSvgBarre($code);                                
                 
+                $liens = $sem->GetSvgPie($code);                                
+                
+                $svg = $objSite->GetCurl($liens["GraphPrimitive"]);
+                //header("Content-Type: image/svg+xml");
+                
+                return $svg;
+
         }
         
 		function ieml_uti_onto($objSite,$uti_id,$ieml_id,$db){

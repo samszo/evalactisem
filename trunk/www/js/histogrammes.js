@@ -167,7 +167,7 @@ function Trad_Pars_Ieml(result, param){
         var T=new Array();
         var Descp=new Array();
         var Trad=new Array();
-        var  Tag=new Array();
+        var Tag=new Array();
         
     var parser = new DOMParser();
         FluxTag = parser.parseFromString(Flux, "text/xml");
@@ -187,10 +187,10 @@ function Trad_Pars_Ieml(result, param){
        
         arrNom = arrNoms.split(P);
         if(result!=1){
-        T=result.split(E);
-        Descp=T[1].split(P);
-        Trad=T[0].split(P);
-        Tag=T[2].split(P);
+	        T=result.split(E);
+	        Descp=T[1].split(P);
+	        Trad=T[0].split(P);
+	        Tag=T[2].split(P);
         }
        
        for(i=0;i<arrNom.length-1;i++){
@@ -243,7 +243,8 @@ function Trad_Pars_Ieml(result, param){
              }
         }
        
-        synIemlS+=T[0];
+       	var bdd = T[0].replace(/\\/g, "");
+        synIemlS+=bdd;
         FluxS+=T[2];
         descpS+=T[1];
       
@@ -265,18 +266,18 @@ function Trad_Pars_Ieml(result, param){
 		doc.setAttribute("hidden","false");
 	if(FluxS.length>2){
 		
-		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+T[0];
+		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
 		AppendResult(url,doc,false);
 	    
 	}
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
-		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+T[0];
+		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
 		AppendResult(url,doc,true);
     }
 	//ajoute le tree des no trad
 	if(FluxN.length>2){
-		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+T[0];
+		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		AppendResult(url,doc,true);
 	}
 	//frame=document.getElementById('treeReq');
@@ -522,11 +523,11 @@ function Select_Trad(id){
  catch(e){}
   
 }
-function Parser(){
+function Parser(op){
     var tree = document.getElementById("Signl_Trad");
     Iemlcode=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_Signl_Trad"));
     //prise en compte de la sélection multiple
-    Iemlcode=GetIemlTreeExp("Signl_Trad", 2);
+    Iemlcode=GetIemlTreeExp("Signl_Trad", 2, op);
 	//var url = urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode;
 	//AjaxRequest(url,"Afficher"," ","");
 	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode;
@@ -536,7 +537,7 @@ function Parser(){
 }
 
 
-function GetIemlTreeExp(idTree, col){
+function GetIemlTreeExp(idTree, col, op){
 
   try {
 
@@ -553,9 +554,9 @@ function GetIemlTreeExp(idTree, col){
 	
 	//pour gérer la multisélection
 	var numRanges = tree.view.selection.getRangeCount();
+	i=0;	
 	for (var t = 0; t < numRanges; t++){
 		tree.view.selection.getRangeAt(t,start,end);
-		i=0;	
 		for (var v = start.value; v <= end.value; v++){
 			c = tree.treeBoxObject.columns[col];
 			val = tree.view.getCellText(v,c);
@@ -563,11 +564,11 @@ function GetIemlTreeExp(idTree, col){
 				cell += val;
 				if(i==2){
 					//ajoute une virgule et un opérateur toute les 3 expressions
-					cell += ",|"  
+					cell += ","+op;  
 					i=-1;
 				}
+				alert(i+" "+cell);
 				i++;
-				alert(cell);
 			}
 		}
 	}

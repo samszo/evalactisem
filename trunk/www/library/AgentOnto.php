@@ -164,6 +164,18 @@ class AgentOnto {
   }
   
   
+  function svgSemCouches($arrSem){
+  	
+  	$svg = new SvgDocument("100%", "100%","","","","SVGcouchesem","onzoom=\"handleZoom(evt);\" onscroll=\"handlePan(evt);\" onload=\"handleLoad(evt);\""); 	
+  	
+  	
+	//ajoute la navigation zoom pan
+  	$svg = $this->svgZoomPan($svg);
+
+	//retourne le svg global
+	$svg->printElement();
+  }
+  
   function svgOnArcElements ($id, $center_x, $center_y, $radius, $display_angle, $start_angle, $coords_on, $spikes_on, $posts) {
 	
 

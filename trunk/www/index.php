@@ -67,7 +67,9 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 
 		<popupset id="popupset">
 			<popup id="clipmenu" onpopupshowing="javascript:;">
-				<menuitem label="Parser" oncommand="Parser();"/>
+				<menuitem label="Parser avec l'opérateur d'union" oncommand="Parser('|');"/>
+				<menuitem label="Parser avec l'opérateur de différence" oncommand="Parser('^');"/>
+				<menuitem label="Parser avec l'opérateur d'intersection" oncommand="Parser('&amp;');"/>
 			</popup>
 		</popupset>
 	<hbox >

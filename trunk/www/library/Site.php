@@ -400,67 +400,31 @@ class Site{
 		return $js;
 	}
 	
-	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
-		if($Cols==-1){
-			$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
-			$Cols = $this->XmlParam->GetElements($Xpath);	
-			//print_r($Cols);
-		}
+	public function GetCurl($url){
 		
-		$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
-		$Q = $this->XmlParam->GetElements($Xpath);
-		//print_r($Q);
-		if($id==-1){
-			//récupère la valeur par defaut
-			$Xpath = "/XmlParams/XmlParam[@nom='".$this->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
-			$attrs = $this->XmlParam->GetElements($Xpath);
-			//print_r( $attrs[0]["def"]);
-			
-			if($attrs[0]["niv"])
-				$id = $attrs[0]["niv"];
-			//echo $id." def<br/>";
-		}
-		
-		$from = str_replace("-parent-", $id, $Q[0]->from);
-		//ECHO $FROM;
-		$sql = $Q[0]->select.$from;
-		//echo $sql;
-		
-		$db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"], $dbOptions);
-		$db->connect();
-		$req = $db->query($sql);
-		$db->close();
-		$nb = mysql_num_rows($req);
+		if($this->trace)
+			echo "Site:GetCurl:url=".$url."<br/>";
+		$oCurl = curl_init($url);
+		// set options
+	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
+		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		$arrInfos = curl_getinfo($oCurl);
+		if($this->trace)
+			echo "Site:GetCurl:arrInfos=".print_r($arrInfos)."<br/>";
 
-		$hierEnfant = "";
-		$tree = '<treechildren >'.EOL;
-		while($r = mysql_fetch_row($req))
-		{
-			$tree .= '<treeitem id="'.$type.'_'.$r[0].'" container="true" empty="false" >'.EOL;
-			$tree .= '<treerow>'.EOL;
-			$i=-1;
-			//colonne de l'identifiant
-			//$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
-			foreach($Cols as $Col)
-			{
-				$tree .= '<treecell label="'.$r[$i].'"/>'.EOL;
-				$i ++;
-			}
-			$tree .= '</treerow>'.EOL;
-			$tree .= $this->GetTreeChildren($type, $Cols, $r[0]);
-			$tree .= '</treeitem>'.EOL;
-		}
-
-		if($nb>0)
-			$tree .= '</treechildren>'.EOL;
-		else
-			$tree = '';
+		// request URL
+		$sResult = curl_exec($oCurl);
+		if($this->trace)
+			echo "Site:GetCurl:sResult=".$sResult."<br/>";
 		
-		return $tree;
+		// close session
+		curl_close($oCurl);
 
+		return $sResult;
+		
 	}
-
 	
 	
   }

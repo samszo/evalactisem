@@ -11,7 +11,7 @@
   // Include the class files.
 	require_once(TT_CLASS_BASE."AllClass.php");
 
-  define ("TRACE", true);
+  define ("TRACE", false);
 	
   define ("DEFSITE", "local");
 
@@ -23,6 +23,7 @@
   define ("DELIM",'*');
   define ("jsPathRoot",PathRoot."/js/");
   define ("jsPathWeb","http://localhost/evalactisem/js/");
+  define ("PathWeb","http://localhost/evalactisem/");
   
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");
 
