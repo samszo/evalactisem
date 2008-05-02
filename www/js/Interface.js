@@ -46,23 +46,7 @@ function VerifAddTrad()
 		makeRequest(url,"trad-message");
 		
 }
-function SupTrad()
-{
-	//récupération des valeurs
-	var idIeml = document.getElementById("id-trad-ieml");
-	var idflux = document.getElementById("id-trad-flux");
-    
-    var listbox=document.getElementById("boxlist");
-    var select=listbox.selectedIndex;
-	url = urlExeAjax+"?f=SupTrad&idIeml="+idIeml.value+"&idflux="+idflux.value;
-   
-	//vérification des valeursboxlistJ
-	if(idIeml.value=="" || idflux.value=="")
-		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
-	else
-		makeRequest(url,"trad-message");
-		listbox.removeItemAt(select);
-}
+
 
 function ChargeBrower(id,url)
 {
