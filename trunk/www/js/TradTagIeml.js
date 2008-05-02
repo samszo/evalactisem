@@ -2332,7 +2332,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		 		}
 		   }
 		 
-		   alert(sour=sour+";");
+		   sour=sour+";";
 		  }
 		
 	   return sour;
