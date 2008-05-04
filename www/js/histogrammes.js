@@ -280,6 +280,9 @@ function Trad_Pars_Ieml(result, param){
 		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		AppendResult(url,doc,true);
 	}
+	url = urlAjax+"library/ExeAjax.php?f=GetTreeDictio";
+	AppendResult(url,doc,true);
+	
 	//frame=document.getElementById('treeReq');
 	//frame.setAttribute("src",url);
 	//AjaxRequest(urlAjax+"overlay/tabletrad.php?FluxM="+FluxM+"&MultiTrad="+synIemlM+"&descpM="+descpM+"&FluxS="+FluxS+"&SignlTrad="+synIemlS+"&descpS="+descpS+"&FluxN="+FluxN);
@@ -469,7 +472,7 @@ function SupTrad()
 	else
 		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
 		SetDonnee();
-		SetDonnee();
+		
 }
 function startSelectTab()
 { 
@@ -507,7 +510,7 @@ function Select_Trad(id){
   try{
   var tree = document.getElementById(id);
   var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
-  
+      
  	  var parent=tree.contentView.getParentIndex(tree.currentIndex);
 	  var parentItem=tree.contentView.getItemAtIndex(parent);
 	  var txtcode_ieml = document.getElementById("code-trad-ieml");
@@ -531,7 +534,7 @@ function Parser(op){
 	//var url = urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode;
 	//AjaxRequest(url,"Afficher"," ","");
 	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode;
-	url = GetResult(url);
+	alert(url = GetResult(url));
 	Trad('webFrame',url)
 	
 }
@@ -540,7 +543,8 @@ function Parser(op){
 function GetIemlTreeExp(idTree, col, op){
 
   try {
-
+    var start = new Object();
+	var end = new Object();
 	var tree;
 	var cell = "(";
 	var c;
@@ -560,6 +564,7 @@ function GetIemlTreeExp(idTree, col, op){
 		for (var v = start.value; v <= end.value; v++){
 			c = tree.treeBoxObject.columns[col];
 			val = tree.view.getCellText(v,c);
+			
 			if(val!=""){
 				cell += val;
 				if(i==2){
@@ -586,6 +591,21 @@ function GetIemlTreeExp(idTree, col, op){
   } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" cell="+cell); }
 }
 
+function create_dicto_ieml_onto(){
+	for(i=0;i<1990;i++){
+		
+	}
+
+}
+function recup_dictio(){
+	var res;
+	for(i=0;i<1990;i++){
+		res=TradIeml.recup_dictio(i);
+		arres=res.split(E);
+		arres[1]=arres[1].substring(0, arres[1].length-1)
+		AjaxRequest(urlAjax+"library/ExeAjax.php?f=insert_ieml_onto&Iemlcode="+arres[1]+"&Iemllib="+arres[2]+"&Imelparent="+arres[0],""," ","");
+	}
+}
 
 function Afficher(result,prarm){
 	alert(result);
