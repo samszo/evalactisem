@@ -10,7 +10,7 @@ require_once ("../param/ParamPage.php");
 	//param des colonnes
 	$Xpath = "/XmlParams/XmlParam[@nom='".$objSite->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
 	$Cols = $objSite->XmlParam->GetElements($Xpath);	
-    
+   
 
     header('Content-type: application/vnd.mozilla.xul+xml');
 ?>
