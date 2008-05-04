@@ -301,10 +301,10 @@ class Xul{
 	}
 	
 	
-	function GetTreeChildren($type, $Cols=-2, $id=-2){
+	function GetTreeChildren($type, $Cols=-1, $id=-1){
 
 		
-		if($Cols==-2){
+		if($Cols==-1){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
 			$Cols = $this->site->XmlParam->GetElements($Xpath);
 			//print_r($Cols);
@@ -312,7 +312,7 @@ class Xul{
 		
 		$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
-		if($id==-2){
+		if($id==-1){
 			
 			//récupère la valeur par defaut
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
@@ -364,7 +364,8 @@ class Xul{
 		   
 		}
 			
-		
+		if($this->trace)
+             echo "Xul:GetTreeChildren:tree". $tree."<br/>";  
 		return $tree;
 
 	}
@@ -395,7 +396,8 @@ class Xul{
 			enableColumnDrag="true"
 			typesource="'.$label.'"
 			flex="1"	
-			id="'.$type.'" ';
+			id="'.$type.'" 
+			multiple="true"';
 			
     		if($type=="No_Trad"){
 				$ihm .= ' onselect="Select_NoTrad(\''.$type.'\');">'; 
@@ -475,9 +477,66 @@ class Xul{
     }
 	
     
-    
-   
+   function GetTree_ieml_onto($type){
+		   	
+   	//adresse de la datasource
+			$label="Dictionnaire Ieml";
+        	$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']";
+			$ds = $this->site->XmlParam->GetElements($Xpath);
+			//if($this->trace)
+                //echo "Xul:GetTree_ieml_onto:ds".print_r($ds)."<br/>";
+			//echo $ds[0]["datasource"];
+			//print_r($Desc);
+			//param des colonnes
+			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_ieml']/Cols/col";
+			$Cols = $this->site->XmlParam->GetElements($Xpath);
+			if($this->trace)
+                echo "Xul:GetTree_ieml_onto:Cols".print_r($Cols)."<br/>";
+			    $tree='<vbox style="background-color:blue;" align="center">';
+                $tree.='<label value="'.$label.'" style="font:arial;size:10;color:yellow"  />';
+                $tree.='<popupset>';
+                   		$tree.='<tooltip id="tipBadValue" onclick="this.hidePopup( );">';
+            				$tree.='<vbox>';
+                				$tree.='<label value="Valeur incorrecte !!"/>';
+            				$tree.='</vbox>';
+            	   		$tree.='</tooltip>';
+    			$tree.='</popupset>';
+    			$tree.='<box id="'.$this->site->scope["box"].'"   class="editableTree" >';
+    			$tree.='<tree id="'.$type.'"
+						width="300" height="400"
+						context="iemlmenu"			
+						enableColumnDrag="true"
+						onselect="Select_Trad(\''.$type.'\');"
+						
+						typesource="'.$type.'"	
+						Treeid="'.$type.'">';
+						
+						$tree.='<treecols>';
+						//le conteneur doit avoir comme id id pour editableTree
+					    $tree.='<treecol id="id" label="branche" primary="true" flex="1" cycler="true"/>';
+					    $tree.='<splitter class="tree-splitter"/>';
+					
+						foreach($Cols as $Col)
+						{
+							//la première colonne est le bouton pour déplier
+								
+								$tree.='<treecol id="treecol_'.$Col["tag"].'" label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"  persist="width ordinal hidden"/>';
+								$tree.='<splitter class="tree-splitter"/>';
+							
+							
+						}
+					
+						$tree.='</treecols>';
+						$tree.= $this->GetTreeChildren($type, $Cols);
+						$tree.='</tree>';
+						$tree.='</box>';
+						$tree.='</vbox>';
+						if($this->trace)
+                        	 echo "Xul:GetTree_ieml_onto:tree". $tree."<br/>";  	
+						return $tree;
+
+   }
 	
 	
-  }
+ }
 ?>
