@@ -25,14 +25,14 @@ Class Sem{
 	function __construct($Site, $FicXml, $So, $De="", $Tr="") {
 		
 		$this->trace = TRACE;
-        
+        /*
 		if($FicXml=="")
 			$FicXml==$Site->scope["FicXml"];
 		if($this->trace){
 			echo "On charge les paramètres : ".$FicXml."<br/>\n";
 			$this->XmlParam = new XmlParam($FicXml);
 		    
-		}
+		}*/
         //$this->parse = $FicXml;
 		$this->site = $Site;	
 		$this->Src = $So;
@@ -225,10 +225,17 @@ Class Sem{
 			echo "Sem.php:GetSvgPie:xml".print_r($xml)."<br/>";
 
 		//charge les paramètres du layers
-		$xmlEvent = simplexml_load_file("../param/events.xml");
+		if (file_exists("../param/events.xml")) {
+		    $xmlEvent = simplexml_load_file("../param/events.xml");
+		 
+		    var_dump($xmlEvent);
+		} else {
+		    exit('Echec lors de l\'ouverture du fichier events.xml.');
+		}
+		//$xmlEvent = simplexml_load_file("../param/events.xml");
 		$arrPrims =array();
 		$arrEvents = array();
-		//construction des tableauc du nombre d'occurrence
+		//construction des tableaux du nombre d'occurrence
 		foreach($xml->xpath("/ieml/group//genOp[@layer='event']") as $genOps){
 			if($this->trace)
 				echo "Sem.php:GetSvgPie:genOps".print_r($genOps)."<br/>";

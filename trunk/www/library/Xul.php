@@ -400,7 +400,7 @@ class Xul{
 			multiple="true"';
 			
     		if($type=="No_Trad"){
-				$ihm .= ' onselect="Select_NoTrad(\''.$type.'\');">'; 
+				$ihm .= ' onselect="Select_NoTrad(\''.$type.'\',\'treecol_descp\');">'; 
     			$ihm .= '<treecols >';
 	  			 $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"   persist="width ordinal hidden" />';
 	  		     $ihm .= '<splitter class="tree-splitter"/>';
@@ -416,7 +416,7 @@ class Xul{
 	  		   $ihm .= '</treechildren>';
 	  		   $ihm .= '</tree>';
             }else{
-				$ihm .= ' onselect="Select_Trad(\''.$type.'\');">';
+				$ihm .= ' onselect="Select_Trad(\''.$type.'\',\'treecol_descp\');">';
             	$ihm .= '<treecols >';
 		  			 $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"  persist="width ordinal hidden"  />';
 		  		     $ihm .= '<splitter class="tree-splitter"/>';
@@ -506,8 +506,7 @@ class Xul{
 						width="300" height="400"
 						context="iemlmenu"			
 						enableColumnDrag="true"
-						onselect="Select_Trad(\''.$type.'\');"
-						
+						onselect="Select_Dictio(\''.$type.'\',\'treecol_code\',\'treecol_lib\');"
 						typesource="'.$type.'"	
 						Treeid="'.$type.'">';
 						

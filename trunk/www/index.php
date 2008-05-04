@@ -60,7 +60,7 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
 	<script src="js/tree.js"/>
-	<script type="text/javascript" src="../xbl/editableTree/functions.js" />
+	
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
