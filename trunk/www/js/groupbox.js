@@ -3,7 +3,14 @@ function GroupBox(nomParent){
 			req=document.getElementById("requette").selectedItem.value;
 			//alert(req);
 			
-			
+			if((req=="GetAllTags")||(req=="GetAllPosts")||(req=="GetAllBundles")){
+		 	    t=document.getElementById(nomParent);
+		        boxb=document.createElement("groupbox");
+				if(t.hasChildNodes()){
+					dernier=t.lastChild;
+					t.removeChild(dernier);
+				}
+			}
 		 	if(req=="GetRecentPosts"){
 		 	    t=document.getElementById(nomParent);
 		        boxb=document.createElement("groupbox");

@@ -91,11 +91,11 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 							<label value="requête" />
 							<menulist id="requette" oncommand="">
 							   <menupopup >
-							     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand=""/>
+							     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand="grpBox.CreatGrpBox('box1');"/>
 							     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
 							     <menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="grpBox.CreatGrpBox('box1');"/>
-							     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand=""/>
-							     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand=""/>
+							     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand="grpBox.CreatGrpBox('box1');"/>
+							     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand="grpBox.CreatGrpBox('box1');"/>
 							   </menupopup>
 							</menulist>
 							<box id="box1" ></box>		    
