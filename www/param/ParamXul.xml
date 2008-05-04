@@ -224,6 +224,10 @@
 				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
 				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
 			</Query>
+			<Query fonction="Insert_ieml_foret">
+				<insert> INSERT INTO ieml_foret (ieml_id,ieml_parent)</insert>
+				<values> VALUES ('-idieml-' , '-idparent-')</values>
+			</Query>
 		</Querys>
 	
 	</XmlParam>
