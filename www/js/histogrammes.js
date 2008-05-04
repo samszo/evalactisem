@@ -497,29 +497,39 @@ function startSelectTab()
 	txtDescpF.value = celldescpF.getAttribute('label');
 
 }
-function Select_NoTrad(id){
+function Select_NoTrad(id,treecol){
+	
 	var tree = document.getElementById(id);
   	var txtcode_flux=document.getElementById("code-trad-flux");
   	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
-  	txtcode_flux.value=selection.firstChild.firstChild.getAttribute("label");
-    var txtlib_ieml=document.getElementById("lib-trad-ieml");
-    txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_descp"));
+  	txtcode_flux.value=selection.firstChild.lastChild.getAttribute("label");
+    
+   
     
 }
-function Select_Trad(id){
+function Select_Dictio(id,treecol1,treecol2){
+	
+	var tree = document.getElementById(id);
+  	var txtcode_flux=document.getElementById("code-trad-flux");
+  	var txtcode_ieml = document.getElementById("code-trad-ieml");
+  	var txtlib_ieml=document.getElementById("lib-trad-ieml");
+  	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
+  	txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol2));
+    txtcode_ieml.value= tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol1));
+}
+function Select_Trad(id,treecol){
   try{
   var tree = document.getElementById(id);
   var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
-      
+     
  	  var parent=tree.contentView.getParentIndex(tree.currentIndex);
 	  var parentItem=tree.contentView.getItemAtIndex(parent);
 	  var txtcode_ieml = document.getElementById("code-trad-ieml");
 	  var txtcode_flux=document.getElementById("code-trad-flux");
 	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
 	  txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
-	  txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_descp"));
+	  txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol));
 	  txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
-	  
   
   }
   		 
@@ -591,12 +601,7 @@ function GetIemlTreeExp(idTree, col, op){
   } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" cell="+cell); }
 }
 
-function create_dicto_ieml_onto(){
-	for(i=0;i<1990;i++){
-		
-	}
 
-}
 function recup_dictio(){
 	var res;
 	for(i=0;i<1990;i++){
