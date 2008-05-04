@@ -102,8 +102,6 @@
         	 global $objSite;
         	 
         	 $objXul = new Xul($objSite);
-        	 if(trace)
-			  echo "ExeAjax:GetTreeDictio:".$objXul->GetTree_ieml_onto("ieml")."<br/>";
         	  $tree=$objXul->GetTree_ieml_onto("ieml");
 			  return $tree;
         }
@@ -214,7 +212,7 @@
                 $row = mysql_fetch_array($result);
                 if($row[0]!=0){
                 	
-                	return VerifExist_onto_trad($idflux,$row[0],$iduti);
+                	 VerifExist_onto_trad($idflux,$row[0],$iduti);
                 	
                 	return AddTrad_onto_trad($idflux,$row[0]);
                 	

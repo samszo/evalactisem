@@ -492,8 +492,8 @@ class Xul{
 			$Cols = $this->site->XmlParam->GetElements($Xpath);
 			if($this->trace)
                 echo "Xul:GetTree_ieml_onto:Cols".print_r($Cols)."<br/>";
-			    $tree='<vbox style="background-color:blue;" align="center">';
-                $tree.='<label value="'.$label.'" style="font:arial;size:10;color:yellow"  />';
+			    $tree='<vbox style="background-color:yellow;" align="center">';
+                $tree.='<label value="'.$label.'" style="font:arial;size:10;color:blue"  />';
                 $tree.='<popupset>';
                    		$tree.='<tooltip id="tipBadValue" onclick="this.hidePopup( );">';
             				$tree.='<vbox>';
