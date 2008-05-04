@@ -1,32 +1,5 @@
 function Traduction(){
-this.recherchez=function(searchString) {
- 
-//  var plusRE = new RegExp( "+", "g");  // can't make anything like this work in IE!
-//  searchString = searchString.replace( plusRE, " ");
-  var wkStr = "";  // kluge around it
- // alert("=="+searchString+"==");
-  for ( var i = 0; i < searchString.length; i++) {
-    if ( searchString.charAt( i) ==  "+") {
-      wkStr = wkStr + " ";
-    } else {
-      wkStr = wkStr + searchString.charAt( i);
-    }
-  }
-  searchString = unescape( wkStr);
-
-
-  var subject = new Array( 1990);
-
-    // The following variables document the field numbers in the "subject" array.
-      var displayedTopicType = 0;
-      var displayableKey = 1;
-      var alphabet1 = 2;
-      var filePrefix = 3;
-      var natLangTopicType = 4;
-      var typeUrl = 5;
-      var color = 6;
-      var descriptor = 7;
-
+subject = new Array( 1990);
 subject[0]=["ideas","fusu","TBASSSAS","fusu","id\u00e9e","ideas.html","semantic","image mentale",];
 subject[1]=["relations","jn","SUBT","jn","relation","relations.html","semantic","banalit\u00e9",];
 subject[2]=["ideas","koko","BSUBBSUB","koko","id\u00e9e","ideas.html","semantic","paix",];
@@ -2017,6 +1990,35 @@ subject[1986]=["ideas","logg","TTUBSASA","logg","id\u00e9e","ideas.html","semant
 subject[1987]=["ideas","yyto","USUSSTUB","yyto","id\u00e9e","ideas.html","pragmatic","discipline artistique / sci.",];
 subject[1988]=["relations","ha","BUAB","ha","relation","relations.html","semantic","prise de parti",];
 subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmatic","exercer une comp\u00e9tence",];
+this.recherchez=function(searchString) {
+ 
+//  var plusRE = new RegExp( "+", "g");  // can't make anything like this work in IE!
+//  searchString = searchString.replace( plusRE, " ");
+  var wkStr = "";  // kluge around it
+ // alert("=="+searchString+"==");
+  for ( var i = 0; i < searchString.length; i++) {
+    if ( searchString.charAt( i) ==  "+") {
+      wkStr = wkStr + " ";
+    } else {
+      wkStr = wkStr + searchString.charAt( i);
+    }
+  }
+  searchString = unescape( wkStr);
+
+
+   
+
+    // The following variables document the field numbers in the "subject" array.
+      var displayedTopicType = 0;
+      var displayableKey = 1;
+      var alphabet1 = 2;
+      var filePrefix = 3;
+      var natLangTopicType = 4;
+      var typeUrl = 5;
+      var color = 6;
+      var descriptor = 7;
+
+
 
   var inflChar = new Object(); // inflected characters
   inflChar[ "\u00c0"] = "A";
@@ -2130,7 +2132,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
     }
   }
 
-//  alert( searchREstring);
+  //alert( searchREstring);
 
   if ( ! hasAlphaNum) {
     alert( "cha&#238;ne de caract&#232;res mal form&#233;e");
@@ -2182,7 +2184,7 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
       }
     }
   }
-
+  
   hitList.sort( hitCompare);
 
   function underLine( procString) {
@@ -2249,7 +2251,9 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 	var s="";
 	var r=0;
     var compt=0;		 
+		
 		syn=source.split(";");
+		
 	    //l'ajout de tiré
 		  for(var i=0;i<syn.length-1; i++){
 		  	
@@ -2334,8 +2338,14 @@ subject[1989]=["relations","ee","UTUT","ee","relation","relations.html","pragmat
 		 
 		   sour=sour+";";
 		  }
-		
+	
 	   return sour;
 
+	}
+
+ this.recup_dictio=function(i){
+	
+	return subject[i][0]+"*"+this.syntaxe_ieml(subject[i][1]+";")+"*"+subject[i][7];
+	
 	}
 }
