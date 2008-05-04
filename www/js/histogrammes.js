@@ -129,9 +129,15 @@ function DelIiciousTreeGraph(result,param){
 			
 	
 	}
+	Tree= document.getElementById("treeReq");
+	//affiche les infos de traduction
+	document.getElementById('infosTrad').setAttribute("hidden","true");
+	//affiche le iframe
+	document.getElementById('contDonnee').setAttribute("hidden","true");
+	document.getElementById('treeReq').setAttribute("hidden","false");
 	if((query=="GetAllBundles")||(query=="GetAllTags")||(query=="")){
 		
-		Tree= document.getElementById("treeReq");
+		
 		Tree.setAttribute("src","overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux");
 	}else
 	if((query=="GetAllPosts")||(query=="GetRecentPosts")||(query=="GetPosts")){
@@ -381,7 +387,13 @@ function AddTrad(){
 
 
 //Creation de la table des choix 
-
+function SupChoixTrad(){
+	var box =document.getElementById("box1");
+	if(box.hasChildNodes()){
+			dernier=box.lastChild;
+			box.removeChild(dernier);
+		}
+}
 function ChoixTrad(CarIeml,DiscIeml){
 	var box =document.getElementById("box");
 	if(box.hasChildNodes()){
