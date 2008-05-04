@@ -63,6 +63,12 @@
                 case 'GetTreeTrad':
         	        	$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
                 	    break;
+                case 'insert_ieml_onto':
+                	   $resultat=insert_ieml_onto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
+                	   break;
+                case 'GetTreeDictio':
+                	   $resultat=GetTreeDictio();
+                	   break;
 		}
         
         echo $resultat; 
@@ -92,7 +98,15 @@
             return $ihm;
         }
         
-        
+        function GetTreeDictio(){
+        	 global $objSite;
+        	 
+        	 $objXul = new Xul($objSite);
+        	 if(trace)
+			  echo "ExeAjax:GetTreeDictio:".$objXul->GetTree_ieml_onto("ieml")."<br/>";
+        	  $tree=$objXul->GetTree_ieml_onto("ieml");
+			  return $tree;
+        }
         
         // Ajouter une traduction dans la table ieml_onto et onto_trad
         function AddTrad($libIeml,$codeflux,$codeIeml){
@@ -109,7 +123,7 @@
                 $where = str_replace("-iemllib-", $libIeml, $Q[0]->where);
                 $from = str_replace("-iduti-", $iduti, $Q[0]->from);
                 $sql = $Q[0]->select.$from.$where;
-                if(TRACE)
+                if(trace)
                 	echo "ExeAjax:AddTrad:$sql.<br/>";
                 $result = $db->query($sql);
                 $db->close();
@@ -392,6 +406,38 @@
                
      }     
         
+     	function insert_ieml_onto($Iemlcode,$Iemllib,$Imelparent){
+     		    global $objSite;	
+     			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
+                	// requête pour vérifier l'existence de la traduction
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='AddTrad_Insert_onto_flux']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $values = str_replace("-codeIeml-", $Iemlcode,$Q[0]->values);
+                $values = str_replace("-libIeml-", $Iemllib,$values);
+                $values = str_replace("-parentIeml-", -1,$values);
+                if($Imelparent=="relations"){
+                	 $values = str_replace("-nivIeml-", 3 ,$values);
+                }elseif($Imelparent=="ideas"){
+                	$values = str_replace("-nivIeml-", 4 ,$values);
+                }elseif($Imelparent=="events"){
+                	$values = str_replace("-nivIeml-", 2 ,$values);
+                }
+
+                $sql = $Q[0]->insert.$values;
+                $result = $db->query($sql);
+                $idieml=mysql_insert_id();
+                
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Insert_ieml_foret']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                print_r($Q);
+                $values = str_replace("-idparent", -1,$Q[0]->values);
+                $values = str_replace("-idieml-", $idieml,$values);
+                $sql = $Q[0]->insert.$values;
+                $result = $db->query($sql);
+                $db->close();
+     		
+     	}
         
         
         ?>
