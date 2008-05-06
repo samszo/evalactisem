@@ -2348,4 +2348,18 @@ this.recherchez=function(searchString) {
 	return subject[i][0]+"*"+this.syntaxe_ieml(subject[i][1]+";")+"*"+subject[i][7];
 	
 	}
+
+this.Niveau_ieml=function(ieml){
+	var niv;
+	alert(ieml);
+	for(i=0;i<subject.length;i++){
+		if(subject[i][7]==ieml){
+			niv=subject[i][0];
+			break;
+		}
+	}
+	return niv;
 }
+}
+
+
