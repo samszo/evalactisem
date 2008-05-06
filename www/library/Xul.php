@@ -492,7 +492,7 @@ class Xul{
 			$Cols = $this->site->XmlParam->GetElements($Xpath);
 			if($this->trace)
                 echo "Xul:GetTree_ieml_onto:Cols".print_r($Cols)."<br/>";
-			    $tree='<vbox style="background-color:yellow;" align="center">';
+			    $tree='<vbox flex="1" style="background-color:yellow;" align="center">';
                 $tree.='<label value="'.$label.'" style="font:arial;size:10;color:blue"  />';
                 $tree.='<popupset>';
                    		$tree.='<tooltip id="tipBadValue" onclick="this.hidePopup( );">';
@@ -501,11 +501,11 @@ class Xul{
             				$tree.='</vbox>';
             	   		$tree.='</tooltip>';
     			$tree.='</popupset>';
-    			$tree.='<box id="'.$this->site->scope["box"].'"   class="editableTree" >';
+    			$tree.='<box id="'.$this->site->scope["box"].'" flex="1"  class="editableTree" >';
     			$tree.='<tree id="'.$type.'"
-						width="300" height="400"
 						context="iemlmenu"			
 						enableColumnDrag="true"
+						flex="1"
 						onselect="Select_Dictio(\''.$type.'\',\'treecol_code\',\'treecol_lib\');"
 						typesource="'.$type.'"	
 						Treeid="'.$type.'">';

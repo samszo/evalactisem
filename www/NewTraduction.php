@@ -18,14 +18,13 @@ require_once ("param/ParamPage.php");
 	    
 	      
 	header('Content-type: application/vnd.mozilla.xul+xml');
-    
+	echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
+	echo '<' . 'xul-overlay href="overlay/popupset.php?f=1"' . '>' . "\n";
+	echo '<' . 'xul-overlay href="overlay/tree.php?box=box1&ParamNom=GetOntoTree"' . '>' . "\n";
+	echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
+	echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
+	
 	?>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<?xul-overlay href="overlay/popupset.php?f=1"?>
-<?xul-overlay href="overlay/tree.php?box=box1&ParamNom=GetOntoTree"?>
-<?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?>
-<?xml-stylesheet rel="stylesheet" href="tree.css" type="text/css" title="css"?>
-
 <window id="ieml-global" title="IEML-10eF v0.1 - information economy meta language - Dixième Famille" orient="horizontal" left="0" top="0" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
 	<script language="JavaScript" type="application/x-javascript" src="js/ajax.js"/>
     <script src="js/TradTagIeml.js"/>

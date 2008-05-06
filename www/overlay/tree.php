@@ -13,9 +13,8 @@ require_once ("../param/ParamPage.php");
    
 
     header('Content-type: application/vnd.mozilla.xul+xml');
-?>
-<?xml version="1.0" encoding="UTF-8" ?>
-
+	echo '<' . '?xml version="1.0" encoding="iso-8859-15" ?' . '>';
+    ?>
 <overlay id="oTree"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 

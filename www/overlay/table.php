@@ -15,8 +15,8 @@ require_once ("../param/ParamPage.php");
 	
 	
     header('Content-type: application/vnd.mozilla.xul+xml');
+	echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 ?>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
 <overlay id="tabletrad" >
 	<box id="<?php echo $objSite->scope["box"]; ?>" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 		<listbox id="boxlist" onselect="startSelectTab();" >

@@ -7,10 +7,8 @@
 	//print_r($Desc);
 
     header('Content-type: application/vnd.mozilla.xul+xml');
+	echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 ?>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-
-
 <overlay id="menu"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 

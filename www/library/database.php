@@ -1,8 +1,5 @@
 <?php class database {
-    /*******************************************************************
-    * Définition des Propriétés
-    *******************************************************************/
-    protected $config = array ();
+	protected $config = array ();
     private $errorLog = array ();
     private $options = array (
         'ERROR_DISPLAY' => true
