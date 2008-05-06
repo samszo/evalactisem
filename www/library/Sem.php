@@ -227,8 +227,6 @@ Class Sem{
 		//charge les paramètres du layers
 		if (file_exists("../param/events.xml")) {
 		    $xmlEvent = simplexml_load_file("../param/events.xml");
-		 
-		    var_dump($xmlEvent);
 		} else {
 		    exit('Echec lors de l\'ouverture du fichier events.xml.');
 		}
@@ -248,6 +246,7 @@ Class Sem{
 				}
 				if($this->trace)
 					echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
+				
 				//récupére les paramètres du tag
 				$event = $xmlEvent->xpath("//event[@compact='".$tag.".']");
 				//calcul le tableau des éléments
