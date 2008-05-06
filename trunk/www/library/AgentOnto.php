@@ -168,6 +168,16 @@ class AgentOnto {
   	
   	$svg = new SvgDocument("100%", "100%","","","","SVGcouchesem","onzoom=\"handleZoom(evt);\" onscroll=\"handlePan(evt);\" onload=\"handleLoad(evt);\""); 	
   	
+	foreach ($genOps->children() as $tag=>$val) {
+		if(array_key_exists($tag,$arrTag)){
+			$arrTag[$tag]=$arrTag[$tag]+1;
+		}else{
+			$arrTag[$tag]=1;
+			$i ++;
+		}
+		//if($this->trace)
+			echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
+	}
   	
 	//ajoute la navigation zoom pan
   	$svg = $this->svgZoomPan($svg);

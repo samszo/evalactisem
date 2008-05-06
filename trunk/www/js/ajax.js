@@ -1,7 +1,6 @@
 //--------------------------------------------
 // AJAX Functions
 //--------------------------------------------
-var urlExeAjax = "/evalactisem";
 
 
 function GetResult(url) {

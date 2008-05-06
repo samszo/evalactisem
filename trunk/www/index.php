@@ -1,5 +1,6 @@
 <?php
 require('library/php-delicious/php-delicious.inc.php');
+require('param/Constantes.php');
 define('DELICIOUS_USER', $_POST['login_uti']);
 define('DELICIOUS_PASS', $_POST['mdp_uti']);
 
@@ -46,7 +47,7 @@ if($con==1){
 
 header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
 header ("title: Saisi des diagnosics d'accessibilité");
-echo '<' . '?xml version="1.0" encoding="iso-8859-15" ?' . '>';
+echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
@@ -54,17 +55,17 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 ?>
 <window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 	
-	<script src="js/histogrammes.js"/>
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
-	<script src="js/tree.js"/>
 	
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
 		var Flux;
+		var urlExeAjax = "<?php echo ajaxPathWeb; ?>";
+		var urlAjax = "<?php echo PathWeb; ?>";
 	</script>
 
 		<popupset id="popupset">
@@ -119,7 +120,7 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 						<caption label="IEML"/>
 						
 			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
-			    			<button id="TypeGraph" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
+			    			<button hidden="true" id="TypeGraph" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
 			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
 
 					</groupbox>
@@ -172,5 +173,16 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
  	RecupDeliciousFlux();
  	
  </script>
+ 
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	var pageTracker = _gat._getTracker("UA-3573757-2");
+	pageTracker._initData();
+	pageTracker._trackPageview();
+	</script>
+ 
 </window>
 

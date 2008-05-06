@@ -22,8 +22,6 @@
   define ("MaxMarker", 300);
   define ("DELIM",'*');
   define ("jsPathRoot",PathRoot."/js/");
-  define ("jsPathWeb","http://localhost/evalactisem/js/");
-  define ("PathWeb","http://localhost/evalactisem/");
   
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");
 
@@ -31,6 +29,7 @@
   define('EOL', "\r\n");
 
 $Site = array(
+	"PATH_WEB" => "http://localhost/evalactisem/", 
 	"SQL_LOGIN" => "root", 
 	"SQL_PWD" => "", 
 	"SQL_HOST" => "localhost",
@@ -45,6 +44,7 @@ $Site = array(
 	"gmKey" => gmKey
 	); 
 $SiteThyp = array(
+	"PATH_WEB" => "http://localhost/evalactisem/", 
 	"SQL_LOGIN" => "root", 
 	"SQL_PWD" => "thyp2006", 
 	"SQL_HOST" => "localhost",
@@ -58,10 +58,32 @@ $SiteThyp = array(
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"gmKey" => gmKey
 	); 
+$SiteMundi = array(
+	"PATH_WEB" => "http://www.mundilogiweb.com/ieml/", 
+	"SQL_LOGIN" => "mundilogieml", 
+	"SQL_PWD" => "uLkm3WuW", 
+	"SQL_HOST" => "mysql5-12",
+	"SQL_DB" => "mundilogieml",
+	"NOM" => "EvalActiSem",//je sais pas
+	"SITE_PARENT" => -1,//je sais pas
+	"SITE_ENFANT" => -1,
+	"DEF_LAT" => 45,
+	"DEF_LNG" => 1,
+	"DEF_ZOOM" => 4,
+	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
+	"gmKey" => gmKey
+	); 
+	
 	
   $SITES = array(
 	"local" => $Site,
-	
+	"thyp" => $SiteThyp,
+  	"mundi" => $SiteMundi
   );
 
+  define ("PathWeb",$SITES[DEFSITE]["PATH_WEB"]);
+  define ("jsPathWeb",PathWeb."js/");
+  define ("ajaxPathWeb",PathWeb."library/ExeAjax.php");
+  
+  
 ?>

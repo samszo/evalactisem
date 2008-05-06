@@ -19,10 +19,10 @@ require_once ("../param/ParamPage.php");
 	$D=array();
 	$Desc=array();
 	$Del=array();
-	//header('Content-type: application/vnd.mozilla.xul+xml');
-   
+	header('Content-type: application/vnd.mozilla.xul+xml');
+	echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
+	
 	?>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
 	 <hbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"  style="background-color:blue;height:200px;width:200px;">
       <script type="text/javascript" src="../xbl/editableTree/functions.js" />
 		<?php
