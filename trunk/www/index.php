@@ -51,6 +51,7 @@ echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
+echo '<?xul-overlay href="overlay/treeDicoIeml.xul" ?>';
 
 ?>
 <window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
@@ -59,6 +60,7 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 	<script src="js/ajax.js"/>
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
+	<script src="js/tree.js"/>
 	
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
@@ -162,6 +164,7 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 							</groupbox>				
 						</vbox>
 						<box id="contDonnee" flex="1" hidden="true" />
+						<vbox id="treeDicoIeml" flex="1" hidden="true" />					
 					</groupbox>
 				</vbox>
 			</groupbox>

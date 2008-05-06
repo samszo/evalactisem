@@ -1,4 +1,3 @@
-urlAjax="http://localhost/evalactisem/";
 E="*";
 P=";";
 function show_tooltip(evt)
@@ -125,10 +124,11 @@ function DelIiciousTreeGraph(result,param){
 	
 	}
 	Tree= document.getElementById("treeReq");
-	//affiche les infos de traduction
+	//cache les infos de traduction
 	document.getElementById('infosTrad').setAttribute("hidden","true");
-	//affiche le iframe
+	document.getElementById('treeDicoIeml').setAttribute("hidden","true");
 	document.getElementById('contDonnee').setAttribute("hidden","true");
+	//affiche le iframe
 	document.getElementById('treeReq').setAttribute("hidden","false");
 	if((query=="GetAllBundles")||(query=="GetAllTags")||(query=="")){
 		
@@ -258,7 +258,9 @@ function Trad_Pars_Ieml(result, param){
 
 	//affiche les infos de traduction
 	document.getElementById('infosTrad').setAttribute("hidden","false");
-	//affiche le iframe
+	document.getElementById('treeDicoIeml').setAttribute("hidden","false");
+
+	//cache le iframe
 	document.getElementById('treeReq').setAttribute("hidden","true");
 	
 	//affiche le tree des singles trad
@@ -280,8 +282,8 @@ function Trad_Pars_Ieml(result, param){
 		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		AppendResult(url,doc,true);
 	}
-	url = urlAjax+"library/ExeAjax.php?f=GetTreeDictio";
-	AppendResult(url,doc,true);
+	//url = urlAjax+"library/ExeAjax.php?f=GetTreeDictio";
+	//AppendResult(url,doc,true);
 	
 	//frame=document.getElementById('treeReq');
 	//frame.setAttribute("src",url);
@@ -377,7 +379,17 @@ function AddTrad(){
     alert(libIeml.value);
 	
 	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
+	
+	/*
+	var cells = new Array(codeFlux,"","");
+	Tree_AddItem('Signl_Trad', cells);
+
+	cells = new Array("",libIeml,codeIeml);
+	Tree_AddItem(codeFlux, cells);
+	*/
+	
 	SetDonnee();
+	
 }   
 
 
@@ -553,7 +565,7 @@ function Parser(op){
 	//var url = urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode;
 	//AjaxRequest(url,"Afficher"," ","");
 	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode;
-	alert(url = GetResult(url));
+	url = GetResult(url);
 	Trad('webFrame',url)
 	
 }
@@ -591,7 +603,7 @@ function GetIemlTreeExp(idTree, col, op){
 					cell += ","+op;  
 					i=-1;
 				}
-				alert(i+" "+cell);
+				//alert(i+" "+cell);
 				i++;
 			}
 		}
@@ -602,10 +614,10 @@ function GetIemlTreeExp(idTree, col, op){
 		cell = cell.substring(0, cell.length-1)
 	else  	
 		cell += ","
-	alert(cell);
+	//alert(cell);
 	//finalise l'expression
 	cell += ")";
-	alert(cell);
+	//alert(cell);
 	return cell;
   } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" cell="+cell); }
 }
