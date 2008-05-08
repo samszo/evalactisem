@@ -29,8 +29,7 @@
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     Donneegraph($result_F,$AllTag,$requete_g,$iduti);
-    $codeActi='GetAB';
-	$descActi='Recuperation de tous les bundles';
+    $Activite->AddActi('RB',$iduti);
    }
    
   if($requette=="GetAllTags"){
@@ -38,9 +37,8 @@
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F="<nom ieml='n.u.-'><![CDATA[$AllTag[0]]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[$AllTag[1]]]></nombre>";
     Donneegraph($result_F,$AllTag,$requete_g,$iduti);
-    
-  	$codeActi='GetAT';
-	$descActi='Recuperation de tous les tags';
+    $Activite->AddActi('RAT',$iduti);
+  	
   }
   
   if($requette=="GetAllPosts"){
@@ -50,10 +48,7 @@
   	 }else {
 	        echo $oDelicious->LastErrorString();
 	 }
-     $codeActi='GetAP';
-	 $descActi='Recuperation de tous les Posts';
-	 
-	 $Activite->AddActi($codeActi,$descActi);
+    $Activite->AddActi("RAP",$iduti);
 	 
   }
   
@@ -68,9 +63,7 @@
 	        echo $oDelicious->LastErrorString();
 	 }
 
-     $codeActi='GetP';
-	 $descActi='Recupperation de  Posts';
-  	 $Activite->AddActi($codeActi,$descActi);
+  	 $Activite->AddActi("RP",$iduti);
 	
 }
   	
@@ -84,9 +77,8 @@ if($requette=="GetRecentPosts"){
 	        echo $oDelicious->LastErrorString();
 	 }
 
-	     $codeActi='GetP';
-		 $descActi='Recupperation de  Posts';
-	  	 $Activite->AddActi($codeActi,$descActi);
+	    
+	  	 $Activite->AddActi("RRP",$iduti);
 	}
   
  

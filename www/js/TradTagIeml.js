@@ -2258,9 +2258,13 @@ this.recherchez=function(searchString) {
 		  for(var i=0;i<syn.length-1; i++){
 		  	
 		  	for(var j=0;j<syn[i].length;j++){
-		  		if(syn[i].charAt(j-1)=="w"){
-		 		 	compt=j-1;
+		  		if((syn[i].charAt(j)=="w")&&(syn[i].length<=4)){
+		 		 	compt=compt-1;
+		 		 }else
+		 		 	if((syn[i].charAt(j-1)=="w")&&(syn[i].length>4)){
+		 		 		compt=j-1;
 		 		 }
+		 		 
 		 		 if(( (compt%2)==1)){
 		  	 		sour=sour+syn[i].charAt(j)+"-";
 		  		    

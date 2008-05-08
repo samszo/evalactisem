@@ -48,9 +48,9 @@ function CordCercles($r,$Nbr,$cx,$cy){
 }
 make_svg_head ($title, $abstract);
     Cercle(600,250,200,"red");
-	$Cord=CordCercles(200,$Nbr,600,250);
+	$Cord=CordCercles(100,$Nbr,600,250);
 	for($i=0;$i<$Nbr;$i++){
-		Cercle($Cord[$i][1],$Cord[$i][2],10,"green");
+		Cercle($Cord[$i][1],$Cord[$i][2],150,GetRndRGBColor(1));
 		Text($Cord[$i][1],$Cord[$i][2],$i);
 	}
    
@@ -62,5 +62,26 @@ function Cercle($cx,$cy,$r,$color){
 }
 Function Text($x,$y,$text){
 	echo '<text x="'.$x.'" y="'.$y.'" font-family="Verdana" font-size="15" fill="yellow" >'.$text.'</text>';
+}
+function GetRndRGBColor($nbColor)
+{
+	$Colors = "";
+	if ($nbColor==1){
+		$c1 = rand(0,255);
+		$c2 = rand(0,255);
+		$c3 = rand(0,255);
+		$Colors = "rgb(" .$c1 ."," .$c2 ."," .$c3 .")";
+		return $Colors;
+	} else {
+		for ($i = 1; $i <= $nbColor; $i++) {
+			$c1 = rand(0,255);
+			$c2 = rand(0,255);
+			$c3 = rand(0,255);
+			$Colors = $Colors ."rgb(" .$c1 ."," .$c2 ."," .$c3 .")/";
+		}
+		$arrColors = split( "/", $Colors);
+		$lastSep = array_pop($arrColors);
+		return $arrColors;
+	}
 }
 ?>
