@@ -49,7 +49,7 @@ require_once ("../param/ParamPage.php");
 					{
 						//la première colonne est le bouton pour déplier
 							
-							echo('<treecol id="treecol_'.$Col["tag"].'" label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"/>');
+							echo('<treecol id="treecol_'.$Col["tag"].'"  label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"/>');
 							echo('<splitter class="tree-splitter"/>');
 						
 						

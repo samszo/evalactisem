@@ -302,7 +302,7 @@ class Xul{
 	
 	
 	function GetTreeChildren($type, $Cols=-1, $id=-1){
-
+        $container="false";
 		
 		if($Cols==-1){
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/Cols/col";
@@ -313,6 +313,7 @@ class Xul{
 		$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
 		if($id==-1){
+			$container="true";
 			
 			//récupère la valeur par defaut
 			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
@@ -341,7 +342,7 @@ class Xul{
 		$tree = '<treechildren >'.EOL;
 		while($r = mysql_fetch_row($req))
 		{
-			$tree .= '<treeitem id="'.$type.'_'.$r[0].'" container="true" empty="false" >'.EOL;
+			$tree .= '<treeitem id="'.$type.'_'.$r[0].'" container="'.$container.'" empty="false" >'.EOL;
 			$tree .= '<treerow>'.EOL;
 			$i= -1;
 			foreach($Cols as $Col)
@@ -409,7 +410,7 @@ class Xul{
 	  		   for($i=0;$i<sizeof($flux)-1;$i++){
                     $ihm .= '<treeitem >';
                         $ihm .= '<treerow>';
-                        $ihm .= '<treecell label="'.$flux[$i].'"/>' ;
+                        $ihm .= '<treecell label="'.$flux[$i].'"/>';
                         $ihm .= '</treerow>';
 	  		        $ihm .= '</treeitem>'; 
 	  		   }
@@ -444,7 +445,7 @@ class Xul{
                         	  			  $ihm .= '<treerow properties="'.$prop.'">';
                         	  					$ihm .= '<treecell label=""  />' ;	
                         	  				    $ihm .= '<treecell label="'.$descp[$i].'"/>' ;	
-                        	  				  	$ihm .= '<treecell label="'.$trad[$i].'"/>' ;
+                        	  				  	$ihm .= '<treecell label="'.$trad[$i].'"/>';
                         	  				  $ihm .= '</treerow>';
                         	  			$ihm .= '</treeitem>';
                         	  		$ihm .= '</treechildren>';
@@ -458,7 +459,7 @@ class Xul{
                         	  			$ihm .= '<treeitem >';	
                         	  				$ihm .= '<treerow>';
                         	 		 			$ihm .= '<treecell label=""/>' ;	
-                        	  				    $ihm .= '<treecell  label="'.$arrDescp[$j].'" />' ;	
+                        	  				    $ihm .= '<treecell  label="'.$arrDescp[$j].'" />';	
                         	  					$ihm .= '<treecell  label="'.$arrTrad[$j].'"/>' ;
                         	  			    $ihm .= '</treerow>';
                         	  			$ihm .= '</treeitem>';
@@ -488,54 +489,89 @@ class Xul{
 			//echo $ds[0]["datasource"];
 			//print_r($Desc);
 			//param des colonnes
-			$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_ieml']/Cols/col";
-			$Cols = $this->site->XmlParam->GetElements($Xpath);
+			
 			if($this->trace)
                 echo "Xul:GetTree_ieml_onto:Cols".print_r($Cols)."<br/>";
-			    $tree='<vbox flex="1" style="background-color:yellow;" align="center">';
-                $tree.='<label value="'.$label.'" style="font:arial;size:10;color:blue"  />';
-                $tree.='<popupset>';
-                   		$tree.='<tooltip id="tipBadValue" onclick="this.hidePopup( );">';
-            				$tree.='<vbox>';
-                				$tree.='<label value="Valeur incorrecte !!"/>';
-            				$tree.='</vbox>';
-            	   		$tree.='</tooltip>';
-    			$tree.='</popupset>';
-    			$tree.='<box id="'.$this->site->scope["box"].'" flex="1"  class="editableTree" >';
+			    $tree='<vbox flex="1" style="background-color:yellow;" >'.EOL;
+                $tree.='<label value="'.$label.'" style="font:arial;size:10;color:blue"  />'.EOL;
+              	$tree.='<box id="'.$this->site->scope["box"].'" flex="1"  class="editableTree" >'.EOL;
     			$tree.='<tree id="'.$type.'"
-						context="iemlmenu"			
-						enableColumnDrag="true"
 						flex="1"
-						onselect="Select_Dictio(\''.$type.'\',\'treecol_code\',\'treecol_lib\');"
+						onselect="Select_Dictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
 						typesource="'.$type.'"	
-						Treeid="'.$type.'">';
+						Treeid="'.$type.'">'.EOL;
 						
-						$tree.='<treecols>';
 						//le conteneur doit avoir comme id id pour editableTree
-					    $tree.='<treecol id="id" label="branche" primary="true" flex="1" cycler="true"/>';
-					    $tree.='<splitter class="tree-splitter"/>';
-					
-						foreach($Cols as $Col)
-						{
-							//la première colonne est le bouton pour déplier
-								
-								$tree.='<treecol id="treecol_'.$Col["tag"].'" label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"  persist="width ordinal hidden"/>';
-								$tree.='<splitter class="tree-splitter"/>';
-							
-							
-						}
-					
-						$tree.='</treecols>';
-						$tree.= $this->GetTreeChildren($type, $Cols);
-						$tree.='</tree>';
-						$tree.='</box>';
-						$tree.='</vbox>';
+            			$tree.= '<treecols >'.EOL;
+		  					 $tree.= '<treecol id="treecol_Tagdel"  primary="true" label="Tag Delicious"  persist="width ordinal hidden" />'.EOL;
+		  		     			$tree.= '<splitter class="tree-splitter"/>'.EOL;
+		  			 			$tree.= '<treecol id="treecol_descp"  label="Description"  persist="width ordinal hidden" />'.EOL;
+		  			 			$tree.= '<splitter class="tree-splitter"/>'.EOL;
+		  					    $tree.= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />'.EOL;
+	  		    		$tree.= '</treecols>'.EOL;  
+						$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio']";
+	  		    		$Q = $this->site->XmlParam->GetElements($Xpath);
+	  		    		$sql = $Q[0]->select.$Q[0]->from;
+
+						$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
+						$db->connect();
+						$req = $db->query($sql);
+						$db->close();
+						$tree .= '<treechildren>'.EOL;
+	  		    		$tree.= '<treeitem container="true" open="false">'.EOL;
+                        	$tree.= '<treerow>'.EOL;
+                        	 	 $tree.= '<treecell label="Dictionnaire ieml"/>' .EOL;
+                        	 $tree.= '</treerow>'.EOL;
+                        	 $tree .= '<treechildren>'.EOL;
+	  		    			 while($reponse=mysql_fetch_array($req)){
+						     	$tree.= '<treeitem container="true" open="false">'.EOL;
+                        	 		$tree.= '<treerow>'.EOL;
+                        	 		 	$tree.= '<treecell label="'.$reponse[0].'"/>' .EOL;
+                        	  	 	$tree.= '</treerow>'.EOL;
+	  		    			     	$tree.= $this->GetTreeChildrenDictio($reponse[0],$reponse[1]);
+	  		    			  	$tree.= '</treeitem>'.EOL;
+
+	  		    		}
+	  		    		$tree .= '</treechildren>'.EOL;
+	  		    		$tree.= '</treeitem>'.EOL;
+	  		    		$tree .= '</treechildren>'.EOL;
+						$tree.='</tree>'.EOL;
+						$tree.='</box>'.EOL;
+						$tree.='</vbox>'.EOL;
 						if($this->trace)
                         	 echo "Xul:GetTree_ieml_onto:tree". $tree."<br/>";  	
 						return $tree;
 
    }
 	
-	
+function GetTreeChildrenDictio($parent,$id){
+        $container="false";
+		
+        $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio_children']";
+		$Q = $this->site->XmlParam->GetElements($Xpath);
+		$from = str_replace("-parent-", $id, $Q[0]->from);
+		$sql = $Q[0]->select.$from;
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
+		$db->connect();
+		$req = $db->query($sql);
+		$db->close();
+		 $tree .= '<treechildren>'.EOL;
+		while($r = mysql_fetch_array($req))
+		{  
+			$tree.= '<treeitem >'.EOL;
+				$tree.= '<treerow>'.EOL;
+	  				$tree.= '<treecell label=""/>'.EOL ;	
+	                $tree.= '<treecell  label="'.$r[0].'" />'.EOL ;	
+	             	$tree.= '<treecell  label="'.$r[1].'"/>'.EOL ;
+	      		$tree.= '</treerow>'.EOL;
+	      	$tree.= '</treeitem>'.EOL;	
+	                        	  				
+		}
+		 $tree .= '</treechildren>'.EOL;
+		if($this->trace)
+             echo "Xul:GetTreeChildren:tree". $tree."<br/>";  
+		return $tree;
+
+	}	
  }
 ?>

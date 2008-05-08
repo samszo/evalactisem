@@ -51,17 +51,17 @@ echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
-echo '<?xul-overlay href="overlay/treeDicoIeml.xul" ?>';
+echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 
 ?>
 <window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
-	
+
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
 	<script src="js/TradTagIeml.js"/>
 	<script src="js/groupbox.js"/>
 	<script src="js/tree.js"/>
-	
+
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
@@ -115,7 +115,7 @@ echo '<?xul-overlay href="overlay/treeDicoIeml.xul" ?>';
 									<menuitem label="Tags par Bundles" value="tagsFbundles"/>
 								</menupopup>
 							</menulist>
-						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
+						    <button id="RecupFlux" label="Afficher le graphique"  onclick="recup_dictio();RecupDeliciousFlux();"/>
 					</groupbox>
 					
 					<groupbox orient="vertical" >
@@ -172,8 +172,7 @@ echo '<?xul-overlay href="overlay/treeDicoIeml.xul" ?>';
  </hbox>
  <script type="text/javascript">
  	//récupération des flux
- 	
- 	RecupDeliciousFlux();
+    RecupDeliciousFlux();
  	
  </script>
  

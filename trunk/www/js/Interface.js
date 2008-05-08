@@ -1,3 +1,4 @@
+
 E="*";
 P=";";
 function show_tooltip(evt)
@@ -84,7 +85,6 @@ function DelIiciousTreeGraph(result,param){
 	query=document.getElementById("requette").selectedItem.value;
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
-    //alert(result);
 	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
   	
   	nSec = iterSec.iterateNext();
@@ -146,9 +146,8 @@ function DelIiciousTreeGraph(result,param){
 
 function SaveFlux(result,param){
 	
-	
-	Flux=result;
 	DelIiciousTreeGraph(result,param);
+	Flux=result;
 }
 
 function Trad_Pars_Ieml(result, param){
@@ -183,8 +182,6 @@ function Trad_Pars_Ieml(result, param){
                 }
                 
         }
-                
-       
         arrNom = arrNoms.split(P);
         if(result!=1){
 	        T=result.split(E);
@@ -217,7 +214,7 @@ function Trad_Pars_Ieml(result, param){
 		                                
 		                              
                                   }
-                           // alert("il existe plusieurs traduction"+nouv_syn);
+                           
                         }else
                             if(iemlTrad.length==2){
                                 synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
@@ -225,7 +222,7 @@ function Trad_Pars_Ieml(result, param){
                                 FluxS+=arrNom[i]+P;
                                 descpS+=ieml[1];
                                 
-                                //alert("il existe qu 'une seul traduction: "+FluxS);
+                                
                                 
                         }
                         
@@ -531,10 +528,10 @@ function Select_NoTrad(id,treecol){
 function Select_Dictio(id,treecol1,treecol2){
 	
 	var tree = document.getElementById(id);
+	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   	var txtcode_flux=document.getElementById("code-trad-flux");
   	var txtcode_ieml = document.getElementById("code-trad-ieml");
   	var txtlib_ieml=document.getElementById("lib-trad-ieml");
-  	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   	txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol2));
     txtcode_ieml.value= tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol1));
 }

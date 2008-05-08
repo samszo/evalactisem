@@ -18,7 +18,7 @@
 	<box id="box" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script >
     	function ChargeUrl(src){
-	    	alert(src);
+	    	
 	    	var iFrame =parent.document.getElementById('webFrame');
     		iFrame.setAttribute("src",src);
     	}
