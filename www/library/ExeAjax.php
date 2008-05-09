@@ -137,7 +137,7 @@
                 $sql = $Q[0]->insert.$values;
                 $result = $db->query($sql);
                 $resp=mysql_fetch_array($result);
-                
+                 echo "==||".utf8_decode($libIeml);
                 //insertion de la traduction dans la table des utilisateurs
                 
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
@@ -169,7 +169,7 @@
                 $db->connect();
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
-                 echo "==||".utf8_decode($libIeml);
+                
                 //requête pour Supprimer une traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
@@ -178,13 +178,6 @@
                 $where = str_replace("-idIeml-", $res[1], $where);
                 
                 $sql = $Q[0]->delete.$Q[0]->from.$where;
-                $result = $db->query($sql);
-                //suppression de la traduction de la table ieml_onto;
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_onto']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where = str_replace("-idIeml-", $res[1], $Q[0]->where);
-                $sql = $Q[0]->delete.$Q[0]->from.$where;
-                echo $sql;
                 $result = $db->query($sql);
                 //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";

@@ -385,7 +385,7 @@ function AddTrad(){
 	Tree_AddItem(codeFlux, cells);
 	*/
 	
-	SetDonnee();
+	//SetDonnee();
 	
 }   
 
