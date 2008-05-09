@@ -37,10 +37,10 @@
                         $resultat = AddDictio($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml']);
                         break;
                 case 'AddTrad':
-                        $resultat = AddTrad($_GET['libIeml'],$_GET['codeFlux'],$_GET['codeIeml'],$_GET['nivIeml']);
+                        $resultat = AddTrad(stripslashes ($_GET['libIeml']),stripslashes ($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
                         break;
                 case 'SupTrad':
-                        $resultat = SupTrad($_GET['codeIeml'],$_GET['libIeml'],$_GET['codeflux']);
+                        $resultat = SupTrad(stripslashes ($_GET['codeIeml']),stripslashes ($_GET['libIeml']),stripslashes ($_GET['codeflux']));
                         break;
                 case 'SetProc':
                         $resultat = SetProc($_GET['id'],$_GET['code'],$_GET['desc']);
@@ -121,12 +121,12 @@
 		        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_recup_id']";
 		        $Q = $objSite->XmlParam->GetElements($Xpath);
 		        $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
-                $from=str_replace("-Iemllib-", $libIeml, $from);
+                $from=str_replace("-Iemllib-",utf8_decode($libIeml), $from);
                 $from=str_replace("-iduti-", $iduti, $from);
-                $sql = $Q[0]->select.$from;
+                echo $sql = $Q[0]->select.$from;
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
-                
+                 echo"==".$res[0];
                 // insertion dans la table de traductions des identifiants
                 
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
@@ -161,14 +161,15 @@
                 
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
-                $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
+                $from=str_replace("-codeFlux-",$codeflux, $Q[0]->from);
                 $from=str_replace("-codeIeml-", $codeIeml, $from);
-                $from=str_replace("-Iemllib-", $libIeml, $from);
-                $sql = $Q[0]->select.$from.$Q[0]->where;
+                $from=str_replace("-Iemllib-",utf8_decode($libIeml), $from);
+                echo $sql = $Q[0]->select.$from.$Q[0]->where;
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
                 $db->connect();
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
+                 echo "==".$res[0];
                 //requête pour Supprimer une traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);

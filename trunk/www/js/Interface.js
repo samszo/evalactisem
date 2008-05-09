@@ -385,7 +385,7 @@ function AddTrad(){
 	Tree_AddItem(codeFlux, cells);
 	*/
 	
-	SetDonnee();
+	//SetDonnee();
 	
 }   
 
@@ -489,7 +489,7 @@ function SupTrad()
 		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
 	else
 		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
-		SetDonnee();
+		//SetDonnee();
 		
 }
 function startSelectTab()
