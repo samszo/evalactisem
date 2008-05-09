@@ -115,7 +115,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									<menuitem label="Tags par Bundles" value="tagsFbundles"/>
 								</menupopup>
 							</menulist>
-						    <button id="RecupFlux" label="Afficher le graphique"  onclick="recup_dictio();RecupDeliciousFlux();"/>
+						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
 					</groupbox>
 					
 					<groupbox orient="vertical" >
@@ -126,7 +126,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
 
 					</groupbox>
-					
 				</vbox>
 				
 				<vbox flex="1">
