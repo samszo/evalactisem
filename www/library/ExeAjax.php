@@ -126,7 +126,7 @@
                 echo $sql = $Q[0]->select.$from;
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
-                 echo"==".$res[0];
+                
                 // insertion dans la table de traductions des identifiants
                 
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
@@ -169,7 +169,7 @@
                 $db->connect();
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
-                 echo "==".$res[0];
+                 echo "==||".utf8_decode($libIeml);
                 //requête pour Supprimer une traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
@@ -321,7 +321,7 @@
     				$Tag.=$reponse[0].";";
     			}
     			
-    			return $Trad."*".$Desc."*".$Tag;
+    			return $Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
                
      }     
         

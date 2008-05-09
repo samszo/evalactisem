@@ -385,7 +385,7 @@ function AddTrad(){
 	Tree_AddItem(codeFlux, cells);
 	*/
 	
-	//SetDonnee();
+	SetDonnee();
 	
 }   
 
@@ -481,7 +481,7 @@ function SupTrad()
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
    
-   alert(codeIeml.value);
+    alert(libIeml.value);
 	url = urlExeAjax+"?f=SupTrad&codeIeml="+codeIeml.value+"libIeml="+libIeml.value+"&codeflux="+codeFlux.value;
    
 	//vérification des valeursboxlistJ
@@ -489,7 +489,7 @@ function SupTrad()
 		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
 	else
 		AjaxRequest(urlAjax+"library/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
-		//SetDonnee();
+		SetDonnee();
 		
 }
 function startSelectTab()
