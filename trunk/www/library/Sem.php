@@ -22,6 +22,12 @@ Class Sem{
 	private $site;
 	private $trace;
     public  $parse;
+    public  $Primis;
+    public $xmlPrimis;
+    public  $Events;
+    public $xmlEvent;
+    
+    
 	function __construct($Site, $FicXml, $So, $De="", $Tr="") {
 		
 		$this->trace = TRACE;
@@ -59,6 +65,19 @@ Class Sem{
 				)
 			);
 		//print_r($this->StarParam);
+		
+		//charge les paramètres des layers
+		if (file_exists("../param/events.xml")) {
+		    $this->xmlEvent = simplexml_load_file("../param/events.xml");
+		} else {
+		    exit('Echec lors de l\'ouverture du fichier events.xml.');
+		}
+		if (file_exists("../param/primitives.xml")) {
+		    $this->xmlPrimis = simplexml_load_file("../param/primitives.xml");
+		} else {
+		    exit('Echec lors de l\'ouverture du fichier primitives.xml.');
+		}
+		
 				
 	}
 	
@@ -210,26 +229,11 @@ Class Sem{
 			echo "Sem.php:GetSvgPie:code".$code."<br/>";
 			
 		
-		$parse = $this->Parse($code);
-		if($this->trace)
-			echo "Sem.php:GetSvgPie:parse".$parse."<br/>";
-		
-		//nettoie le résultat du parser
-		$parse = str_replace("<XMP>","",$parse);
-	    $parse = str_replace("</XMP>","",$parse);
-	    $parse = str_replace("<?xml version=\"1.0\"?>"," ",$parse);
-		$xml = simplexml_load_string($parse);
-		//$xml = simplexml_load_file("../param/ReponseParser.xml");
+		$xml = $this->Parse($code);
 		
 		if($this->trace)
 			echo "Sem.php:GetSvgPie:xml".print_r($xml)."<br/>";
 
-		//charge les paramètres du layers
-		if (file_exists("../param/events.xml")) {
-		    $xmlEvent = simplexml_load_file("../param/events.xml");
-		} else {
-		    exit('Echec lors de l\'ouverture du fichier events.xml.');
-		}
 		//$xmlEvent = simplexml_load_file("../param/events.xml");
 		$arrPrims =array();
 		$arrEvents = array();
@@ -248,15 +252,19 @@ Class Sem{
 					echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
 				
 				//récupére les paramètres du tag
-				$event = $xmlEvent->xpath("//event[@compact='".$tag.".']");
+				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
 				//calcul le tableau des éléments
 				$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
 				foreach ($prims as $prim) {
-					if(array_key_exists($prim,$arrPrims)){
-						$arrPrims[$prim]=$arrPrims[$prim]+1;
-					}else{
-						$arrPrims[$prim]=1;
-					}				
+					//exclusion des vides
+					if($prim!="." && $prim!=".."){
+						//construction des occurences
+						if(array_key_exists($prim,$arrPrims)){
+							$arrPrims[$prim]=$arrPrims[$prim]+1;
+						}else{
+							$arrPrims[$prim]=1;
+						}				
+					}
 				}
 					
 			}
@@ -265,22 +273,16 @@ Class Sem{
 			echo "Sem.php:GetSvgPie:arrEvents=".print_r($arrEvents)."<br/>";
 		if($this->trace)
 			echo "Sem.php:GetSvgPie:arrPrims=".print_r($arrPrims)."<br/>";
-			
+		$this->Events = $arrEvents;	
+		$this->Primis = $arrPrims;	
 		
-		//construction des données de event
-		$donnees = "";
-		$noms = "";
-		foreach ($arrEvents as $tag=>$val) {
-			$event = $xmlEvent->xpath("//event[@compact='".$tag.".']");
-			$noms .= $event[0]["descriptor"].";";
-		    $donnees .= $val.";";	
-		}
-		
+		//construction des données de l'event
+		$arrDon = $this->GetDonneeEvents();
 		$lien= PathWeb.'library/stats.php?large=300';
 		$lien.='&haut=300';
-		$lien.='&titre='.$code;
-		$lien.='&donnees='.$donnees;
-		$lien.='&noms='.$noms;
+		$lien.='&titre='.$arrDon["titre"];
+		$lien.='&donnees='.$arrDon["donnees"];
+		$lien.='&noms='.$arrDon["noms"];
 		$lien.='&type=pie';
 		$lien.='&col1=yellow';
 		$lien.='&col2=red';
@@ -290,21 +292,13 @@ Class Sem{
 		$arrResult = array();
 		$arrResult["GraphEvent"]=$lien;
 
-		//construction des données de l'event
-		$donnees = "";
-		$noms = "";
-		foreach ($arrPrims as $tag=>$val) {
-			if($tag!="."){
-				$noms .= $tag.";";
-			    $donnees .= $val.";";	
-			}
-		}
-		
+		//construction des données de primitive
+		$arrDon = $this->GetDonneePrimis();
 		$lien= PathWeb.'library/stats.php?large=300';
 		$lien.='&haut=300';
-		$lien.='&titre='.$code;
-		$lien.='&donnees='.$donnees;
-		$lien.='&noms='.$noms;
+		$lien.='&titre='.$arrDon["titre"];
+		$lien.='&donnees='.$arrDon["donnees"];
+		$lien.='&noms='.$arrDon["noms"];
 		$lien.='&type=pie';
 		$lien.='&col1=yellow';
 		$lien.='&col2=red';
@@ -317,6 +311,41 @@ Class Sem{
 		
 	}
 	
+	function GetDonneeEvents(){
+		
+		//construction des données de event
+		$donnees = "";
+		$noms = "";
+		$titre = "Events";
+		foreach ($this->Events as $tag=>$val) {
+			$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+			$noms .= $event[0]["descriptor"].";";
+		    $donnees .= $val.";";	
+		}
+		
+		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
+		
+	}
+	
+	function GetDonneePrimis(){
+		
+		//construction des données de event
+		$donnees = "";
+		$noms = "";
+		$titre = "Primitives";
+		foreach ($this->Primis as $tag=>$val) {
+			if($this->trace)
+				echo "Sem.php:GetDonneePrimis:".$tag." ".$val."<br/>";
+			$primis = $this->xmlPrimis->xpath("//primitive[@compact='".$tag.".']");
+			if($this->trace)
+				echo "Sem.php:GetDonneePrimis://primitive[@compact='".$tag.".']<br/>";
+			$noms .= $primis[0]["descriptor"].";";
+		    $donnees .= $val.";";	
+		}
+		
+		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
+		
+	}
 	
 	function Parse($code=""){
 	
@@ -347,7 +376,14 @@ Class Sem{
 		if($this->trace)
 			echo "Sem.php:Parse:sResult".$sResult."<br/>";
 		
-		return $sResult;
+		
+		//nettoie le résultat du parser
+		$sResult = str_replace("<XMP>","",$sResult);
+	    $sResult = str_replace("</XMP>","",$sResult);
+	    $sResult = str_replace("<?xml version=\"1.0\"?>"," ",$sResult);
+		$xml = simplexml_load_string($sResult);
+			
+		return $xml;
 	}
 
 	function GetEventListener($id,$params){
