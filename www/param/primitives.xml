@@ -1,0 +1,7 @@
+<primitives>
+<primitive compact='U.' descriptor='virtuel' />
+<primitive compact='A.' descriptor='actuel' />
+<primitive compact='S.' descriptor='signe' />
+<primitive compact='T.' descriptor='chose' />
+<primitive compact='B.' descriptor='être' />
+</primitives>
