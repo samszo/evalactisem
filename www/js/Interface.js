@@ -554,16 +554,16 @@ function Select_Trad(id,treecol){
  catch(e){}
   
 }
-function Parser(op){
+function Parser(op,type){
     var tree = document.getElementById("Signl_Trad");
     Iemlcode=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_Signl_Trad"));
     //prise en compte de la sélection multiple
     Iemlcode=GetIemlTreeExp("Signl_Trad", 2, op);
 	//var url = urlAjax+"library/ExeAjax.php?f=Parse&code="+Iemlcode;
 	//AjaxRequest(url,"Afficher"," ","");
-	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode;
+	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode+"&type="+type;
 	url = GetResult(url);
-	Trad('webFrame',url)
+	Trad('iemlFrame',url)
 	
 }
 

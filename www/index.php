@@ -72,9 +72,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 
 		<popupset id="popupset">
 			<popup id="clipmenu" onpopupshowing="javascript:;">
-				<menuitem label="Parser avec l'opérateur d'union" oncommand="Parser('|');"/>
-				<menuitem label="Parser avec l'opérateur de différence" oncommand="Parser('^');"/>
-				<menuitem label="Parser avec l'opérateur d'intersection" oncommand="Parser('&amp;');"/>
+				<menuitem label="Voir les primitives" oncommand="Parser('|','Primitive');"/>
+				<menuitem label="Voir les événements" oncommand="Parser('|','Event');"/>
 			</popup>
 		</popupset>
 	<hbox >
@@ -129,9 +128,16 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				</vbox>
 				
 				<vbox flex="1">
-					<groupbox flex="3" >
+					<groupbox flex="3" orient="horizontal" >
 						<caption label="Visualisation des graphiques"/>
-						<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
+						<groupbox flex="1" >
+							<caption label="del.icio.us"/>
+							<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
+						</groupbox>
+						<groupbox flex="1" >
+							<caption label="IEML"/>
+							<iframe id="iemlFrame" flex="1" src="library/CreaPapiDyna.php"  />
+						</groupbox>
 					</groupbox>
 			        <splitter collapse="after" resizeafter="farthest">
 						<grippy/>

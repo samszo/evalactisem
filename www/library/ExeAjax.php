@@ -52,7 +52,7 @@
                         $resultat = Parse($code);
                         break;
                 case 'GetGraph':
-                        $resultat = GetGraph($code);
+                        $resultat = GetGraph($code,$_GET['type']);
                         break;
                 case 'GraphGet':
                 	    $resultat=GraphGet($mbook);
@@ -260,7 +260,7 @@
         }
 
 
-        function GetGraph($code){
+        function GetGraph($code,$type){
         
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
@@ -270,7 +270,7 @@
                 //$svg = $objSite->GetCurl($liens["GraphPrimitive"]);
                 //header("Content-Type: image/svg+xml");
                 
-                return $liens["GraphPrimitive"];
+                return $liens["Graph".$type];
 
         }
         

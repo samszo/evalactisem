@@ -14,9 +14,11 @@ Date de modification : 21/11/2007
 Class XmlParam{
 	public $FicXml;
 	private $xml;
+	private $trace;
 
 	function __construct($FicXml) {
-	    $this->FicXml = $FicXml;
+	    $this->trace = TRACE;
+		$this->FicXml = $FicXml;
 		//echo "On charge les paramètres : ".$FicXml."<br/>\n";
 		if ($xml = simplexml_load_file($FicXml))
 			$this->xml = $xml;
@@ -25,6 +27,8 @@ Class XmlParam{
 	
 	public function GetElements($Xpath){
 		//echo 'On cherche le xpath '.$Xpath.'<br/>';
+		if($this->trace)
+			echo "XmlParam:GetElements:Xpath=".$Xpath."<br/>";
 		return $this->xml->xpath($Xpath);
 	}
 	
