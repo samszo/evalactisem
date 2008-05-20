@@ -41,23 +41,42 @@ function RecupDeliciousFlux(){
 	    
 	 
 	if((query_flux=="GetAllTags")){
-		
-		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'SaveFlux','');
+		urlparams="requette=GetAllTags"+"&"+"req="+query_graph;
+		//alert(urlparams);
+		AjaxRequestPost(urlAjax+"library/RecupFlux.php",'SaveFlux',urlparams,'');
+		//AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'SaveFlux','');
+		document.getElementById("titre").value="Tags en fonction de count";
 	}
 	
 	if((query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
-		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+		urlparams="requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value;
+		AjaxRequestPost(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph',urlparams,'','');
+       
+        //AjaxRequest(urlAjax+"library/RecupFlux.php" ,'DelIiciousTreeGraph','');
+        if(document.getElementById("type").selectedItem.value="tagsFbundles")
+        	document.getElementById("titre").value="Tags en fonction de count";
+        else
+        	document.getElementById("titre").value="Bundels en fonction de Tags";
+        	
     }else
     	if(query_flux=="GetRecentPosts"){
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
     		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
+            if(document.getElementById("type").selectedItem.value=="tagsFbundles")
+        		document.getElementById("titre").value="Tags en fonction de count";
+       	   else
+        		document.getElementById("titre").value="Bundels en fonction de Tags";
     }else
         if(query_flux=="GetPosts"){
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
     		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
+            if(document.getElementById("type").selectedItem.value=="tagsFbundles")
+        		document.getElementById("titre").value="Bundels en fonction de Tags";
+        	else
+        		document.getElementById("titre").value="Tags en fonction de count";
     }
 
 
@@ -264,20 +283,26 @@ function Trad_Pars_Ieml(result, param){
 	var doc = document.getElementById('contDonnee');
 		doc.setAttribute("hidden","false");
 	if(FluxS.length>2){
-		
-		var url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
-		AppendResult(url,doc,false);
+		//var url=urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
+		var url = urlAjax+"library/ExeAjax.php";
+		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
+		AppendResultPost(url,urlparams,doc,false);
+		//AppendResult(url,doc,false);
 	    
 	}
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
-		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
-		AppendResult(url,doc,true);
+		url = urlAjax+"library/ExeAjax.php";
+		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
+		AppendResultPost(url,urlparams,doc,true);
+		//AppendResult(url,doc,true);
     }
 	//ajoute le tree des no trad
 	if(FluxN.length>2){
-		url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
-		AppendResult(url,doc,true);
+		//url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
+		url = urlAjax+"library/ExeAjax.php";
+		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
+		AppendResultPost(url,urlparams,doc,true);
 	}
 	//url = urlAjax+"library/ExeAjax.php?f=GetTreeDictio";
 	//AppendResult(url,doc,true);
@@ -385,7 +410,7 @@ function AddTrad(){
 	Tree_AddItem(codeFlux, cells);
 	*/
 	
-	//SetDonnee();
+	SetDonnee();
 	
 }   
 

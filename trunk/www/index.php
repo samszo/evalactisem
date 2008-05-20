@@ -106,7 +106,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="vertical" >
 						<caption label="Graphique"/>
 						    <label value="Titre"/>
-							<textbox persist="value" id="titre" value="Traduction du Flux"/>
+							<textbox persist="value" id="titre" value="Tags en fonction de count"/>
 							<label value="Type "/>
 							<menulist id="type"  >
 								<menupopup>

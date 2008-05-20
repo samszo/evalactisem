@@ -9,10 +9,17 @@
 
 
         $resultat = "";
+
+        
+        
+        if(isset($_POST['f'])){
+              $fonction = $_POST['f'];
+              echo $fonction;
+        }else
         if(isset($_GET['f']))
                 $fonction = $_GET['f'];
-        else
-                $fonction = '';
+        else 
+        		$fonction ='';
         if(isset($_GET['id']))
                 $id = $_GET['id'];
         else
@@ -61,8 +68,9 @@
         	        	$resultat=Recup_onto_trad();
                 	    break;
                 case 'GetTreeTrad':
-        	        	$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
-                	    break;
+        	        	$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd']);
+                	   
+        	        	break;
                 case 'insert_ieml_onto':
                 	   $resultat=insert_ieml_onto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
                 	   break;
@@ -79,7 +87,7 @@
         function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 			
         	global $objSite;
-
+			echo "flux=".$flux;
         	if($type=="Signl_Trad"){
 			
 				$arrTrad=explode(";",$trad);
@@ -95,7 +103,8 @@
         	$objXul = new Xul($objSite);
         	
         	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
-            return $ihm;
+            
+        	return $ihm;
         }
         
         function GetTreeDictio(){
