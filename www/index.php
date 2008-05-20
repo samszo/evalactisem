@@ -54,7 +54,7 @@ echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 
 ?>
-<window id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+<window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 
 	<script src="js/Interface.js"/>
 	<script src="js/ajax.js"/>
@@ -121,7 +121,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<caption label="IEML"/>
 						
 			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
-			    			<button hidden="true" id="TypeGraph" label="Affichage du graphique" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
+			    			<button hidden="false" id="PostTo" label="Mettre à jour del.icio.us" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="MajFlux();"/>
 			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
 
 					</groupbox>
@@ -168,7 +168,26 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								<label id="trad-message" />
 							</groupbox>				
 						</vbox>
-						<box id="contDonnee" flex="1" hidden="true" />
+						<box id="contDonnee" flex="1" hidden="true" >
+						<tabbox flex="1" >
+						    <tabs >
+						        <tab label="Tags traduits" />
+						        <tab label="Tags avec plusieurs traduction" />
+						        <tab label="Tags sans traduction" />
+						    </tabs>
+						    <tabpanels flex="1">
+						        <tabpanel >
+									<box id="tpSingleTrad" flex="1" />
+						         </tabpanel>
+						        <tabpanel>
+									<box id="tpMultiTrad" flex="1" />
+						         </tabpanel>
+						        <tabpanel>
+									<box id="tpNoTrad" flex="1" />
+						         </tabpanel>
+						    </tabpanels>
+						</tabbox>
+						</box>
 						<vbox id="treeDicoIeml" flex="1" hidden="true" />					
 					</groupbox>
 				</vbox>

@@ -27,29 +27,23 @@ require_once ("../param/ParamPage.php");
 
         </tooltip>
     </popupset>
-	<box id="<?php echo $objSite->scope["box"]; ?>"  class="editableTree" >
+	<box id="<?php echo $objSite->scope["box"]; ?>" flex="1" class="editableTree" >
 		<tree id="tree<?php echo $type;?>"
-			width="300" height="400"
 			context="iemlmenu"			
 			enableColumnDrag="true"
-			fctStart="startEditable"
-			fctSave="saveEditable"
-			fctInsert="startInsert"
-			fctDelete="startDelete"
-			fctSelect="startSelect"
+			flex="1"
 			typesource="<?php echo $type;?>"	
 			idTree="tree<?php echo $type;?>">
 				<treecols>
 				<?php
 					//le conteneur doit avoir comme id id pour editableTree
-					echo('<treecol id="id" label="branche" primary="true" flex="1" cycler="true"/>');
+					echo('<treecol id="id" label="branche" primary="true"  cycler="true"/>');
 					echo('<splitter class="tree-splitter"/>');
 					
 					foreach($Cols as $Col)
 					{
 						//la première colonne est le bouton pour déplier
-							
-							echo('<treecol id="treecol_'.$Col["tag"].'"  label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"/>');
+							echo('<treecol id="treecol_'.$Col["tag"].'" flex="1" label="'.$Col["tag"].'"  hidden="'.$Col["hidden"].'"/>');
 							echo('<splitter class="tree-splitter"/>');
 						
 						
