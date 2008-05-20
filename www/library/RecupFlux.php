@@ -8,9 +8,12 @@
   
    $oDelicious=$_SESSION['Delicious'];
    
+   $requette= $_POST["requette"];
+   $requete_g=$_POST["req"];
+   
    $login=$_SESSION['loginSess'];
-   $requette= $_GET["requette"];
-   $requete_g=$_GET["req"];
+  // $requette= $_GET["requette"];
+   //$requete_g=$_GET["req"];
    $tag=$_GET["tag"];
    $count=$_GET["count"];
    $url=$_GET["url"];

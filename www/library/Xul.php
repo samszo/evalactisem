@@ -497,6 +497,7 @@ class Xul{
               	$tree.='<box id="'.$this->site->scope["box"].'" flex="1"  class="editableTree" >'.EOL;
     			$tree.='<tree id="'.$type.'"
 						flex="1"
+						style="width:600; height:400"
 						onselect="Select_Dictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
 						typesource="'.$type.'"	
 						Treeid="'.$type.'">'.EOL;

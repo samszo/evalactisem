@@ -81,6 +81,7 @@ function AjaxRequest(url,fonction_sortie,params,id) {
    
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
+ 	this.urlparams =encodeURI(urlparams);
  	this.params = params;
 	this.id=id;
 	//alert(params);
@@ -111,9 +112,57 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 
         if (this.req) {
             this.req.onreadystatechange = this.req.onreadystatechange = function () { processReqChange(); }
-            this.req.open("GET", this.url,false);
+            this.req.open("POST", this.url,false);
 			this.req.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
-            this.req.send();
+            this.req.send(this.urlparams);
+		}
+
+    } else {
+
+		alert("Votre navigateur ne connait pas l'objet XMLHttpRequest.");
+
+	}
+
+}
+
+function AjaxRequestPost(url,fonction_sortie,urlparams,params,id) {
+   
+ 	this.url = encodeURI(url);
+ 	this.fonction_sortie = fonction_sortie;
+ 	this.urlparams =encodeURI(urlparams);
+ 	this.params = params;
+	this.id=id;
+	//alert(params);
+
+	var ajaxRequest = this;
+
+    if (window.XMLHttpRequest) {
+
+	    this.req = new XMLHttpRequest();										// XMLHttpRequest natif (Gecko, Safari, Opera, IE7)
+
+		try {
+	    	netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");		// Mozilla Security
+	   	} catch (e) {}
+
+		this.req.onreadystatechange = function () { processReqChange(); }
+        
+		this.req.open("POST", this.url,true);
+		this.req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
+        this.req.send(this.urlparams);
+
+		try {
+	    	//console.log("request: "+url);
+	   	} catch (e) {}
+
+	} else if (window.ActiveXObject) {
+
+	    this.req = new ActiveXObject("Microsoft.XMLHTTP");						 // IE/Windows ActiveX
+
+        if (this.req) {
+            this.req.onreadystatechange = this.req.onreadystatechange = function () { processReqChange(); }
+            this.req.open("POST", this.url,true);
+			this.req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
+            this.req.send(this.urlparams);
 		}
 
     } else {
@@ -144,7 +193,8 @@ function processReqChange() {
 			} catch (e) {}
 
 			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
-			eval(this.fonction_sortie+"(this.req.responseText,'"+this.params+"',+this.id)");
+			
+			eval(this.fonction_sortie+"(this.req.responseText)");
             try{
 	            if(this.req.responseText)
 	            		document.getElementById(this.id).value =this.req.responseText
@@ -157,3 +207,34 @@ function processReqChange() {
 	}
 }
 
+function AppendResultPost(url,urlparams,doc,ajoute) {
+  
+  try {
+	dump("AppendResultPost IN "+url+"\n");
+	p = new XMLHttpRequest();
+	p.onload = null;
+	p.open("POST",url, false);
+	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	p.send(urlparams);
+
+	if (p.status != "200" ){
+	      alert("Réception erreur " + p.status);
+	}else{
+	    response = p.responseText;
+	    //alert(response);
+		xulData="<box id='dataBox' flex='1'  " +
+	          "xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'>" +
+	          response + "</box>";
+		var parser=new DOMParser();
+		var resultDoc=parser.parseFromString(xulData,"text/xml");
+		if(!ajoute){
+			//vide le conteneur
+			while(doc.hasChildNodes())
+				doc.removeChild(doc.firstChild);
+		}
+		//ajoute le résultat
+		doc.appendChild(resultDoc.documentElement);
+	}
+	dump("AppendResultPost OUT \n");
+   } catch(ex2){alert(ex2);dump("::"+ex2);}
+}
