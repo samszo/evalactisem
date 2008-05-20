@@ -286,7 +286,7 @@ function Trad_Pars_Ieml(result, param){
 		//var url=urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
 		var url = urlAjax+"library/ExeAjax.php";
 		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
-		AppendResultPost(url,urlparams,doc,false);
+		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
 		//AppendResult(url,doc,false);
 	    
 	}
@@ -294,7 +294,7 @@ function Trad_Pars_Ieml(result, param){
 	if(FluxM.length>2){
 		url = urlAjax+"library/ExeAjax.php";
 		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
-		AppendResultPost(url,urlparams,doc,true);
+		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),true);
 		//AppendResult(url,doc,true);
     }
 	//ajoute le tree des no trad
@@ -302,7 +302,7 @@ function Trad_Pars_Ieml(result, param){
 		//url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		url = urlAjax+"library/ExeAjax.php";
 		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
-		AppendResultPost(url,urlparams,doc,true);
+		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),true);
 	}
 	//url = urlAjax+"library/ExeAjax.php?f=GetTreeDictio";
 	//AppendResult(url,doc,true);

@@ -374,8 +374,6 @@ class Xul{
 
     function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 
-		$flex = "flex='3'";
-		$splitter = "<splitter />";
     	if($type=="No_Trad"){
     		$label = "Aucunne traduction";
 			$flex = "flex='1'";
@@ -383,16 +381,17 @@ class Xul{
     	}
     	if($type=="Multi_Trad"){
     		$label = "Plusieurs traductions";
-			$flex = "flex='2'";
+			$flex = "flex='1'";
 			$splitter = "";
     	}
     	if($type=="Signl_Trad"){
     		$label = "Une traduction";
-			$splitter = "";
+			$flex = "flex='1'";
+    		$splitter = "";
     	}
     	
-    	$ihm = '<vbox '.$flex.' style="background-color:blue;" >';	
-    	$ihm .= '<label value="'.$label.'" style="font:arial;size:10;color:yellow" />';
+    	//$ihm = '<vbox '.$flex.' style="background-color:blue;" >';	
+    	//$ihm .= '<label value="'.$label.'" style="font:arial;size:10;color:yellow" />';
     	$ihm .= '<tree context="clipmenu"			
 			enableColumnDrag="true"
 			typesource="'.$label.'"
@@ -473,7 +472,7 @@ class Xul{
 	  			$ihm .= '</treechildren>';
 	  		$ihm .= '</tree>';
             }
-	  	$ihm .= '</vbox>'.$splitter;
+	  	//$ihm .= '</vbox>'.$splitter;
     	return $ihm;   	
     }
 	
