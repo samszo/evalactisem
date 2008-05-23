@@ -337,7 +337,7 @@ class SauvFlux{
 		$reponse = $db->query($sql);
 	}
 
-   
+    
 }
 	
 	

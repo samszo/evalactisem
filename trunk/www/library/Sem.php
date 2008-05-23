@@ -229,88 +229,120 @@ Class Sem{
 		if($this->trace)
 			echo "Sem.php:GetSvgPie:code".$code."<br/>";
 			
-		
-		$xml = $this->Parse($code);
-		
-		if($this->trace)
-			echo "Sem.php:GetSvgPie:xml".print_r($xml)."<br/>";
-
-		//$xmlEvent = simplexml_load_file("../param/events.xml");
-		$arrPrims =array();
-		$arrEvents = array();
-		//construction des tableaux du nombre d'occurrence
-		foreach($xml->xpath("/ieml/group//genOp[@layer='event']") as $genOps){
-			if($this->trace)
-				echo "Sem.php:GetSvgPie:genOps".print_r($genOps)."<br/>";
-			$a = $genOps->attributes();
-			foreach ($genOps->children() as $tag=>$val) {
-				if(array_key_exists($tag,$arrEvents)){
-					$arrEvents[$tag]=$arrEvents[$tag]+1;
-				}else{
-					$arrEvents[$tag]=1;
-				}
+			$xml = $this->Parse($code);
+		 
+		if(is_object($xml)){
+			
 				if($this->trace)
-					echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
-				
-				//récupére les paramètres du tag
-				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-				//calcul le tableau des éléments
-				$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
-				foreach ($prims as $prim) {
-					//exclusion des vides
-					if($prim!="." && $prim!=".."){
-						//construction des occurences
-						if(array_key_exists($prim,$arrPrims)){
-							$arrPrims[$prim]=$arrPrims[$prim]+1;
+					echo "Sem.php:GetSvgPie:xml".print_r($xml)."<br/>";
+		
+				//$xmlEvent = simplexml_load_file("../param/events.xml");
+				$arrPrims =array();
+				$arrEvents = array();
+				//construction des tableaux du nombre d'occurrence
+				foreach($xml->xpath("/ieml/group//genOp[@layer='event']") as $genOps){
+					if($this->trace)
+						echo "Sem.php:GetSvgPie:genOps".print_r($genOps)."<br/>";
+					$a = $genOps->attributes();
+					foreach ($genOps->children() as $tag=>$val) {
+						if(array_key_exists($tag,$arrEvents)){
+							$arrEvents[$tag]=$arrEvents[$tag]+1;
 						}else{
-							$arrPrims[$prim]=1;
-						}				
+							$arrEvents[$tag]=1;
+						}
+						if($this->trace)
+							echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
+						
+						//récupére les paramètres du tag
+						$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+						//calcul le tableau des éléments
+						$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
+						foreach ($prims as $prim) {
+							//exclusion des vides
+							if($prim!="." && $prim!=".."){
+								//construction des occurences
+								if(array_key_exists($prim,$arrPrims)){
+									$arrPrims[$prim]=$arrPrims[$prim]+1;
+								}else{
+									$arrPrims[$prim]=1;
+								}				
+							}
+						}
+							
 					}
 				}
-					
-			}
+				if($this->trace)
+					echo "Sem.php:GetSvgPie:arrEvents=".print_r($arrEvents)."<br/>";
+				if($this->trace)
+					echo "Sem.php:GetSvgPie:arrPrims=".print_r($arrPrims)."<br/>";
+				$this->Events = $arrEvents;	
+				$this->Primis = $arrPrims;	
+				
+				//construction des données de l'event
+				$arrDon = $this->GetDonneeEvents();
+		
+				$lien= PathWeb.'library/stats.php?large=300';
+				$lien.='&haut=300';
+				$lien.='&titre='.$arrDon["titre"];
+				$lien.='&donnees='.$arrDon["donnees"];
+				$lien.='&noms='.$arrDon["noms"];
+				$lien.='&type=pie';
+				$lien.='&col1=yellow';
+				$lien.='&col2=red';
+				$lien.='&col3=blue';
+				$lien.='&col4=black';
+				
+				$arrResult = array();
+				$arrResult["GraphEvent"]=$lien;
+		
+				//construction des données de primitive
+				$arrDon = $this->GetDonneePrimis();
+				$lien= PathWeb.'library/stats.php?large=300';
+				$lien.='&haut=300';
+				$lien.='&titre='.$arrDon["titre"];
+				$lien.='&donnees='.$arrDon["donnees"];
+				$lien.='&noms='.$arrDon["noms"];
+				$lien.='&type=pie';
+				$lien.='&col1=yellow';
+				$lien.='&col2=red';
+				$lien.='&col3=blue';
+				$lien.='&col4=black';
+				
+				$arrResult["GraphPrimitive"]=$lien;
+		}else{
+			
+				$lien= PathWeb.'library/stats.php?large=400';
+				$lien.='&haut=300';
+				$lien.='&titre=Erreur';
+				$lien.='&donnees='.$arrDon["donnees"];
+				$lien.='&noms='.$xml;
+				$lien.='&type=pie';
+				$lien.='&col1=yellow';
+				$lien.='&col2=red';
+				$lien.='&col3=blue';
+				$lien.='&col4=black';
+				
+				$arrResult = array();
+				$arrResult["GraphEvent"]=$lien;
+		
+				//construction des données de primitive
+				
+				$lien= PathWeb.'library/stats.php?large=400';
+				$lien.='&haut=300';
+				$lien.='&titre=Erreur';
+				$lien.='&donnees='.$arrDon["donnees"];
+				$lien.='&noms='.$xml;
+				$lien.='&type=pie';
+				$lien.='&col1=yellow';
+				$lien.='&col2=red';
+				$lien.='&col3=blue';
+				$lien.='&col4=black';
+			    $arrResult["GraphPrimitive"]=$lien;
 		}
-		if($this->trace)
-			echo "Sem.php:GetSvgPie:arrEvents=".print_r($arrEvents)."<br/>";
-		if($this->trace)
-			echo "Sem.php:GetSvgPie:arrPrims=".print_r($arrPrims)."<br/>";
-		$this->Events = $arrEvents;	
-		$this->Primis = $arrPrims;	
-		
-		//construction des données de l'event
-		$arrDon = $this->GetDonneeEvents();
-		$lien= PathWeb.'library/stats.php?large=300';
-		$lien.='&haut=300';
-		$lien.='&titre='.$arrDon["titre"];
-		$lien.='&donnees='.$arrDon["donnees"];
-		$lien.='&noms='.$arrDon["noms"];
-		$lien.='&type=pie';
-		$lien.='&col1=yellow';
-		$lien.='&col2=red';
-		$lien.='&col3=blue';
-		$lien.='&col4=black';
-		
-		$arrResult = array();
-		$arrResult["GraphEvent"]=$lien;
-
-		//construction des données de primitive
-		$arrDon = $this->GetDonneePrimis();
-		$lien= PathWeb.'library/stats.php?large=300';
-		$lien.='&haut=300';
-		$lien.='&titre='.$arrDon["titre"];
-		$lien.='&donnees='.$arrDon["donnees"];
-		$lien.='&noms='.$arrDon["noms"];
-		$lien.='&type=pie';
-		$lien.='&col1=yellow';
-		$lien.='&col2=red';
-		$lien.='&col3=blue';
-		$lien.='&col4=black';
-		
-		$arrResult["GraphPrimitive"]=$lien;
-		
 		return $arrResult;
 		
-	}
+	   
+}
 	
 	function GetDonneeEvents(){
 		
@@ -323,8 +355,9 @@ Class Sem{
 			$noms .= $event[0]["descriptor"].";";
 		    $donnees .= $val.";";	
 		}
-		$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
-		
+		if($noms!=''|| $donnees!=''){
+			$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
+		}
 		$this->CreatFileXml($ExpIemlXml,$titre.'_'.XmlGraphIeml);
 		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
 		
@@ -351,6 +384,8 @@ Class Sem{
 		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
 		
 	}
+	
+	//	Creation de fichier xml pour les traduction 
 	function CreatFileXml($xmlTrad,$file_name){
  
 		$file=opendir('./'.Flux_PATH);
@@ -390,6 +425,7 @@ Class Sem{
 
 		// request URL
 		$sResult = curl_exec($oCurl);
+		
 		// close session
 		curl_close($oCurl);
 		if($this->trace)
@@ -397,12 +433,19 @@ Class Sem{
 		
 		
 		//nettoie le résultat du parser
+		
 		$sResult = str_replace("<XMP>","",$sResult);
 	    $sResult = str_replace("</XMP>","",$sResult);
-	    $sResult = str_replace("<?xml version=\"1.0\"?>"," ",$sResult);
-		$xml = simplexml_load_string($sResult);
-			
-		return $xml;
+	    if(eregi('<(.*)>(.*)<(.*)>',$sResult)){
+	    	$sResult = str_replace("<?xml version=\"1.0\"?>"," ",$sResult);
+			$xml = simplexml_load_string($sResult);
+			  return $xml;
+	    }else{
+	    	return  $sResult;
+	    }
+		
+	  
+	    
 	}
 
 	function GetEventListener($id,$params){

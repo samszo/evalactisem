@@ -641,6 +641,10 @@ function recup_dictio(){
 	}
 }
 
+function AddPostIemlDelicios(){
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddPostIeml",'Afficher','');
+	
+}
 function Afficher(result,prarm){
 	alert(result);
 }

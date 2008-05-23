@@ -1,5 +1,6 @@
 <?php
         $ajax = true;
+        require('php-delicious/php-delicious.inc.php');
         require('../param/Constantes.php');
         require_once ("../param/ParamPage.php");
         session_start();
@@ -78,6 +79,9 @@
                 case 'GetTreeDictio':
                 	   $resultat=GetTreeDictio();
                 	   break;
+                case 'AddPostIeml':
+                	
+                	$resultat=AddPostIeml();
 		}
         
         echo $resultat; 
@@ -324,8 +328,9 @@
     				$Tag.=$reponse[0].";";
     			}
     			
-    			
-		        $file=opendir('.'.PATH_FILE_FLUX);
+    			// recuperartion de fichier xml
+                
+    			$file=opendir('.'.PATH_FILE_FLUX);
 				while ($entree= readdir($file)){
 					if($entree==XmlFlux){
 						$xml = simplexml_load_file(Flux_PATH.XmlFlux);
@@ -394,5 +399,37 @@
      		
      	}
         
+     	function AddPostIeml(){
+     		global $objSite;
+     		$oDelicious=$_SESSION['Delicious'];
+     	    $oSaveFlux= new SauvFlux();
+     	    
+	     	if ($aPosts = $oDelicious->GetAllPosts()){
+	  			
+	     		$PotsDelicious=$oSaveFlux->aGetPosts($aPosts);
+	     		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
+                	
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+                $sql = $Q[0]->select.$from;
+               
+                $result = $db->query($sql);
+                $db->close();
+    			while($reponse=mysql_fetch_array($result)){
+    				$EexpIeml.=$reponse[1].DELIM_P;
+    				$TagsTrad.=$reponse[0].DELIM_P;
+    			}
+    			$PotsDelicious = str_replace("<![CDATA[","",$PotsDelicious);
+    			$PotsDelicious = str_replace("]]>","",$PotsDelicious);
+    			echo $PotsDelicious;
+    			$xml = simplexml_load_string($PotsDelicious);
+    			
+	     		
+	      }else {
+		        echo $oDelicious->LastErrorString();
+	 	}
+     }
         
         ?>
