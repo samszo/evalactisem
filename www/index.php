@@ -175,9 +175,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						        <tab label="Tags avec plusieurs traduction" />
 						        <tab label="Tags sans traduction" />
 						    </tabs>
-						    <tabpanels flex="1">
+						    <tabpanels flex="1"  >
 						        <tabpanel >
-									<box id="tpSingleTrad" flex="1" />
+									<box id="tpSingleTrad" flex="1"  />
 						         </tabpanel>
 						        <tabpanel>
 									<box id="tpMultiTrad" flex="1" />

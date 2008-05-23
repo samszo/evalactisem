@@ -1,5 +1,5 @@
 <?php
-
+   session_start();
   //
   // Fichier contenant les definitions de constantes
   define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
@@ -27,8 +27,11 @@
 
   define ("XML_CreaRdf",PathRoot."/param/ParamXul.xml");
   define('EOL', "\r\n");
-
-$Site = array(
+  define("XmlFlux",$_SESSION['loginSess']."_Flux.xml");
+  define('XmlGraphIeml' ,$_SESSION['loginSess']."_GraphIeml.xml");
+  define('Flux_PATH', 'tmpFlux/');
+  define('PATH_FILE_FLUX','/tmpFlux');
+  $Site = array(
 	"PATH_WEB" => "http://localhost/evalactisem/", 
 	"SQL_LOGIN" => "root", 
 	"SQL_PWD" => "", 

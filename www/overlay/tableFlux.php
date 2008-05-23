@@ -6,7 +6,8 @@
 	$sDate=$_GET["date"];
 	$sNote=$_GET["note"];
 	
-	$aTag=explode(";",$sTag);
+	
+	$aTag=explode("*",$sTag);
 	$aDesc=explode(";",$sDesc);
 	$aUrl=explode(";",$sUrl);
 	$aDate=explode(";",$sDate);
@@ -41,13 +42,13 @@
 			</listhead>
 			<listcols>
 				<listcol flex="1"></listcol>
-				<splitter class="tree-splitter"/>
+				<splitter />
 				<listcol flex="1"></listcol>
-				<splitter class="tree-splitter"/>
+				<splitter />
 				<listcol flex="1"></listcol>
-				<splitter class="tree-splitter"/>
+				<splitter />
 				<listcol flex="1"></listcol>
-				<splitter class="tree-splitter"/>
+				<splitter />
 				<listcol flex="1"></listcol>
 				
 			</listcols>

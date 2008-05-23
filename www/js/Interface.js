@@ -6,7 +6,7 @@ function show_tooltip(evt)
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
         var  decale_x = matrix.e 
         var  decale_y = matrix.f
-        var values = res.split(P)
+        var values = count.split(P)
         var barre = evt.target.getAttributeNS(null , "id")
         var numero = parseInt(barre.substring(4 , barre.length)) - 1
         if (numero >= 0)
@@ -25,6 +25,7 @@ function hide_tooltip(evt)
 }
 
 function pf_couleur(num, color){
+   
     document.getElementById("colorpicker" + num).hidePopup();
     document.getElementById("tb_0" + num).value =color;
     document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
@@ -41,16 +42,14 @@ function RecupDeliciousFlux(){
 	    
 	 
 	if((query_flux=="GetAllTags")){
-		urlparams="requette=GetAllTags"+"&"+"req="+query_graph;
-		//alert(urlparams);
-		AjaxRequestPost(urlAjax+"library/RecupFlux.php",'SaveFlux',urlparams,'');
-		//AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'SaveFlux','');
+		
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'SaveFlux','');
 		document.getElementById("titre").value="Tags en fonction de count";
 	}
 	
 	if((query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
-		urlparams="requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value;
-		AjaxRequestPost(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph',urlparams,'','');
+		
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','','');
        
         //AjaxRequest(urlAjax+"library/RecupFlux.php" ,'DelIiciousTreeGraph','');
         if(document.getElementById("type").selectedItem.value="tagsFbundles")
@@ -69,10 +68,12 @@ function RecupDeliciousFlux(){
         		document.getElementById("titre").value="Bundels en fonction de Tags";
     }else
         if(query_flux=="GetPosts"){
+        
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
     		AjaxRequest(urlAjax+"library/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&url="+url+"&date="+date+"&req="+document.getElementById("type").selectedItem.value,'DelIiciousTreeGraph','');
+           
             if(document.getElementById("type").selectedItem.value=="tagsFbundles")
         		document.getElementById("titre").value="Bundels en fonction de Tags";
         	else
@@ -82,26 +83,26 @@ function RecupDeliciousFlux(){
 
 }
 
-function pf_dessin(noms, donnees)
+function pf_dessin(query)
 {
 	lien='library/stats.php?large='+escape("400");
+	lien=lien+'&query='+query;
 	lien=lien+'&haut='+escape('300');
 	lien=lien+'&titre='+escape(document.getElementById("titre").value);
-	lien=lien+'&donnees='+escape(donnees);
-	lien=lien+'&noms='+escape(noms);
 	lien=lien+'&type=pie';
 	lien=lien+'&col1='+escape('#FFCC33');
 	lien=lien+'&col2='+escape('#33FFFF');
 	lien=lien+'&col3='+escape('#000066');
 	lien=lien+'&col4='+escape('#000000');
 	document.getElementById("webFrame").setAttribute("src",lien);
-    //alert(lien);
+    
 }
-
 
 function DelIiciousTreeGraph(result,param){
 
 	query=document.getElementById("requette").selectedItem.value;
+	query_graph=document.getElementById("type").selectedItem.value;
+	
 	var parser = new DOMParser();
 	xmlFlux = parser.parseFromString(result, "text/xml");
 	iterSec = xmlFlux.evaluate("/marque", xmlFlux, null, XPathResult.ANY_TYPE, null );
@@ -110,13 +111,20 @@ function DelIiciousTreeGraph(result,param){
   	if(!nSec)
   		return;
 	for (var j = 0; j < nSec.childNodes.length; j++) {
-		if(nSec.childNodes[j].tagName=="nom"){
+		if(nSec.childNodes[j].tagName=="tags"){
+			
 			nom = nSec.childNodes[j].textContent;
 		    
 		    tag=nSec.childNodes[j].textContent;
 		    
 		}
-		if(nSec.childNodes[j].tagName=="nombre"){
+		if(nSec.childNodes[j].tagName=="count"){
+			
+			count = nSec.childNodes[j].textContent;	
+		    
+		}
+		
+		if(nSec.childNodes[j].tagName=="count"){
 			//document.getElementById("donnees").value = nSec.childNodes[j].textContent;	
 		    
 		}
@@ -129,18 +137,6 @@ function DelIiciousTreeGraph(result,param){
 		if(nSec.childNodes[j].tagName=="date"){
 			date = nSec.childNodes[j].textContent;	
 		}
-		if(nSec.childNodes[j].tagName=="noms"){
-			//document.getElementById("noms").value = nSec.childNodes[j].textContent;
-		    abscises=nSec.childNodes[j].textContent;
-			//alert(abscises);
-		}
-		if(nSec.childNodes[j].tagName=="donnees"){
-			ordonnees = nSec.childNodes[j].textContent;	
-		    res=nSec.childNodes[j].textContent;	
-		    //alert(ordonnees);
-		}
-			
-	
 	}
 	Tree= document.getElementById("treeReq");
 	//cache les infos de traduction
@@ -159,7 +155,8 @@ function DelIiciousTreeGraph(result,param){
 		Tree= document.getElementById("treeReq");
 		Tree.setAttribute("src","overlay/tableFlux.php?tag="+tag+"&desc="+desc+"&url="+url+"&date="+date);
 	}
-	pf_dessin(abscises, ordonnees);
+	
+	pf_dessin(query_graph);
    
 }
 
@@ -187,26 +184,15 @@ function Trad_Pars_Ieml(result, param){
         var Trad=new Array();
         var Tag=new Array();
         
-    var parser = new DOMParser();
-        FluxTag = parser.parseFromString(Flux, "text/xml");
-        iterSecTag = FluxTag.evaluate("/marque",FluxTag, null, XPathResult.ANY_TYPE, null );
-        nSecTag = iterSecTag.iterateNext();
-       
-        if(!nSec)
-                return;
-        for (var j = 0; j < nSec.childNodes.length; j++) {
-                if(nSec.childNodes[j].tagName=="nom"){
-                        arrNoms= nSec.childNodes[j].textContent;
-                        
-                }
-                
-        }
-        arrNom = arrNoms.split(P);
-        if(result!=1){
-	        T=result.split(E);
-	        Descp=T[1].split(P);
-	        Trad=T[0].split(P);
-	        Tag=T[2].split(P);
+        
+   	    
+        arrNoms = result.split(E);
+        arrNom= arrNoms[0].split(P);
+        if(arrNoms[1].length > 1){
+        
+	        Descp=arrNoms[2].split(P);
+	        Trad=arrNoms[1].split(P);
+	        Tag=arrNoms[3].split(P);
         }
        
        for(i=0;i<arrNom.length-1;i++){
@@ -216,7 +202,6 @@ function Trad_Pars_Ieml(result, param){
                 if(trad!=E){
                         ieml=trad.split(E);
                         iemlTrad=ieml[0].split(P);
-                                 
                                 if(iemlTrad.length>2){
                                 in_array="false";
                                     for(j=0;j<Descp.length;j++){
@@ -259,10 +244,10 @@ function Trad_Pars_Ieml(result, param){
              }
         }
        
-       	var bdd = T[0].replace(/\\/g, "");
+       	var bdd = arrNoms[1].replace(/\\/g, "");
         synIemlS+=bdd;
-        FluxS+=T[2];
-        descpS+=T[1];
+        FluxS+=arrNoms[3];
+        descpS+=arrNoms[2];
       
     
     
@@ -294,7 +279,7 @@ function Trad_Pars_Ieml(result, param){
 	if(FluxM.length>2){
 		url = urlAjax+"library/ExeAjax.php";
 		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
-		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),true);
+		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),false);
 		//AppendResult(url,doc,true);
     }
 	//ajoute le tree des no trad
@@ -302,7 +287,7 @@ function Trad_Pars_Ieml(result, param){
 		//url = urlAjax+"library/ExeAjax.php?f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		url = urlAjax+"library/ExeAjax.php";
 		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
-		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),true);
+		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
 	//url = urlAjax+"library/ExeAjax.php?f=GetTreeDictio";
 	//AppendResult(url,doc,true);
@@ -502,6 +487,7 @@ function StartSelecTrad(){
 function SupTrad()
 {
 	//récupération des valeurs
+	
 	var libIeml=document.getElementById("lib-trad-ieml");
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
@@ -588,7 +574,7 @@ function Parser(op,type){
 	//AjaxRequest(url,"Afficher"," ","");
 	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode+"&type="+type;
 	url = GetResult(url);
-	Trad('iemlFrame',url)
+	Trad('iemlFrame',url);
 	
 }
 

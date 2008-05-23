@@ -1,6 +1,6 @@
 <?php 
 require('../param/Constantes.php');
-session_sstart();
+session_start();
 header("Content-type: image/svg+xml");
 
 $large = $_GET["large"];
