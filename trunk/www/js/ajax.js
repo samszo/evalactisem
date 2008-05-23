@@ -81,7 +81,6 @@ function AjaxRequest(url,fonction_sortie,params,id) {
    
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
- 	this.urlparams =encodeURI(urlparams);
  	this.params = params;
 	this.id=id;
 	//alert(params);

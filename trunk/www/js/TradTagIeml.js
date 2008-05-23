@@ -2135,6 +2135,7 @@ this.recherchez=function(searchString) {
   //alert( searchREstring);
 
   if ( ! hasAlphaNum) {
+    alert(searchString);
     alert( "cha&#238;ne de caract&#232;res mal form&#233;e");
     return; 
   }

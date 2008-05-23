@@ -1,14 +1,42 @@
-<?php header("Content-type: image/svg+xml");
+<?php 
+require('param/Constantes.php');
+session_start();
+header("Content-type: image/svg+xml");
+
+
+
 $large = $_GET["large"];
 $haut = $_GET["haut"];
 $titre = $_GET["titre"];
-$donnees = $_GET["donnees"];
-$noms = $_GET["noms"];
 $type = $_GET["type"];
 $col1 = $_GET["col1"];
 $col2 = $_GET["col2"];
 $col3 = $_GET["col3"];
 $col4 = $_GET["col4"];
+$query=$_GET["query"];
+
+
+function Parse($query){
+	
+	    $flux=$_SESSION['loginSess'].'.xml';
+		$file=opendir('./'.PATH_FILE_FLUX);
+		while ($entree= readdir($file)){
+			if($entree==$flux){
+				$xml = simplexml_load_file(PATH_FILE_FLUX."/".$flux);
+				echo $entree;
+				break;
+		    }else
+		     return 'erreur';
+		}
+		if($query=="tagsFbundles"){
+			
+			return $xml->bundles."*".$xml->nbrtag;
+			
+		}else
+		
+			return $xml->tags.'*'.$xml->count;
+		
+}
 
 function faire_rect($x,$y,$width,$height,$style,$id)
 {print("<rect id='".$id."' x='".$x."' y='".$y."' width='".$width."' height='".$height."' style='".$style."'/>\n");}
@@ -302,8 +330,9 @@ $chemin="M".($xd+2*$unite_x)." ".$yd." l".$unite_x." -".$unite_x." 0 ".round(abs
 faire_path($chemin,"opacity:0.5;stroke:".$col3.";fill:".$col2.";","dat3".$i);
 }}
 
-function faire_svg()
-{global $large,$haut,$nbnoms,$type,$titre,$col1;
+function faire_svg(){
+global $large,$haut,$nbnoms,$type,$titre,$col1;	
+
 print("<?xml version='1.0' encoding='iso-8859-1'?>\n");
 print("<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' id='root' xml:space='preserve' width='".$large."' height='".$haut."'>\n"); 
 print("<rect x='0' y='0' width='".$large."' height='".$haut."' style='fill:".$col1.";' pointer-events='none'/>\n"); 
@@ -343,15 +372,20 @@ print("<text id='tooltip_text' x='50' y='15' text-anchor='middle' fill='black'> 
 print("</g>\n");
 print("</svg>");}
 
+$flux=explode('*',Parse($query));
+$donnees=$flux[1];
+$noms=$flux[0];
+
 if ($donnees!="")
 {analyse_donnees();minmax();
 if ($noms!="") {analyse_noms();} else {$nbnoms=0;};
 faire_svg();}
-else
-{print("<?xml version='1.0' encoding='iso-8859-1'?>\n");
+else{
+
+print("<?xml version='1.0' encoding='iso-8859-1'?>\n");
 print("<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' id='root' xml:space='preserve' width='".$large."' height='".$haut."'>\n"); 
 print("<rect x='0' y='0' width='".$large."' height='".$haut."' style='fill:".$col1.";'/>\n");
-print("<text x='10' y='50'>Il faut entrer des données!</text>\n");
+print("<text x='10' y='50'>".Parse($query)."</text>\n");
 print("</svg>");}
 
 ?>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 class SauvFlux{
 	public $descFlux_Band;
@@ -183,8 +182,6 @@ class SauvFlux{
 		$desc="tag";
 		$niv=1;
 		
-		
-	  	
 		if ($aPosts = $oDelicious->GetAllTags()) {
 	  	  foreach ($aPosts as $aPost) { 
 		           
@@ -340,9 +337,7 @@ class SauvFlux{
 		$reponse = $db->query($sql);
 	}
 
-    function aAddPost($objSite){
-    	
-    }
+   
 }
 	
 	
