@@ -1,7 +1,6 @@
 <?php
+session_start();
 
-
-   
 class SauvFlux{
 	public $descFlux_Band;
 	public $niveauFlux_Band;
@@ -28,8 +27,6 @@ class SauvFlux{
 		$parent_Band="";
 		$desc="tag";
 		$niv=1;
-		
-		
 		
 		
 	   if ($aPosts = $oDelicious->GetAllBundles()) {
@@ -176,7 +173,7 @@ class SauvFlux{
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
 	   	 
-		 return "<nom ieml='n.u.-'><![CDATA[$name]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[$aTag]]></nombre>"; 
+		 return "<marque ieml='t.u.-'> <bundles> $name </bundles> <Nbrtag > $aTag </Nbrtag> </marque>"; 
 	   	 
 	}
 	
@@ -250,24 +247,25 @@ class SauvFlux{
     function aGetPosts($aPosts){
 
 		foreach ($aPosts as $aPost) { 
-  			$aDesc.=$aPost['desc']."; ";
-			$aUrl.=$aPost['url']."; ";
-  			$aUdate.=$aPost['updated']."; ";
-  			$aNote.=$aPost['notes']."; ";
-  	        foreach($aPost['tags'] as $aTags){
-  	    	$tag.=$aTags."; ";
+  			$aDesc.=$aPost['desc'].";";
+			$aUrl.=$aPost['url'].";";
+  			$aUdate.=$aPost['updated'].";";
+  			$aNote.=$aPost['notes'].";";
+  	        $tag="";
+  			foreach($aPost['tags'] as $aTags){
+  	    		
+  				$tag.=$aTags.";";
   	    	}
-  	
-  	
-  		}
+  	    	$t.=$tag."*";
+  	    	
+  	    }
   		
 	 
-        $result="<nom ieml='n.u.-'><![CDATA[$tag]]></nom><description ieml=\"d.o.-b.o.-'\"><![CDATA[$aDesc]]></description><url ieml=\"d.i.-l.i.-'t.u.-\"><![CDATA[$aUrl]]></url><date ieml=\"t.o.-n.o.-'s.u.-\" ><![CDATA[$aUdate]]></date>
-";
+        $result="<marque ieml='t.u.-'><tags><![CDATA[$t]]></tags><description><![CDATA[$aDesc]]></description><url><![CDATA[$aUrl]]></url><date><![CDATA[$aUdate]]></date></marque>";
   	
     //$result=str_replace("&","et",$result); 	   
     return $result;
-    }
+}
  
     function GraphTagBund($objSite,$iduti){
 	
@@ -298,9 +296,7 @@ class SauvFlux{
 			
 		}
 		
-		
-		
-		$result="<noms ieml=\"n.u.-'\"><![CDATA[$parents]]></noms><donnees ieml=\"n.u.-'\"><![CDATA[$count]]></donnees>";
+		$result="<bundles> $parents </bundles><nbrtag> $count </nbrtag>";
 		 
 		return $result;
 	
@@ -340,9 +336,13 @@ class SauvFlux{
 		$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 		$values=str_replace("-idflux-",$flux_id,$values);
 		$sql=$Q[0]->insert.$values;
-		echo $sql;
+		$sql;
 		$reponse = $db->query($sql);
 	}
+
+    function aAddPost($objSite){
+    	
+    }
 }
 	
 	

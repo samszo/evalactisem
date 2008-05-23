@@ -40,6 +40,7 @@
    
    // del.icio.us API base URL (without https://)
    define('BASE_URL', 'api.del.icio.us/v1/');
+   define('JSON_URL','http://feeds.delicious.com/feeds/json/network/');
    
    // error codes
    define('ERR_CONNECTION_FAILED', 1);
@@ -437,5 +438,7 @@
          }
          return false;
       }
+      
+    
    }
 ?>

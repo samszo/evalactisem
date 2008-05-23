@@ -1,0 +1,1 @@
+a:2:{i:0;a:2:{s:4:"name";s:10:"semantique";s:4:"tags";s:14:"ieml ontologie";}i:1;a:2:{s:4:"name";s:13:"programmation";s:4:"tags";s:13:"Xul ontologie";}}

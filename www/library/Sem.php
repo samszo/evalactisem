@@ -9,6 +9,7 @@ Date de modification : 29/11/2007
 
 ////////////////////
 */
+
 Class Sem{
 	public $Id;
 	public $Flux;
@@ -322,7 +323,9 @@ Class Sem{
 			$noms .= $event[0]["descriptor"].";";
 		    $donnees .= $val.";";	
 		}
+		$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
 		
+		$this->CreatFileXml($ExpIemlXml,$titre.'_'.XmlGraphIeml);
 		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
 		
 	}
@@ -342,9 +345,25 @@ Class Sem{
 			$noms .= $primis[0]["descriptor"].";";
 		    $donnees .= $val.";";	
 		}
-		
+		$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
+		$file=$titre."_".XmlGraphIeml;
+		$this->CreatFileXml($ExpIemlXml,$file);
 		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
 		
+	}
+	function CreatFileXml($xmlTrad,$file_name){
+ 
+		$file=opendir('./'.Flux_PATH);
+		while ($entree= readdir($file)){
+			if($entree==$file_name){
+				unlink(Flux_PATH."/".$file_name);
+				break;
+			}
+		}
+    	$fichier = fopen(Flux_PATH."/".$file_name,"w");
+	    fwrite($fichier,$xmlTrad);
+	    fclose($fichier);
+    	
 	}
 	
 	function Parse($code=""){

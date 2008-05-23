@@ -1,5 +1,6 @@
 <?php
         $ajax = true;
+        require('../param/Constantes.php');
         require_once ("../param/ParamPage.php");
         session_start();
         
@@ -323,7 +324,16 @@
     				$Tag.=$reponse[0].";";
     			}
     			
-    			return $Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
+    			
+		        $file=opendir('.'.PATH_FILE_FLUX);
+				while ($entree= readdir($file)){
+					if($entree==XmlFlux){
+						$xml = simplexml_load_file(Flux_PATH.XmlFlux);
+			    		break;
+					}
+				}
+    			
+    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
                
      }     
         
