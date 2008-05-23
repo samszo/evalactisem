@@ -1,6 +1,4 @@
 <?php
-   require('Acti.php');
-   require('SaveFlux.php');
    require('php-delicious/php-delicious.inc.php');
    require('../param/Constantes.php');
    require_once ("../param/ParamPage.php");
@@ -119,7 +117,10 @@ function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
     	$result_G=$oSaveFlux->GraphTagBund($objSite,$iduti);
     	
     	echo $result_G="<marque ieml='t.u.-'> <tags> $AllTag[0] </tags><count> $AllTag[1] </count> ".$result_G." </marque>";
-		$name_file=XmlFlux;
+		
+    	//Creation de fichier loginFlux.xml 
+    	
+    	$name_file=XmlFlux;
     	$file=opendir('./'.Flux_PATH);
 		while ($entree= readdir($file)){
 			if($entree==$name_file){

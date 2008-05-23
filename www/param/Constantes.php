@@ -21,6 +21,7 @@
   
   define ("MaxMarker", 300);
   define ("DELIM",'*');
+  define ("DELIM_P",';');
   define ("jsPathRoot",PathRoot."/js/");
   
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");

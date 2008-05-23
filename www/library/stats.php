@@ -35,6 +35,10 @@ function Parse($query,$titre){
 		
 	
 	 }else
+	 	if($titre=='Erreur'){
+	 		return $message_erreur=$xml;
+	 	
+	 	}else{
 	 	
 	 	$xml=Lire_XmlFile(XmlFlux);
 		
@@ -45,6 +49,7 @@ function Parse($query,$titre){
 	 	}else
 			
 			return $xml->tags.'*'.$xml->count;
+	 	}
 }
 
 function faire_rect($x,$y,$width,$height,$style,$id)
@@ -394,7 +399,7 @@ else{
 print("<?xml version='1.0' encoding='iso-8859-1'?>\n");
 print("<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' id='root' xml:space='preserve' width='".$large."' height='".$haut."'>\n"); 
 print("<rect x='0' y='0' width='".$large."' height='".$haut."' style='fill:".$col1.";'/>\n");
-print("<text x='10' y='50'> Pas de donnees </text>\n");
+print("<text x='10' y='150' font-size='12' fill='blue'> ".$_GET['noms']." </text>\n");
 print("</svg>");}
 
 ?>
