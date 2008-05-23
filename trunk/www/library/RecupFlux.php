@@ -8,8 +8,8 @@
   
    $oDelicious=$_SESSION['Delicious'];
    
-   $requette= $_POST["requette"];
-   $requete_g=$_POST["req"];
+   $requette= $_GET["requette"];
+   $requete_g=$_GET["req"];
    
    $login=$_SESSION['loginSess'];
   // $requette= $_GET["requette"];
@@ -30,15 +30,14 @@
    
    if($requette=="GetAllBundles" ){
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
-    $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
-    Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+    echo $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     $Activite->AddActi('RB',$iduti);
    }
    
   if($requette=="GetAllTags"){
     $oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
-    $result_F="<nom ieml='n.u.-'><![CDATA[$AllTag[0]]]></nom><nombre ieml=\"t.u.-t.u.-'\"><![CDATA[$AllTag[1]]]></nombre>";
+    $result_F="<Tags> $AllTag[0] </Tags><Count> $AllTag[1] </Count>";
     Donneegraph($result_F,$AllTag,$requete_g,$iduti);
     $Activite->AddActi('RAT',$iduti);
   	
@@ -46,8 +45,8 @@
   
   if($requette=="GetAllPosts"){
   	if ($aPosts = $oDelicious->GetAllPosts()){
-  		$result_F=$oSaveFlux->aGetPosts($aPosts);
-	  	Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
+	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
   	 }else {
 	        echo $oDelicious->LastErrorString();
 	 }
@@ -59,8 +58,9 @@
   if($requette=="GetPosts"){
   	
   	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date)){
-  	 	$result_F=$oSaveFlux->aGetPosts($aPosts);
-	  	Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+  	 	
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
+	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
 	 
   	}else {
 	        echo $oDelicious->LastErrorString();
@@ -73,8 +73,9 @@
   
 if($requette=="GetRecentPosts"){
   	if ($aPosts = $oDelicious->GetRecentPosts($tag,$count)){
-  	 $result_F=$oSaveFlux->aGetPosts($aPosts);
-	  Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+  	 
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
+	 
 	 
   	}else {
 	        echo $oDelicious->LastErrorString();
@@ -91,17 +92,48 @@ function Xpath($fonction){
 	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
 	 return $Xpath; 
 }
+
+/*
 function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
 	global $oSaveFlux;
 	global $objSite;
+	
+	
 	if($requete_g=="tagsFbundles"){
     	$result_G=$oSaveFlux->GraphTagBund($objSite,$iduti);
-    	echo $result="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
+    	echo $resultB="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
+    	
     }else{
     	$result_G="<noms ieml=\"n.u.-'\"><![CDATA[$AllTag[0]]]></noms><donnees ieml=\"n.u.-'\"><![CDATA[$AllTag[1]]]></donnees>";
-    	echo $result="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
+    	echo $resultT="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
+    	
     }
+}*/
+
+// creation de fichier XML du resultat
+
+function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
+	global $oSaveFlux;
+	global $objSite;
+	
+    	$result_G=$oSaveFlux->GraphTagBund($objSite,$iduti);
+    	
+    	echo $result_G="<marque ieml='t.u.-'> <tags> $AllTag[0] </tags><count> $AllTag[1] </count> ".$result_G." </marque>";
+		$name_file=XmlFlux;
+    	$file=opendir('./'.Flux_PATH);
+		while ($entree= readdir($file)){
+			if($entree==$name_file){
+				unlink(Flux_PATH."/".$name_file);
+				break;
+			}
+		}
+    	$fichier = fopen(Flux_PATH."/".$name_file,"w");
+	    fwrite($fichier,$result_G);
+	    fclose($fichier);
+    	
+   
 }
+
 
 
     

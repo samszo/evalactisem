@@ -1,0 +1,1 @@
+a:2:{s:11:"last-update";s:0:"";s:5:"items";a:1:{i:0;a:6:{s:3:"url";s:46:"http://interstices.info/display.jsp?id=c_17672";s:4:"desc";s:42:")i( interstices - Ontologies informatiques";s:5:"notes";N;s:4:"hash";s:32:"8775726fcc8eb244eb2707581053b1cc";s:4:"tags";a:1:{i:0;s:9:"ontologie";}s:7:"updated";s:19:"2008-01-21 13:05:35";}}}
