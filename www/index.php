@@ -132,11 +132,11 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<caption label="Visualisation des graphiques"/>
 						<groupbox flex="1" >
 							<caption label="del.icio.us"/>
-							<iframe id="webFrame" flex="1" src="library/CreaPapiDyna.php"  />
+							<iframe id="webFrame" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
 						</groupbox>
 						<groupbox flex="1" >
 							<caption label="IEML"/>
-							<iframe id="iemlFrame" flex="1" src="library/CreaPapiDyna.php"  />
+							<iframe id="iemlFrame" flex="1" src="http://ieml.org"  />
 						</groupbox>
 					</groupbox>
 			        <splitter collapse="after" resizeafter="farthest">
@@ -200,15 +200,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  	
  </script>
  
-	<script type="text/javascript">
-	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	<script type="text/javascript">
-	var pageTracker = _gat._getTracker("UA-3573757-2");
-	pageTracker._initData();
-	pageTracker._trackPageview();
-	</script>
  
 </window>
 

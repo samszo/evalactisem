@@ -46,7 +46,7 @@ session_start();
 <body bgcolor="#ffffff">
 	<div id='globalPass'>
 		<div class='BlocTextePass'>	
-			<p align="center">Vous allez entrer dans une zone sécurisée.</p>		
+			<p align="center">Veuillez saisir votre compte del.icio.us.</p>		
 			<form name="formulaire" method="post" action="index.php">
 			<p align="center">login :<br /> 
 			<input name="login_uti" type="text" id="login_uti">

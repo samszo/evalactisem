@@ -399,67 +399,66 @@
      		
      	}
         
-     	function AddPostIeml(){
-     		global $objSite;
-     		$oDelicious=$_SESSION['Delicious'];
-     	    $oSaveFlux= new SauvFlux();
-     	    $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
-	     	if ($aPosts = $oDelicious->GetAllPosts()){
-	  			
-	     		$PotsDelicious=$oSaveFlux->aGetPosts($aPosts,'string');
-	     	
-	      }else {
-		        echo $oDelicious->LastErrorString();
-	 	  }
-	 	  if ($iPosts = $oIeml->GetAllPosts()){
-	  			
-	     		 $PotsIeml=$oSaveFlux->aGetPosts($iPosts,'string');
-	     	
-	      }else {
-		        echo $oIeml->LastErrorString();
-	 	  }
-	 	
+   	function AddPostIeml(){
+     	global $objSite;
+     	$oDelicious=$_SESSION['Delicious'];
+        $oSaveFlux= new SauvFlux();
+        $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
+        
+        /*
+	   	if ($aPosts = $oDelicious->GetAllPosts()){
+     		$PotsDelicious=$oSaveFlux->aGetPosts($aPosts,'string');	     	
+	    }else {
+	        echo $oDelicious->LastErrorString();
+	        return;
+	    }
+	 	*/
      	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		 $db->connect();   
                 	
-         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetTradTag']";
          $Q = $objSite->XmlParam->GetElements($Xpath);
          $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+         $from = str_replace("-poster-", 0,$from);
          $sql = $Q[0]->select.$from;
                
           $result = $db->query($sql);
           $db->close();
-    	  while($reponse=mysql_fetch_array($result)){
-    	     
-    		 $TagsTrad[$reponse[0]]=$reponse[1];
+        //boucle sur les tag traduit  
+    	while($reponse=mysql_fetch_assoc($result)){     
+
+    		//vérifie si le tag est déjà posté
+    		$post = $oIeml->GetPosts($reponse["ieml_code"]);
+    		if($post){
+    			//on ajoute le post
+    		}
+    		
+    		$TagsTrad[$reponse[0]]=$reponse[1];
+			//flagguer le post comme poster
+			//$book->TagPoster($idTag,0);
     	}
     	
     	$FluxDelicious=explode('#',$PotsDelicious);
     	$FluxIeml=explode('#',$PotsIeml);
-    	$Pots=explode(DELIM_P,$FluxDelicious[0]);
+    	$Post=explode(DELIM_P,$FluxDelicious[0]);
     	$Descp=explode(DELIM_P,$FluxDelicious[1]);
     	$Tags=explode(DELIM,$FluxDelicious[2]);
+    	if(!eregi($_SESSION['loginSess'],$FluxIeml[4])){
+    		 $iemlNotes=$FluxIeml[4].$_SESSION['loginSess'].DELIM_P;
+    	}
     	
-    	for($i=0;sizeof($Pots)-1;$i++){
-    		$iemlNotes='';
+    	for($i=0;sizeof($Post)-1;$i++){
     		$iemlTags='';
-    		if(!eregi($_SESSION['loginSess'],$FluxIeml[4])){
-    			
-    			 $iemlNotes=$FluxIeml[4].$_SESSION['loginSess'].DELIM_P;
-    		}
-    		 	$iemlPost=$Pots[$i];
-    		 	$iemlDescp=$Descp[$i];
-    		 	$DateMJR=date('y-m-d h:m:s');
-    			$Tag=explode(DELIM_P,$Tags[$i]);
-    			array_pop($Tag);
-    			foreach($TagsTrad as $index=>$val){
-    				if(in_array($index,$Tag)){
-    					$iemlTags.=$val.'';
-    					
-    				}
-    				
-    		 }
-    	
+    	 	$iemlPost=$Post[$i];
+    	 	$iemlDescp=$Descp[$i];
+    	 	$DateMJR=date('y-m-d h:m:s');
+    		$Tag=explode(DELIM_P,$Tags[$i]);
+    		array_pop($Tag);
+    		foreach($TagsTrad as $index=>$val){
+    			if(in_array($index,$Tag)){
+    				$iemlTags.=$val.'';	
+    			}    				
+    		 }    	
     		if($iemlTags!='')
     		 	$oIeml->AddPost($iemlPost,$iemlDescp,$iemlNotes,$iemlTags,$DateMJR,true) ;  
     	}
