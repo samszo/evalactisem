@@ -32,6 +32,8 @@
   define('XmlGraphIeml' ,$_SESSION['loginSess']."_GraphIeml.xml");
   define('Flux_PATH', 'tmpFlux/');
   define('PATH_FILE_FLUX','/tmpFlux');
+  define('LOGIN_IEML',"testIeml");
+  define('MDP_IEML','lmei08');
   $Site = array(
 	"PATH_WEB" => "http://localhost/evalactisem/", 
 	"SQL_LOGIN" => "root", 

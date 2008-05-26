@@ -241,8 +241,9 @@ class SauvFlux{
 
 
 
-    function aGetPosts($aPosts){
-
+    function aGetPosts($aPosts,$format_result){
+        
+    	
 		foreach ($aPosts as $aPost) { 
   			$aDesc.=$aPost['desc'].";";
 			$aUrl.=$aPost['url'].";";
@@ -257,10 +258,13 @@ class SauvFlux{
   	    	
   	    }
   		
-	 
-        $result="<marque ieml='t.u.-'><tags><![CDATA[$t]]></tags><description><![CDATA[$aDesc]]></description><url><![CDATA[$aUrl]]></url><date><![CDATA[$aUdate]]></date></marque>";
-  	
-    //$result=str_replace("&","et",$result); 	   
+	    if($format_result=='xml'){
+        	$result="<marque ieml='t.u.-'><tags><![CDATA[$t]]></tags><description><![CDATA[$aDesc]]></description><url><![CDATA[$aUrl]]></url><date><![CDATA[$aUdate]]></date></marque>";
+	    }else
+	    	if($format_result=='string'){
+	    		$result=$aUrl."#".$aDesc."#".$t."#".$aUdate."#".$aNote;
+	    }
+     	   
     return $result;
 }
  

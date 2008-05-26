@@ -367,7 +367,7 @@
          $sUrl, // URL of post
          $sDescription, // description of post
          $sNotes = '', // additional notes relating to post
-         $aTags = array(), // tags to assign to the post
+         $aTags = '', // tags to assign to the post
          $sDate = '', // date of the post, format YYYY-MM-DD HH:MM:SS - default is current date and time
          $bReplace = true // if set, any existing post with the same URL will be replaced
       ) {
@@ -377,7 +377,7 @@
             'url' => $sUrl,
             'description' => $sDescription,
             'extended' => $sNotes,
-            'tags' => implode(' ', $aTags)
+            'tags' =>  $aTags
          );
          
          if ($sDate != '') $aParameters['dt'] = $this->ToDeliciousDate($sDate);

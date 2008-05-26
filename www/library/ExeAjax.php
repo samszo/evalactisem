@@ -403,33 +403,70 @@
      		global $objSite;
      		$oDelicious=$_SESSION['Delicious'];
      	    $oSaveFlux= new SauvFlux();
-     	    
+     	    $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
 	     	if ($aPosts = $oDelicious->GetAllPosts()){
 	  			
-	     		$PotsDelicious=$oSaveFlux->aGetPosts($aPosts);
-	     		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		        $db->connect();   
-                	
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
-                $sql = $Q[0]->select.$from;
-               
-                $result = $db->query($sql);
-                $db->close();
-    			while($reponse=mysql_fetch_array($result)){
-    				$EexpIeml.=$reponse[1].DELIM_P;
-    				$TagsTrad.=$reponse[0].DELIM_P;
-    			}
-    			$PotsDelicious = str_replace("<![CDATA[","",$PotsDelicious);
-    			$PotsDelicious = str_replace("]]>","",$PotsDelicious);
-    			echo $PotsDelicious;
-    			$xml = simplexml_load_string($PotsDelicious);
-    			
-	     		
+	     		$PotsDelicious=$oSaveFlux->aGetPosts($aPosts,'string');
+	     	
 	      }else {
 		        echo $oDelicious->LastErrorString();
-	 	}
-     }
+	 	  }
+	 	  if ($iPosts = $oIeml->GetAllPosts()){
+	  			
+	     		 $PotsIeml=$oSaveFlux->aGetPosts($iPosts,'string');
+	     	
+	      }else {
+		        echo $oIeml->LastErrorString();
+	 	  }
+	 	
+     	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		 $db->connect();   
+                	
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
+         $Q = $objSite->XmlParam->GetElements($Xpath);
+         $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+         $sql = $Q[0]->select.$from;
+               
+          $result = $db->query($sql);
+          $db->close();
+    	  while($reponse=mysql_fetch_array($result)){
+    	     
+    		 $TagsTrad[$reponse[0]]=$reponse[1];
+    	}
+    	
+    	$FluxDelicious=explode('#',$PotsDelicious);
+    	$FluxIeml=explode('#',$PotsIeml);
+    	$Pots=explode(DELIM_P,$FluxDelicious[0]);
+    	$Descp=explode(DELIM_P,$FluxDelicious[1]);
+    	$Tags=explode(DELIM,$FluxDelicious[2]);
+    	
+    	for($i=0;sizeof($Pots)-1;$i++){
+    		$iemlNotes='';
+    		$iemlTags='';
+    		if(!eregi($_SESSION['loginSess'],$FluxIeml[4])){
+    			
+    			 $iemlNotes=$FluxIeml[4].$_SESSION['loginSess'].DELIM_P;
+    		}
+    		 	$iemlPost=$Pots[$i];
+    		 	$iemlDescp=$Descp[$i];
+    		 	$DateMJR=date('y-m-d h:m:s');
+    			$Tag=explode(DELIM_P,$Tags[$i]);
+    			array_pop($Tag);
+    			foreach($TagsTrad as $index=>$val){
+    				if(in_array($index,$Tag)){
+    					$iemlTags.=$val.'';
+    					
+    				}
+    				
+    		 }
+    	
+    		if($iemlTags!='')
+    		 	$oIeml->AddPost($iemlPost,$iemlDescp,$iemlNotes,$iemlTags,$DateMJR,true) ;  
+    	}
+    	
+      
+ }
+     	
+     
         
         ?>
