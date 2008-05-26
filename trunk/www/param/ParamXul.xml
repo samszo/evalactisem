@@ -156,6 +156,14 @@
                        INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id
                 </from>
 			</Query>
+			<Query fonction="GetTradTag">
+				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_lib</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id AND t.trad_post = -poster-
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id
+                </from>
+			</Query>
 		</Querys>
 		<rdfDesc urn="ieml"/>
 		<rdf tag="id_ieml"/>
