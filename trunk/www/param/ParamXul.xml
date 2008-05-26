@@ -335,7 +335,7 @@
 		<Querys>
 			<Query fonction="AddActi">
 				<insert> INSERT INTO ieml_acti_uti   </insert>
-				<values> VALUES ('-idActi-','-iduti-',now(),now())</values>
+				<values> VALUES ('-idActi-','-iduti-',now())</values>
 			</Query>
 		</Querys>
 	

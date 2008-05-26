@@ -43,7 +43,7 @@
   
   if($requette=="GetAllPosts"){
   	if ($aPosts = $oDelicious->GetAllPosts()){
-  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
 	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
   	 }else {
 	        echo $oDelicious->LastErrorString();
@@ -57,7 +57,7 @@
   	
   	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date)){
   	 	
-  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
 	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
 	 
   	}else {
@@ -72,7 +72,7 @@
 if($requette=="GetRecentPosts"){
   	if ($aPosts = $oDelicious->GetRecentPosts($tag,$count)){
   	 
-  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
 	 
 	 
   	}else {
