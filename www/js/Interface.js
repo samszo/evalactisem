@@ -647,20 +647,25 @@ function recup_dictio(){
 }
 
 function AddPostIemlDelicios(){
-	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddPostIeml",'Afficher','');
-	document.getElementById('infosTrad').setAttribute("hidden","true");
-	document.getElementById('treeDicoIeml').setAttribute("hidden","true");
-	var meter=document.getElementById('progmeter');
-	meter.setAttribute("style","display: inline;");
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddPostIeml",'Afficher','')
+	var meter=document.getElementById('MajIeml');
+	meter.setAttribute("hidden","false");
 	
 }
 function Afficher(result,prarm){
-	alert(result);
+	
 	var meter=document.getElementById('progmeter');
 	meter.setAttribute("value","100");
+	if(result==''){
+		alert("il n y pas de Posts recents a mettre a jour");
+		document.getElementById('MajIeml').setAttribute("hidden","true");
+	}else{
+		
+		message='Les Posts suivants on ete mis a jour: ';
+		alert(message+result);
+		document.getElementById('MajIeml').setAttribute("hidden","true");
+	    document.getElementById('MajIeml').setAttribute("hidden","true");
+	}
 	
 }
- function BarreProgress(){
-	 var meter=document.getElementById('progmeter');
-	 meter.setAttribute("style","display: inline;");
-  }
+

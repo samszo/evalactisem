@@ -305,8 +305,6 @@ class SauvFlux{
 
 	function utilisateur($objSite,$uti_login){
 		
-	  
-		
 		$Xpath=Xpath('Verif_Exist_Utilisateur');
 		$Q=$objSite->XmlParam->GetElements($Xpath);
 		$where=str_replace("-login-",$uti_login,$Q[0]->where);

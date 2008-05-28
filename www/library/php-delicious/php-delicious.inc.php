@@ -219,6 +219,8 @@
             if ($sUrl != '') $aParameters['url'] = $sUrl;
             if ($iCount != -1) $aParameters['count'] = $iCount;
             if($MaqueRequest=="true"){
+            	if($this->trace)
+            		echo "php-delicious.php:GetList:MaqueRequest".$MaqueRequest."<br/>"; 
             	// make request
 	            if ($aResult = $this->DeliciousRequest($sCmd, $aParameters)) {
 	               $aPosts = array();
@@ -245,7 +247,7 @@
 	            } else {
 	               $oCache->Set(false);
 	            }
-	         }
+            }
 	      }
          $aData = $oCache->Get();
 		 /*ajout samszo
@@ -319,11 +321,19 @@
          return false;
       }
       
+      /**
+       * Enter description here...
+       *
+       * @param unknown_type $sTag
+       * @param unknown_type $sDate
+       * @param unknown_type $sUrl
+       * @return unknown
+       */
       function GetPosts(
          $sTag = '', // filter by tag
          $sDate = '', // filter by date - format YYYY-MM-DD HH:MM:SS
          $sUrl = '', // filter by URL
-         $Mrequest="true"//faire la requete a delicious
+         $Mrequest
       ) {
          return $this->GetList('posts/get', $sTag, $sDate, $sUrl,-1,$Mrequest);
       }

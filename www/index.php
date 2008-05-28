@@ -38,7 +38,7 @@ function ChercheAbo ()
 ChercheAbo ();
 
 if($con==1){
-	$lbl = "label='Connection to del.icio.us failed.' style='color:red;size=10'";
+	$lbl = "label='Connection to del.icio.us failed.' style='color:red;size:10'";
 }elseif($con==3){
 	$lbl = "label='Del.icio.us API access throttled.'" ;
 }else{  
@@ -188,9 +188,14 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    </tabpanels>
 						</tabbox>
 						</box>
-						<vbox id='MajIeml' flex='1'><progressmeter id="progmeter" value="50%" style="display: none;" /></vbox>
-						<vbox id="treeDicoIeml" flex="1" hidden="true" />					
+						<vbox id="treeDicoIeml" flex="1" hidden="true" />	
+										
 					</groupbox>
+					<vbox id='MajIeml' flex='1' hidden='true' >
+					    <label id='label_MajIeml' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
+						<progressmeter id="progmeter" value="50%"  />
+						
+					</vbox>
 				</vbox>
 			</groupbox>
 		</vbox> 
