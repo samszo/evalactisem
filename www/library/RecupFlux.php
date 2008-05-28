@@ -121,13 +121,11 @@ function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
     	//Creation de fichier loginFlux.xml 
     	
     	$name_file=XmlFlux;
-    	$file=opendir('./'.Flux_PATH);
-		while ($entree= readdir($file)){
-			if($entree==$name_file){
+			if(file_exists(Flux_PATH."/".$name_file)){
 				unlink(Flux_PATH."/".$name_file);
-				break;
+				
 			}
-		}
+		
     	$fichier = fopen(Flux_PATH."/".$name_file,"w");
 	    fwrite($fichier,$result_G);
 	    fclose($fichier);

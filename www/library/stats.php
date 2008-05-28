@@ -14,15 +14,13 @@ $col4 = $_GET["col4"];
 $query=$_GET["query"];
 $file='';
 function Lire_XmlFile($file){
-	
-		$files=opendir('.'.PATH_FILE_FLUX);
-		while($entree= readdir($files)){
+
 			//echo "Fichier:".$entree."::".$file;
-			if($entree==$file){
+			if(file_exists(Flux_PATH.$file)){
 				$xml = simplexml_load_file(Flux_PATH.$file);
-				break;
+				
 			}
-         }
+         
          
          return $xml;
 }
