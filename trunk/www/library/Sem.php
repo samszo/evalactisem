@@ -388,12 +388,8 @@ Class Sem{
 	//	Creation de fichier xml pour les traduction 
 	function CreatFileXml($xmlTrad,$file_name){
  
-		$file=opendir('./'.Flux_PATH);
-		while ($entree= readdir($file)){
-			if($entree==$file_name){
+		if(file_exists(Flux_PATH."/".$file_name)){
 				unlink(Flux_PATH."/".$file_name);
-				break;
-			}
 		}
     	$fichier = fopen(Flux_PATH."/".$file_name,"w");
 	    fwrite($fichier,$xmlTrad);

@@ -18,7 +18,10 @@ class BookMark{
     	$s .= $this->bookmark."<br/>";
     	return $s;
     }
-	function __construct($bookmark){
+	function __construct(){
+		
+	}
+	function construct($bookmark){
 		$this->trace=TRACE;
 		$this->bookmark=$bookmark;
 		
@@ -56,7 +59,47 @@ class BookMark{
 			$this->NbPost = $i;
 			
 	}
-	
+    
+	function MajPostIeml( $objSite,$oDelicious){
+     	 
+        $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
+        
+	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		 $db->connect();         	
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetTradTag']";
+         $Q = $objSite->XmlParam->GetElements($Xpath);
+         $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+         $from = str_replace("-poster-", 0,$from);
+         $sql = $Q[0]->select.$from;
+         $result = $db->query($sql);
+         $db->close();
+        //boucle sur les tag traduit 
+   		// pour chaque tag  il faut recupper l'url correspondant
+    	
+    	while($reponse=mysql_fetch_assoc($result)){     
+            $reponse['onto_flux_code'];
+    		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','',false);
+    		foreach($Posts as $Post){
+    			$PostIeml=$oIeml->GetPosts('','',$Post['url']);
+    			if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])){
+    				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
+    			} 
+    			$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
+    			echo $Post['url'];
+            }
+        	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		 	$db->connect();  
+    		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='update_posted_tag']";
+        	$Q = $objSite->XmlParam->GetElements($Xpath);
+        	$where=str_replace("-IdIeml-",$reponse['ieml_id'],$Q[0]->where);
+        	$where=str_replace("-IdFlux-",$reponse['onto_flux_id'],$where);
+        	$sql = $Q[0]->update.$where;
+        	$res = $db->query($sql);
+         	$db->close();
+         	
+    	}
+        
+   }
 }
 
 ?>

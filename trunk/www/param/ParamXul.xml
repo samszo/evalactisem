@@ -148,6 +148,10 @@
 				<insert> INSERT INTO ieml_uti_onto (uti_id,ieml_id)</insert>
 				<values> VALUES ('-iduti-' , '-idieml-')</values>
 			</Query>
+			<Query fonction="update_posted_tag">
+				<update> update ieml_trad SET trad_post=1</update>
+				<where> where ieml_id=-IdIeml- AND onto_flux_id=-IdFlux-</where>
+			</Query>
 			<Query fonction="Tree_dynamique">
 				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_lib</select>
 				<from> FROM ieml_onto_flux f
@@ -157,7 +161,7 @@
                 </from>
 			</Query>
 			<Query fonction="GetTradTag">
-				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_lib</select>
+				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_id,f.onto_flux_id</select>
 				<from> FROM ieml_onto_flux f
 					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id AND t.trad_post = -poster-
                        INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id

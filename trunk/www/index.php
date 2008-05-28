@@ -188,6 +188,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    </tabpanels>
 						</tabbox>
 						</box>
+						<vbox id='MajIeml' flex='1'><progressmeter id="progmeter" value="50%" style="display: none;" /></vbox>
 						<vbox id="treeDicoIeml" flex="1" hidden="true" />					
 					</groupbox>
 				</vbox>
@@ -196,7 +197,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  </hbox>
  <script type="text/javascript">
  	//récupération des flux
-    RecupDeliciousFlux();
+   GetFlux();
  	
  </script>
  

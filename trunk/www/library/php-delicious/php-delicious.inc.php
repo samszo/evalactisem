@@ -193,8 +193,9 @@
          return false;
       }
       
+      
       // generic function to get post listings
-      function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1) {
+      function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1,$MaqueRequest) {
          $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
          
          if (!$oCache->Check()) {
@@ -217,40 +218,43 @@
             if ($sDate != '')  $aParameters['dt'] = $this->ToDeliciousDate($sDate);
             if ($sUrl != '') $aParameters['url'] = $sUrl;
             if ($iCount != -1) $aParameters['count'] = $iCount;
-         
-            // make request
-            if ($aResult = $this->DeliciousRequest($sCmd, $aParameters)) {
-               $aPosts = array();
-               $aPosts['last-update'] = $this->FromDeliciousDate($aResult['attributes']['UPDATE']);
-               $aPosts['items'] = array();
-               foreach ($aResult['items'] as $aCurPost) {
-                  // check absence of tags for current URL
-                  $aCurPost['attributes']['TAG'] != 'system:unfiled' ? $aTags = explode(' ', $aCurPost['attributes']['TAG']) : $aTags = array();
-                  
-                  $aNewPost = array(
-                     'url' => $aCurPost['attributes']['HREF'],
-                     'desc' => $aCurPost['attributes']['DESCRIPTION'],
-                     'notes' => $aCurPost['attributes']['EXTENDED'],
-                     'hash' => $aCurPost['attributes']['HASH'],
-                     'tags' => $aTags,
-                     'updated' => $this->FromDeliciousDate($aCurPost['attributes']['TIME'])
-                  );
-                  
-                  if ($sCmd == 'posts/get') $aNewPost['count'] = $aCurPost['attributes']['OTHERS'];
-                  
-                  $aPosts['items'][] = $aNewPost;
-               }
-               $oCache->Set($aPosts);
-            } else {
-               $oCache->Set(false);
-            }
-         }
+            if($MaqueRequest=="true"){
+            	// make request
+	            if ($aResult = $this->DeliciousRequest($sCmd, $aParameters)) {
+	               $aPosts = array();
+	               $aPosts['last-update'] = $this->FromDeliciousDate($aResult['attributes']['UPDATE']);
+	               $aPosts['items'] = array();
+	               foreach ($aResult['items'] as $aCurPost) {
+	                  // check absence of tags for current URL
+	                  $aCurPost['attributes']['TAG'] != 'system:unfiled' ? $aTags = explode(' ', $aCurPost['attributes']['TAG']) : $aTags = array();
+	                  
+	                  $aNewPost = array(
+	                     'url' => $aCurPost['attributes']['HREF'],
+	                     'desc' => $aCurPost['attributes']['DESCRIPTION'],
+	                     'notes' => $aCurPost['attributes']['EXTENDED'],
+	                     'hash' => $aCurPost['attributes']['HASH'],
+	                     'tags' => $aTags,
+	                     'updated' => $this->FromDeliciousDate($aCurPost['attributes']['TIME'])
+	                  );
+	                  
+	                  if ($sCmd == 'posts/get') $aNewPost['count'] = $aCurPost['attributes']['OTHERS'];
+	                  
+	                  $aPosts['items'][] = $aNewPost;
+	               }
+	               $oCache->Set($aPosts);
+	            } else {
+	               $oCache->Set(false);
+	            }
+	         }
+	      }
          $aData = $oCache->Get();
 		 /*ajout samszo
 		 echo "<br/>aData=<br/>";
 		 print_r($aData);
 		 echo "<br/>";
 		 //fin ajout samszo*/
+         //print_r($aData);
+         
          return $aData['items'];
       }
       
@@ -318,22 +322,25 @@
       function GetPosts(
          $sTag = '', // filter by tag
          $sDate = '', // filter by date - format YYYY-MM-DD HH:MM:SS
-         $sUrl = '' // filter by URL
+         $sUrl = '', // filter by URL
+         $Mrequest="true"//faire la requete a delicious
       ) {
-         return $this->GetList('posts/get', $sTag, $sDate, $sUrl);
+         return $this->GetList('posts/get', $sTag, $sDate, $sUrl,-1,$Mrequest);
       }
       
       function GetRecentPosts(
          $sTag = '', // filter by tag
-         $iCount = 15 // number of posts to retrieve, min 15, max 100
+         $iCount = 15, // number of posts to retrieve, min 15, max 100,
+         $Mrequest="true"
       ) {
-         return $this->GetList('posts/recent', $sTag, '', '', $iCount);
+         return $this->GetList('posts/recent', $sTag, '', '', $iCount,$Mrequest);
       }
       
       function GetAllPosts(
-         $sTag = '' // filter by tag
+         $sTag = '', // filter by tag
+         $Mrequest="true"
       ) { 
-         return $this->GetList('posts/all', $sTag, '', '', -1);
+         return $this->GetList('posts/all', $sTag, '', '', -1, $Mrequest);
       }
       
       function GetDates(

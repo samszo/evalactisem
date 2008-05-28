@@ -30,10 +30,15 @@ function pf_couleur(num, color){
     document.getElementById("tb_0" + num).value =color;
     document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
 }
-
+function GetFlux(){
+	AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
+	AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
+	
+}
 function SetDonnee(){
 	
 	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
+	
 }
 function RecupDeliciousFlux(){
 	
@@ -43,7 +48,7 @@ function RecupDeliciousFlux(){
 	 
 	if((query_flux=="GetAllTags")){
 		
-		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'SaveFlux','');
+		AjaxRequest(urlAjax+"library/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'DelIiciousTreeGraph','');
 		document.getElementById("titre").value="Tags en fonction de count";
 	}
 	
@@ -643,8 +648,19 @@ function recup_dictio(){
 
 function AddPostIemlDelicios(){
 	AjaxRequest(urlAjax+"library/ExeAjax.php?f=AddPostIeml",'Afficher','');
+	document.getElementById('infosTrad').setAttribute("hidden","true");
+	document.getElementById('treeDicoIeml').setAttribute("hidden","true");
+	var meter=document.getElementById('progmeter');
+	meter.setAttribute("style","display: inline;");
 	
 }
 function Afficher(result,prarm){
 	alert(result);
+	var meter=document.getElementById('progmeter');
+	meter.setAttribute("value","100");
+	
 }
+ function BarreProgress(){
+	 var meter=document.getElementById('progmeter');
+	 meter.setAttribute("style","display: inline;");
+  }
