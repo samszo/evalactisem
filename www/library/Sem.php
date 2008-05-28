@@ -612,7 +612,89 @@ Class Sem{
 			echo "sql = ".$sql."<br/>\n";
 		}
 		*/		
+ function InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent){
+ 	global $objSite;	
+     			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
+                	// requête pour vérifier l'existence de la traduction
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='AddTrad_Insert_onto_flux']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $values = str_replace("-codeIeml-", $Iemlcode,$Q[0]->values);
+                $values = str_replace("-libIeml-", utf8_decode($Iemllib),$values);
+                
+     			if($Imelparent=="elements"){
+                	 $values = str_replace("-nivIeml-", 1 ,$values);
+                	  $values = str_replace("-parentIeml-", "elements",$values);
+                }
+                elseif($Imelparent=="relations"){
+                	 $values = str_replace("-nivIeml-", 3 ,$values);
+                	 $values = str_replace("-parentIeml-", "relations",$values);
+                }elseif($Imelparent=="ideas"){
+                	$values = str_replace("-nivIeml-", 5 ,$values);
+                	$values = str_replace("-parentIeml-","ideas",$values);
+                	
+                }elseif($Imelparent=="events"){
+                	$values = str_replace("-nivIeml-", 2 ,$values);
+                	$values = str_replace("-parentIeml-", "events",$values);
+                }elseif($Imelparent=="cycles"){
+                	$values = str_replace("-nivIeml-", 4 ,$values);
+                	$values = str_replace("-parentIeml-","cycles",$values);
+                }
 
+                $sql = $Q[0]->insert.$values;
+                $result = $db->query($sql);
+                $idieml=mysql_insert_id();
+                
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Insert_ieml_foret']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+               
+                $values = str_replace("-idparent", -1,$Q[0]->values);
+                $values = str_replace("-idieml-", $idieml,$Q[0]->values);
+		     	if($Imelparent=="elements"){
+		                	 $values = str_replace("-idparent-",1,$values);
+		                }
+		                elseif($Imelparent=="relations"){
+		                	 $values = str_replace("-idparent-",3,$values);
+		                }elseif($Imelparent=="ideas"){
+		                	$values = str_replace("-idparent-",5,$values);
+		                	
+		                }elseif($Imelparent=="events"){
+		                	$values = str_replace("-idparent-",2,$values);
+		                }elseif($Imelparent=="cycles"){
+		                	$values = str_replace("-idparent-",4,$values);
+		                }
+                echo $sql = $Q[0]->insert.$values;
+                $result = $db->query($sql);
+                $db->close();
+ }
+  function RecupOntoTrad(){
+    	global $objSite;	
+    	
+                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
+                	// requête pour vérifier l'existence de la traduction
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+                $sql = $Q[0]->select.$from;
+               
+                $result = $db->query($sql);
+                $db->close();
+    			while($reponse=mysql_fetch_array($result)){
+    				$Trad.=$reponse[1].";";
+    				$Desc.=$reponse[2].";";
+    				$Tag.=$reponse[0].";";
+    			}
+    			
+    			// recuperartion de fichier xml
+    			if (file_exists(Flux_PATH.XmlFlux)){
+					$xml = simplexml_load_file(Flux_PATH.XmlFlux);
+			    }
+    			
+    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
+               
+     }     
+        
 	
 }
 ?>
