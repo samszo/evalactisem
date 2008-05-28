@@ -19,6 +19,7 @@ class BookMark{
     	return $s;
     }
 	function __construct(){
+		$this->trace=TRACE;
 		
 	}
 	function construct($bookmark){
@@ -77,17 +78,24 @@ class BookMark{
    		// pour chaque tag  il faut recupper l'url correspondant
     	
     	while($reponse=mysql_fetch_assoc($result)){     
-            $reponse['onto_flux_code'];
-    		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','',false);
+    		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','', false);
+    		if($this->trace)
+					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
     		foreach($Posts as $Post){
-    			$PostIeml=$oIeml->GetPosts('','',$Post['url']);
+    			$PostIeml=$oIeml->GetPosts('','',$Post['url'],true);
+    			if(TRACE)
+					echo "BookMark.php:MajPostIeml:Imel".print_r($PostIeml)."<br/>";
     			if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])){
     				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
     			} 
-    			$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
-    			echo $Post['url'];
+    			$AddPost=$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
+    			if($this->trace)
+					echo "BookMark.php:MajPostIeml:AddPost".print_r($AddPost)."<br/>";
+    			
+					$postMAJ.= $Post['url']." ";
             }
-        	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+        	
+            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		 	$db->connect();  
     		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='update_posted_tag']";
         	$Q = $objSite->XmlParam->GetElements($Xpath);
@@ -98,7 +106,7 @@ class BookMark{
          	$db->close();
          	
     	}
-        
+   echo $postMAJ;     
    }
 }
 

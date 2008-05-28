@@ -398,6 +398,7 @@
      	global $objSite;
      	$oDelicious=$_SESSION['Delicious'];
          $bmark=new  BookMark();
+         
          $bmark->MajPostIeml($objSite,$oDelicious);
          
     	
