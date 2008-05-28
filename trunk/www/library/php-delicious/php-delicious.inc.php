@@ -222,7 +222,9 @@
             	if($this->trace)
             		echo "php-delicious.php:GetList:MaqueRequest".$MaqueRequest."<br/>"; 
             	// make request
-	            if ($aResult = $this->DeliciousRequest($sCmd, $aParameters)) {
+	                $aResult = $this->DeliciousRequest($sCmd, $aParameters);
+            	    if ( $aResult['attributes']['TAG']!='') {
+	            	
 	               $aPosts = array();
 	               $aPosts['last-update'] = $this->FromDeliciousDate($aResult['attributes']['UPDATE']);
 	               $aPosts['items'] = array();

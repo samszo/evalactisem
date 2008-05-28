@@ -188,14 +188,13 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    </tabpanels>
 						</tabbox>
 						</box>
-						<vbox id="treeDicoIeml" flex="1" hidden="true" />	
-										
+						
+						<vbox id="treeDicoIeml" flex="1" hidden="true" />			
 					</groupbox>
 					<vbox id='MajIeml' flex='1' hidden='true' >
-					    <label id='label_MajIeml' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
-						<progressmeter id="progmeter" value="50%"  />
-						
-					</vbox>
+					   <label id='label_MajIeml' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
+					   <progressmeter id="progmeter" value="50%"  />
+				   </vbox>
 				</vbox>
 			</groupbox>
 		</vbox> 
