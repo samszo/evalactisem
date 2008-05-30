@@ -43,9 +43,12 @@
       var $oCacheObject;
       
       function Cache($sKey, $iCacheTime) {
+      	 $this->trace = TRACE;
          $this->sFile = CACHE_PATH.md5($sKey).".txt";
          $this->sFileLock = "$this->sFile.lock";
          $iCacheTime >= 10 ? $this->iCacheTime = $iCacheTime : $this->iCacheTime = 10;
+         if($this->trace)
+         echo "Cache.php:Cache():Key:$sKey";
       }
       
       function Check() {
@@ -80,5 +83,12 @@
             return unserialize(file_get_contents($this->sFile));
          }
       }
+   
+   	  function Delete(){
+   	 	 if (file_exists($this->sFile)) {
+               unlink($this->sFile);
+         }
+   	  }
    }
+   
 ?>

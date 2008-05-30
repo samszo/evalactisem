@@ -192,7 +192,11 @@
 				<from>FROM ieml_onto_flux</from>
 				<where>WHERE onto_flux_code='-tag-'</where>
 			</Query>
-		   
+		   <Query fonction="Ieml_Uti_Onto_Flux_existe">
+				<select> SELECT uti_id,onto_flux_id </select>
+				<from> FROM ieml_uti_onto_flux </from>
+				<where> WHERE onto_flux_id=-idflux- AND uti_id=-iduti-</where>
+			</Query>
 		    <Query fonction="Flux_Foret">
 				<insert> INSERT INTO ieml_foret_flux (onto_flux_id,onto_flux_parents)</insert>
 				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
@@ -246,6 +250,22 @@
 			<Query fonction="Insert_ieml_foret">
 				<insert> INSERT INTO ieml_foret (ieml_id,ieml_parent)</insert>
 				<values> VALUES ('-idieml-' , '-idparent-')</values>
+			</Query>
+			
+		   <Query fonction="Delete_Ieml_uti_Onto_Flux">
+				<delete> DELETE  </delete>
+				<from> FROM  `ieml_uti_onto_flux` </from>
+				<where> WHERE  uti_id=-iduti-</where>
+			</Query>
+			 <Query fonction="Delete_Ieml_uti_Onto">
+				<delete> DELETE  </delete>
+				<from> FROM  `ieml_uti_onto`</from>
+				<where> WHERE  uti_id=-iduti-</where>
+			</Query>
+			<Query fonction="Delete_Ieml_uti">
+				<delete> DELETE  </delete>
+				<from> FROM  `ieml_uti`</from>
+				<where> WHERE  uti_id=-iduti-</where>
 			</Query>
 		</Querys>
 	

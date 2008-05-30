@@ -80,8 +80,11 @@
                 	   $resultat=GetTreeDictio();
                 	   break;
                 case 'AddPostIeml':
-                	
                 	$resultat=AddPostIeml();
+                	break;
+               case 'Delet_Compte_Delicious':
+               		$resultat=Delet_Compte_Delicious();
+               		break;
 		}
         
         echo $resultat; 
@@ -316,22 +319,30 @@
                
      }     
         
-     	function insert_ieml_onto($Iemlcode,$Iemllib,$Imelparent){
-     		global $objSite;     
-     		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-     		     
-     		     $sem->InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent);
+        function insert_ieml_onto($Iemlcode,$Iemllib,$Imelparent){
+	     	global $objSite;     
+	     	$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+	     		     
+	     		     $sem->InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent);
      	}
         
-   	function AddPostIeml(){
-     	global $objSite;
-     	$oDelicious=$_SESSION['Delicious'];
-         $bmark=new  BookMark();
-         
-         $bmark->MajPostIeml($objSite,$oDelicious);
-         
-    	
-   }
+	   	function AddPostIeml(){
+	     	global $objSite;
+	     	$oDelicious=$_SESSION['Delicious'];
+	        $bmark=new  BookMark();
+	         
+	         $bmark->MajPostIeml($objSite,$oDelicious);
+	         
+	    }
+    
+	   function Delet_Compte_Delicious(){
+	     global $objSite;
+	     $oDelicious=$_SESSION['Delicious'];
+	     $bmark=new  BookMark();
+	         
+	         return $bmark->DeletCompteDelicious($objSite,$oDelicious,$_SESSION['iduti'],$_SESSION['loginSess']);
+	   
+	   }
      	
      
         

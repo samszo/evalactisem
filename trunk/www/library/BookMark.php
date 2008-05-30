@@ -1,4 +1,5 @@
 <?php
+
 class BookMark{
 	private $bookmark;
 	private $trace;
@@ -64,7 +65,8 @@ class BookMark{
 	function MajPostIeml( $objSite,$oDelicious){
      	 
         $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
-        
+         // Recupération des tarductions des tags
+         
 	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		 $db->connect();         	
          $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetTradTag']";
@@ -75,7 +77,7 @@ class BookMark{
          $result = $db->query($sql);
          $db->close();
         //boucle sur les tag traduit 
-   		// pour chaque tag  il faut recupper l'url correspondant
+   		// pour chaque tag  il faut recupper l'url correspondante
     	
     	while($reponse=mysql_fetch_assoc($result)){     
     		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','', false);
@@ -83,18 +85,25 @@ class BookMark{
 					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
     		foreach($Posts as $Post){
     			$PostIeml=$oIeml->GetPosts('','',$Post['url'],true);
-    			if(TRACE)
-					echo "BookMark.php:MajPostIeml:Imel".print_r($PostIeml)."<br/>";
-    			if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])){
-    				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
-    			} 
-    			$AddPost=$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
     			if($this->trace)
-					echo "BookMark.php:MajPostIeml:AddPost".print_r($AddPost)."<br/>";
+					echo "BookMark.php:MajPostIeml:Imel".print_r($PostIeml)."<br/>";
+    			
+				// Si le login ni pas dans la description de post ou le tag n exite pas dans le post on ajoute le post
+					
+				if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])||!in_array($reponse['ieml_code'],$PostIeml['tags'])){
+    				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
+    				$AddPost=$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
+    				if($this->trace)
+    			    	echo "BookMark.php:MajPostIeml:AddPost".print_r($AddPost)."<br/>";
+    			} 
+    			
+    			
     			
 					$postMAJ.= $Post['url']." ";
             }
         	
+            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
+            
             $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		 	$db->connect();  
     		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='update_posted_tag']";
@@ -107,6 +116,60 @@ class BookMark{
          	
     	}
    echo $postMAJ;     
+   }
+   
+   function DeletCompteDelicious($objSite,$oDelicious,$iduti,$login){
+   	 	 
+   		 //Suppression des tags de l'utilisateur de la table ieml_uti_onto_flux
+   		 
+   	     $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		 $db->connect();         	
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Delete_Ieml_uti_Onto_Flux']";
+         $Q = $objSite->XmlParam->GetElements($Xpath);
+         $where = str_replace("-iduti-", $iduti ,$Q[0]->where);
+         if($this->trace)
+         	echo"BookMark.php:Delet_Compte_Delicious:SQL:".$sql;
+         $sql = $Q[0]->delete.$Q[0]->from.$where;
+         $result = $db->query($sql);
+         
+         //Suppression des traductions de l'utilisateur
+              	
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Delete_Ieml_uti_Onto']";
+         $Q = $objSite->XmlParam->GetElements($Xpath);
+         $where = str_replace("-iduti-", $iduti ,$Q[0]->where);
+         $sql = $Q[0]->delete.$Q[0]->from."".$where;
+         if($this->trace)
+         	echo"BookMark.php:Delet_Compte_Delicious:SQL:".$sql;
+         $result = $db->query($sql);
+         //Suppression de l'utilisateur 
+         
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Delete_Ieml_uti']";
+         $Q = $objSite->XmlParam->GetElements($Xpath);
+         $where = str_replace("-iduti-", $iduti ,$Q[0]->where);
+         $sql = $Q[0]->delete.$Q[0]->from."".$where;
+         if($this->trace)
+         	echo"BookMark.php:Delet_Compte_Delicious:SQL:".$sql;
+         $result = $db->query($sql);
+         $db->close();
+         //Suppression des Fichiers de l'utilisateur Flux_login,Primitives_login,Events_login
+         
+   		$this->Suppression_Fichier(Flux_PATH.XmlFlux);
+   		$this->Suppression_Fichier(Flux_PATH.'Events_'.XmlGraphIeml);
+   		$this->Suppression_Fichier(Flux_PATH.'Primitives_'.XmlGraphIeml);
+   		
+   		//Purrage du cache delicoius
+   		$oDelicious->DeleteCache($login."posts/all".''.''.-1);
+   		$oDelicious->DeleteCache($login.'tags/bundles/all');
+   		$oDelicious->DeleteCache($login."tags/get");
+   		
+   		return 'Votre  compte a ete supprime avec succe';
+ 
+   	}
+
+   	function Suppression_Fichier($fichier){
+   	  if(file_exists($fichier)){
+				unlink($fichier);
+	  }
    }
 }
 

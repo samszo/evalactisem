@@ -612,7 +612,7 @@ Class Sem{
 			echo "sql = ".$sql."<br/>\n";
 		}
 		*/		
- function InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent){
+   function InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent){
  	global $objSite;	
      			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		        $db->connect();   
@@ -693,7 +693,11 @@ Class Sem{
     			
     			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
                
-     }     
+     }   
+
+     function DeletCompteDelicious(){
+     	
+     }
         
 	
 }

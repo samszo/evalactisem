@@ -194,6 +194,7 @@
       }
       
       
+      
       // generic function to get post listings
       function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1,$MaqueRequest) {
          $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
@@ -218,13 +219,16 @@
             if ($sDate != '')  $aParameters['dt'] = $this->ToDeliciousDate($sDate);
             if ($sUrl != '') $aParameters['url'] = $sUrl;
             if ($iCount != -1) $aParameters['count'] = $iCount;
+            
             if($MaqueRequest=="true"){
-            	if($this->trace)
+            	if(TRACE)
             		echo "php-delicious.php:GetList:MaqueRequest".$MaqueRequest."<br/>"; 
             	// make request
-	                $aResult = $this->DeliciousRequest($sCmd, $aParameters);
-            	    if ( $aResult['attributes']['TAG']!='') {
-	            	
+	             $aResult = $this->DeliciousRequest($sCmd, $aParameters);
+	            if(TRACE)
+            	   	echo "php-delicious.php:GetList:aResult".print_r($aResult)."<br/>"; 
+            	 if (sizeof($aResult['items'])>0) {
+	              
 	               $aPosts = array();
 	               $aPosts['last-update'] = $this->FromDeliciousDate($aResult['attributes']['UPDATE']);
 	               $aPosts['items'] = array();
@@ -343,14 +347,15 @@
       function GetRecentPosts(
          $sTag = '', // filter by tag
          $iCount = 15, // number of posts to retrieve, min 15, max 100,
-         $Mrequest="true"
+         $Mrequest
       ) {
          return $this->GetList('posts/recent', $sTag, '', '', $iCount,$Mrequest);
       }
       
       function GetAllPosts(
-         $sTag = '', // filter by tag
-         $Mrequest="true"
+         $sTag = '',// filter by tag
+         $Mrequest
+         
       ) { 
          return $this->GetList('posts/all', $sTag, '', '', -1, $Mrequest);
       }
@@ -458,6 +463,9 @@
          return false;
       }
       
-    
+      function DeleteCache($file){
+      	 $oCache = new Cache($file, $this->iCacheTime);
+      	 $oCache->Delete();
+      }
    }
 ?>
