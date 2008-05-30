@@ -1,20 +1,20 @@
 <?php
 
 session_start();
+
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns='http://www.w3.org/1999/xhtml'> 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
 <title>EvalActiSem</title>
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT LANGUAGE='JavaScript'>
 
-    <!--
-    if (window !=top ) {top.location=window.location;}
-   //-->
-
+    
+    if (window !=top ) {
+    	top.location=window.location;
+    
 </SCRIPT>
-<style type="text/css">
+<style type='text/css'>
 #globalPass
 	{
 	position:absolute;
@@ -43,22 +43,24 @@ session_start();
 </style>
 </head>
 
-<body bgcolor="#ffffff">
+<body bgcolor='#ffffff'>
 	<div id='globalPass'>
 		<div class='BlocTextePass'>	
-			<p align="center">Veuillez saisir votre compte del.icio.us.</p>		
-			<form name="formulaire" method="post" action="index.php">
-			<p align="center">login :<br /> 
-			<input name="login_uti" type="text" id="login_uti">
+			<p align='center'>Veuillez saisir votre compte del.icio.us.</p>		
+			<form name='formulaire' method='post' action='index.php'>
+			<p align='center'>login :<br /> 
+			<input name='login_uti' type='text' id='login_uti'/>
 			</p>
-			<p align="center">mot de passe : <br />
-			<input name="mdp_uti" type="password" id="mdp_uti">
+			<p align='center'>mot de passe : <br />
+			<input name='mdp_uti' type='password' id='mdp_uti'/>
 			</p>
-			<p align="center">
-			<input type="submit" name="Submit" value="Connexion">
+			<p align='center'>
+			<input type='submit' name='Submit' value='Connexion'/>
 			</p>
 			</form>
 		</div>
-	</div><!--Fin div globalPass-->
+</div><!--Fin div globalPass-->
 </body>
 </html>
+
+

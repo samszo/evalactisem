@@ -78,6 +78,7 @@ class SauvFlux{
 					   $parents=$result[0].$aPost['name'].";";
 					   $id=$result[1];
 	                   $idpred=$id;
+	                  
 					   if(@mysql_num_rows($res)==0){
 						    
 					   	    $Xpath=Xpath('Ieml_Onto_Flux');
@@ -153,6 +154,18 @@ class SauvFlux{
 				        
 						}
 			             
+				   }else{
+				   	 $reponse=mysql_fetch_assoc($req);
+				   	 $Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
+					 $Q=$objSite->XmlParam->GetElements($Xpath);
+					 $where=str_replace("-idflux-",$reponse['onto_flux_id'],$Q[0]->where);
+					 $where=str_replace("-iduti-",$iduti,$where);
+					 $sql=$Q[0]->select.$Q[0]->from.$where;
+					 $r = $db->query($sql);
+					 
+					 if(@mysql_num_rows($r)==0)				   	 
+				   	 	$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id'],$db);
+				   	
 				   }
 			$db->close();  		 
 			}
@@ -197,7 +210,6 @@ class SauvFlux{
 				   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 				   $db->connect();
 				   $req = $db->query($sql);
-				   $db->close();
 				   if(@mysql_num_rows($req)==0){
 					 		
 				   			$Xpath=Xpath('Ieml_Onto_Flux');
@@ -222,7 +234,21 @@ class SauvFlux{
 				            $this->flux_uti($objSite,$iduti,$idflux,$db);
 					        $db->close();
 	  
+				   }else{
+	  	   			 $reponse=mysql_fetch_assoc($req);
+				   	 $Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
+					 $Q=$objSite->XmlParam->GetElements($Xpath);
+					 $where=str_replace("-idflux-",$reponse['onto_flux_id'],$Q[0]->where);
+					 $where=str_replace("-iduti-",$iduti,$where);
+					 $sql=$Q[0]->select.$Q[0]->from.$where;
+					 $r = $db->query($sql);
+					 
+					 if(@mysql_num_rows($r)==0)				   	 
+				   	 	
+					 $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id'],$db);
+				   	
 				   }
+				    $db->close();
 	 		} 
 	  	    
 		    

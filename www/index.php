@@ -125,6 +125,12 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
 
 					</groupbox>
+					<groupbox orient="vertical" >
+						<caption label="Administration"/>
+						
+			    			<button id="AdminDelicious" label="Suppimer mon compte" tooltiptext="Voir l'histogramme" onclick="SupprimerCompteDelicious();"/>
+
+					</groupbox>
 				</vbox>
 				
 				<vbox flex="1">
@@ -191,8 +197,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						
 						<vbox id="treeDicoIeml" flex="1" hidden="true" />			
 					</groupbox>
-					<vbox id='MajIeml' flex='1' hidden='true' >
-					   <label id='label_MajIeml' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
+					<vbox id='Maj' flex='1' hidden='true' >
+					   <label id='label_Maj' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
 					   <progressmeter id="progmeter" value="50%"  />
 				   </vbox>
 				</vbox>

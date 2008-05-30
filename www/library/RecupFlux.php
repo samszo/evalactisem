@@ -42,7 +42,7 @@
   }
   
   if($requette=="GetAllPosts"){
-  	if ($aPosts = $oDelicious->GetAllPosts()){
+  	if ($aPosts = $oDelicious->GetAllPosts('',true)){
   		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
 	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
   	 }else {
@@ -55,7 +55,7 @@
  
   if($requette=="GetPosts"){
   	
-  	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date)){
+  	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date,true)){
   	 	
   		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
 	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
@@ -70,7 +70,7 @@
   	
   
 if($requette=="GetRecentPosts"){
-  	if ($aPosts = $oDelicious->GetRecentPosts($tag,$count)){
+  	if ($aPosts = $oDelicious->GetRecentPosts($tag,$count,true)){
   	 
   		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
 	 
