@@ -658,7 +658,7 @@ function SupprimeDelicious(result,prarm){
 	    alert(result);
 		document.getElementById('Maj').setAttribute("hidden","true");
 	    document.getElementById('Maj').setAttribute("hidden","true");
-	    
+	    window.location.href = "exit.php";
 	}
 function Afficher(result,prarm){
 	
@@ -670,15 +670,17 @@ function Afficher(result,prarm){
 	}else{
 		
 		message='Les Posts suivants ont ete mis a jour: ';
-		//alert(message+result);
+		alert(message+result);
 		document.getElementById('Maj').setAttribute("hidden","true");
 	    document.getElementById('Maj').setAttribute("hidden","true");
 	}
 }
 function SupprimerCompteDelicious(){
+    
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
 	document.getElementById('label_Maj').setAttribute("value","La suppression est en cours ...");
-	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Delet_Compte_Delicious",'SupprimeDelicious','')
+	AjaxRequest(urlAjax+"library/ExeAjax.php?f=Delet_Compte_Delicious",'SupprimeDelicious','');
+	
 }
 
