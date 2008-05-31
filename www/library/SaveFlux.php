@@ -344,7 +344,6 @@ class SauvFlux{
 		$res=mysql_fetch_array($req);
 		if( @mysql_num_rows($req)==0){
 			$Xpath=Xpath('Enrg_Utilisateur');
-			echo $Xpath;
 			$Q=$objSite->XmlParam->GetElements($Xpath);
 			$values=str_replace("-login-",$uti_login,$Q[0]->values);
 			$sql=$Q[0]->insert.$values;
@@ -365,7 +364,7 @@ class SauvFlux{
 		$values=str_replace("-idflux-",$flux_id,$values);
 		$sql=$Q[0]->insert.$values;
 		if($this->trace)
-			echo "SaveFlux:utilisateur:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
+			echo "SaveFlux:flux_uti:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		$db->connect();
 		$db->query($sql);
