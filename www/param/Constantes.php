@@ -65,7 +65,7 @@ $SiteThyp = array(
 	"gmKey" => gmKey
 	); 
 $SiteMundi = array(
-	"PATH_WEB" => "http://www.mundilogiweb.com/ieml/", 
+	"PATH_WEB" => "http://www.mundilogiweb.com/evalactisem/", 
 	"SQL_LOGIN" => "mundilogieml", 
 	"SQL_PWD" => "uLkm3WuW", 
 	"SQL_HOST" => "mysql5-12",
