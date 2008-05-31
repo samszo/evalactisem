@@ -80,10 +80,13 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
+	<vbox id='Maj' hidden='true' >
+	   <label id='label_Maj' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
+	   <progressmeter id="progmeter" value="50%"  />
+   </vbox>
 	<label id="tradu" hidden="true" value=""/>
 	<hbox id="histogramme" flex="1">
 	   <vbox flex="1" >
-
 		 <groupbox orient="horizontal" flex="1" >
 			<caption <?php echo $lbl;?> />
 				<vbox>
@@ -101,12 +104,22 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 							   </menupopup>
 							</menulist>
 							<box id="box1" ></box>		    
+						    <button id="ShowFlux" label="Afficher les données"  onclick="RecupDeliciousFlux();"/>
+					</groupbox>
+										
+					<groupbox orient="vertical" >
+						<caption label="IEML"/>
+						
+			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
+			    			<button hidden="false" id="PostTo" label="Mettre à jour del.icio.us" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
+			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
+
 					</groupbox>
 					
 					<groupbox orient="vertical" >
 						<caption label="Graphique"/>
-						    <label value="Titre"/>
-							<textbox persist="value" id="titre" value="Tags en fonction de count"/>
+						    <label value="Titre" hidden="true"/>
+							<textbox persist="value" hidden="true" id="titre" value=""/>
 							<label value="Type "/>
 							<menulist id="type"  >
 								<menupopup>
@@ -118,14 +131,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					</groupbox>
 					
 					<groupbox orient="vertical" >
-						<caption label="IEML"/>
-						
-			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
-			    			<button hidden="false" id="PostTo" label="Mettre à jour del.icio.us" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
-			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
-
-					</groupbox>
-					<groupbox orient="vertical" >
 						<caption label="Administration"/>
 						
 			    			<button id="AdminDelicious" label="Suppimer mon compte" tooltiptext="Voir l'histogramme" onclick="SupprimerCompteDelicious();"/>
@@ -133,75 +138,71 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					</groupbox>
 				</vbox>
 				
-				<vbox flex="1">
-					<groupbox flex="3" orient="horizontal" >
-						<caption label="Visualisation des graphiques"/>
-						<groupbox flex="1" >
-							<caption label="del.icio.us"/>
-							<iframe id="webFrame" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
-						</groupbox>
-						<groupbox flex="1" >
-							<caption label="IEML"/>
-							<iframe id="iemlFrame" flex="1" src="http://ieml.org"  />
-						</groupbox>
-					</groupbox>
-			        <splitter collapse="after" resizeafter="farthest">
-						<grippy/>
-					</splitter>
+				<hbox flex="1">
 					<groupbox flex="1" orient="horizontal" >
 						<caption label="Visualisation des données"/>
 						<iframe  id="treeReq" flex="1" />
-						<vbox id="infosTrad" hidden="true"  >
-							<groupbox  >
-								<caption label="Langage du flux"/>
-							    <label id="id-trad-flux" hidden="true"/>
-								<label value="code :"/><label id="code-trad-flux" style="background-color:yellow" />
-							    <label value="descriptif : "/><label id="lib-trad-flux" style="background-color:yellow" />
-							</groupbox>
-							<groupbox >
-								<caption label="Langage IEML"/>
-							    <label id="id-trad-ieml" hidden="true"/>
-								<label value="code :"/><label id="code-trad-ieml" style="background-color:yellow" />
-								<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:yellow" />
-							</groupbox>
+						<vbox id="infosTrad" hidden="true" flex="1" >
 							<groupbox >
 								<caption label="Actions de traduction"/>
-								<button label="Ajouter" oncommand="AddTrad();"/>	
-								<button label="Supprimer" oncommand="SupTrad();"/>
-								<label id="trad-Sup-message" />			
-								<label id="trad-message" />
-								<label id="trad-Sup-message" />			
-								<label id="trad-message" />
+								<hbox >
+									<groupbox orient="horizontal" >
+										<caption label="Langage du flux"/>
+									    <label id="id-trad-flux" hidden="true"/>
+										<label value="code :"/><label id="code-trad-flux" style="background-color:yellow" />
+									    <label value="descriptif : "/><label id="lib-trad-flux" style="background-color:yellow" />
+									</groupbox>
+									<groupbox orient="horizontal" >
+										<caption label="Langage IEML"/>
+									    <label id="id-trad-ieml" hidden="true"/>
+										<label value="code :"/><label id="code-trad-ieml" style="background-color:yellow" />
+										<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:yellow" />
+									</groupbox>
+								</hbox>
+								<hbox>
+										<button label="Ajouter" oncommand="AddTrad();"/>	
+										<button label="Supprimer" oncommand="SupTrad();"/>
+										<button label="Modifier" oncommand="ModifTrad();"/>
+										<button label="Créer un noeud" oncommand="CreaNoeud();"/>
+										<label id="trad-Sup-message" hidden="true" />			
+										<label id="trad-message" hidden="true" />
+										<label id="trad-Sup-message" hidden="true" />			
+										<label id="trad-message" hidden="true" />
+								</hbox>
 							</groupbox>				
+							<box id="contDonnee" flex="1" hidden="true" >
+								<tabbox flex="1" >
+								    <tabs >
+								        <tab label="Tags traduits" />
+								        <tab label="Tags avec plusieurs traduction" />
+								        <tab label="Tags sans traduction" />
+								    </tabs>
+								    <tabpanels flex="1"  >
+								        <tabpanel >
+											<box id="tpSingleTrad" flex="1" context="clipmenu" />
+								         </tabpanel>
+								        <tabpanel>
+											<box id="tpMultiTrad" flex="1" />
+								         </tabpanel>
+								        <tabpanel>
+											<box id="tpNoTrad" flex="1" />
+											<vbox id="treeDicoIeml" flex="1" hidden="true" />
+								         </tabpanel>
+								    </tabpanels>
+								</tabbox>
+							</box>
 						</vbox>
-						<box id="contDonnee" flex="1" hidden="true" >
-						<tabbox flex="1" >
-						    <tabs >
-						        <tab label="Tags traduits" />
-						        <tab label="Tags avec plusieurs traduction" />
-						        <tab label="Tags sans traduction" />
-						    </tabs>
-						    <tabpanels flex="1"  >
-						        <tabpanel >
-									<box id="tpSingleTrad" flex="1"  />
-						         </tabpanel>
-						        <tabpanel>
-									<box id="tpMultiTrad" flex="1" />
-						         </tabpanel>
-						        <tabpanel>
-									<box id="tpNoTrad" flex="1" />
-						         </tabpanel>
-						    </tabpanels>
-						</tabbox>
-						</box>
 						
-						<vbox id="treeDicoIeml" flex="1" hidden="true" />			
+									
 					</groupbox>
-					<vbox id='Maj' flex='1' hidden='true' >
-					   <label id='label_Maj' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
-					   <progressmeter id="progmeter" value="50%"  />
-				   </vbox>
-				</vbox>
+			        <splitter collapse="before" resizeafter="farthest">
+						<grippy/>
+					</splitter>
+					<groupbox style="min-width: 350px;" orient="horizontal" >
+						<caption label="Visualisation des graphiques"/>
+						<iframe id="webFrame" style="min-width: 350px;" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+					</groupbox>
+				</hbox>
 			</groupbox>
 		</vbox> 
  </hbox>

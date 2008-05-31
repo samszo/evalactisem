@@ -392,7 +392,7 @@ class Xul{
     	
     	//$ihm = '<vbox '.$flex.' style="background-color:blue;" >';	
     	//$ihm .= '<label value="'.$label.'" style="font:arial;size:10;color:yellow" />';
-    	$ihm .= '<tree context="clipmenu"			
+    	$ihm .= '<tree 			
 			enableColumnDrag="true"
 			typesource="'.$label.'"
 			flex="1"	

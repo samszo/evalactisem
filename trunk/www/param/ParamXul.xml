@@ -297,30 +297,7 @@
 				
 				<where></where>
 			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','lib-param0-'],[0,1])"/>
-		</Query>	
-		
-		<Query fonction="GetTreeChildren_10eF" >
-			<Cols>
-				<col tag="id" parse="Integer" hidden="false"/>
-				<col tag="lib" hidden="false"/>
-				<col tag="code" hidden="false"/>
-				<col tag="niveau" hidden="false"/>
-				<col tag="type" hidden="true"/>
-			</Cols>
-			<select>SELECT oe.10ef_id , oe.10ef_code , oe.10ef_desc , oe.10ef_niveau , oe.10ef_parent </select>
-			
-				<from niv="0"> FROM ieml_10ef oe
-                               INNER JOIN ieml_10ef op ON oe.10ef_id = op.10ef_id
-                               AND op.10ef_parent =-parent-
-				
-				</from>
-				
-				<where></where>
-			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','lib-param0-'],[0,1])"/>
-		
-		</Query>	
-	    
-	  
+		</Query>	    
 	  
 	   <!-- tree du Flux delicious -->
 		
@@ -329,7 +306,7 @@
 				<col tag="id" parse="Integer" hidden="true"/>
 				<col tag="lib" hidden="false"/>
 				<col tag="code" hidden="false"/>
-				<col tag="niveau" hidden="false"/>
+				<col tag="niveau" hidden="true"/>
 				<col tag="type" hidden="true"/>
 			</Cols>
 			<select>SELECT oe.onto_flux_id id, oe.onto_flux_code code, oe.onto_flux_desc lib, oe.onto_flux_niveau niveau, oe.onto_flux_parents type </select>

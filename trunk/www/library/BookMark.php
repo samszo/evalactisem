@@ -80,7 +80,7 @@ class BookMark{
    		// pour chaque tag  il faut recupper l'url correspondante
     	
     	while($reponse=mysql_fetch_assoc($result)){     
-    		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','', false);
+    		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','', true);
     		if($this->trace)
 					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
     		foreach($Posts as $Post){
