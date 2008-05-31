@@ -151,8 +151,6 @@ function DelIiciousTreeGraph(result,param){
 	//affiche le iframe
 	document.getElementById('treeReq').setAttribute("hidden","false");
 	if((query=="GetAllBundles")||(query=="GetAllTags")||(query=="")){
-		
-		
 		Tree.setAttribute("src","overlay/tree.php?box=box2&ParaNom=GetOntoTree&type=flux");
 	}else
 	if((query=="GetAllPosts")||(query=="GetRecentPosts")||(query=="GetPosts")){
@@ -579,7 +577,7 @@ function Parser(op,type){
 	//AjaxRequest(url,"Afficher"," ","");
 	var url = urlAjax+"library/ExeAjax.php?f=GetGraph&code="+Iemlcode+"&type="+type;
 	url = GetResult(url);
-	Trad('iemlFrame',url);
+	Trad('webFrame',url);
 	
 }
 
