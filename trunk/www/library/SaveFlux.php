@@ -6,9 +6,12 @@ class SauvFlux{
 	public $parentsFlux_Band;
 	public $descFlux;
 	public $niveauFlux;
+	public $trace;
 	
 	
 	function _construct($desc_Band,$niv_Band,$parent_Band,$desc,$niv){
+		
+		$this->trace = TRACE;
 		
 		$this->descFlux_Band=$desc_Band;
 		$this->niveauFlux_Band=$niv_Band;
@@ -219,8 +222,6 @@ class SauvFlux{
 							$value = str_replace("-codeFlux-",addslashes($aPost['tag']),$value );
 							$value = str_replace("-niveauFlux-",$niv,$value );
 							$value = str_replace("-parentsFlux-",$parentsFlux,$value );
-						    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		                    $db->connect();
 							$sql = $Q[0]->insert.$value;
 						    $req = $db->query($sql);
 						    $idflux=mysql_insert_id();
@@ -335,6 +336,8 @@ class SauvFlux{
 		$Q=$objSite->XmlParam->GetElements($Xpath);
 		$where=str_replace("-login-",$uti_login,$Q[0]->where);
 		$sql=$Q[0]->select.$Q[0]->from.$where;
+		if($this->trace)
+			echo "SaveFlux:utilisateur:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		$db->connect();
 		$req = $db->query($sql);
@@ -361,8 +364,12 @@ class SauvFlux{
 		$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 		$values=str_replace("-idflux-",$flux_id,$values);
 		$sql=$Q[0]->insert.$values;
-		$sql;
-		$reponse = $db->query($sql);
+		if($this->trace)
+			echo "SaveFlux:utilisateur:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		$db->connect();
+		$db->query($sql);
+		$db->close();
 	}
 
     
