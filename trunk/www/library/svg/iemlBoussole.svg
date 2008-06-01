@@ -5,7 +5,11 @@
 	<style type="text/css"><![CDATA[
 		.styleFontLegende{font-size:10pt;}
 		.styleFontChoix{fill:red;font-size:10pt;}
+		.styleFontMouseOver{font-size:30pt;}
 		.styleI{fill:none;stroke:none;}
+		.styleF{fill:white;stroke:#000000;}
+		.styleM{fill:orangered;stroke:#000000;}
+		.styleO{fill:teal;stroke:#000000;}
 		.styleU{fill:blue;stroke:#000000;}
 		.styleT{fill:none;stroke:#000000;}
 		.styleB{fill:none;stroke:#000000;}
@@ -17,13 +21,13 @@
 		.styleBsrc{fill:red;stroke:#000000;}
 		.styleTsrc{fill:yellow;stroke:#000000;}
 		.styleSsrc{fill:orange;stroke:#000000;}
-		.styleEsrc{fill:fuchsia;stroke:#000000;}
+		.styleEsrc{fill:purple;stroke:#000000;}
 		.styleUdst{opacity:0.5;fill:blue;stroke:none;}
 		.styleAdst{opacity:0.5;fill:green;stroke:none;}
 		.styleTdst{opacity:0.5;fill:yellow;stroke:none;}
 		.styleBdst{opacity:0.5;fill:red;stroke:none;}
 		.styleSdst{opacity:0.5;fill:orange;stroke:none;}
-		.styleEdst{opacity:0.5;fill:fuchsia;stroke:none;}
+		.styleEdst{opacity:0.5;fill:purple;stroke:none;}
 	]]></style>
 	  <defs>
 	    <pattern id="MotifTriangle" patternUnits="userSpaceOnUse"
@@ -41,63 +45,21 @@
 	        <stop offset="50%" stop-color="white" />
 	        <stop offset="100%" stop-color="black" />
 	      </linearGradient>
+		 <radialGradient id="lGrad_O:M:." >
+	        <stop offset="0%" stop-color="orange" />
+	        <stop offset="50%" stop-color="green" />
+	      </radialGradient>
+		 <radialGradient id="lGrad_M:O:." >
+	        <stop offset="0%" stop-color="green" />
+	        <stop offset="50%" stop-color="orange" />
+	      </radialGradient>
       </defs>
 
-	<script type="text/ecmascript"><![CDATA[
+ <script xlink:href="../js/iemlBoussole.js" />  
 
-    var src, dst, trl;
-
-    function init() {
-	    location.reload();
-    }
-
-
-    function clickSrc(evt) {
-
-   	var tgt = evt.target;
-   	var txtLgd;
-	if(!src){
-    	src=tgt;
-    	txtLgd = "txtSrc"
-    }else{
-		if(!dst){
-	    	dst = tgt;
-	    	txtLgd = "txtDst"
-	    }else{
-			trl = tgt;	    
-	    	txtLgd = "txtTrl"
-	    }
-    }
-    	
-    var arrId = tgt.getAttribute("id").split("_");
-    
-	var id,class;
-	//met à jour les pavés seulement dans le cas du choix d'une primitive
-	if(arrId.length==2){
-		for (var i = 1; i <= 6; i++) {
-			//récupère l'identifiant du pavé
-			id = 'g_'+arrId[1]+'_'+i;
-			//modifie la class du pavé
-			if(document.getElementById(id).getAttribute("class")=="styleI")
-				class = 'style'+arrId[1]+'dst';
-			else
-				class = 'styleI';
-			document.getElementById(id).setAttribute("class",class);
-	
-		}
-	}
-	
-	//mis à jour du texte
-    document.getElementById(txtLgd).firstChild.data=tgt.getAttribute("iemlCode");
-
-    alert(tgt.getAttribute("id"));
-    //alert(src.getAttribute("iemlCode"));
-	
-    }
-  ]]></script>
 	<g id="gGlobal">
 		<g id="legende">
-			<rect x="400" y="10" width="250" height="100" stroke="black" stroke-width="2" fill="white"/>
+			<rect x="400" y="10" width="400" height="110" stroke="black" stroke-width="2" fill="white"/>
 			<text x="410" y="30" class="styleFontLegende">Source : </text>
 			<text id="txtSrc" x="490" y="30" class="styleFontChoix">Choisissez une source</text>
 			<text x="410" y="50" class="styleFontLegende">Destination : </text>
@@ -108,32 +70,76 @@
 				<rect x="410" y="80" width="70" height="20" stroke="black" stroke-width="2" fill="lightsteelblue"/>
 				<text x="420" y="95" class="styleFontLegende">initialiser</text>
 			</g>
+			<text id="txtMouseOver" x="500" y="110" class="styleFontMouseOver">Pointez un bloc</text>
+			<text id="txtRecordPoint" x="0" y="500" class="styleFontMouseOver"> </text>
 		</g>
-		<g id="g_primitives">
-			<polygon id="g_E" iemlCode="*E:**" onclick="clickSrc(evt)" fill="url(#MonDegrade)" points="357.031,140.311 477.147,207.023 357.142,276.501 317.891,208.518 "/>
-
+		<g visibility="hidden">
 			<g transform="rotate(60) translate(100,-300)" >
-				<polygon id="g_E1" iemlCode="*E:**" onclick="clickSrc(evt)" fill="url(#MonDegrade)" points="357.031,140.311 477.147,207.023 357.142,276.501 317.891,208.518 "/>
+ 				<polygon id="g_E1" iemlCode="*E:**" onclick="clickSrc(evt)" class="styleEsrc" points="357.031,140.311 477.147,207.023 357.142,276.501 317.891,208.518 "/>
 			</g>
 			<g transform="rotate(40) translate(100,-300)" >
 				<polygon id="g_E2" iemlCode="*E:**" onclick="clickSrc(evt)" fill="url(#MonDegrade)" points="357.031,140.311 477.147,207.023 357.142,276.501 317.891,208.518 "/>
 			</g>
-
-
-			<polygon id="g_U" iemlCode="*U:**" onclick="clickSrc(evt)" fill="url(#Mon)" points="239.128,71.549 356.962,0.882 357.128,139.549 278.628,139.549 "/>
-			
-			<polygon id="g_A" iemlCode="*A:**" onclick="clickSrc(evt)" class="styleAsrc" points="121.159,140.236 118.876,2.856 239.049,72.045 199.799,140.028 "/>
-			<polygon id="g_T" iemlCode="*T:**" onclick="clickSrc(evt)" class="styleTsrc" points="121.129,275.981 1.014,209.267 121.019,139.789 160.269,207.772 "/>
-			
-			<polygon id="g_B" iemlCode="*B:**" onclick="clickSrc(evt)" class="styleBdst" points="356.334,275.722 358.616,413.102 238.444,343.913 277.694,275.929 "/>
-			
-			<polygon id="g_S" iemlCode="*S:**" onclick="clickSrc(evt)" class="styleSsrc" points="238.367,344.408 120.533,415.074 120.366,276.408 198.866,276.408 "/>
+			<line x1="356.962" y1="0.882" x2="278.628" y2="139.549" stroke-width="2" stroke="black" />
 		</g>
+		<g id="g_primitives" >
+			<polygon id="g_E" iemlCode="*E:**" onclick="clickSrc(evt)" class="styleI" points="357.031,140.311 477.147,207.023 357.142,276.501 317.891,208.518 "/>
+			<polygon id="g_U" iemlCode="*U:**" onclick="clickSrc(evt)" class="styleI" points="239.128,71.549 356.962,0.882 357.128,139.549 278.628,139.549 "/>
+			<polygon id="g_A" iemlCode="*A:**" onclick="clickSrc(evt)" class="styleI" points="121.159,140.236 118.876,2.856 239.049,72.045 199.799,140.028 "/>
+			<polygon id="g_T" iemlCode="*T:**" onclick="clickSrc(evt)" class="styleI" points="121.129,275.981 1.014,209.267 121.019,139.789 160.269,207.772 "/>
+			<polygon id="g_B" iemlCode="*B:**" onclick="clickSrc(evt)" class="styleI" points="356.334,275.722 358.616,413.102 238.444,343.913 277.694,275.929 "/>	
+			<polygon id="g_S" iemlCode="*S:**" onclick="clickSrc(evt)" class="styleI" points="238.367,344.408 120.533,415.074 120.366,276.408 198.866,276.408 "/>
+					
+			<g id="g_F:" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)" >
+				<polygon id="g_*F:**_0" iemlCode="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="121.159,140.236 118.876,2.856 239.049,72.045 199.799,140.028 "/>
+
+				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
+					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
+					<polygon id="g_*O:**_2" visibility="hidden" iemlCode="*U:**" onclick="SelectPave(evt,'*F:**')" class="styleUsrc"  points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
+
+				<polygon id="g_*F:**_2" visibility="hidden" iemlCode="*M:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleM" points=" 199.654,139.729 219.292,173.746 239.089,208.178 258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 179.671,241.53 160.032,207.515 180.014,173.746 "/>
+					<polygon id="g_*M:**_1" visibility="hidden" iemlCode="*T:**" onclick="SelectPave(evt,'*F:**')" class="styleTsrc" points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
+					<polygon id="g_*M:**_2" visibility="hidden" iemlCode="*S:**" onclick="SelectPave(evt,'*F:**')" class="styleSsrc" points="218.949,241.531 199.31,275.546 179.671,241.53 160.032,207.515 199.31,207.515 238.588,207.515 "/>
+					<polygon id="g_*M:**_3" visibility="hidden" iemlCode="*B:**" onclick="SelectPave(evt,'*F:**')" class="styleBsrc" points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
+
+				<polygon id="g_*F:**_3" visibility="hidden" iemlCode="*E:**" onclick="SelectPave(evt,'*F:**')" class="styleEsrc"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
+
+				<line id="g_*F:**_on" visibility="visible" stroke-width="2" stroke="white" x1="199.799" y1="140.028" x2="118.876" y2="2.856"  />
+
+
+			</g>
+		</g>
+
+		<g id="g_cercle_centre" visibility="hidden" >
+				<circle cx="240" cy="186" r="60" class="styleBdst" />
+				<circle cx="240" cy="230" r="60" class="styleAdst" />
+		</g>
+
+	
 		<g id="g_events">
+
+			<g id="g_O:|M:" iemlCode="*F:**" visibility="hidden" onmouseover="ModifTxtMouseOver(evt)" >
+				<polygon class="styleSdst" points="121.159,140.236 118.876,2.856 239.049,72.045 199.799,140.028 "/>
+				<polygon id="g_O:|M:" iemlCode="*F:**" onclick="clickSrc(evt)" class="styleAdst" points="121.159,140.236 118.876,2.856 239.049,72.045 199.799,140.028 "/>
+				<polygon id="g_O:|M:_1" iemlCode="*O:**" onclick="clickSrc(evt)" class="styleAdst" points="219.419,105.63 239.059,71.614 258.698,105.63 278.337,139.646 239.059,139.645 199.781,139.646 "/>
+				<polygon id="g_O:|M:_3" iemlCode="*O:O:.**" onclick="clickSrc(evt)" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
+
+				<polygon id="g_O:|M:_2" iemlCode="*M:M:.**" onclick="clickSrc(evt)" class="styleSsrc" points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
+
+				<polygon id="g_O:|M:_4" iemlCode="*O:M:.**" onclick="clickSrc(evt)" fill="url(#lGrad_O:M:.)" points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
+				<polygon id="g_O:|M:_5" iemlCode="*M:O:.**" onclick="clickSrc(evt)" fill="url(#lGrad_M:O:.)" points="218.949,241.531 199.31,275.546 179.671,241.53 160.032,207.515 199.31,207.515 238.588,207.515 "/>
+
+				<polygon id="g_O:|M:_6" iemlCode="*M:**" onclick="clickSrc(evt)" class="styleSdst" points="140.82,174.345 121.181,140.329 160.459,140.329 199.737,140.33 180.098,174.344 160.459,208.361 "/>
+
+
+			</g>
+
+
+
 			<g id="g_events_E">
-				<polygon id="g_E_1" iemlCode="**E:.**" onclick="clickSrc(evt)" fill="url(#MonDegrade)" points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
-				<polygon id="g_E_2" iemlCode="**E:.**" onclick="clickSrc(evt)" fill="url(#MonDegrade)"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
-				<polygon id="g_E_3" iemlCode="**E:.**" onclick="clickSrc(evt)" fill="url(#MonDegrade)"  points="317.66,140.283 356.94,140.283 337.3,174.299 317.661,208.314 298.022,174.298 278.383,140.283 "/>
+				<polygon id="g_E_1" iemlCode="**E:.**" onclick="clickSrc(evt)" class="styleI" points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
+				<polygon id="g_E_2" iemlCode="**E:.**" onclick="clickSrc(evt)" class="styleI"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
+				<polygon id="g_E_3" iemlCode="**E:.**" onclick="clickSrc(evt)" class="styleI"  points="317.66,140.283 356.94,140.283 337.3,174.299 317.661,208.314 298.022,174.298 278.383,140.283 "/>
 				<polygon id="g_E_4" iemlCode="**E:.**" onclick="clickSrc(evt)" class="styleI" points="337.25,242.277 356.89,276.293 317.61,276.293 278.334,276.292 297.972,242.278 317.612,208.261 "/>
 				<polygon id="g_E_5" iemlCode="**E:.**" onclick="clickSrc(evt)" class="styleI" points="238.967,140.213 278.248,140.214 258.608,174.23 238.968,208.246 219.331,174.23 199.692,140.214 "/>
 				<polygon id="g_E_6" iemlCode="**E:.**" onclick="clickSrc(evt)" class="styleI" points="297.887,174.229 317.526,208.246 278.247,208.245 238.969,208.246 258.609,174.23 278.248,140.214 "/>
@@ -310,7 +316,7 @@
 		</g>
 
 
-		<g id="g_events_grille1" transform="scale(0.5) translate(240,200) rotate(0) ">
+		<g id="g_events_grille1" visibility="hidden" transform="scale(0.5) translate(240,200) rotate(0) ">
 			<path d="M238.967,140.713l39.281,0.001l-0.433-0.75l-19.64,34.016l-19.641,34.015h0.866l-19.638-34.016l-19.639-34.016
 				l-0.433,0.75L238.967,140.713z M199.259,140.464l19.639,34.016l19.638,34.016l0.433,0.75l0.433-0.75l19.64-34.015l19.64-34.016
 				l0.434-0.75h-0.866l-39.281-0.001l-39.275,0.001h-0.866L199.259,140.464z"/>
@@ -571,6 +577,7 @@
 				h39.278h0.866L278.273,275.978z"/>
 		</g>
 
+		<g id="RecordPoints" />
 
 
 	</g>
