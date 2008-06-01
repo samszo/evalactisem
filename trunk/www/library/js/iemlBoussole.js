@@ -48,7 +48,7 @@
 	    var arrId = doc.getAttribute("id").split("_");
 	    var iemlCode = doc.getAttribute("iemlCode");
 		if(trace)	
-		    dump("iemlBoussole:ModifPave:iemlCode="+iemlCode);
+		    alert("iemlBoussole:ModifPave:iemlCode="+iemlCode);
 	    
 		var id
 		var css;
@@ -58,7 +58,7 @@
 				//récupère l'identifiant du pavé
 				id = 'g_'+iemlCode+'_'+i;
 				if(trace)	
-				    dump("iemlBoussole:ModifPave:id="+id);
+				    alert("iemlBoussole:ModifPave:id="+id);
 				if(!document.getElementById(id))return;
 				//modifie la class du pavé
 				if(document.getElementById(id).getAttribute("class")=="styleI")
@@ -139,9 +139,11 @@
 		
 		//récupère l'identifiant du pavé de la branche
 		var id = 'g_'+idDst+'_0';
-
+		if(trace)
+			alert(id+' '+cssSrc);
+		
 		if(!document.getElementById(id))return;
-		//alert(id+' '+cssSrc);
+		
 		//modifie la class du pavé
 		if(document.getElementById(id).getAttribute("class")==cssSrc){
 			cssDst = 'styleF';
