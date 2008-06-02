@@ -1,5 +1,5 @@
     var src, dst, trl;
-	var trace=false;
+	var trace=true;
 	var arrNavig = new Array("ModifPave('O:|M:');");
 
     function init() {
