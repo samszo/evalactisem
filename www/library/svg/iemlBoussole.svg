@@ -117,8 +117,9 @@
 
 				<polygon id="g_*(O:|M:)**_1" iemlCode="*O:E**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleAdst" points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
 				<polygon id="g_*(O:|M:)**_3" iemlCode="*O:O:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
-
+  
 				<polygon id="g_*(O:|M:)**_2" iemlCode="*M:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleSsrc" points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
+				<polygon id="g_*(O:|M:)**_7" iemlCode="*M:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleO" points="199.653,139.729 238.932,139.729 238.932,207.76 219.293,173.745"/>
 
 				<polygon id="g_*(O:|M:)**_4" iemlCode="*O:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" fill="url(#lGrad_O:M:.)" points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
 				<polygon id="g_*(O:|M:)**_5" iemlCode="*M:O:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  fill="url(#lGrad_M:O:.)" points="218.949,241.531 199.31,275.546 179.671,241.53 160.032,207.515 199.31,207.515 238.588,207.515 "/>
