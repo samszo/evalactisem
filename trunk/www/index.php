@@ -56,11 +56,11 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 
-	<script src="js/Interface.js"/>
-	<script src="js/ajax.js"/>
-	<script src="js/TradTagIeml.js"/>
-	<script src="js/groupbox.js"/>
-	<script src="js/tree.js"/>
+	<script src="library/js/Interface.js"/>
+	<script src="library/js/ajax.js"/>
+	<script src="library/js/TradTagIeml.js"/>
+	<script src="library/js/groupbox.js"/>
+	<script src="library/js/tree.js"/>
 
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
@@ -141,7 +141,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				<hbox flex="1">
 					<groupbox flex="1" orient="horizontal" >
 						<caption label="Visualisation des données"/>
-						<iframe  id="treeReq" flex="1" />
+						
+						<vbox id='TableFlux' hidden='true' flex="1"/>
+							
 						<vbox id="infosTrad" hidden="true" flex="1" >
 							<groupbox >
 								<caption label="Actions de traduction"/>
@@ -214,4 +216,3 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  
  
 </window>
-

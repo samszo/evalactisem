@@ -5,7 +5,7 @@
   define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
   
 	// *** chemin de toutes les bases et les spip en service ***
-  define("TT_CLASS_BASE", PathRoot."/library/");
+  define("TT_CLASS_BASE", PathRoot."/library/php/");
 	// *** Define the path to the SVG class dir. ***
 	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
   // Include the class files.
@@ -22,16 +22,16 @@
   define ("MaxMarker", 300);
   define ("DELIM",'*');
   define ("DELIM_P",';');
-  define ("jsPathRoot",PathRoot."/js/");
+  define ("jsPathRoot",PathRoot."/library/js/");
   
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");
 
   define ("XML_CreaRdf",PathRoot."/param/ParamXul.xml");
   define('EOL', "\r\n");
-  define("XmlFlux",$_SESSION['loginSess']."_Flux.xml");
-  define('XmlGraphIeml' ,$_SESSION['loginSess']."_GraphIeml.xml");
-  define('Flux_PATH', 'tmpFlux/');
-  define('PATH_FILE_FLUX','/tmpFlux');
+  define("XmlFlux",$_SESSION['loginSess']."_Flux");
+  define('XmlGraphIeml' ,$_SESSION['loginSess']."_GraphIeml");
+  define('Flux_PATH', '../tmpFlux/');
+  define('PATH_FILE_FLUX','../tmpFlux/');
   define('LOGIN_IEML',"ieml");
   define('MDP_IEML','Paragraphe08');
   $Site = array(
@@ -88,8 +88,8 @@ $SiteMundi = array(
   );
 
   define ("PathWeb",$SITES[DEFSITE]["PATH_WEB"]);
-  define ("jsPathWeb",PathWeb."js/");
-  define ("ajaxPathWeb",PathWeb."library/ExeAjax.php");
+  define ("jsPathWeb",PathWeb."library/js/");
+  define ("ajaxPathWeb",PathWeb."library/php/ExeAjax.php");
   
   
 ?>

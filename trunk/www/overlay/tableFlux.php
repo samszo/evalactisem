@@ -1,10 +1,10 @@
 <?php
 	
-	$sTag=$_GET["tag"];
-	$sDesc=$_GET["desc"];
-	$sUrl=$_GET["url"];
-	$sDate=$_GET["date"];
-	$sNote=$_GET["note"];
+	$sTag=$_POST["tag"];
+	$sDesc=$_POST["desc"];
+	$sUrl=$_POST['url'];
+	$sDate=$_POST['date'];
+	$sNote=$_POST['note'];
 	
 	
 	$aTag=explode("*",$sTag);
@@ -12,49 +12,44 @@
 	$aUrl=explode(";",$sUrl);
 	$aDate=explode(";",$sDate);
 	$aNote=explode(";",$sNote);
-	//print_r($sNote) ;
-	header('Content-type: application/vnd.mozilla.xul+xml');
-	echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
-	?>
-	<box id="box" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-    <script >
-    	function ChargeUrl(src){
-	    	
-	    	var iFrame =parent.document.getElementById('webFrame');
-    		iFrame.setAttribute("src",src);
-    	}
-    </script>
-    
-		<listbox id="boxlist"  flex="1" onselect="ChargeUrl(this.selectedItem.childNodes[2].getAttribute('label'));">
+	
+	
+
+	
+
+		echo'<listbox id="boxlist"  flex="1" >';
 			
-			<listhead >
-				<listheader label="Tag"></listheader>
+			echo'<listhead >';
+				echo'<listheader label="Tag"></listheader>';
 			    
-				<listheader label="desc"></listheader>
+				echo'<listheader label="desc"></listheader>';
 				
-				<listheader label="url"></listheader>
+				echo'<listheader label="url"></listheader>';
 				
-				<listheader label="Note"></listheader>
+				echo'<listheader label="Note"></listheader>';
 				
-				<listheader label="date"></listheader>
+				echo'<listheader label="date"></listheader>';
 					
 							
-			</listhead>
-			<listcols>
-				<listcol flex="1"></listcol>
-				<splitter />
-				<listcol flex="1"></listcol>
-				<splitter />
-				<listcol flex="1"></listcol>
-				<splitter />
-				<listcol flex="1"></listcol>
-				<splitter />
-				<listcol flex="1"></listcol>
-				
-			</listcols>
+			echo'</listhead>';
+			echo'<listcols>';
+				echo'<listcol flex="1">';
+					echo'</listcol>';
+				echo'<splitter />';
+				echo'<listcol flex="1">';
+				echo'</listcol>';
+				echo'<splitter />';
+				echo'<listcol flex="1">';
+				echo'</listcol>';
+				echo'<splitter />';
+				echo'<listcol flex="1">';
+				echo'</listcol>';
+				echo'<splitter />';
+				echo'<listcol flex="1">';
+				echo'</listcol>';
+			echo'</listcols>';
 		
-		<?php
-			for($i=0;$i<sizeof($aUrl);$i++)
+			for($i=0;$i<sizeof($aTag);$i++)
 			{   
 			    
 				echo('<listitem>');
@@ -66,6 +61,9 @@
 				
 				echo('</listitem>');
 			}		    			    
-		?>
-		</listbox>
-	</box>
+		
+		echo'</listbox>';
+
+	
+	
+?>
