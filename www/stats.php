@@ -19,7 +19,7 @@ $query=$_GET["query"];
 function Parse($query){
 	
 	    $flux=$_SESSION['loginSess'].'.xml';
-		$file=opendir('./'.PATH_FILE_FLUX);
+		$file=opendir(PATH_FILE_FLUX);
 		while ($entree= readdir($file)){
 			if($entree==$flux){
 				$xml = simplexml_load_file(PATH_FILE_FLUX."/".$flux);
