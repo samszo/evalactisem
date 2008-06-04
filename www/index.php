@@ -142,7 +142,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox flex="1" orient="horizontal" >
 						<caption label="Visualisation des données"/>
 						
-						<vbox id='TableFlux' hidden='true' flex="1"/>
+						<vbox id='TableFlux'  flex="1"></vbox>
+					   
+						
 							
 						<vbox id="infosTrad" hidden="true" flex="1" >
 							<groupbox >

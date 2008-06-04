@@ -1,6 +1,6 @@
     var src, dst, trl;
 	var trace=true;
-	var arrNavig = new Array("ModifPave('O:|M:');");
+	var arrNavig = new Array("ModifPave('O:|M:')");
 
     function init() {
 	    location.reload();
@@ -127,7 +127,7 @@
     }
 
 
-    function SelectPave(evt,idDst){
+    function SelectPave1(evt,idDst){
 
 		if(trace)
 			ShowRecordPoint(evt);
@@ -143,7 +143,7 @@
 			alert(id+' '+cssSrc);
 		
 		if(!document.getElementById(id))return;
-		
+		 
 		//modifie la class du pavé
 		if(document.getElementById(id).getAttribute("class")==cssSrc){
 			cssDst = 'styleF';
@@ -159,6 +159,38 @@
 		//document.getElementById('g_'+arrId[1]+"_on").setAttribute("visibility",visiDst);
 		
     }
+    function SelectPave(evt,idDst){
+
+		if(trace)
+			ShowRecordPoint(evt);
+
+		//met à jour la branche suivant le choix du pavé
+	   	var tgt = evt.target;
+		var cssSrc = tgt.getAttribute("fill");		
+		var cssDst, visiDst;
+		id_fill=cssSrc.split("#");
+		fill=id_fill[1].replace(")","");
+		alert(idDst);
+		
+		var id = 'g_'+idDst+'_Src';
+		 if(trace)
+			alert(id+' '+fill);
+		//modifie la class du pavé
+		if(document.getElementById(id).getAttribute("fill")==fill){
+			cssDst = 'styleF';
+			visiDst = "hidden";
+		}else{
+			cssDst = fill;
+			visiDst = "visible";
+		}
+		//alert(visiDst+' '+cssDst);
+		
+		document.getElementById(id).setAttribute("fill",cssSrc);
+		//affiche le motif on pour la branche
+		//document.getElementById('g_'+arrId[1]+"_on").setAttribute("visibility",visiDst);
+		
+    }
+    
     
     function RecordPoint(evt){
 
