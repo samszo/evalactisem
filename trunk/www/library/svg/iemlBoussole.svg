@@ -30,29 +30,35 @@
 		.styleEdst{opacity:0.5;fill:purple;stroke:none;}
 	]]></style>
 	  <defs>
-	    <pattern id="MotifTriangle" patternUnits="userSpaceOnUse"
-	             x="0" y="0" width="100" height="100"
-	             viewBox="0 0 10 10" >
-	      <path d="M 0 0 L 7 0 L 3.5 7 z" fill="red" stroke="blue" />
-	    </pattern> 
-		 <linearGradient id="MonDegrade" gradientTransform="rotate(90)">
-	        <stop offset="0%" stop-color="black" stop-opacity="0.5" />
-	        <stop offset="50%" stop-color="white" />
-	        <stop offset="100%" stop-color="black" />
-	      </linearGradient>
-		 <linearGradient id="Mon" gradientTransform="rotate(30) ">
-	        <stop offset="0%" stop-color="black" />
-	        <stop offset="50%" stop-color="white" />
-	        <stop offset="100%" stop-color="black" />
-	      </linearGradient>
-		 <radialGradient id="lGrad_O:M:." >
-	        <stop offset="0%" stop-color="orange" />
-	        <stop offset="50%" stop-color="green" />
-	      </radialGradient>
-		 <radialGradient id="lGrad_M:O:." >
-	        <stop offset="0%" stop-color="green" />
-	        <stop offset="50%" stop-color="orange" />
-	      </radialGradient>
+		  <linearGradient id="lGrad_M:M:." x1="20%" y1="100%" x2="7%" y2="80%"  >
+		       <stop offset="35%" stop-color="teal"   />
+		       <stop offset="65%" stop-color="teal" />
+		    </linearGradient>
+		  <linearGradient id="lGrad_M:M:." x1="20%" y1="100%" x2="7%" y2="80%"  >
+		    <stop offset="35%" stop-color="orangered"   />
+		    <stop offset="65%" stop-color="orangered" />
+		 </linearGradient>
+		 <linearGradient id="lGrad_O:M:." x1="20%" y1="100%" x2="7%" y2="80%"  >
+	       <stop id="SrcO" offset="5%" stop-color="teal"   />
+	       <stop id="SrcM" offset="95%" stop-color="orangered" />
+	    </linearGradient>
+	    <linearGradient id="lGrad_M:O:."  gradientTransform="rotate(70)">
+	       <stop offset="40%" stop-color="orangered"/>
+	       <stop offset="60%" stop-color="teal" />
+	    </linearGradient>
+	    <linearGradient id="lGrad_O:E:." x1="100%" y1="10%" x2="45%" y2="80%">
+	       <stop offset="40%" stop-color="teal" />
+	       <stop offset="60%" stop-color="purple" />
+	    </linearGradient>
+	    <linearGradient id="lGrad_M:E:." >
+	       <stop offset="50%" stop-color="orangered" />
+	       <stop offset="50%" stop-color="purple" />
+	    </linearGradient>
+	    <linearGradient id="Css_Events" >
+	       <stop id="relat1"  offset="40%" stop-color="teal" />
+	       <stop id="relat2" offset="60%" stop-color="green" />
+	    </linearGradient>
+	
       </defs>
 
  <script xlink:href="../js/iemlBoussole.js" />  
@@ -90,9 +96,11 @@
 			<polygon id="g_B" iemlCode="*B:**" onclick="clickSrc(evt)" class="styleI" points="356.334,275.722 358.616,413.102 238.444,343.913 277.694,275.929 "/>	
 			<polygon id="g_S" iemlCode="*S:**" onclick="clickSrc(evt)" class="styleI" points="238.367,344.408 120.533,415.074 120.366,276.408 198.866,276.408 "/>
 					
-			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)" >
-				<polygon id="g_*F:**_0" iemlCode="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="121.159,140.236 118.876,2.856 239.049,72.045 199.799,140.028 "/>
-
+			 <g>
+				<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  onclick="SelectPave(evt,'*F:**')">
+				<polygon id="g_*F:**_0" iemlCode="*F:**" onclick="ShowHidePave(this.id)" fill="url(#Css_Events)" points="118.876,2.856 118.876,2.856 239.049,72.045 199.799,140.028 "/>
+                <polygon id="g_*F:**_0" iemlCode="*F:**" onclick="ShowHidePave(this.id)" fill="url(#Css_Events)" points="121.159,140.236 118.876,2.856 199.799,140.028 199.799,140.028 "/>
+            </g>
 				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
 					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
 					<polygon id="g_*O:**_2" visibility="hidden" iemlCode="*U:**" onclick="SelectPave(evt,'*F:**')" class="styleUsrc"  points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
@@ -111,20 +119,21 @@
 
 	
 		<g id="g_events">
-
-			<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" >
-				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="ShowHidePave(this.id)" class="styleF" points="239.128,71.549 356.962,0.882 357.128,139.549 278.628,139.549 "/>
-
-				<polygon id="g_*(O:|M:)**_1" iemlCode="*O:E**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleAdst" points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
-				<polygon id="g_*(O:|M:)**_3" iemlCode="*O:O:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
+             <g>
+				<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" >
+					<polygon id="g_*(O:|M:)**_Src" iemlCode="*(O:|M:)**" onclick="ShowHidePave(this.id)" fill="url(#lGrad_O:E:.)"  points="356.962,0.882 356.962,0.882 357.128,139.549 278.628,139.549 "/>
+                	<polygon id="g_*(O:|M:)**_Des" iemlCode="*(O:|M:)**" onclick="ShowHidePave(this.id)" fill="url(#lGrad_M:E:.)" points="239.128,71.549 356.962,0.882 357.128,139.549 278.628,139.549 "/>
+               </g>
+				<polygon id="g_*(O:|M:)**_1" iemlCode="*O:E**"   visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  fill="url(#lGrad_O:E:.)"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
+				<polygon id="g_*(O:|M:)**_3" iemlCode="*O:O:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  class="styleO" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 199.653,139.729 199.653,139.729 "/>
   
-				<polygon id="g_*(O:|M:)**_2" iemlCode="*M:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleSsrc" points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
-				<polygon id="g_*(O:|M:)**_7" iemlCode="*M:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleO" points="199.653,139.729 238.932,139.729 238.932,207.76 219.293,173.745"/>
+				<polygon id="g_*(O:|M:)**_2" iemlCode="*M:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  class="styleM" points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
+				
 
-				<polygon id="g_*(O:|M:)**_4" iemlCode="*O:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" fill="url(#lGrad_O:M:.)" points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
+				<polygon id="g_*(O:|M:)**_4" iemlCode="*O:M:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  fill="url(#lGrad_O:M:.)" points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
 				<polygon id="g_*(O:|M:)**_5" iemlCode="*M:O:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"  fill="url(#lGrad_M:O:.)" points="218.949,241.531 199.31,275.546 179.671,241.53 160.032,207.515 199.31,207.515 238.588,207.515 "/>
 
-				<polygon id="g_*(O:|M:)**_6" iemlCode="*M:E:**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')" class="styleSdst" points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
+				<polygon id="g_*(O:|M:)**_6" iemlCode="*M:E:**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**')"   fill="url(#lGrad_M:E:.)" points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
 
 				<line id="g_*(O:|M:)**_on" visibility="visible" stroke-width="2" stroke="white" x1="356.962" y1="0.882" x2="278.628" y2="139.549"  />
 

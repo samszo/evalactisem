@@ -15,7 +15,7 @@
 	
 	
 
-	
+	echo'<box id="box" >';
 
 		echo'<listbox id="boxlist"  flex="1" >';
 			
@@ -63,7 +63,7 @@
 			}		    			    
 		
 		echo'</listbox>';
-
+	echo '</box>';
 	
 	
 ?>
