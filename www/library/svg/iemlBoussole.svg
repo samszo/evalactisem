@@ -64,6 +64,14 @@
  <script xlink:href="../js/iemlBoussole.js" />  
 
 	<g id="gGlobal">
+		<g id="CreaPave">
+			<circle cx="10" cy="10" r="5" fill="black" onclick="ShowPoint()" />		
+			<circle cx="10" cy="25" r="5" fill="black" onclick="ShowPave()" />		
+			<circle cx="10" cy="40" r="5" fill="black" onclick="AddPave()" />		
+			<g id="ShowPave" transform="scale(0.6) translate(-140,-60)" >
+				<polygon id="dynaPave"  iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="" />
+			</g>
+		</g>
 		<g id="legende">
 			<rect x="400" y="10" width="400" height="110" stroke="black" stroke-width="2" fill="white"/>
 			<text x="410" y="30" class="styleFontLegende">Source : </text>
@@ -190,6 +198,9 @@
 				<polygon id="g_S_6" iemlCode="*T:.**" onclick="clickSrc(evt)" class="styleI" points="238.563,276.228 199.284,276.228 218.924,242.211 238.563,208.196 258.202,242.211 277.841,276.228 "/>
 			</g>
 		</g>
+
+		<g id="g_grille" visibility="hidden">
+
 		<g id="g_events_grille" visibility="hidden">
 			<path d="M238.967,140.713l39.281,0.001l-0.433-0.75l-19.64,34.016l-19.641,34.015h0.866l-19.638-34.016l-19.639-34.016
 				l-0.433,0.75L238.967,140.713z M199.259,140.464l19.639,34.016l19.638,34.016l0.433,0.75l0.433-0.75l19.64-34.015l19.64-34.016
@@ -580,6 +591,7 @@
 			<path d="M238.563,275.728h-39.279l0.433,0.75l19.64-34.017l19.638-34.016h-0.866l19.64,34.016l19.639,34.017l0.433-0.75H238.563z
 				 M278.273,275.978l-19.639-34.017l-19.639-34.016l-0.433-0.75l-0.433,0.75l-19.638,34.016l-19.64,34.017l-0.433,0.75h0.866h39.279
 				h39.278h0.866L278.273,275.978z"/>
+		</g>
 		</g>
 
 		<g id="RecordPoints" />
