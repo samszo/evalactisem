@@ -1,5 +1,6 @@
     var src, dst, trl;
-	var trace=true;
+	var trace=false;
+	var creaPoint=true;
 	var arrNavig = new Array("ModifPave('O:|M:')");
 
     function init() {
@@ -129,7 +130,7 @@
 
     function SelectPave1(evt,idDst){
 
-		if(trace)
+		if(creaPoint)
 			ShowRecordPoint(evt);
 
 		//met à jour la branche suivant le choix du pavé
@@ -199,6 +200,8 @@
 	    var point = tgt.getAttribute("cx")+","+tgt.getAttribute("cy")+" ";
 
 	    document.getElementById("txtRecordPoint").firstChild.data += point;		
+	    var pave = document.getElementById("txtRecordPoint").firstChild.data;
+	    document.getElementById("dynaPave").setAttribute("points",pave);		
 		
     }
 
@@ -225,7 +228,7 @@
 			a.setAttribute("cy", point[1]);
 			a.setAttribute("r", "6");
 			a.setAttribute("class", "styleBdst");
-			a.setAttribute("onclick", "RecordPoint(evt)");
+			a.setAttribute("onclick", "RecordPoint(evt);");
 			cont.appendChild(a); 
 		}	
     }
