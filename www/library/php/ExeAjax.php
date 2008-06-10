@@ -373,7 +373,7 @@
 	   		 if(file_exists(Flux_PATH.$file)){
              	$xml=simplexml_load_file(Flux_PATH.$file);
                 foreach($xml->xpath('color') as $color){
-                	$arrColor[$color['id'].""]=$color."";
+                	$arrColor.=$color['id'].';'.$color.'&';
                 }
              	 
            }
