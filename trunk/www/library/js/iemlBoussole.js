@@ -307,10 +307,9 @@
     }
    
     function AfficheResult(result,param){
-        
-        
-         res=result.split("[");
-          alert(res);
+      
+          alert(result);
+          arrPatette=result.split('&');
          var arrIdB= new Array("g_*F:**_0","g_*(O:|M:)**_0");
 	  	 for(var i = 0; i < arrIdB.length; i++){
 		  	 iemlCode=document.getElementById(arrIdB[i]).getAttribute("iemlCode");
@@ -318,12 +317,14 @@
 		  	 for (var k = 1; k <= 18; k++) {		
 		  	    id = 'g_'+iemlCode+'_'+k;
 		  	    if(!document.getElementById(id)) break;
+		  	    col=arrPatette[l].split(";");
 		  	    
 			  		document.getElementById(id).setAttribute("fill",result[id]);
 			  	    for (var j = 1; j <= 18; j++) {
 					//récupère l'identifiant du pavé
 						idchild = 'g_'+iemlCode+'_'+j;
 		                if(!document.getElementById(idchild)) break;
+		                  col=arrPatette[l].split(";");
 		                document.getElementById(idchild).setAttribute("fill",result[idchild]);
 					    
 					}
