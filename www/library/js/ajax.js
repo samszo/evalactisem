@@ -124,7 +124,7 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 
 }
 
-function AjaxRequestPost(url,fonction_sortie,urlparams,params,id) {
+function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
    
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
@@ -132,7 +132,7 @@ function AjaxRequestPost(url,fonction_sortie,urlparams,params,id) {
  	this.params = params;
 	this.id=id;
 	//alert(params);
-
+ 
 	var ajaxRequest = this;
 
     if (window.XMLHttpRequest) {

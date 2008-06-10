@@ -12,8 +12,6 @@
 
         $resultat = "";
 
-        
-        
         if(isset($_POST['f'])){
               $fonction = $_POST['f'];
               echo $fonction;
@@ -39,10 +37,6 @@
          else
          		$mbook="toto";
        
-         		
-       
-                
-
 		switch ($fonction) {
                 case 'AddDictio':
                         $resultat = AddDictio($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml']);
@@ -91,8 +85,15 @@
                 case 'Table_Flux':
                		$resultat=Table_Flux($_GET['tag'],$_GET['desc'],$_GET['url'],$_GET['date'],$_GET['note']);
                		break;
-               
-		}
+               	
+                case 'SavePalette':
+                	$resultat=SavePalette(stripslashes ($_POST['color']));
+                	break;
+                
+                case 'GetPalette':
+                	$resultat=GetPalette();
+                	break;
+       }
         
         echo $resultat; 
 
@@ -266,6 +267,7 @@
                 return $message;
                 
         }
+
         function SetProc($id,$code,$desc){
         
                 global $objSite;
@@ -342,7 +344,7 @@
 	         
 	    }
     
-	   function Delet_Compte_Delicious(){
+	   	function Delet_Compte_Delicious(){
 	     global $objSite;
 	     $oDelicious=$_SESSION['Delicious'];
 	     $bmark=new  BookMark();
@@ -351,11 +353,32 @@
 	   
 	   }
        
-	   function Table_Flux($sTag,$sUrl,$sDesc,$sDate,$sNote){
+	   	function Table_Flux($sTag,$sUrl,$sDesc,$sDate,$sNote){
        	
        $objXul = new Xul($objSite);
        return $objXul->TableFlux($sTag,$sUrl,$sDesc,$sDate,$sNote);
 	}
-     
+       
+	   	function SavePalette($color){
+	   	 	global $objSite;
+	   		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+	   	 	
+	   	 	$sem->CreatFileXml($color,'Color_'.$_SESSION['loginSess']);
+	   	}
+	   	
+	   	function GetPalette(){
+	   		global $objSite;
+	   		$arrColor;
+	   		$file=md5('Color_'.$_SESSION['loginSess']).".xml";
+	   		 if(file_exists(Flux_PATH.$file)){
+             	$xml=simplexml_load_file(Flux_PATH.$file);
+                foreach($xml->xpath('color') as $color){
+                	$arrColor[$color['id'].""]=$color."";
+                }
+             	 
+           }
+	       print_r($arrColor);  
+	   }
+          
         
         ?>

@@ -186,7 +186,7 @@ function SaveFlux(result,param){
 function Trad_Pars_Ieml(result, param){
 	 	var trad;
         var synIeml="";
-        var Ieml;
+        var Ieml; 
         var FluxN="";
         var FluxM="";
         var FluxS="";
@@ -613,6 +613,6 @@ function GoUrl(url){
 }
 function CreaNoeud(){
 
-	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.svg");
+	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.xul");
 }
 

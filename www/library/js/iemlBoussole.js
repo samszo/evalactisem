@@ -2,10 +2,13 @@
 	var trace=false;
 	var creaPoint=false;
 	var DyanaPavecreaPoint=false;
+	var colorChoos=false;
+	var color="";
 	var arrNavig = new Array("ModifPave('O:|M:');");
    
     function init() {
-	    location.reload();
+        GetPalette();
+	   
     }
 
 
@@ -137,7 +140,7 @@
         	ShowRecordPoint(evt)
 		//met à jour la branche suivant le choix du pavé
 	   	var tgt = evt.target;
-		var cssSrc = tgt.getAttribute("class");		
+		var cssSrc = tgt.getAttribute("fill");		
 		var cssDst, visiDst;
 		
 		//récupère l'identifiant du pavé de la branche
@@ -148,8 +151,8 @@
 		if(!document.getElementById(id))return;
 		
 		//modifie la class du pavé
-		if(document.getElementById(id).getAttribute("class")==cssSrc){
-			cssDst = 'styleF';
+		if(document.getElementById(id).getAttribute("fill")==cssSrc){
+			cssDst = 'white';
 			visiDst = "hidden";
 		}else{
 			cssDst = cssSrc;
@@ -157,7 +160,7 @@
 		}
 		//alert(visiDst+' '+cssDst);
 		
-		document.getElementById(id).setAttribute("class",cssDst);
+		document.getElementById(id).setAttribute("fill",cssDst);
 		//affiche le motif on pour la branche
 		//document.getElementById('g_'+arrId[1]+"_on").setAttribute("visibility",visiDst);
 		
@@ -216,18 +219,26 @@
     }
     
     function ShowPave(){
-    	if(DyanaPavecreaPoint==false)
+    	if(DyanaPavecreaPoint==false){
     		DyanaPavecreaPoint=true;
-    	else
-    	DyanaPavecreaPoint=false;
+    		
+    	}else{
+    		DyanaPavecreaPoint=false;
+    		var pave = document.getElementById("ShowPave");
+       		while(pave.hasChildNodes())
+				pave.removeChild(pave.firstChild);
+    	
+    	}
     }
     function ShowPoints(){
-    	if(creaPoint==true)
+    	if(creaPoint==true){
     		creaPoint=false;
-       else
+    		document.getElementById("dynaPave").setAttribute("points", "");
+    		
+       }else
        	creaPoint=true;
        	
-    }
+}
     function Trace(){
      if(trace==true)
      	trace=false;
@@ -235,4 +246,88 @@
      	if(trace==false)
      		trace=true;
 	}
-    
+  function colorpicker(couleur){
+   	 document.getElementById("colorpicker").hidePopup();
+   	 colorChoos='true';
+   	 color=couleur;
+  }
+  function ChangeColor(id){
+    var colors="";
+    var l=0;
+  	if(colorChoos=='true'){
+  		 document.getElementById(id).setAttribute("fill", color);
+  	     colorChoos='false';
+  	     var arrIdB= new Array("g_*F:**_0","g_*(O:|M:)**_0");
+	  	 for(var i = 0; i < arrIdB.length; i++){
+		  	 iemlCode=document.getElementById(arrIdB[i]).getAttribute("iemlCode");
+		  	 //recuppere les couleurs de tous les paves
+		  	 for (var k = 1; k <= 18; k++) {
+		  	    id = 'g_'+iemlCode+'_'+k;
+		  	    if(!document.getElementById(id)) break;
+			  	colors+='<color id="'+id+'">'+document.getElementById(id).getAttribute("fill")+'</color>';
+			  	colors+=RecupFill(id);
+		  	
+		  	}
+		  	
+	  	}
+  	 colors='<palette>'+colors+'</palette>';
+     urlparams="f=SavePalette&color="+colors;
+     AjaxRequestPost(urlAjax+"/library/php/ExeAjax.php",urlparams,"","","");
+  	}
+ } 
+ function RecupFill(idb){
+         var fill="";
+		//affiche les pavés d'une branche
+	    var iemlCode = document.getElementById(idb).getAttribute("iemlCode");
+	   	if(trace)
+			alert("iemlBoussole:RecupFill:iemlCode="+iemlCode);
+	       
+		var id
+		for (var i = 1; i <= 18; i++) {
+			//récupère l'identifiant du pavé
+			
+			id = 'g_'+iemlCode+'_'+i;
+		    if(trace)
+			    dump("iemlBoussole:RecupFill:id="+id);
+			if(!document.getElementById(id)) break;;
+			//modifie la visibilité du pavé
+		   if(trace)
+			  dump("iemlBoussole:RecupFill:fill="+fill);
+			
+			fill+='<color id="'+id+'">'+document.getElementById(id).getAttribute("fill")+'</color>';
+			if(trace)
+			  dump("iemlBoussole:RecupFill:fill="+color);
+			//gère les pavés enfants
+			
+		}
+    	return fill;
+    }
+    function GetPalette(){
+    	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=GetPalette" ,'AfficheResult','');
+    }
+   
+    function AfficheResult(result,param){
+        
+        
+         res=result.split("[");
+          alert(res);
+         var arrIdB= new Array("g_*F:**_0","g_*(O:|M:)**_0");
+	  	 for(var i = 0; i < arrIdB.length; i++){
+		  	 iemlCode=document.getElementById(arrIdB[i]).getAttribute("iemlCode");
+		  	 //recuppere les couleurs de tous les paves
+		  	 for (var k = 1; k <= 18; k++) {		
+		  	    id = 'g_'+iemlCode+'_'+k;
+		  	    if(!document.getElementById(id)) break;
+		  	    
+			  		document.getElementById(id).setAttribute("fill",result[id]);
+			  	    for (var j = 1; j <= 18; j++) {
+					//récupère l'identifiant du pavé
+						idchild = 'g_'+iemlCode+'_'+j;
+		                if(!document.getElementById(idchild)) break;
+		                document.getElementById(idchild).setAttribute("fill",result[idchild]);
+					    
+					}
+	  		 
+	  		}
+  		}
+  }
