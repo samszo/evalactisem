@@ -1,81 +1,25 @@
     var src, dst, trl,evnt;
 	var trace=false;
 	var creaPoint=false;
-	var DyanaPavecreaPoint=false;
-	var colorChoos=false;
-	var color="";
+	var DynaPaveCreaPoint=false;
 	var arrNavig = new Array("ModifPave('O:|M:');");
+	//nombre maximum d'enfant 
+	var maxEnfant = 20;
    
     function init() {
-        GetPalette();
-	   
+	    location.reload();
     }
 
-
-    function clickSrc(evt) {
-
-	   	var tgt = evt.target;
-	   	var txtLgd;
-		if(!src){
-	    	src=tgt;
-	    	txtLgd = "txtSrc"
-	    }else{
-			if(!dst){
-		    	dst = tgt;
-		    	txtLgd = "txtDst"
-		    }else{
-				trl = tgt;	    
-		    	txtLgd = "txtTrl"
-		    }
-	    }
-	    	
-		ModifPave(tgt);
-		
-		//mis à jour du texte
-	    document.getElementById(txtLgd).firstChild.data=tgt.getAttribute("iemlCode");
-	
-		if(trace)	
-		    console.log("iemlBoussole:clickSrc:%id=",tgt.getAttribute("id"));
-	    //alert(src.getAttribute("iemlCode"));
-	
-    }
     
     function ModifTxtMouseOver(evt){
 	
 		//mis à jour du texte sur le mouse over
 	   	var tgt = evt.target;
 	    document.getElementById("txtMouseOver").firstChild.data=tgt.getAttribute("iemlCode");
+	    //document.getElementById("txtMousePoint").firstChild.data=tgt.getAttribute("iemlCode");
     	
     }
     
-    function ModifPave(doc){
-
-	    var arrId = doc.getAttribute("id").split("_");
-	    var iemlCode = doc.getAttribute("iemlCode");
-		if(trace)	
-		    alert("iemlBoussole:ModifPave:iemlCode="+iemlCode);
-	    
-		var id
-		var css;
-		//met à jour les pavés seulement dans le cas du choix d'une primitive
-		if(arrId.length==2){
-			for (var i = 1; i <= 16; i++) {
-				//récupère l'identifiant du pavé
-				id = 'g_'+iemlCode+'_'+i;
-				if(trace)	
-				    alert("iemlBoussole:ModifPave:id="+id);
-				if(!document.getElementById(id))return;
-				//modifie la class du pavé
-				if(document.getElementById(id).getAttribute("class")=="styleI")
-					css = 'style'+arrId[1]+'dst';
-				else
-					css = 'styleI';
-				document.getElementById(id).setAttribute("class",css);		
-			}
-		}
-    	
-    }
-
     function ShowHidePave(idSrc,n){
 
 		//affiche les pavés d'une branche
@@ -84,31 +28,44 @@
 	   	if(trace)
 			alert("iemlBoussole:ShowHidePave:iemlCode="+iemlCode);
 	    
-		var id
-		for (var i = 1; i <= n; i++) {
-			//récupère l'identifiant du pavé
-			id = 'g_'+iemlCode+'_'+i;
+		var id;
+
+		//traitement du pavé central
+	    BoucleHideShow(iemlCode,'_');
+
+		//traitement de la branche
+	    //BoucleHideShow(iemlCode,'-');
+
+    	
+    }
+    
+    function BoucleHideShow(iemlCode, gId){
+		
+		var id;
+		    	
+		for (var i = 1; i <= maxEnfant; i++) {
+			id = 'g_'+iemlCode+gId+i;
 			if(trace)
-			    dump("iemlBoussole:ShowHidePave:id="+id +"document.getElementById(id) "+document.getElementById(id));
+			    dump("iemlBoussole:BoucleHideShow:id="+id +"document.getElementById(id) "+document.getElementById(id));
 			if(!document.getElementById(id))return;
 			//modifie la visibilité du pavé
 			if(document.getElementById(id).getAttribute("visibility")=="hidden"){
 				document.getElementById(id).setAttribute("visibility","visible");
-				HidePave(id);
+				HidePave(id,gId);
 			}else{
 				document.getElementById(id).setAttribute("visibility","hidden");
 				//gère les pavés enfants
-				HidePave(id);
+				HidePave(id,gId);
 				if(trace)
 					//supprime les RecordPoint
 					DelRecordPoint();
 			}
 	
 		}
-    	
+
     }
    
-    function HidePave(idSrc){
+    function HidePave(idSrc,gId){
 
 		//affiche les pavés d'une branche
 	   	var tgt = document.getElementById(idSrc);
@@ -117,31 +74,32 @@
 			alert("iemlBoussole:HidePave:iemlCode="+iemlCode);
 	       
 		var id
-		for (var i = 1; i <= 18; i++) {
+		for (var i = 1; i <= maxEnfant; i++) {
 			//récupère l'identifiant du pavé
-			id = 'g_'+iemlCode+'_'+i;
+			id = 'g_'+iemlCode+gId+i;
 		    if(trace)
 			    dump("iemlBoussole:HidePave:id="+id);
 			if(!document.getElementById(id))return;
 			//modifie la visibilité du pavé
 			document.getElementById(id).setAttribute("visibility","hidden");
 			//gère les pavés enfants
-			HidePave(id);	
+			HidePave(id,gId);	
 		}
     	
     }
 
    
-    function SelectPave(evt,idDst){
+    function SelectPave(evt,idDst,idSrc){
         
-		if(DyanaPavecreaPoint)
-			CreatDyanaPave(evt);
+		if(DynaPaveCreaPoint)
+			CreaDynaPave(evt);
         if(creaPoint)
         	ShowRecordPoint(evt)
 		//met à jour la branche suivant le choix du pavé
 	   	var tgt = evt.target;
-		var cssSrc = tgt.getAttribute("fill");		
-		var cssDst, visiDst;
+		var cssSrc,cssDst, visiDst;
+		if(!idSrc)
+			cssSrc = tgt.getAttribute("class");		
 		
 		//récupère l'identifiant du pavé de la branche
 		var id = 'g_'+idDst+'_0';
@@ -151,15 +109,17 @@
 		if(!document.getElementById(id))return;
 		
 		//modifie la class du pavé
-		if(document.getElementById(id).getAttribute("fill")==cssSrc){
-			cssDst = 'white';
+		if(document.getElementById(id).getAttribute("class")==cssSrc){
+			//efface
+			cssDst = 'styleF';
 			visiDst = "hidden";
 		}else{
+			//met le style de la source
 			cssDst = cssSrc;
 			visiDst = "visible";
 		}
 		//alert(visiDst+' '+cssDst);
-		document.getElementById(id).setAttribute("fill",cssDst);
+		document.getElementById(id).setAttribute("class",cssDst);
 		//affiche le motif on pour la branche
 		//document.getElementById('g_'+arrId[1]+"_on").setAttribute("visibility",visiDst);
 		
@@ -204,7 +164,7 @@
 			cont.appendChild(a); 
 		}	
     }
-    function CreatDyanaPave(evt){
+    function CreaDynaPave(evt){
    		var SVG_NS ="http://www.w3.org/2000/svg";
    		var tgt = evt.target;
    		var g=document.getElementById("ShowPave");
@@ -218,26 +178,23 @@
     }
     
     function ShowPave(){
-    	if(DyanaPavecreaPoint==false){
-    		DyanaPavecreaPoint=true;
-    		
-    	}else{
-    		DyanaPavecreaPoint=false;
-    		var pave = document.getElementById("ShowPave");
-       		while(pave.hasChildNodes())
-				pave.removeChild(pave.firstChild);
-    	
-    	}
+    	if(DynaPaveCreaPoint==false)
+    		DynaPaveCreaPoint=true;
+    	else
+    	DynaPaveCreaPoint=false;
     }
     function ShowPoints(){
-    	if(creaPoint==true){
+	    //initialisation du texte de la séquence de points
+	    document.getElementById("txtRecordPoint").firstChild.data = " ";
+	    //efface le pavé déja créer
+	    document.getElementById("dynaPave").setAttribute("points","");		
+	    		
+    	if(creaPoint==true)
     		creaPoint=false;
-    		document.getElementById("dynaPave").setAttribute("points", "");
-    		
-       }else
-       	creaPoint=true;
+       	else
+       		creaPoint=true;
        	
-}
+    }
     function Trace(){
      if(trace==true)
      	trace=false;
