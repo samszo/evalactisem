@@ -42,6 +42,8 @@
 		.styleA{fill:none;stroke:#000000;}
 		.styleS{fill:none;stroke:#000000;}
 		
+		.styleLigne{stroke-width:2; stroke:black;}
+		
 		.styleUsrc{fill:blue;stroke:#000000;}
 		.styleAsrc{fill:green;stroke:#000000;}
 		.styleBsrc{fill:red;stroke:#000000;}
@@ -113,7 +115,7 @@
 	    <g id="g_events">
 
 			<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" >
-				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'O:|M:');ShowHidePave(this.id,18)" class="styleF"   points="239.128,71.549 356.962,0.882 357.128,139.549 278.628,139.549 "/>
+				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave(this.id,18)" fill="white" stroke="#000000"    points="239.128,71.549 356.962,0.882 357.128,139.549 278.628,139.549 "/>
 
 				<polygon id="g_*(O:|M:)**_1" iemlCode="*O:E:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_1');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,6);" fill="purple" stroke="#000000"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
 				<polygon id="g_*(O:|M:)**_2" iemlCode="*O:E:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_2');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,6);" fill="teal" stroke="#000000"  points=" 317.509,208.217 357.142,276.501 278.23,276.249  "/>
@@ -147,14 +149,14 @@
 				    <polygon id="g_*M:O:.**_6" iemlCode="*x.**"  visibility="hidden" onclick="ChangeColor('g_*M:O:.**_6');SelectPave(evt,'*(O:|M:)**')" fill="purple" stroke="#000000"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
 				    
 					
-				<polygon id="g_*(O:|M:)**_9" iemlCode="*M:E:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_9');SelectPave(evt,'*(O:|M:)**');;ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,3);"  fill="orangered" stroke="#000000"  points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
-                <polygon id="g_*(O:|M:)**_10" iemlCode="*M:E:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_10');SelectPave(evt,'*(O:|M:)**');;ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,3);" fill="teal" stroke="#000000"   points=" 238.367,344.408 198.866,276.408 278.367,276.209 "/>
+				<polygon id="g_*(O:|M:)**_9" iemlCode="*M:E:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_9');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,3);"  fill="orangered" stroke="#000000"  points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
+                <polygon id="g_*(O:|M:)**_10" iemlCode="*M:E:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_10');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,3);" fill="teal" stroke="#000000"   points=" 238.367,344.408 198.866,276.408 278.367,276.209 "/>
                 	<polygon id="g_*M:E:.**_1" visibility="hidden" iemlCode="*T:**" onclick="ChangeColor('g_*M:E**_1');SelectPave(evt,'*(O:|M:)**');" fill="yellow" stroke="#000000"  points=" 199.653,139.729 278.177,139.729 317.454,207.761 238.898,207.761  "/>
 					<polygon id="g_*M:E:.**_2" visibility="hidden" iemlCode="*S:**" onclick="ChangeColor('g_*M:E**_2');SelectPave(evt,'*(O:|M:)**');" fill="orange" stroke="#000000" points=" 317.509,208.217 239.089,208.178 199.812,276.209 278.367,276.209  "/>
 					<polygon id="g_*M:E:.**_3" visibility="hidden" iemlCode="*B:**" onclick="ChangeColor('g_*M:E**_3');SelectPave(evt,'*(O:|M:)**');" fill="red" stroke="#000000" points=" 199.654,139.729 238.931,207.761 199.31,275.546 160.375,207.761  "/>
                 
-                <polygon id="g_*(O:|M:)**_11" iemlCode="*M:M:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_11');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,9);"  fill="orangered" stroke="#000000"  points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
-                <polygon id="g_*(O:|M:)**_12" iemlCode="*M:.M:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_12');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,9);" fill="orangered" stroke="#000000"  points=" 121.159,140.236 160.375,207.761 199.654,139.729  "/> 
+                <polygon id="g_*(O:|M:)**_11" iemlCode="*M:M:.**"  visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_11');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,18);"  fill="orangered" stroke="#000000"  points="180.014,173.746 199.654,139.729 219.292,173.746 238.931,207.761 199.654,207.76 160.375,207.761 "/>
+                <polygon id="g_*(O:|M:)**_12" iemlCode="*M:M:.**" visibility="hidden" onclick="ChangeColor('g_*(O:|M:)**_12');SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**',18);ShowHidePave(this.id,18);" fill="orangered" stroke="#000000"  points=" 121.159,140.236 160.375,207.761 199.654,139.729  "/> 
                 	<polygon id="g_*M:M:.**_1" iemlCode="*s.**"   visibility="hidden" onclick="ChangeColor('g_*M:M:.**_1');SelectPave(evt,'*(O:|M:)**')" fill="orange" stroke="#000000"  points=" 199.653,139.729 238.898,207.761 252.024,139.72"/>
 				    <polygon id="g_*M:M:.**_2" iemlCode="*b.**"   visibility="hidden" onclick="ChangeColor('g_*M:M:.**_2');SelectPave(evt,'*(O:|M:)**')" fill="red" stroke="#000000"  points=" 252.024,139.72 278.628,139.549 295.961,170.067 238.953,208.217 "/>
 				    <polygon id="g_*M:M:.**_3" iemlCode="*t.**"   visibility="hidden" onclick="ChangeColor('g_*M:M:.**_3');SelectPave(evt,'*(O:|M:)**')" fill="blue" stroke="#000000"  points=" 173.45,184.92 199.654,139.729 238.588,207.515  "/>
@@ -167,7 +169,7 @@
 				    
               
                
-				<line id="g_*(O:|M:)**_13"  marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.932" y1="207.76"  x2="238.932"  y2="139.729" />
+				<line id="g_*(O:|M:)**_13"  marker-end="url(#Triangle)" visibility="hidden" class="styleLigne"  x1="238.932" y1="207.76"  x2="238.932"  y2="139.729" />
 				<line id="g_*(O:|M:)**_14"  marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="239.089" y1="208.178" x2="180.014"  y2="173.746" />
 				<line id="g_*(O:|M:)**_15"  marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.898" y1="207.761" x2= "297.815" y2="173.746"/>
 				<line id="g_*(O:|M:)**_16"  marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.953" y1="208.217" x2= "297.869" y2="242.233"/>
