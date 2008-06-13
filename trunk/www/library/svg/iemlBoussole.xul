@@ -88,7 +88,11 @@
 		<g id="CreaPave">
 			<g id="ShowPave" transform="scale(0.4) translate(-100,100)" onmouseover="ModifTxtMouseOver(evt)">
 				<polygon id="dynaPave"  iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="" />
+			    <g id="Pave">
+			    </g>
 			</g>
+			
+			
 		</g>
 		<g id="legende" visibility="hidden" >
 			<rect x="400" y="10" width="400" height="110" stroke="black" stroke-width="2" fill="white"/>
@@ -112,7 +116,7 @@
 				
 			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  name="primitives">
 				<polygon id="g_*F:**_0" iemlCode="*F:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id)" class="styleF" points="199.799,140.028 239.049,72.045 118.876,2.856  "/>
-                <polygon id="g_*F:**-1" iemlCode="*F:**" onclick="SelectPave(evt,'*F:**');ShowHidePave('*F:**');" class="styleF"   points="199.799,140.028 121.159,140.236 118.876,2.856"/>
+                <polygon id="g_*F:**-1" iemlCode="*F:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleF"   points="199.799,140.028 121.159,140.236 118.876,2.856"/>
 				<line id="g_*F:**-2"    iemlCode="*F:**" visibility="hidden"  marker-end="url(#Triangle)" opacity="0.5"  fill="purple" stroke="none" x1= "121.159" y1="140.236"  x2="239.049" y2="72.045" />
   
 				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />

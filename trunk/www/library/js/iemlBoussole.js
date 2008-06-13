@@ -310,7 +310,7 @@ function jsdump(str)
    function CreaDynaPave(evt){
    		var SVG_NS ="http://www.w3.org/2000/svg";
    		var tgt = evt.target;
-   		var g=document.getElementById("ShowPave");
+   		var g=document.getElementById("Pave");
 	    var point = tgt.getAttribute("points");
 	    var iemlcode=tgt.getAttribute("iemlCode")
 	    var p=document.createElementNS(SVG_NS, "polygon");
@@ -328,7 +328,7 @@ function jsdump(str)
     	}else{
     		DynaPaveCreaPoint=false;
     		document.getElementById("Pave_status").setAttribute("style","background-color:red")
-    		var pave = document.getElementById("ShowPave");
+    		var pave = document.getElementById("Pave");
        		while(pave.hasChildNodes())
 				pave.removeChild(pave.firstChild);
     	
@@ -338,14 +338,14 @@ function jsdump(str)
     function ShowPoints(){
     	if(creaPoint==true){
     		creaPoint=false;
-    		document.getElementById("Points_status").setAttribute("style","background-color:green");
+    		document.getElementById("Points_status").setAttribute("style","background-color:red");
     		document.getElementById("dynaPave").setAttribute("points", "");
     		document.getElementById("ShowPoints").setAttribute("value","");
     		document.getElementById("menu").setAttribute("hidden",'true');
     		
        }else{
        	creaPoint=true;
-       	document.getElementById("Points_status").setAttribute("style","background-color:red")
+       	document.getElementById("Points_status").setAttribute("style","background-color:green")
        }
 }
     function Trace(){
