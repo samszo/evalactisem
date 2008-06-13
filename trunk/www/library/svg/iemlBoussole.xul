@@ -104,7 +104,7 @@
 			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  name="primitives">
 				<polygon id="g_*F:**_0" iemlCode="*F:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id)" class="styleF" points="199.799,140.028 239.049,72.045 118.876,2.856  "/>
                 <polygon id="g_*F:**-1" iemlCode="*F:**" onclick="SelectPave(evt,'*F:**');ShowHidePave('*F:**');" class="styleF"   points="199.799,140.028 121.159,140.236 118.876,2.856"/>
-				<line id="g_*F:**-2"    iemlCode="*F:**" visibility="visible"  marker-end="url(#Triangle)" class='styleLineSrcDst' x1= "121.159" y1="140.236"  x2="239.049" y2="72.045" />
+				<line id="g_*F:**-2"    iemlCode="*F:**" visibility="hidden"  marker-end="url(#Triangle)" opacity="0.5"  fill="purple" stroke="none" x1= "121.159" y1="140.236"  x2="239.049" y2="72.045" />
   
 				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
 					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
@@ -126,7 +126,7 @@
 			<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" name="events">
 				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 357.128,139.549 356.962,0.882 "/>
 				<polygon id="g_*(O:|M:)**-1" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 239.128,71.549 356.962,0.882"/>
-				<line id="g_*(O:|M:)**-2"    iemlCode="*(O:|M:)**" visibility="visible"  marker-end="url(#Triangle)" class='styleLineSrcDst'  x1="278.628" y1="139.549" x2= "356.962" y2="0.882"/>
+				<line id="g_*(O:|M:)**-2"    iemlCode="*(O:|M:)**" visibility="hidden"  marker-end="url(#Triangle)" class='styleLineSrcDst' x1= "239.000" y1="71.549 " x2="345.000" y2="131.500" />
   
 				<polygon id="g_*(O:|M:)**_1" iemlCode="*M:E:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');ShowHidePave(this.id);" class="styleM"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
 				<polygon id="g_*(O:|M:)**_2" iemlCode="*M:E:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');ShowHidePave(this.id);" class="styleE"  points="317.509,208.217 357.142,276.501 278.23,276.249  "/>
