@@ -20,15 +20,15 @@
 	             <button id="palette" label="couleurs"  popup="colorpicker" style="font-size:9pt;font-weight:bold;font-color:red;"/>
 				</vbox>
 	        	<vbox id="Points_status" style="background-color:red" >
-	             	<button id="Points" label="Points"  onclick="ShowPoints()" style="font-size:8pt"/>
+	             	<button id="Points" label="Points"  onclick="ShowPoints()" style="font-size:8pt;font-weight:bold;"/>
 				</vbox>
 				 <vbox id="Pave_status" style="background-color:red" >
-	                <button id="Show/HidePavé" label="Pavé"  onclick="ShowPave()" style="font-size:8pt;background-color:red"/>
+	                <button id="Show/HidePavé" label="Pavé"  onclick="ShowPave()" style="font-size:8pt;font-weight:bold;background-color:red"/>
 	             </vbox>
 	             <vbox id="Trace_status" style="background-color:red" >
-	             <button id="Trace" label="Trace"  onclick="Trace()" style="font-size:8pt"/>
+	             <button id="Trace" label="Trace"  onclick="Trace()" style="font-size:8pt;font-weight:bold;"/>
 	            </vbox>
-	             <button id="SavePoints" label="SavePoints"  onclick="AddPave()" style="font-size:8pt"/>
+	             <button id="SavePoints" label="SavePoints"  onclick="AddPave()" style="font-size:8pt;font-weight:bold;"/>
 	        </groupbox>	
 	        <groupbox id="menu" hidden="true">
 	        	<caption label='Points' />
