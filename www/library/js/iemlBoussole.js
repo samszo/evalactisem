@@ -323,9 +323,11 @@ function jsdump(str)
     function ShowPave(){
     	if(DynaPaveCreaPoint==false){
     		DynaPaveCreaPoint=true;
+    		document.getElementById("Pave_status").setAttribute("style","background-color:green");
     		
     	}else{
     		DynaPaveCreaPoint=false;
+    		document.getElementById("Pave_status").setAttribute("style","background-color:red")
     		var pave = document.getElementById("ShowPave");
        		while(pave.hasChildNodes())
 				pave.removeChild(pave.firstChild);
@@ -336,20 +338,25 @@ function jsdump(str)
     function ShowPoints(){
     	if(creaPoint==true){
     		creaPoint=false;
+    		document.getElementById("Points_status").setAttribute("style","background-color:green");
     		document.getElementById("dynaPave").setAttribute("points", "");
     		document.getElementById("ShowPoints").setAttribute("value","");
     		document.getElementById("menu").setAttribute("hidden",'true');
     		
-       }else
+       }else{
        	creaPoint=true;
-       	
+       	document.getElementById("Points_status").setAttribute("style","background-color:red")
+       }
 }
     function Trace(){
-     if(trace==true)
+     if(trace==true){
+        document.getElementById("Trace_status").setAttribute("style","background-color:red");
      	trace=false;
-     else
-     	if(trace==false)
+    } else
+     	if(trace==false){
+     	    document.getElementById("Trace_status").setAttribute("style","background-color:green");
      		trace=true;
+     	}
 	}
 	
 	
