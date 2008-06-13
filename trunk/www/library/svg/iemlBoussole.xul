@@ -124,8 +124,8 @@
 	    <g id="g_events">
 
 			<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" name="events">
-				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:.)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 357.128,139.549 356.962,0.882 "/>
-				<polygon id="g_*(O:|M:)**-1" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:.)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 239.128,71.549 356.962,0.882"/>
+				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 357.128,139.549 356.962,0.882 "/>
+				<polygon id="g_*(O:|M:)**-1" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 239.128,71.549 356.962,0.882"/>
 				<line id="g_*(O:|M:)**-2"    iemlCode="*(O:|M:)**" visibility="visible"  marker-end="url(#Triangle)" class='styleLineSrcDst'  x1="278.628" y1="139.549" x2= "356.962" y2="0.882"/>
   
 				<polygon id="g_*(O:|M:)**_1" iemlCode="*M:E:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');ShowHidePave(this.id);" class="styleM"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>

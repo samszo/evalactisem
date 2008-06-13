@@ -193,7 +193,7 @@
 		var cssSrc1,cssSrc2,cssDst, visiDst;
 		//recuperation de l'identifiant de premier pavé
 		if(!idSrc){
-			
+			   if(idDst=='*(O:|M:)**'){
 				id1 = tgt.getAttribute("id");
 				//recuperation de l'identifaint de deuxieme pavé
 				lemme_id=id1.split("_");
@@ -219,6 +219,11 @@
 	 
 			    }
 		   
+			 }else{
+			 
+			 	cssSrc1=tgt.getAttribute("class");
+			    cssSrc2=cssSrc1;
+			 }
 		 }
 		 if(trace)
 			alert(id1+' '+id2);
