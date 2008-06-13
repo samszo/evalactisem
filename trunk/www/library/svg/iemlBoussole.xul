@@ -40,7 +40,7 @@
         .styleLineSrcDst{stroke-width:3;stroke:black;}
 		.styleFontLegende{font-size:10pt;}
 		.styleFontChoix{fill:red;font-size:10pt;}
-		.styleFontMouseOver{font-size:30pt;}
+		.styleFontMouseOver{font-size:18pt;}
 		.styleI{fill:none;stroke:none;}
 		.styleF{fill:white;stroke:#000000;}
 		.styleFontBoutonCercle{font-size:8pt;}
@@ -86,7 +86,7 @@
 				<polygon id="dynaPave"  iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="" />
 			</g>
 		</g>
-		<g id="legende">
+		<g id="legende" visibility="hidden" >
 			<rect x="400" y="10" width="400" height="110" stroke="black" stroke-width="2" fill="white"/>
 			<text x="410" y="30" class="styleFontLegende">Source : </text>
 			<text id="txtSrc" x="490" y="30" class="styleFontChoix">Choisissez une source</text>
@@ -98,9 +98,10 @@
 				<rect x="410" y="80" width="70" height="20" stroke="black" stroke-width="2" fill="lightsteelblue"/>
 				<text x="420" y="95" class="styleFontLegende">initialiser</text>
 			</g>
-			<text id="txtMouseOver" x="500" y="110" class="styleFontMouseOver">Pointez un bloc</text>
 			<text id="txtRecordPoint" x="0" y="500" class="styleFontMouseOver"> </text>
 		</g>
+
+		<text id="txtMouseOver" x="0" y="35" class="styleFontMouseOver"> </text>
 		
 		<g id="g_primitives" >
 			<polygon id="g_S" iemlCode="*S:**" onclick="SelectPave(evt,'*F:**')"  class="styleI" points="199.799,140.028 118.876,2.856 239.049,72.045 "/>
