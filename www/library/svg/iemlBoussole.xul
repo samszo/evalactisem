@@ -16,8 +16,12 @@
 		<vbox >
 	        <groupbox  >
 	        	<caption label='Outils' />
-	             <button id="palette" label="couleurs"  popup="colorpicker" style="font-size:9pt"/>
+	        	<vbox style="background-color:red" >
+	             <button id="palette" label="couleurs"  popup="colorpicker" style="font-size:9pt;font-weight:bold;font-color:red;"/>
+				</vbox>
+	        	<vbox style="background-color:green" >
 	             <button id="Points" label="Points"  onclick="ShowPoints()" style="font-size:8pt"/>
+				</vbox>
 	             <button id="Show/HidePavé" label="Pavé"  onclick="ShowPave()" style="font-size:8pt;background-color:red"/>
 	             <button id="SavePoints" label="SavePoints"  onclick="AddPave()" style="font-size:8pt"/>
 	             <button id="Trace" label="Trace"  onclick="Trace()" style="font-size:8pt"/>
