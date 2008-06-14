@@ -44,7 +44,11 @@
 	
 		//mis à jour du texte sur le mouse over
 	   	var tgt = evt.target;
-	    document.getElementById("txtMouseOver").firstChild.data=tgt.getAttribute("iemlCode");
+	   	//prise encompte du cas particulier de la branche
+	   	if(tgt.getAttribute("iemlSelect"))
+		    document.getElementById("txtMouseOver").firstChild.data=tgt.getAttribute("iemlSelect");
+		else		
+		    document.getElementById("txtMouseOver").firstChild.data=tgt.getAttribute("iemlCode");
     	
     }
     
@@ -77,6 +81,7 @@
     }
 
      function ShowHidePave(idSrc){
+
 
 		//affiche les pavés d'une branche
 	   	tgt = document.getElementById(idSrc);
@@ -143,44 +148,6 @@
 		}
     	
     }
-
-   
-   
-    function SelectPave1(evt,idDst,idSrc){
-        
-		if(DynaPaveCreaPoint)
-			CreaDynaPave(evt);
-        if(creaPoint)
-        	ShowRecordPoint(evt);
-		//met à jour la branche suivant le choix du pavé
-	   	var tgt = evt.target;
-		var cssSrc,cssDst, visiDst;
-		if(!idSrc)
-			cssSrc = tgt.getAttribute("class");		
-		
-		//récupère l'identifiant du pavé de la branche
-		var id = 'g_'+idDst+'_0';
-		if(trace)
-			alert(id+' '+cssSrc);
-		
-		if(!document.getElementById(id))return;
-		
-		//modifie la class du pavé
-		if(document.getElementById(id).getAttribute("class")==cssSrc){
-			//efface
-			cssDst = 'styleF';
-			visiDst = "hidden";
-		}else{
-			//met le style de la source
-			cssDst = cssSrc;
-			visiDst = "visible";
-		}
-		//alert(visiDst+' '+cssDst);
-		document.getElementById(id).setAttribute("class",cssDst);
-		//affiche le motif on pour la branche
-		//document.getElementById('g_'+arrId[1]+"_on").setAttribute("visibility",visiDst);
-		
-    }
     
     function SelectPave(evt,idDst,idSrc){
         
@@ -188,9 +155,10 @@
 			CreaDynaPave(evt);
         if(creaPoint)
         	ShowRecordPoint(evt);
+
 		//met à jour la branche suivant le choix du pavé
 	   	var tgt = evt.target;
-		var cssSrc1,cssSrc2,cssDst, visiDst;
+		var cssSrc1,cssSrc2,cssDst, visiDst, iemlCode;
 		//recuperation de l'identifiant de premier pavé
 		if(!idSrc){
 			   if(idDst=='*(O:|M:)**'){
@@ -209,8 +177,7 @@
 			    if(document.getElementById(id1).getAttribute("iemlCode")==document.getElementById(id2).getAttribute("iemlCode")){
 			    	cssSrc1=document.getElementById(id2).getAttribute("class");
 			        cssSrc2=document.getElementById(id1).getAttribute("class");
-			    }else{
-			        
+			    }else{			        
 				    indice=parseInt(lemme_id[2])-1;
 				    id2 = "g_"+lemme_id[1]+"_"+indice;
 				    if(!document.getElementById(id2))return;
@@ -218,25 +185,29 @@
 				        cssSrc2=document.getElementById(id2).getAttribute("class");
 	 
 			    }
-		   
 			 }else{
 			 
 			 	cssSrc1=tgt.getAttribute("class");
 			    cssSrc2=cssSrc1;
 			 }
 		 }
-		 if(trace)
+		 
+	    //récupère le code ieml
+	    iemlCode = tgt.getAttribute("iemlCode");
+		 if(trace){
 			alert(id1+' '+id2);
-		    //récupère l'identifiant du pavé de la branche
+			alert(iemlCode);
+		 }
+		 
+		 //récupère l'identifiant du pavé de la branche
 		 var idBrache1 = 'g_'+idDst+'_0';
 		 var idBrache2 = 'g_'+idDst+'-1';
 		 var idLine = 'g_'+idDst+'-2';
 		 if(trace)
 			alert(idBrache1+' '+idBrache2);
 			
-		if(!document.getElementById(idBrache1)||!document.getElementById(idBrache2))return;
-			//modifie la class du pavé
-		if((document.getElementById(idBrache1).getAttribute("class")==cssSrc1)&&(document.getElementById(idBrache2).getAttribute("class")==cssSrc2)){
+		//modifie la class du pavé
+		if((document.getElementById(idBrache1).getAttribute("class")==cssSrc1)){
 			//efface
 			cssDst1 = 'styleF';
 			cssDst2 = 'styleF';
@@ -248,9 +219,20 @@
 			visiL=  "visible";
 		}
 		//alert(visiDst+' '+cssDst);
-		document.getElementById(idBrache1).setAttribute("class",cssDst1);
-		document.getElementById(idBrache2).setAttribute("class",cssDst2);
-		document.getElementById(idLine).setAttribute("visibility",visiL);
+		if(document.getElementById(idBrache1)){
+			//met à jour les styles
+			document.getElementById(idBrache1).setAttribute("class",cssDst1);
+			//met à jour le code ieml de la branche
+			document.getElementById(idBrache1).setAttribute("iemlSelect",iemlCode);
+		}
+		if(document.getElementById(idBrache2)){
+			document.getElementById(idBrache2).setAttribute("iemlSelect",iemlCode);
+			document.getElementById(idBrache2).setAttribute("class",cssDst2);	
+			//met à jour la ligne
+			document.getElementById(idLine).setAttribute("visibility",visiL);
+			//met à jour le code ieml de la ligne
+			document.getElementById(idLine).setAttribute("iemlCode",iemlCode);
+		};
 		
 		//affiche le motif on pour la branche
 		//document.getElementById('g_'+arrId[1]+"_on").setAttribute("visibility",visiDst);
@@ -279,12 +261,13 @@
 			cont.removeChild(cont.firstChild);
 		
 	}
-function jsdump(str) 
-{ 
-  Components.classes['...@mozilla.org/consoleservice;1'] 
-            .getService(Components.interfaces.nsIConsoleService) 
-            .logStringMessage(str); 
-}
+	
+	function jsdump(str) 
+	{ 
+	  Components.classes['...@mozilla.org/consoleservice;1'] 
+	            .getService(Components.interfaces.nsIConsoleService) 
+	            .logStringMessage(str); 
+	}
 
     function ShowRecordPoint(evt){
 
