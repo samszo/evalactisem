@@ -102,10 +102,6 @@
 				
 			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  name="primitives">
 				<polygon id="g_*F:**_0" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="121.159,140.236 199.799,140.028 239.049,72.045 118.876,2.856 "/>
-                <!-- 
-                <polygon id="g_*F:**-1" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id);" class="styleF"   points="199.799,140.028 121.159,140.236 118.876,2.856"/>
-				<line id="g_*F:**-2"    iemlCode="*F:**" visibility="hidden"  marker-end="url(#Triangle)" opacity="0.5"  fill="purple" stroke="none" x1= "121.159" y1="140.236"  x2="239.049" y2="72.045" />
-  				 -->
   				 
 				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
 					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
