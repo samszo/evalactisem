@@ -42,9 +42,12 @@
 		
 	      	
         .styleLineSrcDst{stroke-width:3;stroke:black;}
+
 		.styleFontLegende{font-size:10pt;}
 		.styleFontChoix{fill:red;font-size:10pt;}
 		.styleFontMouseOver{font-size:18pt;}
+		.styleFontBranche{font-size:16pt;}
+
 		.styleI{fill:none;stroke:none;}
 		.styleF{fill:white;stroke:#000000;}
 		.styleFontBoutonCercle{font-size:8pt;}
@@ -94,31 +97,16 @@
 			
 			
 		</g>
-		<g id="legende" visibility="hidden" >
-			<rect x="400" y="10" width="400" height="110" stroke="black" stroke-width="2" fill="white"/>
-			<text x="410" y="30" class="styleFontLegende">Source : </text>
-			<text id="txtSrc" x="490" y="30" class="styleFontChoix">Choisissez une source</text>
-			<text x="410" y="50" class="styleFontLegende">Destination : </text>
-			<text id="txtDst" x="490" y="50" class="styleFontChoix">Choisissez une destination</text>
-			<text x="410" y="70" class="styleFontLegende">Expression : </text>
-			<text id="txtTrl" x="490" y="70" class="styleFontChoix">Choisissez une expression</text>
-			<g id="btnRefresh" onclick="init()">
-				<rect x="410" y="80" width="70" height="20" stroke="black" stroke-width="2" fill="lightsteelblue"/>
-				<text x="420" y="95" class="styleFontLegende">initialiser</text>
-			</g>
-			<text id="txtRecordPoint" x="0" y="500" class="styleFontMouseOver"> </text>
-		</g>
-
-		<text id="txtMouseOver" x="0" y="35" class="styleFontMouseOver"> </text>
 		
 		<g id="g_primitives" >
-			<polygon id="g_S" iemlCode="*S:**" onclick="SelectPave(evt,'*F:**')"  class="styleI" points="199.799,140.028 118.876,2.856 239.049,72.045 "/>
 				
 			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  name="primitives">
-				<polygon id="g_*F:**_0" iemlCode="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="199.799,140.028 239.049,72.045 118.876,2.856  "/>
-                <polygon id="g_*F:**-1" iemlCode="*F:**" onclick="ShowHidePave(this.id);" class="styleF"   points="199.799,140.028 121.159,140.236 118.876,2.856"/>
+				<polygon id="g_*F:**_0" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="121.159,140.236 199.799,140.028 239.049,72.045 118.876,2.856 "/>
+                <!-- 
+                <polygon id="g_*F:**-1" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id);" class="styleF"   points="199.799,140.028 121.159,140.236 118.876,2.856"/>
 				<line id="g_*F:**-2"    iemlCode="*F:**" visibility="hidden"  marker-end="url(#Triangle)" opacity="0.5"  fill="purple" stroke="none" x1= "121.159" y1="140.236"  x2="239.049" y2="72.045" />
-  
+  				 -->
+  				 
 				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
 					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
 					<polygon id="g_*O:**_2" visibility="hidden" iemlCode="*U:**" onclick="SelectPave(evt,'*F:**')" class="styleUsrc"  points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
@@ -137,8 +125,8 @@
 	    <g id="g_events">
 
 			<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" name="events">
-				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 357.128,139.549 356.962,0.882 "/>
-				<polygon id="g_*(O:|M:)**-1" iemlCode="*(O:|M:)**" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 239.128,71.549 356.962,0.882"/>
+				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" iemlSelect="*(O:|M:)**" onclick="ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 357.128,139.549 356.962,0.882 "/>
+				<polygon id="g_*(O:|M:)**-1" iemlCode="*(O:|M:)**" iemlSelect="*(O:|M:)**" onclick="ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 239.128,71.549 356.962,0.882"/>
 				<line id="g_*(O:|M:)**-2"    iemlCode="*(O:|M:)**" visibility="hidden"  marker-end="url(#Triangle)" class='styleLineSrcDst' x1= "239.000" y1="71.549 " x2="345.000" y2="131.500" />
   
 				<polygon id="g_*(O:|M:)**_1" iemlCode="*M:E:.**" visibility="hidden" onclick="SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');ShowHidePave(this.id);" class="styleM"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
@@ -286,12 +274,12 @@
 				
               
                
-				<line id="g_*(O:|M:)**_13"  iemlCode="*A:A1:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.932" y1="207.76"  x2="238.932"  y2="139.729" />
-				<line id="g_*(O:|M:)**_14"  iemlCode="*A:A2:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="239.089" y1="208.178" x2="180.014"  y2="173.746" />
-				<line id="g_*(O:|M:)**_15"  iemlCode="*A:A3:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.898" y1="207.761" x2= "297.815" y2="173.746"/>
-				<line id="g_*(O:|M:)**_16"  iemlCode="*A:A4:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.953" y1="208.217" x2= "297.869" y2="242.233"/>
-				<line id="g_*(O:|M:)**_17"  iemlCode="*A:A5:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="239.089" y1="208.178" x2= "239.089" y2="276.208"/>  
-				<line id="g_*(O:|M:)**_18"  iemlCode="*A:A6:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.588" y1="207.515" x2= "179.671" y2="241.53 "/> 
+				<line id="g_*(O:|M:)**_13"  iemlCode="*O:O:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.932" y1="207.76"  x2="238.932"  y2="139.729" />
+				<line id="g_*(O:|M:)**_14"  iemlCode="*O:M:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="239.089" y1="208.178" x2="180.014"  y2="173.746" />
+				<line id="g_*(O:|M:)**_15"  iemlCode="*O:E:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.898" y1="207.761" x2= "297.815" y2="173.746"/>
+				<line id="g_*(O:|M:)**_16"  iemlCode="*M:E:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.953" y1="208.217" x2= "297.869" y2="242.233"/>
+				<line id="g_*(O:|M:)**_17"  iemlCode="*M:M:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="239.089" y1="208.178" x2= "239.089" y2="276.208"/>  
+				<line id="g_*(O:|M:)**_18"  iemlCode="*M:O:.**" marker-end="url(#Triangle)" visibility="hidden" stroke-width="2" stroke="black" x1="238.588" y1="207.515" x2= "179.671" y2="241.53 "/> 
 
 			</g>
 		</g>
@@ -696,6 +684,26 @@
 		</g>
 
 		<g id="RecordPoints" />
+
+		<g id="legende" >
+			<g id="OldLegende" visibility="hidden" >
+				<rect x="400" y="10" width="400" height="110" stroke="black" stroke-width="2" fill="white"/>
+				<text x="410" y="30" class="styleFontLegende">Source : </text>
+				<text id="txtSrc" x="490" y="30" class="styleFontChoix">Choisissez une source</text>
+				<text x="410" y="50" class="styleFontLegende">Destination : </text>
+				<text id="txtDst" x="490" y="50" class="styleFontChoix">Choisissez une destination</text>
+				<text x="410" y="70" class="styleFontLegende">Expression : </text>
+				<text id="txtTrl" x="490" y="70" class="styleFontChoix">Choisissez une expression</text>
+				<g id="btnRefresh" onclick="init()">
+					<rect x="410" y="80" width="70" height="20" stroke="black" stroke-width="2" fill="lightsteelblue"/>
+					<text x="420" y="95" class="styleFontLegende">initialiser</text>
+				</g>
+				<text id="txtRecordPoint" x="0" y="500" class="styleFontMouseOver"> </text>
+			</g>
+			<text id="txtPrimitives" x="50" y="186" transform="rotate(-30)" class="styleFontBranche">PRIMITIVE</text>
+			<text id="txtEvents" x="280" y="-64" transform="rotate(30)" class="styleFontBranche">EVENT</text>
+			<text id="txtMouseOver" x="0" y="35" class="styleFontMouseOver"> </text>
+		</g>
 
 
 	</g>
