@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>	
+    <script src="../library/js/GoogleDoc.js" />
+    <script type="text/javascript" >
+     
+     	 vis= new spreadsheets("tablediv");
+     	
+    </script>
+ 
+    <box id="tablediv">Loading...</box>
+    <button label='Doc' onclick='vis.spreadsheet();'></button>
+  </window>
+
+ 
+
