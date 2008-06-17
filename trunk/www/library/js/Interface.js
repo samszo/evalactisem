@@ -1,4 +1,4 @@
-
+   
 E="*";
 P=";";
 function show_tooltip(evt)
@@ -200,9 +200,7 @@ function Trad_Pars_Ieml(result, param){
         var Descp=new Array();
         var Trad=new Array();
         var Tag=new Array();
-        
-        
-   	    
+
         arrNoms = result.split(E);
         arrNom= arrNoms[0].split(P);
         if(arrNoms[1].length > 1){
@@ -232,8 +230,7 @@ function Trad_Pars_Ieml(result, param){
 		                            MultiTrad+=ieml[0]+E;
 		                           	FluxM+=arrNom[i]+P;
 		                            descpM+=ieml[1]+E;
-		                                
-		                              
+                              
                                   }
                            
                         }else
@@ -242,9 +239,7 @@ function Trad_Pars_Ieml(result, param){
                                 SignlTrad+=ieml[0];
                                 FluxS+=arrNom[i]+P;
                                 descpS+=ieml[1];
-                                
-                                
-                                
+
                         }
                         
                 }else{
@@ -265,8 +260,7 @@ function Trad_Pars_Ieml(result, param){
         synIemlS+=bdd;
         FluxS+=arrNoms[3];
         descpS+=arrNoms[2];
-      
-    
+
 	//affiche les infos de traduction
 	 document.getElementById("TableFlux").setAttribute("hidden","true");
 	 document.getElementById('infosTrad').setAttribute("hidden","false");
@@ -279,8 +273,7 @@ function Trad_Pars_Ieml(result, param){
 		var url = urlAjax+"library/php/ExeAjax.php";
 		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
-		
-	    
+
 	}
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
@@ -296,6 +289,8 @@ function Trad_Pars_Ieml(result, param){
 		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
 	
+  document.getElementById("iemlCycle").setAttribute("hidden","false");
+  document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
 }
 
 
@@ -308,47 +303,6 @@ function Trad(id,src){
 	var iFrame =document.getElementById(id);
     iFrame.setAttribute("src",src);
 }
-
-
-function AddTradDictio(result,param){
-        if(result=="false"){
-		aTrad=document.getElementById("code-trad-flux").value;
-		rTrad=TradIeml.recherchez(aTrad);
-		if(rTrad=="*"){
-			document.getElementById("trad-message").value="Il n'exite pas une  traduction qui correspond a cet mot veuillez une traduire a partir de la table ieml "
-		}else {
-	 		
-	 		Trad=rTrad.split(e);
-	    	CarIeml=Trad[0].split(P);
-	 		DiscIeml=Trad[1].split(P);
-	 		if(CarIeml.length >2){
-	 		alert("il existe plusieurs possibilités veuillez choisir une");
-	 		ChoixTrad(CarIeml,DiscIeml);
-	 		}else
-	 		if(CarIeml.length ==2){
-	 			var codeIeml = document.getElementById("code-trad-ieml");
-                RequetteAddTrad();
-	 		}
-	}
-	
-	}else{
-            aTrad=document.getElementById("code-trad-flux").value;
-		    rTrad=TradIeml.recherchez(aTrad);
-			Trad=rTrad.split(E);
-	    	CarIeml=Trad[0].split(P);
-	 		DiscIeml=Trad[1].split(P);
-	 		if(CarIeml.length >2){
-	 		alert("il existe plusieurs possibilités veuillez choisir une");
-	 		ChoixTrad(CarIeml,DiscIeml);
-	 		}else
-	 		if(CarIeml.length ==2){
-	 			var codeIeml = document.getElementById("code-trad-ieml");
-                RequetteAddTrad();
-	 		}
-
-	}
-}
-
 function AddTrad(){
 	
 	var libIeml=document.getElementById("lib-trad-ieml");
@@ -362,19 +316,6 @@ function AddTrad(){
 	SetDonnee();
 	
 }   
-
-
-
-
-//Creation de la table des choix 
-function SupChoixTrad(){
-	var box =document.getElementById("box1");
-	if(box.hasChildNodes()){
-			dernier=box.lastChild;
-			box.removeChild(dernier);
-		}
-}
-
 function RequetteAddTrad(){
 	var libflux= document.getElementById("code-trad-flux");
 	var codeIeml = document.getElementById("code-trad-ieml");
@@ -614,5 +555,73 @@ function GoUrl(url){
 function CreaNoeud(){
 
 	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.xul");
+}
+
+function handleQueryResponse(response) {
+      
+        // Send the query with a callback function
+        if (response.isError()) {
+          alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+          return;
+        }
+
+        var data = response.getDataTable(); 
+        var xul = [];
+        xul.push('<listbox id="iemlCycle" >');
+
+        // Header row
+        xul.push('<listcols>')
+        //xul.push('<tr><th>Seq</th>');
+        for (var col = 0; col < data.getNumberOfColumns(); col++) {
+          xul.push('<listcol flex="1">' + this.escapeHtml(data.getColumnLabel(col)) + '</listcol>');
+        }
+        xul.push('</listcols>');
+
+        for (var row = 0; row < data.getNumberOfRows(); row++) {
+          //xul.push('<tr><td align="right">' + (row + 1) + '</td>');
+          xul.push("<listitem>")
+          for (var col = 0; col < data.getNumberOfColumns(); col++) {
+            xul.push(data.getColumnType(col) == 'number' ? '< align="right">' : '<listcell label="');
+            xul.push(escapeHtml(data.getFormattedValue(row, col)));
+            xul.push('" />');
+          
+          }
+          xul.push('</listitem>');
+        }
+        xul.push('</listbox>');
+        var parser=new DOMParser();
+        ListBox=parser.parseFromString(xul.join(''),"text/xml");
+        alert(xul.join(''));
+        //document.getElementById('tpIemlCycle').appendChild(ListBox.documentElement);
+       
+      }
+
+function escapeHtml(text) {
+        if (text == null)
+          return '';
+
+        return text.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+ }
+
+function initialize () {
+        var query = new google.visualization.Query('http://spreadsheets.google.com/tq?key=p8PAs8y8e1x2YTS7Zgag7Nw&hl=en');
+        query.send(handleQueryResponse);  // Send the query with a callback function
+}
+
+function GetCycleIeml(){
+	 google.load("visualization", "1");
+	 google.setOnLoadCallback(initialize);
+}
+function SelectionCycle(){
+Table=window.parent.frames['iemlCycle'].document.getElementById('')
+window.parent.frames['iemlCycle'].document.getElementById('O:.B:M:.-').setAttribute('style',"background-color:green");
+
+}
+function ModifTrad(){
+table=window.parent.frames('webFrame').document.getElementById('Points')
+window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
 }
 

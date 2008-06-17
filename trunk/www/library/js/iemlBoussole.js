@@ -8,6 +8,7 @@
 	var maxEnfant = 60;
 	var colorChoos=false;
 	var color="";
+	var predId="" ;
 	var arrNavig = new Array("ModifPave('O:|M:');");
    
     function init() {
@@ -433,4 +434,21 @@
 	  		}
   		}
   }
+ 
+function SelectionCycle(evt){
+
+var tgt = evt.target;
+var iemlCode=tgt.getAttribute("iemlCode");
+// changer la couleur du la ligne qui correspond a la source
+window.parent.frames['iemlCycle'].document.getElementById(iemlCode).setAttribute('style',"background-color:green");
+window.parent.frames['iemlCycle'].document.getElementById('descp_'+iemlCode).setAttribute('style',"background-color:green");
+// deselectionné la ligne précédente
+alert(predId);
+if(predId!=""){
+	window.parent.frames['iemlCycle'].document.getElementById(predId).setAttribute('style',"background-color:white");
+	window.parent.frames['iemlCycle'].document.getElementById('descp_'+predId).setAttribute('style',"background-color:white");
+}
+ predId=iemlCode;
+ }  
+ 
  
