@@ -65,10 +65,13 @@
              	idS=id[0];
             }else{
              	idS=id[0]+'_'+i;
+             	
              	i++;
             }
           }else{
           	idS=id[0];
+          	if((row%2)==0)
+          		i++;
           }
          idPredArr.push(id[0]);
  	      if((row%2)==0){
