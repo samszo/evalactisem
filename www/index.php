@@ -52,7 +52,6 @@ echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>'
 echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
-
 ?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 
@@ -61,6 +60,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	<script src="library/js/TradTagIeml.js"/>
 	<script src="library/js/groupbox.js"/>
 	<script src="library/js/tree.js"/>
+	<script type="text/javascript"  src="http://www.google.com/jsapi"></script>
+ 	<script src="library/js/GoogleDoc.js"/>
+	
 
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
@@ -127,7 +129,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									<menuitem label="Tags par Bundles" value="tagsFbundles"/>
 								</menupopup>
 							</menulist>
-						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
+						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();GetCycleIeml();"/>
 					</groupbox>
 					
 					<groupbox orient="vertical" >
@@ -180,6 +182,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								        <tab label="Tags traduits" />
 								        <tab label="Tags avec plusieurs traduction" />
 								        <tab label="Tags sans traduction" />
+								        <tab label="Cycle de axial orientation / where" />
 								    </tabs>
 								    <tabpanels flex="1"  >
 								        <tabpanel >
@@ -192,6 +195,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											<box id="tpNoTrad" flex="1" />
 											<vbox id="treeDicoIeml" flex="1" hidden="true" />
 								         </tabpanel>
+								         <tabpanel>
+											
+											<iframe id="iemlCycle" flex='1' hidden="false" />
+								        </tabpanel>
 								    </tabpanels>
 								</tabbox>
 							</box>
