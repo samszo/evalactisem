@@ -1,13 +1,13 @@
 <?php
 //http://code.google.com/apis/visualization/documentation/index.html
-header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
+//header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
 echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 ?>
 
 <box  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script  src="http://www.google.com/jsapi"></script>
-    <script type="text/javascript"><![CDATA[
+    <script type="text/javascript">
       google.load("visualization", "1");
       function initialize() {
         var query = new google.visualization.Query('http://spreadsheets.google.com/tq?key=p8PAs8y8e1x2YTS7Zgag7Nw&hl=en');
@@ -63,7 +63,7 @@ echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
           .replace(/"/g, '&quot;');
       }
 
-    ]]></script>
+    </script>
     <box id='tablediv'>
    </box>
    </box>

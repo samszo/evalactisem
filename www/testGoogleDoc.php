@@ -3,6 +3,8 @@
 ?>
 <html>
   <head>
+	
+	<link rel="stylesheet" href="iemldict.css" type="text/css">
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1");
@@ -24,17 +26,12 @@
         var html = [];
         var td="";
         var tr="";
-        var idSrc;
-        var idDes;
-        var idPredArr=[];
-        var idPred;
-        var idS;
+        var id;
         var i=1;
-        html.push('<table border="1" id="Cycle">');
-
-        // Header row
+        html.push('<table border="1" id="**t:t:.*" >');
+	 	 // Header row
         //html.push('<tr><th>Seq</th>');
-        html.push('<tr>');
+        html.push('<tr id="header">');
         for (var col = 0; col < data.getNumberOfColumns(); col++) {
           html.push('<th>' + escapeHtml(data.getColumnLabel(col)) + '</th>');
         }
@@ -46,46 +43,32 @@
           td="";
           //html.push('<tr>');
           for (var col = 0; col < data.getNumberOfColumns(); col++) {
-            if((escapeHtml(data.getFormattedValue(row, col))!="")&&((row%2)==0)){
-            	id=escapeHtml(data.getFormattedValue(row, col)).split(":.");
-           	    id[1]=id[1].replace('-','').replace('.','');
-           	    idDes='*'+id[1]+':.**';
-           	    td+=(data.getColumnType(col) == 'number' ? '<td id="'+idDes+'"  align="right">' : '<td id="'+idDes+ '"  >');
-           	    
-           	}else{
-            	td+=(data.getColumnType(col) == 'number' ? '<td id="descp_'+idDes+ '"  align="right">' : '<td id="descp_'+idDes+ '" >');
-            }
-            td+=(escapeHtml(data.getFormattedValue(row, col)));
+            id="*"+escapeHtml(data.getFormattedValue(row, col))+"**";
+            if(id!="***"){
+	            
+	           if((row%2)==0){
+	            	
+	          	    td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+ id + '"  class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="g_'+ id + '" ><a id="'+ id + '" class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">');
+	           	    
+	           	}else{
+	           		
+	            	td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="descp_'+ id + '"  class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="gdescp_'+ id + '"  ><a id="descp_'+ id + '"  class="NoSelect"  href="http://www.ieml.org/french/ooom_1.html">');
+	            }
+           }else{
+           	
+           		td+=(data.getColumnType(col) == 'number' ? '<td id=""><a class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id=""><a id="" class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">');
+
+			}
+            td+=(escapeHtml(data.getFormattedValue(row, col)))+'</a>';
             td+=('</td>');
           }
-          if(idPredArr.length!=0){
-            idPred= idPredArr.pop();
-            
-            if(id[0]!=  idPred){
-             	idS=id[0];
-            }else{
-             	idS=id[0]+'_'+i;
-             	
-             	i++;
-            }
-          }else{
-          	idS=id[0];
-          	if((row%2)==0)
-          		i++;
-          }
-         idPredArr.push(id[0]);
- 	      if((row%2)==0){
- 	      	alert(idSrc='*' + idS +':.**');
-          }else{
-          	alert(idSrc='descp_*' + idS + ':.**');
-          }
-          	tr='<tr id="'+idSrc+'">'+td+'</tr>';
+               	tr='<tr >'+td+'</tr>';
           	html.push(tr);
       }
        
        
         html.push('</table>');
-       	alert(html.join(''));
+       	//alert(html.join(''));
         document.getElementById('tablediv').innerHTML = html.join('');
       }
 
@@ -104,5 +87,6 @@
 
   <body>
     <div id="tablediv">Loading...</div>
+    
   </body>
 </html>
