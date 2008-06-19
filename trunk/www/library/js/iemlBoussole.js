@@ -436,19 +436,87 @@
   }
  
 function SelectionCycle(evt){
-
-var tgt = evt.target;
-var iemlCode=tgt.getAttribute("iemlCode");
-// changer la couleur du la ligne qui correspond a la source
-window.parent.frames['iemlCycle'].document.getElementById(iemlCode).setAttribute('style',"background-color:green");
-window.parent.frames['iemlCycle'].document.getElementById('descp_'+iemlCode).setAttribute('style',"background-color:green");
-// deselectionné la ligne précédente
-alert(predId);
-if(predId!=""){
-	window.parent.frames['iemlCycle'].document.getElementById(predId).setAttribute('style',"background-color:white");
-	window.parent.frames['iemlCycle'].document.getElementById('descp_'+predId).setAttribute('style',"background-color:white");
-}
- predId=iemlCode;
- }  
+    var idBranS=[];
+    var idBranD=[];
+	var tgt = evt.target;
+	var iemlCode=tgt.getAttribute("iemlCode");
+	
+	//recuperation des primitives de la barnche
+	
+	iemlCode=iemlCode.replace('*','');
+	iemlCode=iemlCode.replace('**','');
+	
+	//le cas ou l'id de la branche et de la forme **A:A:.*
+	if(iemlCode.length > 3){
+		idBranArr=iemlCode.split(":.");
+		
+		if(idBranArr[0].charAt(1) == ":"){
+			idBranS=idBranArr[0].split(':');
+			
+		}else{
+			idBranS[0]=idBranArr[0];
+			idBranS[1]='';
+		}
+		
+		if(idBranArr[1].charAt(1) == ":"){
+			idBranD=idBranArr[1].split(':');
+		}else{
+			idBranD[0]=idBranArr[1];
+			idBranD[1]='';
+		}
+	}else{
+		//le cas ou id et de la forme a.
+		idBranS[0]=iemlCode=iemlCode.replace('.','');
+		idBranS[1]='';
+		idBranD[0]='';
+		idBranD[1]='';
+	}
+	//les ids de la Grille	 
+	
+	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('a');
+	
+	// mettre a jour les cellules de la grille
+	alert(cycle.length);
+	for(var i=0 ; i < cycle.length; i++){
+		//if(!cycle[i].getAttribute("id")) break;
+		
+		if(cycle[i].getAttribute("id")!='' && cycle[i].getAttribute("id").substring(0,5)!="descp"  ){	
+			idNode=cycle[i].getAttribute("id");
+		 	for(var j=0 ; j < 2 ; j++){
+		 	      alert(idNode.charAt(1)+" "+idNode.charAt(3)+" "+idNode.charAt(5)+" "+idNode.charAt(7)+" "+idBranS[j]);
+		          
+		           if(idBranS[j]!=''){
+		          
+					if( idNode.charAt(1)== idBranS[j] ||  idNode.charAt(3)== idBranS[j] || idNode.charAt(5)== idBranS[j] || idNode.charAt(7)== idBranS[j]){
+			         	
+			         	if(window.parent.frames['iemlCycle'].document.getElementById(idNode).getAttribute('class')=="NoSelect"){
+			         	   
+			         	   	window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"IsSelect");
+			         	    
+			         	}else{
+			         		
+			         		window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelect");
+			            }
+			       }
+			     }
+				    if(idBranD[j]!=''){
+				    
+					if( idNode.charAt(1)== idBranD[j]|| idNode.charAt(3)== idBranD[j] || idNode.charAt(5)== idBranD[j] || idNode.charAt(7)== idBranD[j]){
+			        	
+			        	if(window.parent.frames['iemlCycle'].document.getElementById(idNode).getAttribute('class')=="NoSelect"){
+			         	 	
+			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"IsSelect");
+			         	
+			         	}else{
+			         		
+			         		window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelect");
+			        }
+			     }
+			   }
+			}
+		}
+			
+	}
+}  
  
  

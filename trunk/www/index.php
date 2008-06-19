@@ -50,6 +50,7 @@ header ("title: Saisi des diagnosics d'accessibilité");
 echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
+echo ('<' . '?xml-stylesheet href="iemldict.css" type="text/css"?' . '>' . "\n");
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
