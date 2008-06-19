@@ -4,7 +4,7 @@
 <html>
   <head>
 	
-	<link rel="stylesheet" href="CSS/iemldict.css" type="text/css">
+	<link rel="stylesheet" href="CSS/iemlCycle.css" type="text/css">
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1");
@@ -48,16 +48,16 @@
 	            
 	           if((row%2)==0){
 	            	
-	          	    td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+ id + '"  class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="g_'+ id + '" ><a id="'+ id + '" class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">');
+	          	    td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+ id + '"  class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td ><a id="'+ id + '" class="NoSelect" href="http://www.ieml.org/french/ooom_1.html" >');
 	           	    
 	           	
 	           	}else{
 	           		Descpid="descp_*"+escapeHtml(data.getFormattedValue(row-1, col))+"**";
-	            	td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+Descpid+ '"  class="NoSelectDesc" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="gdescp_'+ id + '"  ><a id="'+Descpid+ '"  class="NoSelectDesc"  href="http://www.ieml.org/french/ooom_1.html">');
+	            	td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+Descpid+ '"  class="NoSelectDesc" href="http://www.ieml.org/french/ooom_1.html">' : '<td ><a id="'+Descpid+ '"  class="NoSelectDesc"  href="http://www.ieml.org/french/ooom_1.html" >');
 	            }
            }else{
            	
-           		td+=(data.getColumnType(col) == 'number' ? '<td id=""><a href="http://www.ieml.org/french/ooom_1.html">' : '<td id=""><a id=""  href="http://www.ieml.org/french/ooom_1.html">');
+           		td+=(data.getColumnType(col) == 'number' ? '<td ><a a id="" href="http://www.ieml.org/french/ooom_1.html">' : '<td ><a id=""  href="http://www.ieml.org/french/ooom_1.html">');
 
 			}
             td+=(escapeHtml(data.getFormattedValue(row, col)))+'</a>';
