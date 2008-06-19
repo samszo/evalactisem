@@ -4,12 +4,12 @@
 <html>
   <head>
 	
-	<link rel="stylesheet" href="iemldict.css" type="text/css">
+	<link rel="stylesheet" href="CSS/iemldict.css" type="text/css">
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1");
       function initialize() {
-        var query = new google.visualization.Query("http://spreadsheets.google.com/tq?key=p8PAs8y8e1x2YTS7Zgag7Nw&hl=en");
+        var query = new google.visualization.Query("http://spreadsheets.google.com/tq?key=p8PAs8y8e1x3J43Fu2t0bDg&hl=en");
         query.send(handleQueryResponse);  // Send the query with a callback function
       }
       google.setOnLoadCallback(initialize); // Set callback to run when API is loaded
@@ -32,17 +32,17 @@
 	 	 // Header row
         //html.push('<tr><th>Seq</th>');
         html.push('<tr id="header">');
-        for (var col = 0; col < data.getNumberOfColumns(); col++) {
+        for (var col = 0; col < data.getNumberOfColumns()-1; col++) {
           html.push('<th>' + escapeHtml(data.getColumnLabel(col)) + '</th>');
         }
         html.push('</tr>');
 
-        for (var row = 0; row < data.getNumberOfRows(); row++) {
+        for (var row = 0; row < data.getNumberOfRows()-1; row++) {
          // html.push('<tr><td align="right">' + (row + 1) + '</td>');
           tr="";
           td="";
           //html.push('<tr>');
-          for (var col = 0; col < data.getNumberOfColumns(); col++) {
+          for (var col = 0; col < data.getNumberOfColumns()-1; col++) {
             id="*"+escapeHtml(data.getFormattedValue(row, col))+"**";
             if(id!="***"){
 	            
@@ -50,13 +50,14 @@
 	            	
 	          	    td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+ id + '"  class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="g_'+ id + '" ><a id="'+ id + '" class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">');
 	           	    
+	           	
 	           	}else{
-	           		
-	            	td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="descp_'+ id + '"  class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="gdescp_'+ id + '"  ><a id="descp_'+ id + '"  class="NoSelect"  href="http://www.ieml.org/french/ooom_1.html">');
+	           		Descpid="descp_*"+escapeHtml(data.getFormattedValue(row-1, col))+"**";
+	            	td+=(data.getColumnType(col) == 'number' ? '<td  align="right" ><a id="'+Descpid+ '"  class="NoSelectDesc" href="http://www.ieml.org/french/ooom_1.html">' : '<td id="gdescp_'+ id + '"  ><a id="'+Descpid+ '"  class="NoSelectDesc"  href="http://www.ieml.org/french/ooom_1.html">');
 	            }
            }else{
            	
-           		td+=(data.getColumnType(col) == 'number' ? '<td id=""><a class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">' : '<td id=""><a id="" class="NoSelect" href="http://www.ieml.org/french/ooom_1.html">');
+           		td+=(data.getColumnType(col) == 'number' ? '<td id=""><a href="http://www.ieml.org/french/ooom_1.html">' : '<td id=""><a id=""  href="http://www.ieml.org/french/ooom_1.html">');
 
 			}
             td+=(escapeHtml(data.getFormattedValue(row, col)))+'</a>';

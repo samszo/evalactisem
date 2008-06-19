@@ -8,7 +8,7 @@
 	var maxEnfant = 60;
 	var colorChoos=false;
 	var color="";
-	var predId="" ;
+	var predEvt="" ;
 	var arrNavig = new Array("ModifPave('O:|M:');");
    
     function init() {
@@ -443,6 +443,7 @@ function SelectionCycle(evt){
 	
 	//recuperation des primitives de la barnche
 	
+	if(InitGrille(iemlCode)==true) return;
 	iemlCode=iemlCode.replace('*','');
 	iemlCode=iemlCode.replace('**','');
 	
@@ -461,12 +462,12 @@ function SelectionCycle(evt){
 		if(idBranArr[1].charAt(1) == ":"){
 			idBranD=idBranArr[1].split(':');
 		}else{
-			idBranD[0]=idBranArr[1];
+			idBranD[0]=idBranArr[1].replace(":");
 			idBranD[1]='';
 		}
 	}else{
 		//le cas ou id et de la forme a.
-		idBranS[0]=iemlCode=iemlCode.replace('.','');
+		idBranS[0]=iemlCode.replace(':','').replace('.','');
 		idBranS[1]='';
 		idBranD[0]='';
 		idBranD[1]='';
@@ -476,41 +477,29 @@ function SelectionCycle(evt){
 	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('a');
 	
 	// mettre a jour les cellules de la grille
-	alert(cycle.length);
+	
 	for(var i=0 ; i < cycle.length; i++){
 		//if(!cycle[i].getAttribute("id")) break;
 		
 		if(cycle[i].getAttribute("id")!='' && cycle[i].getAttribute("id").substring(0,5)!="descp"  ){	
 			idNode=cycle[i].getAttribute("id");
 		 	for(var j=0 ; j < 2 ; j++){
-		 	      alert(idNode.charAt(1)+" "+idNode.charAt(3)+" "+idNode.charAt(5)+" "+idNode.charAt(7)+" "+idBranS[j]);
-		          
+		 	      
 		           if(idBranS[j]!=''){
 		          
-					if( idNode.charAt(1)== idBranS[j] ||  idNode.charAt(3)== idBranS[j] || idNode.charAt(5)== idBranS[j] || idNode.charAt(7)== idBranS[j]){
-			         	
-			         	if(window.parent.frames['iemlCycle'].document.getElementById(idNode).getAttribute('class')=="NoSelect"){
-			         	   
+					if( idNode.charAt(1)== idBranS[j] ||  idNode.charAt(3)== idBranS[j] || idNode.charAt(6)== idBranS[j] || idNode.charAt(8)== idBranS[j]|| idNode.substring(1,3)== idBranS[j] || idNode.substring(2,4)== idBranS[j]|| idNode.substring(1,3)== idBranS[j]){
+			        
 			         	   	window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"IsSelect");
-			         	    
-			         	}else{
-			         		
-			         		window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelect");
-			            }
-			       }
-			     }
+			                window.parent.frames['iemlCycle'].document.getElementById('descp_'+idNode).setAttribute('class',"IsSelectDesc");
+			       	}
+			      }
+			   
 				    if(idBranD[j]!=''){
 				    
-					if( idNode.charAt(1)== idBranD[j]|| idNode.charAt(3)== idBranD[j] || idNode.charAt(5)== idBranD[j] || idNode.charAt(7)== idBranD[j]){
-			        	
-			        	if(window.parent.frames['iemlCycle'].document.getElementById(idNode).getAttribute('class')=="NoSelect"){
-			         	 	
+					if( idNode.charAt(1)== idBranD[j]|| idNode.charAt(3)== idBranD[j] || idNode.charAt(7)== idBranD[j] || idNode.charAt(8)== idBranD[j] || idNode.substring(1,3) || idNode.substring(2,4)== idBranD[j] || idNode.substring(1,3)== idBranS[j]){
+	
 			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"IsSelect");
-			         	
-			         	}else{
-			         		
-			         		window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelect");
-			        }
+			         	    window.parent.frames['iemlCycle'].document.getElementById('descp_'+idNode).setAttribute('class',"IsSelect");
 			     }
 			   }
 			}
@@ -518,5 +507,25 @@ function SelectionCycle(evt){
 			
 	}
 }  
- 
+function InitGrille(iemlCode){
+var init=false;
+  if(iemlCode==predEvt){
+	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('a');
+	for(var i=0 ; i < cycle.length; i++){
+		if(cycle[i].getAttribute("id")!=''){	
+			idNode=cycle[i].getAttribute("id");
+			if(idNode.substring(0,5)!="descp")
+			   window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelect");
+			else
+               window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelectDesc");
+               				
+		}
+	
+	}
+	init=true;
+  }
+  predEvt=iemlCode;
+  return init;
+  
+}
  
