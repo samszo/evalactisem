@@ -108,7 +108,7 @@
 			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  name="primitives">
 				<polygon id="g_*F:**_0" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="121.159,140.236 199.799,140.028 239.049,72.045 118.876,2.856 "/>
   				 
-				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
+				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
 					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>
 					<polygon id="g_*O:**_2" visibility="hidden" iemlCode="*U:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**')" class="styleUsrc"  points="258.537,173.746 278.177,139.729 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 "/>
 
@@ -119,7 +119,7 @@
 					<polygon id="g_*M:**_3" visibility="hidden" iemlCode="*B:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**')" class="styleBsrc" points="258.729,242.193 278.367,276.209 239.089,276.208 199.812,276.209 219.45,242.193 239.089,208.178 "/>
 
 
-				<polygon id="g_*F:**_3" visibility="hidden" iemlCode="*E:**" onclick="SelectPave(evt,'*F:**')" class="styleEsrc"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
+				<polygon id="g_*F:**_3" visibility="hidden" iemlCode="*E:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**')" class="styleEsrc"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
 
 
 			</g>
