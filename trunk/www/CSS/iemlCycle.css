@@ -25,7 +25,7 @@ a.NoSelect
     }
 a.NoSelect:visited
     { 
-    color:#66CCCC;
+    color:#000099;
     text-decoration:none;
     }
 
@@ -69,7 +69,7 @@ a.IsSelect:hover
     }
 a.IsSelect:visited
     { 
-    color:#3399FF;
+    color:#000099;
     text-decoration:none;
     }
 a.IsSelect:link
@@ -97,7 +97,7 @@ a.NoSelectDesc
     }
 a.NoSelectDesc:visited
     { 
-    color:#03197b;
+   color:#000099;
     text-decoration:none;
     }
 
@@ -136,7 +136,7 @@ a.IsSelectDesc:hover
     }
 a.IsSelectDesc:visited
     { 
-    color:#3399FF;
+   color:#000099;
     text-decoration:none;
     }
 a.IsSelectDesc:link
