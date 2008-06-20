@@ -435,7 +435,7 @@ class Xul{
                         	  		$ihm .= '<treechildren>';
                         	  			$ihm .= '<treeitem >';	
                         	  			if($this->trace)
-                        	  			echo "Xul:GetTreeTrad:".print_r($bdd)."<br/>";  
+                        	  				echo "Xul:GetTreeTrad:".print_r($bdd)."<br/>";  
                         	  			if(in_array($trad[$i],$bdd)){
                         	  			  	$prop="utilisateur";
                         	  			  }else{

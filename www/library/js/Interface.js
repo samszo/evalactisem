@@ -1,6 +1,14 @@
    
 E="*";
 P=";";
+
+function GetGrille(){
+	//var url = "http://localhost/evalactisem/overlay/CycleGoogleDoc.php";
+	//var grille = GetResult(url);
+	//alert(grille);
+	initDoc();
+}
+
 function show_tooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()

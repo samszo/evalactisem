@@ -436,6 +436,11 @@
   }
  
 function SelectionCycle(evt){
+
+	if(!window.parent.frames['iemlCycle'])
+		return;
+
+
     var idBranS=[];
     var idBranD=[];
 	var tgt = evt.target;
@@ -443,7 +448,8 @@ function SelectionCycle(evt){
 	
 	//recuperation des primitives de la barnche
 	
-	if(InitGrille(iemlCode)==true) return;
+	InitGrille(iemlCode);
+	
 	iemlCode=iemlCode.replace('*','');
 	iemlCode=iemlCode.replace('**','');
 	
@@ -507,6 +513,7 @@ function SelectionCycle(evt){
 			
 	}
 }  
+
 function InitGrille(iemlCode){
 var init=false;
   if(iemlCode==predEvt){
@@ -528,4 +535,6 @@ var init=false;
   return init;
   
 }
+
+
  
