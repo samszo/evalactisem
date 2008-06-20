@@ -1,55 +1,57 @@
-function spreadsheets(container){
-this.containerElement=container;
-this.initialize=function () {
+      function initDoc() {
+	      google.load("visualization", "1");
+	      google.setOnLoadCallback(initialize); // Set callback to run when API is loaded
+      }
+      
+      function initialize() {
         var query = new google.visualization.Query('http://spreadsheets.google.com/tq?key=p8PAs8y8e1x2YTS7Zgag7Nw&hl=en');
-        query.send(this.handleQueryResponse);  // Send the query with a callback function
-}
-this.handleQueryResponse= function(response) {
+        query.send(handleQueryResponse);  // Send the query with a callback function
+      }
+
+      // Query response handler function.
+      function handleQueryResponse(response) {
 
         if (response.isError()) {
           alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
           return;
         }
-        alert('');
+
         var data = response.getDataTable(); 
-        var html = [];
-        html.push('<table border="1">');
+        var xul = [];
+        xul.push('<listbox id="iemlCycle" >');
 
         // Header row
-        html.push('<tr><th>Seq</th>');
+        xul.push('<listcols>')
+        //xul.push('<tr><th>Seq</th>');
         for (var col = 0; col < data.getNumberOfColumns(); col++) {
-          html.push('<th>' + this.escapeHtml(data.getColumnLabel(col)) + '</th>');
+          xul.push('<listcol flex="1">' + escapeHtml(data.getColumnLabel(col)) + '</listcol>');
         }
-        html.push('</tr>');
+        xul.push('</listcols>');
 
         for (var row = 0; row < data.getNumberOfRows(); row++) {
-          html.push('<tr><td align="right">' + (row + 1) + '</td>');
+          //xul.push('<tr><td align="right">' + (row + 1) + '</td>');
+          xul.push("<listitem>")
           for (var col = 0; col < data.getNumberOfColumns(); col++) {
-            data.getFormattedValue(row, col);
-            html.push(data.getColumnType(col) == 'number' ? '<td align="right">' : '<td>');
-            html.push(this.escapeHtml(data.getFormattedValue(row, col)));
-            html.push('</td>');
+            xul.push(data.getColumnType(col) == 'number' ? '< align="right">' : '<listcell label="');
+            xul.push(escapeHtml(data.getFormattedValue(row, col)));
+            xul.push('" />');
+          
           }
-          html.push('</tr>');
+          xul.push('</listitem>');
         }
-        html.push('</table>');
-		this.containerElement.innerHTML = html.join('');
+        xul.push('</listbox>');
+        var parser=new DOMParser();
+        var ListBox=parser.parseFromString(xul.join(''),"text/xml");
+        //alert(xul.join(''));
+        document.getElementById('tablediv').appendChild(ListBox.documentElement);
       }
 
+      function escapeHtml(text) {
+        if (text == null)
+          return '';
 
-
-// Utility function to escape HTML special characters
-this.escapeHtml = function(text) {
-
-  if (text == null)
-    return '';
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-this.spreadsheet=function(){
-    
-	google.load("visualization", "1");
-	google.setOnLoadCallback(initialize);
-	
-}
-}
+        return text.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }

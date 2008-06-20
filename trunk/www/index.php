@@ -61,7 +61,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	<script src="library/js/TradTagIeml.js"/>
 	<script src="library/js/groupbox.js"/>
 	<script src="library/js/tree.js"/>
-	<script type="text/javascript"  src="http://www.google.com/jsapi"></script>
+	<script src="http://www.google.com/jsapi" />
  	<script src="library/js/GoogleDoc.js"/>
 	
 
@@ -80,6 +80,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 			</popup>
 		</popupset>
 	<hbox >
+	    <button label="Afficher la grille"  onclick="GetGrille()"/>
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
@@ -140,6 +141,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 
 					</groupbox>
 				</vbox>
+
+			        <splitter collapse="before" resizeafter="farthest">
+						<grippy/>
+					</splitter>
 				
 				<hbox flex="1">
 					<groupbox flex="1" orient="horizontal" >
@@ -183,7 +188,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								        <tab label="Tags traduits" />
 								        <tab label="Tags avec plusieurs traduction" />
 								        <tab label="Tags sans traduction" />
-								        <tab label="Cycle de axial orientation / where" />
+								        <tab label="Dictionnaire et Cycles" />
 								    </tabs>
 								    <tabpanels flex="1"  >
 								        <tabpanel >
@@ -194,11 +199,28 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								         </tabpanel>
 								        <tabpanel>
 											<box id="tpNoTrad" flex="1" />
-											<vbox id="treeDicoIeml" flex="1" hidden="true" />
 								         </tabpanel>
 								         <tabpanel>
-											
-											<iframe id="iemlCycle" flex='1' hidden="false" />
+
+											<tabbox flex="1" orient="horizontal" >
+											    <tabs orient="vertical" >
+											        <tab label="Dictionnaire" />
+											        <tab label="Cycle 1" />
+											        <tab label="Cycle 2" />
+											    </tabs>
+											    <tabpanels flex="1"  >
+											        <tabpanel >
+														<vbox id="treeDicoIeml" flex="1" hidden="false" />
+											         </tabpanel>
+											        <tabpanel>
+														<iframe id="iemlCycle" flex='1' hidden="false" />
+											         </tabpanel>
+											         <tabpanel>
+														<iframe id="iemlCycle1" flex='1' hidden="false" />
+											        </tabpanel>
+											    </tabpanels>
+											</tabbox>
+
 								        </tabpanel>
 								    </tabpanels>
 								</tabbox>
@@ -212,7 +234,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					</splitter>
 					<groupbox style="min-width: 350px;" orient="horizontal" >
 						<caption label="Visualisation des graphiques"/>
-						<iframe id="webFrame" style="min-width: 350px;" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+						<iframe id="webFrame" style="min-width: 500px;" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
 					</groupbox>
 				</hbox>
 			</groupbox>

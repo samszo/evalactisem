@@ -14,7 +14,8 @@
 
         if(isset($_POST['f'])){
               $fonction = $_POST['f'];
-              echo $fonction;
+			if(TRACE)
+              echo "ExeAjax:fonction".$fonction."<br/>";
         }else
         if(isset($_GET['f']))
                 $fonction = $_GET['f'];
@@ -103,7 +104,8 @@
         function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 			
         	global $objSite;
-			echo "flux=".$flux;
+			if(TRACE)
+				"ExeAjax:fonction".$fonction.$flux."<br/>";
         	if($type=="Signl_Trad"){
 			
 				$arrTrad=explode(";",$trad);
