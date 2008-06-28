@@ -264,6 +264,29 @@ Cette table est utilisée pour stocker les flux IEML  produit par l’activité 
 || *Champ*     || *Type*      || *Description*                                         ||
 || flux_id     || int(11)     || Identifiant de la table ieml_flux                     ||
 || acti_id     || int(11)     || Identifiant de la table ieml_acti                     ||
-|| flux_ieml   || Text        || Chaîne de caractère formaté avec le langage star sous la forme :Source = l’identifiant de l’utilisateur effectuant l’action : tu-tu-.we-b-.tu-nu-du-.personnes,id,-:(nombre, système d’information (nom de la table, nom du champ, -) unique)Destination = la phrase IEML ||
+|| flux_ieml   || Text        || Chaîne de caractère formaté avec le langage star sous la forme :Source = l’identifiant de l’utilisateur effectuant l’action : tu-tu-.we-b-.tu-nu-du-.[personnes,id,-]:(nombre, système d’information [nom de la table, nom du champ, -] unique)Destination = la phrase IEML correspondant au contexte sémantique de l’action Translation = la phrase IEML  correspondant au contexte sémantique du processus (navigation) ayant amené l’action. Cette expression IEML  sera construite dynamiquement par les actions de l’utilisateur.  ||
 || flux_date    ||   Date     || Date de création du flux                              ||
+
+Il n’y a pas de taille limite pour le flux.
+Chaque flux est associé à une action sur le logiciel EvalActiSem.
+
+===V.2.2. Communication Php/MySql===
+MySql permet la communication entre les fonctions PHP et la base de données. Le flux  récupéré est stocké dans la base de données dans la table del.icio.us ainsi que la traduction du flux.
+===V.2.3. Communication serveur PHP/API del.icio.us===
+Les classes PHP communiquent avec l’API del.icio.us on utilisant le protocole HTTP, la bibliothèque Curl de PHP permet de se connecter, de communique avec différents serveurs, grâce à de nombreux protocoles .libcurl supporte actuellement les protocoles suivants : HTTP, HTTPS, FTP, gopher, telnet, dict, file, et LDAP. libcurl supporte aussi les certificats HTTPS, les POST HTTP, PUT http [3]. 
+
+La réponse de API del.icio.us est ce forme d’XML, la classe php le récupère, le parse et stocke le résultat dans la base de données.    
+===V.2.4. Communication serveur PHP/StartParser  IEML ===
+La communication entre le serveur PHP et le StartParser IEML [4] s’effectuer a l’aide des requêtes Curl. 
+===V.2.5. Communication serveur  interface de gestion Xul/Serveur PHP===
+L’interface de gestion communique avec le serveur PHP par des fonctions java script, une fois l’utilisateur a saisir sont login, son password et a choisi le type de visualisation qu’il souhait l’interface envoie les paramètres  de connexion a la fonction php-delicious qui se charge de la connexion avec l’API del.icio.us ainsi que de la récupération du résultat.
+===V.2.6. Communication Serveur /API GoogleDocs===
+Le serveur communique avec  l’api GoogleDocs par l’intermédiaire des requêtes Jason. Il envois a l’api GoogleDocs une requête en précisant le type de visualisation qu’il veut récupérer et la clé du document a récupérer. L’api répond on envoyant la réponse sous le format Jason.    
+==VI. Description  des l’interfaces==
+===VI.1 Interfaces logiciels===
+====VI.1.1 Les objets PHP ====
+Ces objets sont développés en PHP 5.
+
+
+
                 
