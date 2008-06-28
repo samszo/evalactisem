@@ -1,0 +1,285 @@
+__TOC__
+----
+Page de titre
+----
+<font size = "4">'''Scénario d<nowiki>’</nowiki>utilisation de l<nowiki>’</nowiki>application Sémantisation'''</font>
+
+<font size = "4">'''1. Diagramme des cas d<nowiki>’</nowiki>utilisation :'''</font>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font size = "4">'''Description :'''</font>
+
+<font size = "4">'''                            '''</font>
+
+
+'''Précondition :'''
+ Le système doit être connecté à Internet pour pouvoir communiquer avec l<nowiki>’</nowiki>API delicious, et l<nowiki>’</nowiki>utilisateur possède un compte delicious.
+
+'''Début :'''
+Lorsque l<nowiki>’</nowiki>utilisateur  clic sur le bouton récupération du flux après avoir saisie son login et son mot de passe.
+
+'''Fin :'''
+:Lorsque l<nowiki>’</nowiki>api delicious répond à la requête envoyée par le système.
+
+
+
+'''Postcondition :'''
+:Si l<nowiki>’</nowiki>API a répondue deux représentations seront données a ce flux, une représentation se forme d<nowiki>’</nowiki>histogramme et une représentation se forme de table. Le flux récupéré sera comparé a ce lui stocké dans la base de données si le flux a changer (il y a nouvelles données) les nouvelles données seront stockées.
+
+'''Déroulement normal :'''
+1.	l<nowiki>’</nowiki>utilisateur saisie son login et son  mot de passe delicious.
+2.	il choisit le  type de requête qu il veut effectué (le type du flux).
+3.	il choisit le type de graphique.
+4.	 il clic sur le bouton récupération du flux.
+5.	le système envoie une requête à l<nowiki>’</nowiki>API delicious.
+6.	 si le login et le mot de passe sont corrects l<nowiki>’</nowiki>API delicious envoie le flux au système.
+7.	le système compare le flux récupéré avec le flux sauvegardé.
+8.	le système créer les représentations et les affiches.
+
+
+''' Variantes :'''
+•	login ou mot de passe incorrects : si le login ou le mot de passe saisie par l<nowiki>’</nowiki>utilisateur sont incorrects un message d<nowiki>’</nowiki>erreur est affiché, l<nowiki>’</nowiki>utilisateur doit saisir le login et le mot de passe de  nouveau.
+•	Problème de connexion : si le système n<nowiki>’</nowiki>arrive pas a ce connecté à l<nowiki>’</nowiki>API delicious, un message d<nowiki>’</nowiki>erreur est affiché. L<nowiki>’</nowiki>utilisateur doit vérifie qu  il est connecté à Internet.
+
+
+
+
+
+
+'''Précondition :'''
+:Il fau t y avoir un flux  déjà récupéré et stocké dans la base de données
+
+'''Début'''
+:L<nowiki>’</nowiki>utilisateur clic sur le bouton Traduction.
+
+'''Fin ''':
+:L<nowiki>’</nowiki>utilisateur revient à l<nowiki>’</nowiki>interface principale.
+
+'''Postcondition :'''
+:Des mises a jour des tables onto_trad et ieml_onto sont effectués après  que l<nowiki>’</nowiki>utilisateur  sélection les mots qu il veut traduire.
+
+'''Déroulement :'''
+1.	l<nowiki>’</nowiki>utilisateur sélection  le mot a traduire dans la table de traduction et clic sur le bouton ajout une traduction.
+2.	le système consulte la base de données pour traduire le mot
+	si aucune traduction ne correspond au mot sélection le système consulte le dictionnaire ieml,
+	si il y a plusieurs traductions possibles l<nowiki>’</nowiki>utilisateur est invité a choisir une.
+	Si dans le dictionnaire il n y a pas de traduction l<nowiki>’</nowiki>utilisateur traduira manuellement.
+'''Invariants :'''
+•	lors de l<nowiki>’</nowiki>étape 1 si aucun mot ni sélection un message s<nowiki>’</nowiki>affiche invitant l<nowiki>’</nowiki>utilisateur a sélectionné une valeur.
+
+
+
+
+
+
+
+
+'''Précondition :'''
+:Il faut qu il existe une sauvegarde du flux récupéré dans la base de donnée ainsi  qu une traduction en ieml de ce flux.
+
+'''Début :'''
+:L<nowiki>’</nowiki>utilisateur clic sur le bouton graphique.
+'''Fin'''
+:La construction de la représentation graphique a partir des expression ieml parser.
+
+'''Postecondition'''
+:Si l<nowiki>’</nowiki>expression ieml est valide un fichier xml est retourné par le paser, ce fichier contient les différents niveaux ieml qui constitue cette expression.
+
+
+'''Déroulement'''
+1.	lorsque l<nowiki>’</nowiki>utilisateur clic sur le bouton Graphique, le système crée une expression ieml selon une syntaxe spécifique.
+2.	 le système envoie l<nowiki>’</nowiki>expression ieml au parser ieml pour que ce dernier la parse.
+3. à partir de réponse fournie par le parser ieml, le système crée la représentation graphique et l<nowiki>’</nowiki>affiche
+'''Variante'''
+:Si l<nowiki>’</nowiki>expression ieml ni pas valide, un message d<nowiki>’</nowiki>erreur est affiché.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font size = "4">'''2. Diagrammes de séquences :'''</font>
+'''2.1 Récupération du flux :'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''2 .2 Traduction'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''2.3 Représentation graphique :'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font size = "4">'''3. Captures d<nowiki>’</nowiki>écrans :'''</font>
+'''Etape1 :'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font size = "4">'''Interface de traduction :'''</font>
+
+
