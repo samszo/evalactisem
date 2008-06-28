@@ -308,10 +308,11 @@ Cet objet permet de ce connecter a l’API del.icio.us et de traiter les résult
 ||RenameTag     ||sOld,sNew|| Tags               ||Renomme une Tag                     ||
 ||GetRecentPosts||sDate,iCount|| Tags            ||Retourne une liste de Posts filtrer en fonction de Tags, nombre maximum de Posts retourner est 15                             ||
 ||GetAllPosts   ||sTag     || Post               ||Retourne une liste de tous les Posts filtrer en fonction de Tags.                     ||
-||GetDates      ||sUrl,sDescription,sNotes,aTags,sDate,bReplace                        || True ou flase   ||Ajoute un Posts                 ||
+||GetDates      ||sUrl,sDescription,sNotes,aTags,sDate,bReplace                        || True ou flase   ||Ajoute un Posts              ||
 ||DeletePost    ||sUrl     ||                     ||Supprime un Post                   ||
 ||GetAllBundles ||         ||                     ||Récupère  tous les groupes de tags del.icio.us     ||
 ||DeleteBundle  ||sName    ||                     ||Supprime un bondles                ||
+||GetAllPosts   ||sTag     || Post               ||Retourne une liste de tous les Posts filtrer en fonction de Tags.                     ||
 
 
 
