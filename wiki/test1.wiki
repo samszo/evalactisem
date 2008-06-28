@@ -286,6 +286,19 @@ Le serveur communique avec  l’api GoogleDocs par l’intermédiaire des requê
 ===VI.1 Interfaces logiciels===
 ====VI.1.1 Les objets PHP ====
 Ces objets sont développés en PHP 5.
+====VI.1.1.1 PhpDelicious ====
+Cet objet permet de ce connecter a l’API del.icio.us et de traiter les résultats.
+
+|| *Propriétés*                                                                        ||
+|| *Nom*       || *Type*               || *Description*                                ||
+|| sUsername   || Chaîne de caractères || Login  del.icio .us                          ||
+|| sPassword   || Chaîne de caractères || Mot de passe del.icio.us IEML                ||
+|| iCacheTime  || int                  || La durée en seconde pour mettre en cache les données récupérées                     ||
+|| oXmlParder  || Objet                || Objet permettant de traiter les données del.icio.us retournées                 ||
+|| bFirstchange|| Booléen              ||                                              ||
+|| iLastError  || int                  ||  Type d’erreur qui prouve se produire de la connexion au serveur del.icio.us       ||
+
+
 
 
 
