@@ -14,7 +14,8 @@
 		 	<colorpicker onselect="colorpicker(this.color);"/>
 		</popup>
 		<hbox flex='2'>
-		<vbox >
+		<vbox >	
+		
 	        <groupbox  >
 	        	<caption label='Outils' />
 	        	<vbox id="palette_status" style="background-color:red" >
@@ -36,6 +37,7 @@
 	        	<textbox id='ShowPoints' multiline="true" rows="5" cols="1" value="" />
 	        </groupbox>	
 	        
+
         </vbox>
     <vbox flex="1" >    
     <svg width="1000" height="1000" id="SVGglobal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -86,6 +88,11 @@
 		      orient="auto">
 		      <path d="M 0 0 L 10 5 L 0 10 z" />
 		    </marker>	     
+			<pattern id="TrianglePattern" patternUnits="userSpaceOnUse"
+		             x="0" y="0" width="100" height="100"
+		             viewBox="0 0 10 10" >
+		      <path d="M 0 0 L 7 0 L 3.5 7 z" fill="red" stroke="blue" />
+		    </pattern> 
       </defs>
 
 
@@ -106,7 +113,7 @@
 		<g id="g_primitives" >
 				
 			<g id="g_*F:**" iemlCode="*F:**" onmouseover="ModifTxtMouseOver(evt)"  name="primitives">
-				<polygon id="g_*F:**_0" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id)" class="styleF" points="121.159,140.236 199.799,140.028 239.049,72.045 118.876,2.856 "/>
+				<polygon id="g_*F:**_0" iemlCode="*F:**" iemlSelect="*F:**" onclick="ShowHidePave(this.id)" points="121.159,140.236 199.799,140.028 239.049,72.045 118.876,2.856 "/>
   				 
 				<polygon id="g_*F:**_1" visibility="hidden" iemlCode="*O:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="199.653,139.729 238.932,139.729 278.177,139.729 297.815,173.746 297.815,173.746 317.454,207.761 278.177,207.76 238.898,207.761 219.293,173.745 " />
 					<polygon id="g_*O:**_1" visibility="hidden" iemlCode="*A:**" onclick="SelectionCycle(evt);SelectPave(evt,'*F:**')" class="styleAsrc" points="238.932,139.729 278.21,139.729 258.57,173.745 238.932,207.76 219.293,173.745 199.653,139.729 "/>

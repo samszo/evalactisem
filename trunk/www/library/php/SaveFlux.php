@@ -197,7 +197,7 @@ class SauvFlux{
 		
 		$desc="tag";
 		$niv=1;
-		
+
 		if ($aPosts = $oDelicious->GetAllTags()) {
 	  	  foreach ($aPosts as $aPost) { 
 		           

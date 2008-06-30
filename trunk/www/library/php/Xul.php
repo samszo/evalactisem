@@ -338,6 +338,9 @@ class Xul{
 		$db->close();
 		$nb = mysql_num_rows($req);
 
+		if($this->trace)
+			echo "Xul:GetTreeChildren:sql".$sql."<br/>";
+		
 		$hierEnfant = "";
 		$tree = '<treechildren >'.EOL;
 		while($r = mysql_fetch_row($req))
