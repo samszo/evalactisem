@@ -22,6 +22,7 @@
 
    $iduti=$oSaveFlux->utilisateur($objSite,$login);
    $_SESSION['iduti']=$iduti;
+   
    $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti))  ;
   
    

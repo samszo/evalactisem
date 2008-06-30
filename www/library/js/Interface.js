@@ -1,4 +1,4 @@
-   
+console.log('TOTO');   
 E="*";
 P=";";
 

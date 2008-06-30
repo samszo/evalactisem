@@ -88,6 +88,6 @@
 
   <body>
     <div id="tablediv">Loading...</div>
-    
+<script src="http://spreadsheets.google.com/gpub?url=http%3A%2F%2F4b08ep9s-a.gmodules.com%2Fig%2Fifr%3Fup__table_query_url%3Dhttp%253A%252F%252Fspreadsheets.google.com%252Ftq%253Frange%253DA2%25253AB5%2526key%253Dp9ISv2bT_puZmAV340lRUAQ%2526gid%253D0%2526pub%253D1%26up_title%3Dma%2520carte%26up_show_tooltip%3D1%26up_enable_wheel%3D1%26up__table_query_refresh_interval%3D0%26url%3Dhttp%253A%252F%252Fwww.google.com%252Fig%252Fmodules%252Fmap.xml&height=281&width=450"></script>    
   </body>
 </html>

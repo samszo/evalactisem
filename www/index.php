@@ -80,7 +80,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 			</popup>
 		</popupset>
 	<hbox >
-	    <button label="Afficher la grille"  onclick="GetGrille()"/>
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
