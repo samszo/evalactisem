@@ -1,4 +1,3 @@
-console.log('TOTO');   
 E="*";
 P=";";
 
@@ -455,10 +454,11 @@ function GetIemlTreeExp(idTree, col, op){
     var start = new Object();
 	var end = new Object();
 	var tree;
-	var cell = "(";
+	var IemlToParse = "(";
+	var arrIEML = [];
 	var c;
 	var i;
-	var val;
+	var val, niv, maxNiv;
 	
   	if (window.parent != self) 
 		tree = parent.document.getElementById(idTree);
@@ -467,7 +467,8 @@ function GetIemlTreeExp(idTree, col, op){
 	
 	//pour gérer la multisélection
 	var numRanges = tree.view.selection.getRangeCount();
-	i=0;	
+	i=0;
+	maxNiv=0;	
 	for (var t = 0; t < numRanges; t++){
 		tree.view.selection.getRangeAt(t,start,end);
 		for (var v = start.value; v <= end.value; v++){
@@ -475,28 +476,82 @@ function GetIemlTreeExp(idTree, col, op){
 			val = tree.view.getCellText(v,c);
 			
 			if(val!=""){
-				cell += val;
-				if(i==2){
-					//ajoute une virgule et un opérateur toute les 3 expressions
-					cell += ","+op;  
-					i=-1;
-				}
-				//alert(i+" "+cell);
+				//enregistre l'expression
+		        //et le niveau le plus haut
+		        niv = GetIemlLayer(val);
+		        arrIEML.push(new Array(val, niv));
+		        if(niv>maxNiv)
+		        	maxNiv=niv;
 				i++;
 			}
 		}
 	}
-	//vérifie si la dernière virgule est bien mise
-	if(i==0)
-		//supprime le dernier opérateur
-		cell = cell.substring(0, cell.length-1)
-	else  	
-		cell += ","
+	//met à jour chaque expression suivant le niveau le plus haut
+	//nécessaire pour que l'expression soit valide pour le parser
+	//if(trace)
+		console.log('interface:GetIemlTreeExp:'+maxNiv);   
+	
+	for (var i = 0; i < arrIEML.length; i++){
+		if(arrIEML[i][1]<maxNiv){
+			//met à jour le layer de l'expression
+			arrIEML[i][0]= SetIemlMaxLayer(arrIEML[i],maxNiv); 	
+		}
+		IemlToParse += arrIEML[i][0]+op;
+	}
+	//supprime le dernier opérateur
+	IemlToParse = IemlToParse.substring(0, IemlToParse.length-1);
 	//finalise l'expression
-	cell += ")";
-	//alert(cell);
-	return cell;
-  } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" cell="+cell); }
+	IemlToParse += ")";
+
+	return IemlToParse;
+
+  } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" IemlToParse="+IemlToParse); }
+}
+
+
+function GetIemlLayer(ieml){
+  try {
+	//récupère le dernier caractère
+	var c = ieml.substr(ieml.length-1,1);
+	var niv;
+	if(c==":")
+		niv = 1;
+	if(c==".")
+		niv = 2;
+	if(c=="-")
+		niv = 3;
+	if(c=="'")
+		niv = 4;
+	if(c==",")
+		niv = 5;
+	if(c=="_")
+		niv = 6;
+	//if(trace)
+		console.log('interface:GetIemlLayer:niv='+niv+' c='+c);   
+	
+	return niv;
+
+  } catch(ex2){ alert("interfaces:GetIemlLayer:"+ex2+" ieml="+ieml); }
+}
+
+function SetIemlMaxLayer(arrIEML,maxNiv){
+
+  try {
+	if(arrIEML[1]<1 && maxNiv>=1)
+		arrIEML[0] += ":";
+	if(arrIEML[1]<2 && maxNiv>=2)
+		arrIEML[0] += ".";
+	if(arrIEML[1]<3 && maxNiv>=3)
+		arrIEML[0] += "-";
+	if(arrIEML[1]<4 && maxNiv>=4)
+		arrIEML[0] += "'";
+	if(arrIEML[1]<5 && maxNiv>=5)
+		arrIEML[0] += ",";
+	if(arrIEML[1]<6 && maxNiv>=6)
+		arrIEML[0] += "'";
+	
+	return arrIEML[0];
+  } catch(ex2){ alert("interfaces:SetIemlMaxLayer:"+ex2+" ieml="+ieml); }
 }
 
 
