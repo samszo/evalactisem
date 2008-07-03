@@ -10,8 +10,6 @@ extract($_POST,EXTR_OVERWRITE);
 
 function ChercheAbo ()
 	{
-		// connexion a delicious
-		global $con;
 		
 		$login=$_POST['login_uti'];
 		$mdp=$_POST['mdp_uti'];
@@ -22,6 +20,7 @@ function ChercheAbo ()
 			$_SESSION['Delicious']=$oDelicious;
 			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
 			$con=$oDelicious->LastError();
+			$_SESSION['con']=$con;
 			if ($con==2)
 			{
 				echo "Incorrect del.icio.us username or password";
@@ -37,9 +36,9 @@ function ChercheAbo ()
 
 ChercheAbo ();
 
-if($con==1){
+if($_SESSION['con']==1){
 	$lbl = "label='Connection to del.icio.us failed.' style='color:red;size:10'";
-}elseif($con==3){
+}elseif($_SESSION['con']==3){
 	$lbl = "label='Del.icio.us API access throttled.'" ;
 }else{  
 	$lbl = "label='traduction, semantique, ieml, delicious .....' style='color:blue;size:20px'"; 
