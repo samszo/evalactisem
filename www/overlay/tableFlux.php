@@ -35,16 +35,16 @@
 			echo'<listcols>';
 				echo'<listcol flex="1">';
 					echo'</listcol>';
-				echo'<splitter />';
+				
 				echo'<listcol flex="1">';
 				echo'</listcol>';
-				echo'<splitter />';
+				
 				echo'<listcol flex="1">';
 				echo'</listcol>';
-				echo'<splitter />';
+				
 				echo'<listcol flex="1">';
 				echo'</listcol>';
-				echo'<splitter />';
+				
 				echo'<listcol flex="1">';
 				echo'</listcol>';
 			echo'</listcols>';

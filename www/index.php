@@ -1,4 +1,5 @@
 <?php
+set_time_limit(100);
 require('library/php-delicious/php-delicious.inc.php');
 require('param/Constantes.php');
 define('DELICIOUS_USER', $_POST['login_uti']);
@@ -10,6 +11,8 @@ extract($_POST,EXTR_OVERWRITE);
 
 function ChercheAbo ()
 	{
+		// connexion a delicious
+		global $con;
 		
 		$login=$_POST['login_uti'];
 		$mdp=$_POST['mdp_uti'];
@@ -20,7 +23,6 @@ function ChercheAbo ()
 			$_SESSION['Delicious']=$oDelicious;
 			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
 			$con=$oDelicious->LastError();
-			$_SESSION['con']=$con;
 			if ($con==2)
 			{
 				echo "Incorrect del.icio.us username or password";
@@ -36,9 +38,9 @@ function ChercheAbo ()
 
 ChercheAbo ();
 
-if($_SESSION['con']==1){
+if($con==1){
 	$lbl = "label='Connection to del.icio.us failed.' style='color:red;size:10'";
-}elseif($_SESSION['con']==3){
+}elseif($con==3){
 	$lbl = "label='Del.icio.us API access throttled.'" ;
 }else{  
 	$lbl = "label='traduction, semantique, ieml, delicious .....' style='color:blue;size:20px'"; 
@@ -48,7 +50,7 @@ header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
 header ("title: Saisi des diagnosics d'accessibilité");
 echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
-echo ('<' . '?xml-stylesheet href="tree.css" type="text/css"?' . '>' . "\n");
+echo ('<' . '?xml-stylesheet href="CSS/tree.css" type="text/css"?' . '>' . "\n");
 echo ('<' . '?xml-stylesheet href="CSS/iemlCycleCss.css" type="text/css"?' . '>' . "\n");
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
@@ -79,11 +81,12 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 			</popup>
 		</popupset>
 	<hbox >
+	   
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
 	<vbox id='Maj' hidden='true' >
-	   <label id='label_Maj' value='Veuillez patienter la mise a jour est en cours...' style='font-style:normal;color: green'/>
+	   <label id='label_Maj' value='' style='font-style:normal;color: green'/>
 	   <progressmeter id="progmeter" value="50%"  />
    </vbox>
 	<label id="tradu" hidden="true" value=""/>
@@ -129,7 +132,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									<menuitem label="Tags par Bundles" value="tagsFbundles"/>
 								</menupopup>
 							</menulist>
-						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();GetCycleIeml();"/>
+						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
 					</groupbox>
 					
 					<groupbox orient="vertical" >
@@ -203,7 +206,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											<tabbox flex="1" orient="horizontal" >
 											    <tabs orient="vertical" >
 											        <tab label="Dictionnaire" />
-											        <tab label="Cycle 1" />
+											        <tab label="Cycle 1" syle="color:green"/>
 											        <tab label="Cycle 2" />
 											    </tabs>
 											    <tabpanels flex="1"  >
@@ -232,7 +235,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					</splitter>
 					<groupbox style="min-width: 350px;" orient="horizontal" >
 						<caption label="Visualisation des graphiques"/>
-						<iframe id="webFrame" style="min-width: 500px;" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+						<hbox>
+							<iframe id="webFrame1" style="min-width: 150px;" flex="1"  src="" hidden="true" />
+							<iframe id="webFrame" style="min-width: 500px;" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+					    </hbox>
 					</groupbox>
 				</hbox>
 			</groupbox>
@@ -241,7 +247,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  <script type="text/javascript">
  	//récupération des flux
    GetFlux();
- 	
+   
  </script>
  
  
