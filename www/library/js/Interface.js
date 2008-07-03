@@ -1,6 +1,32 @@
 E="*";
 P=";";
 
+function ShowDialog(){
+	
+  try {
+	netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+	var lbl = "tutu";
+	//valider le libellé 
+	//http://developer.mozilla.org/fr/docs/Extraits_de_code:Dialogues_et_invites
+	var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+	                        .getService(Components.interfaces.nsIPromptService);
+	var input = {value: lbl};
+	var check = {value: false};
+	result = prompts.prompt(window, "Validation critère", "Valider ou modifier la règle", input, null, check);
+	// input.value contient la chaîne de caractères saisie par l'utilisateur
+	// check.value indique l'état de la case à cocher
+	// result - contient true si l'utilisateur a cliqué sur OK	
+	if(!result)
+		return;
+	lbl = input.value;
+	//lbl = Utf8.encode(lbl);
+	alert(lbl);
+ 
+  } catch(ex2){console.log("Interface:ShowDialog:"+ex2);}	
+	
+}
+
+
 function GetGrille(){
 	//var url = "http://localhost/evalactisem/overlay/CycleGoogleDoc.php";
 	//var grille = GetResult(url);
