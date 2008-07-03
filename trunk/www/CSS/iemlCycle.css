@@ -4,17 +4,16 @@
 
 
 
-
-a.NoSelect:link, a.NoSelect:visited
+div.NoSelect
     { 
     display:block;
-    height:55px;  width:80px;
-     border:1px outset #dbecff;
+    height:35px;  width:150px;
+    border:1px outset #dbecff;
     font-family:Arial, Helvetica, Sans-Serif;
-    font-weight:bold;
-    font-size:9pt;
+    font-size:8pt;
     line-height:15pt;
     text-align:center;
+    background-color:#6699CC;
     }
 
 
@@ -29,7 +28,7 @@ a.NoSelect:visited
     text-decoration:none;
     }
 
-a.NoSelect:hover
+div.NoSelect:hover
     { 
     border-style: inset;
     }
@@ -40,10 +39,6 @@ a.NoSelect:link
     color:#000099;
     text-decoration:none;
     }
-
-
-
-
 
 a.IsSelect:link, a.IsSelect:visited
     { 

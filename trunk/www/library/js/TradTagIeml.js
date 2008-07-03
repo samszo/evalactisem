@@ -2135,9 +2135,10 @@ this.recherchez=function(searchString) {
   //alert( searchREstring);
 
   if ( ! hasAlphaNum) {
-    alert(searchString);
-    alert( "cha&#238;ne de caract&#232;res mal form&#233;e");
-    return; 
+    //alert("la chaine de caractères suivante n est pas valide: "+searchString);
+    //alert( "cha&#238;ne de caract&#232;res mal form&#233;e");
+    //return  ; 
+    searchREstring=searchREstring+'aaaa';
   }
 
   var hitList = new Array();
@@ -2303,7 +2304,7 @@ this.recherchez=function(searchString) {
 		 		    
 		 		}else
 		 			if(((compt%8)==r)&&(compt!=r)&&(sour.charAt(j+r-1)!="'")){
-		 				if(r<7){
+		 				if(5>r<7){
 		 					sour=sour+syn[i].charAt(j)+"'";
 		 		        	r++;
 		 		    	}else

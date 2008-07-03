@@ -89,7 +89,7 @@
 		    <Query fonction="ExeAjax_recup_id">
 				<select>SELECT f.onto_flux_id,o.ieml_id   </select>
 				<from> 	FROM ieml_onto_flux f 
-				        INNER JOIN ieml_onto o on f.onto_flux_code='-codeFlux-' and o.ieml_lib='-Iemllib-' 
+				        INNER JOIN ieml_onto o on f.onto_flux_code='-codeFlux-' and o.ieml_code="-Iemlcode-" 
 				        INNER JOIN ieml_uti_onto_flux u on u.onto_flux_id = f.onto_flux_id AND u.uti_id ='-iduti-'
 				</from>
 				<where> </where>

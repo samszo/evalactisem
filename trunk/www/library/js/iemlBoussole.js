@@ -1,7 +1,5 @@
     var src, dst, trl,evnt;
 	var trace=false;
-	var creaPoint=false;
-	var DynaPaveCreaPoint=false;
 	var values="";
 	var arrNavig = new Array("ModifPave('O:|M:');");
 	//nombre maximum d'enfant 
@@ -22,7 +20,7 @@
 		    	
 		for (var i = 1; i <= maxEnfant; i++) {
 			id = 'g_'+iemlCode+gId+i;
-			if(trace)
+			if(trace=="true")
 			    dump("iemlBoussole:BoucleHideShow:id="+id +"document.getElementById(id) "+document.getElementById(id));
 			if(!document.getElementById(id))return;
 			//modifie la visibilité du pavé
@@ -33,7 +31,7 @@
 				document.getElementById(id).setAttribute("visibility","hidden");
 				//gère les pavés enfants
 				HidePave(id,gId);
-				if(trace)
+				if(trace=="true")
 					//supprime les RecordPoint
 					DelRecordPoint();
 			}
@@ -57,7 +55,7 @@
 
 	    var arrId = doc.getAttribute("id").split("_");
 	    var iemlCode = doc.getAttribute("iemlCode");
-		if(trace)	
+		if(trace=="true")	
 		    alert("iemlBoussole:ModifPave:iemlCode="+iemlCode);
 	    
 		var id
@@ -67,7 +65,7 @@
 			for (var i = 1; i <= 16; i++) {
 				//récupère l'identifiant du pavé
 				id = 'g_'+iemlCode+'_'+i;
-				if(trace)	
+				if(trace=="true")	
 				    alert("iemlBoussole:ModifPave:id="+id);
 				if(!document.getElementById(id))return;
 				//modifie la class du pavé
@@ -87,7 +85,7 @@
 		//affiche les pavés d'une branche
 	   	tgt = document.getElementById(idSrc);
 	    var iemlCode = tgt.getAttribute("iemlCode");
-	   	if(trace)
+	   	if(trace=="true")
 			alert("iemlBoussole:ShowHidePave:iemlCode="+iemlCode);
 	    
 		var id;
@@ -107,7 +105,7 @@
 		    	
 		for (var i = 1; i <= maxEnfant; i++) {
 			id = 'g_'+iemlCode+gId+i;
-			if(trace)
+			if(trace=="true")
 			    dump("iemlBoussole:BoucleHideShow:id="+id +"document.getElementById(id) "+document.getElementById(id));
 			if(!document.getElementById(id))return;
 			//modifie la visibilité du pavé
@@ -118,7 +116,7 @@
 				document.getElementById(id).setAttribute("visibility","hidden");
 				//gère les pavés enfants
 				HidePave(id,gId);
-				if(trace)
+				if(trace=="true")
 					//supprime les RecordPoint
 					DelRecordPoint();
 			}
@@ -132,14 +130,14 @@
 		//affiche les pavés d'une branche
 	   	var tgt = document.getElementById(idSrc);
 	    var iemlCode = tgt.getAttribute("iemlCode");
-	   	if(trace)
+	   	if(trace=="true")
 			alert("iemlBoussole:HidePave:iemlCode="+iemlCode);
 	       
 		var id
 		for (var i = 1; i <= maxEnfant; i++) {
 			//récupère l'identifiant du pavé
 			id = 'g_'+iemlCode+'_'+i;
-		    if(trace)
+		    if(trace=="true")
 			    dump("iemlBoussole:HidePave:id="+id);
 			if(!document.getElementById(id))return;
 			//modifie la visibilité du pavé
@@ -151,10 +149,11 @@
     }
     
     function SelectPave(evt,idDst,idSrc){
-        
-		if(DynaPaveCreaPoint)
+        if(window.parent.frames['webFrame1'])
+        trace=window.parent.frames['webFrame1'].document.getElementById("trace").getAttribute("value")
+		if(window.parent.frames['webFrame1'] && window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="true")
 			CreaDynaPave(evt);
-        if(creaPoint)
+        if(window.parent.frames['webFrame1'] && window.parent.frames['webFrame1'].document.getElementById("creaPoint").getAttribute("value")=="true")
         	ShowRecordPoint(evt);
 
 		//met à jour la branche suivant le choix du pavé
@@ -195,7 +194,7 @@
 		 
 	    //récupère le code ieml
 	    iemlCode = tgt.getAttribute("iemlCode");
-		 if(trace){
+		 if(trace=="true"){
 			alert(id1+' '+id2);
 			alert(iemlCode);
 		 }
@@ -204,7 +203,7 @@
 		 var idBrache1 = 'g_'+idDst+'_0';
 		 var idBrache2 = 'g_'+idDst+'-1';
 		 var idLine = 'g_'+idDst+'-2';
-		 if(trace)
+		 if(trace=="true")
 			alert(idBrache1+' '+idBrache2);
 			
 		//modifie la class du pavé
@@ -248,9 +247,9 @@
 	    document.getElementById("txtRecordPoint").firstChild.data += point;		
 	    var pave = document.getElementById("txtRecordPoint").firstChild.data;
 	    document.getElementById("dynaPave").setAttribute("points",pave);		
-		values=point+document.getElementById("ShowPoints").getAttribute("value");
-		document.getElementById("menu").setAttribute("hidden",'false');
-		document.getElementById("ShowPoints").setAttribute("value",values);
+		values=point+window.parent.frames['webFrame1'].document.getElementById("ShowPoints").getAttribute("value");
+		window.parent.frames['webFrame1'].document.getElementById("menu").setAttribute("hidden",'false');
+		window.parent.frames['webFrame1'].document.getElementById("ShowPoints").setAttribute("value",values);
 		
     }
     
@@ -263,12 +262,7 @@
 		
 	}
 	
-	function jsdump(str) 
-	{ 
-	  Components.classes['...@mozilla.org/consoleservice;1'] 
-	            .getService(Components.interfaces.nsIConsoleService) 
-	            .logStringMessage(str); 
-	}
+	
 
     function ShowRecordPoint(evt){
 
@@ -296,7 +290,7 @@
    		var tgt = evt.target;
    		var g=document.getElementById("Pave");
 	    var point = tgt.getAttribute("points");
-	    var iemlcode=tgt.getAttribute("iemlCode")
+	    var iemlcode=tgt.getAttribute("iemlCode");
 	    var p=document.createElementNS(SVG_NS, "polygon");
 	    p.setAttribute("points", point);
 	    p.setAttribute("class", "styleE");
@@ -305,14 +299,15 @@
     }
     
     function ShowPave(){
-    	if(DynaPaveCreaPoint==false){
-    		DynaPaveCreaPoint=true;
+        
+    	if(document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="false"){
+    		document.getElementById("DynaPaveCreaPoint").setAttribute("value","true");
     		document.getElementById("Pave_status").setAttribute("style","background-color:green");
     		
     	}else{
-    		DynaPaveCreaPoint=false;
+    		document.getElementById("DynaPaveCreaPoint").setAttribute("value","false");
     		document.getElementById("Pave_status").setAttribute("style","background-color:red")
-    		var pave = document.getElementById("Pave");
+    		var pave = window.parent.frames['webFrame'].document.getElementById("Pave");
        		while(pave.hasChildNodes())
 				pave.removeChild(pave.firstChild);
     	
@@ -320,26 +315,27 @@
     }
     
     function ShowPoints(){
-    	if(creaPoint==true){
-    		creaPoint=false;
+    	if(document.getElementById("creaPoint").getAttribute("value")=="true"){
+    		document.getElementById("creaPoint").setAttribute("value","false");
     		document.getElementById("Points_status").setAttribute("style","background-color:red");
-    		document.getElementById("dynaPave").setAttribute("points", "");
     		document.getElementById("ShowPoints").setAttribute("value","");
     		document.getElementById("menu").setAttribute("hidden",'true');
     		
        }else{
-       	creaPoint=true;
+       	document.getElementById("creaPoint").setAttribute("value","true");
        	document.getElementById("Points_status").setAttribute("style","background-color:green")
        }
 }
     function Trace(){
-     if(trace==true){
+     if(document.getElementById("trace").getAttribute("value")=="true"){
         document.getElementById("Trace_status").setAttribute("style","background-color:red");
-     	trace=false;
+     	document.getElementById("trace").setAttribute("value","false");
+     	
     } else
-     	if(trace==false){
-     	    document.getElementById("Trace_status").setAttribute("style","background-color:green");
-     		trace=true;
+     	if(document.getElementById("trace").getAttribute("value")=="false"){
+     	   document.getElementById("Trace_status").setAttribute("style","background-color:green");
+     	   document.getElementById("trace").setAttribute("value","true");
+     	    
      	}
 	}
 	
@@ -436,11 +432,11 @@
   }
  
 function SelectionCycle(evt){
-
+    
 	if(!window.parent.frames['iemlCycle'])
 		return;
 
-
+   
     var idBranS=[];
     var idBranD=[];
 	var tgt = evt.target;
@@ -459,7 +455,7 @@ function SelectionCycle(evt){
 		
 		if(idBranArr[0].charAt(1) == ":"){
 			idBranS=idBranArr[0].split(':');
-			
+			 	
 		}else{
 			idBranS[0]=idBranArr[0];
 			idBranS[1]='';
@@ -480,61 +476,62 @@ function SelectionCycle(evt){
 	}
 	//les ids de la Grille	 
 	
-	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('a');
+	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('div');
 	
 	// mettre a jour les cellules de la grille
 	
-	for(var i=0 ; i < cycle.length; i++){
+	for(var i=1 ; i < cycle.length; i++){
 		//if(!cycle[i].getAttribute("id")) break;
 		
-		if(cycle[i].getAttribute("id")!='' && cycle[i].getAttribute("id").substring(0,5)!="descp"  ){	
-			idNode=cycle[i].getAttribute("id");
+			idNoeud=cycle[i].getAttribute("id");
 		 	for(var j=0 ; j < 2 ; j++){
-		 	      
 		           if(idBranS[j]!=''){
 		          
-					if( idNode.charAt(1)== idBranS[j] ||  idNode.charAt(3)== idBranS[j] || idNode.charAt(6)== idBranS[j] || idNode.charAt(8)== idBranS[j]|| idNode.substring(1,3)== idBranS[j] || idNode.substring(2,4)== idBranS[j]|| idNode.substring(1,3)== idBranS[j]){
-			        
-			         	   	window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"IsSelect");
-			                window.parent.frames['iemlCycle'].document.getElementById('descp_'+idNode).setAttribute('class',"IsSelectDesc");
+					if( idNoeud.charAt(1)== idBranS[j] ||  idNoeud.charAt(3)== idBranS[j] || idNoeud.charAt(6)== idBranS[j] || idNoeud.charAt(8)== idBranS[j]|| idNoeud.substring(1,3)== idBranS[j] || idNoeud.substring(2,4)== idBranS[j]|| idNoeud.substring(1,3)== idBranS[j]){
+			         	   	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).removeAttribute('class');
+			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('style',"visibility:hidden;height:0px;width:0px;");
+			         	 	
 			       	}
 			      }
 			   
 				    if(idBranD[j]!=''){
 				    
-					if( idNode.charAt(1)== idBranD[j]|| idNode.charAt(3)== idBranD[j] || idNode.charAt(7)== idBranD[j] || idNode.charAt(8)== idBranD[j] || idNode.substring(1,3) || idNode.substring(2,4)== idBranD[j] || idNode.substring(1,3)== idBranS[j]){
+					if( idNoeud.charAt(1)== idBranD[j]|| idNoeud.charAt(3)== idBranD[j] || idNoeud.charAt(7)== idBranD[j] || idNoeud.charAt(8)== idBranD[j] || idNoeud.substring(1,3) || idNoeud.substring(2,4)== idBranD[j] || idNoeud.substring(1,3)== idBranS[j]){
 	
-			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"IsSelect");
-			         	    window.parent.frames['iemlCycle'].document.getElementById('descp_'+idNode).setAttribute('class',"IsSelect");
-			     }
+			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).removeAttribute('class');
+			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('style',"visibility:hidden;height:0px;width:0px;");
+			         	    
+			        }
 			   }
 			}
-		}
+		
 			
 	}
 }  
 
 function InitGrille(iemlCode){
-var init=false;
-  if(iemlCode==predEvt){
-	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('a');
+  
+  cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('div');
 	for(var i=0 ; i < cycle.length; i++){
-		if(cycle[i].getAttribute("id")!=''){	
-			idNode=cycle[i].getAttribute("id");
-			if(idNode.substring(0,5)!="descp")
-			   window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelect");
-			else
-               window.parent.frames['iemlCycle'].document.getElementById(idNode).setAttribute('class',"NoSelectDesc");
-               				
+		if(cycle[i].getAttribute("id")!=''&& cycle[i].getAttribute("id")!='tablediv'){	
+			   idNoeud=cycle[i].getAttribute("id")
+			   window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('class',"NoSelect");
+			   window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('style',"visibility:visible");
 		}
 	
 	}
-	init=true;
+	
   }
-  predEvt=iemlCode;
-  return init;
-  
+function AfficheIeml(id){
+    descp=document.getElementById(id).firstChild.nodeValue;
+    console.log(Ieml_lib=descp.split('('));
+    id=id.replace('*','').replace('**','');
+    window.parent.document.getElementById('code-trad-ieml').setAttribute('value',id);
+	window.parent.document.getElementById('lib-trad-ieml').setAttribute('value',Ieml_lib[0]);
+	
 }
+  
+
 
 
  

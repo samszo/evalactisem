@@ -14,8 +14,7 @@
 
         if(isset($_POST['f'])){
               $fonction = $_POST['f'];
-			if(TRACE)
-              echo "ExeAjax:fonction".$fonction."<br/>";
+            
         }else
         if(isset($_GET['f']))
                 $fonction = $_GET['f'];
@@ -43,7 +42,7 @@
                         $resultat = AddDictio($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml']);
                         break;
                 case 'AddTrad':
-                        $resultat = AddTrad(stripslashes ($_GET['libIeml']),stripslashes ($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
+                        $resultat = AddTrad(stripslashes($_GET['libIeml']),stripslashes($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
                         break;
                 case 'SupTrad':
                         $resultat = SupTrad(stripslashes ($_GET['codeIeml']),stripslashes ($_GET['libIeml']),stripslashes ($_GET['codeflux']));
@@ -70,8 +69,8 @@
         	        	$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd']);
                 	   
         	        	break;
-                case 'insert_ieml_onto':
-                	   $resultat=insert_ieml_onto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
+                case 'InsertIemlOnto':
+                	   $resultat=InsertIemlOnto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
                 	   break;
                 case 'GetTreeDictio':
                 	   $resultat=GetTreeDictio();
@@ -104,8 +103,7 @@
         function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 			
         	global $objSite;
-			if(TRACE)
-				"ExeAjax:fonction".$fonction.$flux."<br/>";
+
         	if($type=="Signl_Trad"){
 			
 				$arrTrad=explode(";",$trad);
@@ -122,7 +120,7 @@
         	
         	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
             
-        	return $ihm;
+        	return stripslashes($ihm);
         }
         
         function GetTreeDictio(){
@@ -135,87 +133,19 @@
         
         // Ajouter une traduction dans la table ieml_onto et onto_trad
         function AddTrad($libIeml,$codeflux,$codeIeml){
-
-        		$iduti=$_SESSION['iduti'];
                 global $objSite;
-				$Activite= new Acti();
-                	
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		        $db->connect();   
-		        
-		        //recuperation des identifiants ieml_id et ieml_onto_flux
-		        
-		        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_recup_id']";
-		        $Q = $objSite->XmlParam->GetElements($Xpath);
-		        $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
-                $from=str_replace("-Iemllib-",utf8_decode($libIeml), $from);
-                $from=str_replace("-iduti-", $iduti, $from);
-                echo $sql = $Q[0]->select.$from;
-                $result = $db->query($sql);
-                $res=mysql_fetch_array($result);
-                
-                // insertion dans la table de traductions des identifiants
-                
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $values=str_replace("-idflux-", $res[0], $Q[0]->values);
-                $values=str_replace("-idIeml-", $res[1],$values);
-                
-                $sql = $Q[0]->insert.$values;
-                $result = $db->query($sql);
-                $resp=mysql_fetch_array($result);
-                 echo "==||".utf8_decode($libIeml);
-                //insertion de la traduction dans la table des utilisateurs
-                
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $values=str_replace("-idieml-", $res[1],$Q[0]->values);
-                $values=str_replace("-iduti-", $iduti, $values);
-                $sql = $Q[0]->insert.$values;
-                $result = $db->query($sql);
-                $res=mysql_fetch_array($result);
-                $message = mysql_affected_rows()." traduction ajoutée";
-                $db->close();
-                $Activite->AddActi("AddTrad",$iduti);
-                return $message;
-                
- }
+                $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+                return $sem->Add_Trad($libIeml,$codeflux,$codeIeml);
+                             
+ 		}
        
         function SupTrad($codeIeml,$libIeml,$codeflux){
         
                 global $objSite;
-                $Activite= new Acti();
+                $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+                return $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);
                 
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $from=str_replace("-codeFlux-",$codeflux, $Q[0]->from);
-                $from=str_replace("-codeIeml-", $codeIeml, $from);
-                $from=str_replace("-Iemllib-",utf8_decode($libIeml), $from);
-                echo $sql = $Q[0]->select.$from.$Q[0]->where;
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-                $db->connect();
-                $result = $db->query($sql);
-                $res=mysql_fetch_array($result);
-                
-                //requête pour Supprimer une traduction
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                //echo $Q;
-                $where = str_replace("-idflux-", $res[0], $Q[0]->where);
-                $where = str_replace("-idIeml-", $res[1], $where);
-                
-                $sql = $Q[0]->delete.$Q[0]->from.$where;
-                $result = $db->query($sql);
-                //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $sql = $Q[0]->delete.$Q[0]->from.$where;
-                $result = $db->query($sql);
-                $message = mysql_affected_rows()." traduction supprime";
-                $db->close();
-                 $Activite->AddActi("DelTrad",$iduti);
-                return $message;
-        }
+                }
                 
         
         function SetOnto($type,$col,$id,$valeur){
@@ -330,7 +260,7 @@
                
      }     
         
-        function insert_ieml_onto($Iemlcode,$Iemllib,$Imelparent){
+        function InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent){
 	     	global $objSite;     
 	     	$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
 	     		     

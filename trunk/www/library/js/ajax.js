@@ -123,7 +123,6 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 	}
 
 }
-
 function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
    
  	this.url = encodeURI(url);

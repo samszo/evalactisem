@@ -699,8 +699,89 @@ Class Sem{
     			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
                
      }   
-
-     
+   function Add_Trad($libIeml,$codeflux,$codeIeml){
+   	global $objSite;
+   				$iduti=$_SESSION['iduti'];
+   				$Activite= new Acti();
+   	            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		        $db->connect();   
+		        
+		        //recuperation des identifiants ieml_id et ieml_onto_flux
+		        
+		        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_recup_id']";
+		        $Q = $objSite->XmlParam->GetElements($Xpath);
+		        $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
+                $from=str_replace("-Iemlcode-",$codeIeml, $from);
+                $from=str_replace("-iduti-", $iduti, $from);
+                $sql = $Q[0]->select.$from;
+                if(Trace)
+                  echo"ExeAjex:AddTrad:sql:$sql ";
+        		
+                $result = $db->query($sql);
+                $res=mysql_fetch_array($result);
+                
+                // insertion dans la table de traductions des identifiants
+                
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $values=str_replace("-idflux-", $res[0], $Q[0]->values);
+                $values=str_replace("-idIeml-", $res[1],$values);
+                
+                $sql = $Q[0]->insert.$values;
+                $result = $db->query($sql);
+                $resp=mysql_fetch_array($result);
+                
+                //insertion de la traduction dans la table des utilisateurs
+                
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $values=str_replace("-idieml-", $res[1],$Q[0]->values);
+                $values=str_replace("-iduti-", $iduti, $values);
+                $sql = $Q[0]->insert.$values;
+                $result = $db->query($sql);
+                $res=mysql_fetch_array($result);
+                $message = mysql_affected_rows()." traduction ajoutée";
+                $db->close();
+                $Activite->AddActi("AddTrad",$iduti);
+                return $message;
+  
+   }
+   function Sup_Trad($codeIeml,$libIeml,$codeflux){
+   	global $objSite;
+   	            $Activite= new Acti();
+   				$iduti=$_SESSION['iduti'];
+   	            $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $from=str_replace("-codeFlux-",$codeflux, $Q[0]->from);
+                $from=str_replace("-codeIeml-", $codeIeml, $from);
+                $from=str_replace("-Iemllib-",utf8_decode($libIeml), $from);
+                echo $sql = $Q[0]->select.$from.$Q[0]->where;
+                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+                $db->connect();
+                $result = $db->query($sql);
+               
+                $res=mysql_fetch_array($result);
+                
+                //requête pour Supprimer une traduction
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                //echo $Q;
+                $where = str_replace("-idflux-", $res[0], $Q[0]->where);
+                $where = str_replace("-idIeml-", $res[1], $where);
+                
+                $sql = $Q[0]->delete.$Q[0]->from.$where;
+                $result = $db->query($sql);
+                //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
+                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";
+                $Q = $objSite->XmlParam->GetElements($Xpath);
+                $sql = $Q[0]->delete.$Q[0]->from.$where;
+                $result = $db->query($sql);
+                $message = mysql_affected_rows()." traduction supprime";
+                $db->close();
+                 $Activite->AddActi("DelTrad",$iduti);
+                return $message;
+        
+   }
         
 	
 }
