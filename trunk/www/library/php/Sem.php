@@ -710,8 +710,8 @@ Class Sem{
 		        
 		        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_recup_id']";
 		        $Q = $objSite->XmlParam->GetElements($Xpath);
-		        $from=str_replace("-codeFlux-", $codeflux, $Q[0]->from);
-                $from=str_replace("-Iemlcode-",$codeIeml, $from);
+		        $from=str_replace("-codeFlux-", Trim($codeflux), $Q[0]->from);
+                $from=str_replace("-Iemlcode-",Trim($codeIeml), $from);
                 $from=str_replace("-iduti-", $iduti, $from);
                 $sql = $Q[0]->select.$from;
                 if(Trace)
@@ -782,7 +782,70 @@ Class Sem{
                 return $message;
         
    }
-        
+   function GetCycle(){
+  	$Xul='';
+   	$lien ='http://spreadsheets.google.com/pub?key=p8PAs8y8e1x3J43Fu2t0bDg';
+  	
+  	if($this->trace)
+			echo "Sem:GetCycle:lien=".$lien."<br/>";
+			
+	    $oCurl = curl_init($lien);
+	    
+		// set options
+	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
+		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		
+		// request URL
+		curl_exec($oCurl);
+		
+		$sResult = curl_exec($oCurl);
+		
+		// close session
+		curl_close($oCurl);
+		
+		if($this->trace)
+			echo "Sem.php:GetCycle:sResult".$sResult."<br/>";
+			eregi('<TABLE (.*) >(.*)</TABLE>',$sResult, $chaine);
+		    eregi('(<BODY (.*) >)(.*)</BODY>',$chaine[0], $Html);
+	        eregi('(<td (.*) >)',$Html[0], $chaine);
+	   
+	        $a=eregi_replace('class=\'[[:alnum:]]* \'|class=\'[[:alpha:]]*\'|<br/>|colspan=[[:digit:]]*|class=hd' ,' ',$chaine[0]);
+	        $a=eregi_replace('<p style=\'height:[[:digit:]]*px;\'>.</td>' ,'<td>',$a);
+	        $a=eregi_replace('style=\'width:[[:digit:]]*px;\'|style=\'display:none;\'|style=\'width:[[:digit:]]*;\'' ,'',$a);
+	        $a=eregi_replace('<td[[:space:]]*>' ,'<td> ',$a);
+	        $ArrTr=explode("<tr>",$a);
+	        $Xul.='<grid  id="GridCycle" style="width:200px"  >';
+			$cell=explode("<td>",$ArrTr[0]);
+			$Xul.='<columns id="cols">';	
+			for($j=1;$j<sizeof($cell)/2;$j++){
+				
+				$Xul.='<column id="col_'.$j.'" ></column>';
+			}
+			$Xul.='</columns>';
+		    $Xul.='<rows id="CycleRows">';
+	        for($i=1;$i<sizeof($ArrTr)-1;$i++){
+                 $ArrTd=explode("<td>",$ArrTr[$i]);
+                 $Xul.='<row id="row_'.$i.'" >';
+                 for($j=3;$j<sizeof($ArrTd);$j++){
+                 	if($i%2!=0){
+                 		$Td[$j]=$ArrTd[$j];
+                 	}else{
+                 		if($Td[$j]!=" " && $ArrTd[$j]!=" "){
+                 			$Xul.='<label id="*'.$Td[$j].'**" value="'.$ArrTd[$j].'('.$Td[$j].')"  class="NoSelect" onclick="AfficheIeml(\'*'.$Td[$j].'**\') "  />';
+                 		   
+                 		}else{
+                 			$Xul.='<label id="* **"  value=" " class="NoSelect"  />';
+                 			
+                 		}
+                 	}
+                 }
+	        	 $Xul.='</row>';
+            }
+             $Xul.='</rows>';
+		     $Xul.='</grid>';
+		    echo $Xul;
+   }
 	
 }
 ?>

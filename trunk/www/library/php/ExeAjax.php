@@ -3,7 +3,7 @@
         require('../php-delicious/php-delicious.inc.php');
         require('../../param/Constantes.php');
         require_once ("../../param/ParamPage.php");
-        session_start();
+        
         
         
         //charge le fichier de paramètrage
@@ -93,6 +93,10 @@
                 case 'GetPalette':
                 	$resultat=GetPalette();
                 	break;
+                case 'IemlCycle':
+                	$resultat=IemlCycle();
+                	break;
+               
        }
         
         echo $resultat; 
@@ -311,6 +315,13 @@
            }
 	       print_r($arrColor);  
 	   }
-          
+	   function IemlCycle(){
+	   		global $objSite;
+ 			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+ 			return $sem->GetCycle();                           
+                
+	   }
+	   
+       
         
         ?>

@@ -3,8 +3,21 @@
 /* ======================================================== */
 
 
+listitem::-moz-listbox-listcell(NoSelect){
+	 display:block;
+	 height:35px;  width:150px;
+   	 border:1px outset #dbecff;
+	 background-color: #6699CC;
+	 font-family:Arial, Helvetica, Sans-Serif;
+     font-size:8pt;
+     line-height:15pt;
+     text-align:center;
+}
 
-div.NoSelect
+listcell::-moz-tree-(NoSelect:hover){ 
+    border-style: inset;
+}
+.NoSelect
     { 
     display:block;
     height:35px;  width:150px;
@@ -13,7 +26,7 @@ div.NoSelect
     font-size:8pt;
     line-height:15pt;
     text-align:center;
-    background-color:#6699CC;
+    background:#6699CC;
     }
 
 
@@ -28,7 +41,7 @@ a.NoSelect:visited
     text-decoration:none;
     }
 
-div.NoSelect:hover
+.NoSelect:hover
     { 
     border-style: inset;
     }

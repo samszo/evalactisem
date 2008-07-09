@@ -48,7 +48,6 @@ function GetFlux(){
 	
 }
 function SetDonnee(){
-	
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 	
 }
@@ -222,6 +221,7 @@ function Trad_Pars_Ieml(result, param){
         var Trad=new Array();
         var Tag=new Array();
         var arrNoms=new Array();
+        console.log(result);
         arrNoms = result.split(E);
         arrNom= arrNoms[0].split(P);
         if(arrNoms[1].length > 1){
@@ -310,9 +310,12 @@ function Trad_Pars_Ieml(result, param){
 		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
+	url = urlAjax+"library/php/ExeAjax.php";
+	urlparams="f=IemlCycle";
+	AppendResultPost(url,urlparams,document.getElementById('iemlCycle'),false);
 	
   document.getElementById("iemlCycle").setAttribute("hidden","false");
-  document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
+  //document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
   document.getElementById('infosTrad').setAttribute("hidden","false");
   document.getElementById('treeDicoIeml').setAttribute("hidden","false");
   document.getElementById('contDonnee').setAttribute("hidden","false");
@@ -593,4 +596,30 @@ function ModifTrad(){
 table=window.parent.frames('webFrame').document.getElementById('Points')
 window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
 }
+
+function ShowDialog(){
+        
+  try {
+        
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+        var lbl = "tutu";
+        //valider le libellé 
+        //http://developer.mozilla.org/fr/docs/Extraits_de_code:Dialogues_et_invites
+        var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                                .getService(Components.interfaces.nsIPromptService);
+        var input = {value: lbl};
+        var check = {value: false};
+        result = prompts.prompt(window, "Validation critère", "Valider ou modifier la règle", input, null, check);
+        // input.value contient la chaîne de caractères saisie par l'utilisateur
+        // check.value indique l'état de la case à cocher
+        // result - contient true si l'utilisateur a cliqué sur OK      
+        if(!result)
+                return;
+        lbl = input.value;
+        //lbl = Utf8.encode(lbl);
+        alert(lbl);
+ 
+  } catch(ex2){console.log("Interface:ShowDialog:"+ex2);}
+ }       
+        
 
