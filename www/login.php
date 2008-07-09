@@ -10,7 +10,7 @@ session_start();
 <SCRIPT LANGUAGE='JavaScript'>
 
     
-    if (window !=top ) {
+    if (window !=top ) 
     	top.location=window.location;
     
 </SCRIPT>

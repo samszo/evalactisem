@@ -187,16 +187,13 @@ function processReqChange() {
    			} catch (e) {}
 
 			try {
-	   			////console.log(this.req.responseText);
+	   			//console.log(this.req.responseText);
 			} catch (e) {}
 
 			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
 			
 			eval(this.fonction_sortie+"(this.req.responseText)");
-            try{
-	            if(this.req.responseText)
-	            		document.getElementById(this.id).value =this.req.responseText
-	            } catch(e){}
+            
 		} else {
 
 			alert("Il y avait un probleme avec le XML: " + this.req.statusText);

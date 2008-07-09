@@ -1,5 +1,5 @@
 <?php
-set_time_limit(100);
+set_time_limit(3000);
 require('library/php-delicious/php-delicious.inc.php');
 require('param/Constantes.php');
 define('DELICIOUS_USER', $_POST['login_uti']);
@@ -55,13 +55,14 @@ echo ('<' . '?xml-stylesheet href="CSS/iemlCycleCss.css" type="text/css"?' . '>'
 //echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
-<window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+<window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload=" ">
 
 	<script src="library/js/Interface.js"/>
 	<script src="library/js/ajax.js"/>
 	<script src="library/js/TradTagIeml.js"/>
 	<script src="library/js/groupbox.js"/>
 	<script src="library/js/tree.js"/>
+	<script src="library/js/iemlBoussole.js"/>
 	<script src="http://www.google.com/jsapi" />
  	<script src="library/js/GoogleDoc.js"/>
 	
@@ -117,8 +118,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						
 			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
 			    			<button hidden="false" id="PostTo" label="Mettre à jour del.icio.us" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
-			     			<button hidden="true" id="bt_10" label="Gérer les traductions"  onclick="Trad('webFrame','Traduction.xul');"/>
-
+			     			
 					</groupbox>
 					
 					<groupbox orient="vertical" >
@@ -214,10 +214,11 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 														<vbox id="treeDicoIeml" flex="1" hidden="false" />
 											         </tabpanel>
 											        <tabpanel>
-														<iframe id="iemlCycle" flex='1' hidden="false" />
+														
+														<box  id="iemlCycle"  hidden="false" />
 											         </tabpanel>
 											         <tabpanel>
-														<iframe id="iemlCycle1" flex='1' hidden="false" />
+														<box id="iemlCycle1" flex='1' hidden="false" />
 											        </tabpanel>
 											    </tabpanels>
 											</tabbox>
@@ -238,6 +239,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<hbox>
 							<iframe id="webFrame1" style="min-width: 150px;" flex="1"  src="" hidden="true" />
 							<iframe id="webFrame" style="min-width: 500px;" flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+					        
 					    </hbox>
 					</groupbox>
 				</hbox>
@@ -246,7 +248,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  </hbox>
  <script type="text/javascript">
  	//récupération des flux
-   GetFlux();
+  GetFlux();
    
  </script>
  

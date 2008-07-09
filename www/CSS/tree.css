@@ -2,3 +2,21 @@
 
 treechildren::-moz-tree-row(utilisateur){background-color: green;}
 treechildren::-moz-tree-row(dictio){background-color: yellow;}
+.NoSelect
+    { 
+    display:block;
+    height:30px;  width:50px;
+    border:1px outset #dbecff;
+    font-family:Arial, Helvetica, Sans-Serif;
+    font-size:8pt;
+    line-height:15pt;
+    text-align:center;
+    background:#6699CC;
+    color:#000099;
+    }
+
+.NoSelect:hover
+    { 
+    border-style: inset;
+    }
+    

@@ -433,7 +433,7 @@
  
 function SelectionCycle(evt){
     
-	if(!window.parent.frames['iemlCycle'])
+	if(!window.parent.document.getElementById('GridCycle'))
 		return;
 
    
@@ -444,7 +444,7 @@ function SelectionCycle(evt){
 	
 	//recuperation des primitives de la barnche
 	
-	InitGrille(iemlCode);
+	//InitGrille(iemlCode);
 	
 	iemlCode=iemlCode.replace('*','');
 	iemlCode=iemlCode.replace('**','');
@@ -476,20 +476,23 @@ function SelectionCycle(evt){
 	}
 	//les ids de la Grille	 
 	
-	cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('div');
+	row=window.parent.document.getElementById('CycleRows').childNodes; 
 	
 	// mettre a jour les cellules de la grille
 	
-	for(var i=1 ; i < cycle.length; i++){
-		//if(!cycle[i].getAttribute("id")) break;
+	for(var i=1 ; i < row.length; i++){
+		rowChild=row[i].childNodes;
 		
-			idNoeud=cycle[i].getAttribute("id");
-		 	for(var j=0 ; j < 2 ; j++){
+		//if(rowChild.length==0) break;
+            for(k=1;k<rowChild.length;k++){		
+				idNoeud=rowChild[k].getAttribute("id");
+		 		for(var j=0 ; j < 2 ; j++){
 		           if(idBranS[j]!=''){
 		          
 					if( idNoeud.charAt(1)== idBranS[j] ||  idNoeud.charAt(3)== idBranS[j] || idNoeud.charAt(6)== idBranS[j] || idNoeud.charAt(8)== idBranS[j]|| idNoeud.substring(1,3)== idBranS[j] || idNoeud.substring(2,4)== idBranS[j]|| idNoeud.substring(1,3)== idBranS[j]){
-			         	   	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).removeAttribute('class');
-			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('style',"visibility:hidden;height:0px;width:0px;");
+			         	   	//window.parent.console.log(idNoeud);
+			         	   	window.parent.document.getElementById(idNoeud).removeAttribute('class');
+			         	 	window.parent.document.getElementById(idNoeud).setAttribute('hidden',"true");
 			         	 	
 			       	}
 			      }
@@ -498,39 +501,49 @@ function SelectionCycle(evt){
 				    
 					if( idNoeud.charAt(1)== idBranD[j]|| idNoeud.charAt(3)== idBranD[j] || idNoeud.charAt(7)== idBranD[j] || idNoeud.charAt(8)== idBranD[j] || idNoeud.substring(1,3) || idNoeud.substring(2,4)== idBranD[j] || idNoeud.substring(1,3)== idBranS[j]){
 	
-			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).removeAttribute('class');
-			         	 	window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('style',"visibility:hidden;height:0px;width:0px;");
+			         	 	window.parent.document.getElementById(idNoeud).removeAttribute('class');
+			         	 	window.parent.document.getElementById(idNoeud).setAttribute('hidden','true');
 			         	    
 			        }
 			   }
 			}
 		
-			
+		}		
 	}
 }  
 
 function InitGrille(iemlCode){
   
-  cycle=window.parent.frames['iemlCycle'].document.getElementsByTagName('div');
-	for(var i=0 ; i < cycle.length; i++){
-		if(cycle[i].getAttribute("id")!=''&& cycle[i].getAttribute("id")!='tablediv'){	
-			   idNoeud=cycle[i].getAttribute("id")
-			   window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('class',"NoSelect");
-			   window.parent.frames['iemlCycle'].document.getElementById(idNoeud).setAttribute('style',"visibility:visible");
-		}
-	
+  	row=window.parent.document.getElementById('CycleRows').childNodes; 
+	for(var i=1 ; i < row.length; i++){
+		rowChild=row[i].childNodes;
+            for(k=1;k<rowChild.length;k++){	
+  		       idNoeud=rowChild[k].getAttribute("id")
+			   window.parent.document.getElementById(idNoeud).setAttribute('class',"NoSelect");
+			   window.parent.document.getElementById(idNoeud).setAttribute('hidden',"false");
+			}
 	}
-	
-  }
+}
+
 function AfficheIeml(id){
-    descp=document.getElementById(id).firstChild.nodeValue;
-    console.log(Ieml_lib=descp.split('('));
+    descp=document.getElementById(id).value;
+    Ieml_lib=descp.split('(');
     id=id.replace('*','').replace('**','');
-    window.parent.document.getElementById('code-trad-ieml').setAttribute('value',id);
-	window.parent.document.getElementById('lib-trad-ieml').setAttribute('value',Ieml_lib[0]);
+    document.getElementById('code-trad-ieml').setAttribute('value',id);
+	document.getElementById('lib-trad-ieml').setAttribute('value',Ieml_lib[0]);
 	
 }
-  
+function RequestIemlCycle(){
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=IemlCycle","GetCycle"," ","");
+	
+
+}
+function GetCycle(result){
+	console.log(result);
+	
+	
+}
+
 
 
 
