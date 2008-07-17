@@ -423,77 +423,76 @@ class Xul{
                         multiple="true"';
                         
                 if($type=="No_Trad"){
-                                $ihm .= ' onselect="Select_NoTrad(\''.$type.'\',\'treecol_descp\');">'; 
-                        $ihm .= '<treecols >';
-                                 $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"   persist="width ordinal hidden" />';
-                             $ihm .= '<splitter class="tree-splitter"/>';
-                 $ihm .= '</treecols>';
-                           $ihm .= '<treechildren>';  
-                           for($i=0;$i<sizeof($flux)-1;$i++){
+                  $ihm .= ' onselect="Select_NoTrad(\''.$type.'\',\'treecol_descp\');">'; 
+                  $ihm .= '<treecols >';
+                      $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"   persist="width ordinal hidden" />';
+                      $ihm .= '<splitter class="tree-splitter"/>';
+                  $ihm .= '</treecols>';
+                  $ihm .= '<treechildren>';  
+                  for($i=0;$i<sizeof($flux)-1;$i++){
                     $ihm .= '<treeitem >';
                         $ihm .= '<treerow>';
-                        $ihm .= '<treecell label="'.$flux[$i].'"/>';
+                        	$ihm .= '<treecell label="'.$flux[$i].'"/>';
                         $ihm .= '</treerow>';
-                                $ihm .= '</treeitem>'; 
-                           }
-                           $ihm .= '</treechildren>';
-                           $ihm .= '</tree>';
+                     $ihm .= '</treeitem>'; 
+                   }
+                   $ihm .= '</treechildren>';
+                   $ihm .= '</tree>';
             }else{
-                                $ihm .= ' onselect="Select_Trad(\''.$type.'\',\'treecol_descp\');">';
+                $ihm .= ' onselect="Select_Trad(\''.$type.'\',\'treecol_descp\');">';
                 $ihm .= '<treecols >';
-                                         $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"  persist="width ordinal hidden"  />';
-                                     $ihm .= '<splitter class="tree-splitter"/>';
-                                         $ihm .= '<treecol id="treecol_descp" flex="1" label="Description"  persist="width ordinal hidden" />';
-                                         $ihm .= '<splitter class="tree-splitter"/>';
-                                         $ihm .= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />';
-                            $ihm .= '</treecols>';
-                        $ihm .= '<treechildren>';    
-                    for($i=0;$i<sizeof($flux)-1;$i++){
-                        $ihm .= '<treeitem container="true" open="true">';
-                                         $ihm .= '<treerow>';
-                                         $ihm .= '<treecell label="'.$flux[$i].'"/>' ;
-                                         $ihm .= '</treerow>';
-                                         if($type=="Signl_Trad"){
+                   $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"  persist="width ordinal hidden"  />';
+                   $ihm .= '<splitter class="tree-splitter"/>';
+                   $ihm .= '<treecol id="treecol_descp" flex="1" label="Description"  persist="width ordinal hidden" />';
+                   $ihm .= '<splitter class="tree-splitter"/>';
+                   $ihm .= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />';
+                  $ihm .= '</treecols>';
+                  $ihm .= '<treechildren>';    
+                  for($i=0;$i<sizeof($flux)-1;$i++){
+                     $ihm .= '<treeitem container="true" open="true">';
+                        $ihm .= '<treerow>';
+                        $ihm .= '<treecell label="'.$flux[$i].'"/>' ;
+                        $ihm .= '</treerow>';
+                        if($type=="Signl_Trad"){
                                                 //echo $type;
-                                                $ihm .= '<treechildren>';
-                                                        $ihm .= '<treeitem >';  
-                                                        if($this->trace)
-                                                                echo "Xul:GetTreeTrad:".print_r($bdd)."<br/>";  
-                                                        if(in_array($trad[$i],$bdd)){
-                                                                $prop="utilisateur";
-                                                          }else{
-                                                                $prop="dictio";
-                                                          }
-                                                          $ihm .= '<treerow properties="'.$prop.'">';
-                                                                        $ihm .= '<treecell label=""  />' ;      
-                                                                    $ihm .= '<treecell label="'.$descp[$i].'"/>' ;      
-                                                                        $ihm .= '<treecell label="'.$trad[$i].'"/>';
-                                                                  $ihm .= '</treerow>';
-                                                        $ihm .= '</treeitem>';
-                                                $ihm .= '</treechildren>';
-                                        }
-                                        if($type=="Multi_Trad"){
-                                                $ihm .= '<treechildren>';
-                                                $arrDescp = explode(";",$descp[$i]);
-                                                $arrTrad = explode(";",$trad[$i]);
+                           $ihm .= '<treechildren>';
+                             $ihm .= '<treeitem >';  
+                             if($this->trace)
+                             	echo "Xul:GetTreeTrad:".print_r($bdd)."<br/>";  
+                             if(in_array($trad[$i],$bdd)){
+                               $prop="utilisateur";
+                        }else{
+                           $prop="dictio";
+                        }
+                        $ihm .= '<treerow properties="'.$prop.'">';
+                           $ihm .= '<treecell label=""  />' ;      
+                           $ihm .= '<treecell label="'.$descp[$i].'"/>' ;      
+                           $ihm .= '<treecell label="'.$trad[$i].'"/>';
+                        $ihm .= '</treerow>';
+                      $ihm .= '</treeitem>';
+                     $ihm .= '</treechildren>';
+                   }
+                    if($type=="Multi_Trad"){
+                      $ihm .= '<treechildren>';
+                      $arrDescp = explode(";",$descp[$i]);
+                      $arrTrad = explode(";",$trad[$i]);
+                      for($j=0;$j<sizeof($arrTrad)-1;$j++){
+                         $ihm .= '<treeitem >';  
+	                         $ihm .= '<treerow>';
+	                             $ihm .= '<treecell label=""/>' ;        
+	                             $ihm .= '<treecell  label="'.$arrDescp[$j].'" />';  
+	                             $ihm .= '<treecell  label="'.$arrTrad[$j].'"/>' ;
+	                          $ihm .= '</treerow>';
+                           $ihm .= '</treeitem>';
                                                 
-                                                for($j=0;$j<sizeof($arrTrad)-1;$j++){
-                                                        $ihm .= '<treeitem >';  
-                                                                $ihm .= '<treerow>';
-                                                                        $ihm .= '<treecell label=""/>' ;        
-                                                                    $ihm .= '<treecell  label="'.$arrDescp[$j].'" />';  
-                                                                        $ihm .= '<treecell  label="'.$arrTrad[$j].'"/>' ;
-                                                            $ihm .= '</treerow>';
-                                                        $ihm .= '</treeitem>';
-                                                
-                                                }
-                                                $ihm .= '</treechildren>';
-                                        }
-                                        $ihm .= '</treeitem>';
+                         }
+                         $ihm .= '</treechildren>';
+                         }
+                         $ihm .= '</treeitem>';
                         }
                                                 
-                                $ihm .= '</treechildren>';
-                        $ihm .= '</tree>';
+                      $ihm .= '</treechildren>';
+                $ihm .= '</tree>';
             }
                 //$ihm .= '</vbox>'.$splitter;
         return $ihm;    

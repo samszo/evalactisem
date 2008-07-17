@@ -43,7 +43,7 @@ function GetFlux(){
     document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
-	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
+	//AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
 	
 }
