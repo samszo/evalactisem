@@ -94,7 +94,7 @@
                 	$resultat=GetPalette();
                 	break;
                 case 'IemlCycle':
-                	$resultat=IemlCycle();
+                	$resultat=IemlCycle($_POST['key']);
                 	break;
                
        }
@@ -315,10 +315,10 @@
            }
 	       print_r($arrColor);  
 	   }
-	   function IemlCycle(){
+	   function IemlCycle($key){
 	   		global $objSite;
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
- 			return $sem->GetCycle();                           
+ 			return $sem->GetCycle($key);                           
                 
 	   }
 	   

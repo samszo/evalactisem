@@ -2,11 +2,14 @@
 E="*";
 P=";";
 
-function GetGrille(){
-	//var url = "http://localhost/evalactisem/overlay/CycleGoogleDoc.php";
-	//var grille = GetResult(url);
-	//alert(grille);
-	initDoc();
+function ChargeCycle(key){
+	//vérifie que l'onglet n'est pas déjà rempli
+	if(document.getElementById('iemlCycle_'+key).hasChildNodes())
+		return;
+
+	url = urlAjax+"library/php/ExeAjax.php";
+	urlparams="f=IemlCycle&key="+key;
+	AppendResultPost(url,urlparams,document.getElementById('iemlCycle_'+key),false);
 }
 
 function show_tooltip(evt)
@@ -310,11 +313,7 @@ function Trad_Pars_Ieml(result, param){
 		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
-	url = urlAjax+"library/php/ExeAjax.php";
-	urlparams="f=IemlCycle";
-	AppendResultPost(url,urlparams,document.getElementById('iemlCycle'),false);
 	
-  document.getElementById("iemlCycle").setAttribute("hidden","false");
   //document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
   document.getElementById('infosTrad').setAttribute("hidden","false");
   document.getElementById('treeDicoIeml').setAttribute("hidden","false");

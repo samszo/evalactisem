@@ -782,9 +782,9 @@ Class Sem{
                 return $message;
         
    }
-   function GetCycle(){
+   function GetCycle($key){
   	$Xul='';
-   	$lien ='http://spreadsheets.google.com/pub?key=p8PAs8y8e1x3J43Fu2t0bDg';
+   	$lien ='http://spreadsheets.google.com/pub?key='.$key;
   	
   	if($this->trace)
 			echo "Sem:GetCycle:lien=".$lien."<br/>";

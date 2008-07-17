@@ -206,19 +206,18 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											<tabbox flex="1" orient="horizontal" >
 											    <tabs orient="vertical" >
 											        <tab label="Dictionnaire" />
-											        <tab label="Cycle 1" syle="color:green"/>
-											        <tab label="Cycle 2" />
+											        <tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+											        <tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
 											    </tabs>
 											    <tabpanels flex="1"  >
 											        <tabpanel >
-														<vbox id="treeDicoIeml" flex="1" hidden="false" />
+														<vbox id="treeDicoIeml" flex="1"  />
 											         </tabpanel>
 											        <tabpanel>
-														
-														<box  id="iemlCycle"  hidden="false" />
+														<box  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg"  />
 											         </tabpanel>
 											         <tabpanel>
-														<box id="iemlCycle1" flex='1' hidden="false" />
+														<box id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
 											        </tabpanel>
 											    </tabpanels>
 											</tabbox>
