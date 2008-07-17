@@ -444,7 +444,7 @@ function SelectionCycle(evt){
 	
 	//recuperation des primitives de la barnche
 	
-	//InitGrille(iemlCode);
+	InitGrille(iemlCode);
 	
 	iemlCode=iemlCode.replace('*','');
 	iemlCode=iemlCode.replace('**','');
