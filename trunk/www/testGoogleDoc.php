@@ -11,7 +11,7 @@
     <script type="text/javascript">
       google.load("visualization", "1");
       function initialize() {
-        var query = new google.visualization.Query("http://spreadsheets.google.com/tq?key=p8PAs8y8e1x3J43Fu2t0bDg&hl=en");
+        var query = new google.visualization.Query("http://spreadsheets.google.com/pub?key=p8PAs8y8e1x3J43Fu2t0bDg");
         query.send(handleQueryResponse);  // Send the query with a callback function
       }
       google.setOnLoadCallback(initialize); // Set callback to run when API is loaded

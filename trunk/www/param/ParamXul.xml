@@ -180,7 +180,7 @@
 		<Querys>
 			<Query fonction="Ieml_Onto_Flux">
 				<insert> INSERT INTO ieml_onto_flux (onto_flux_id,onto_flux_code,onto_flux_desc,onto_flux_niveau,onto_flux_parents)</insert>
-				<values> VALUES ("", '-codeFlux-' , '-descFlux- ', '-niveauFlux- ', '-parentsFlux-' )</values>
+				<values> VALUES (' ', '-codeFlux-' , '-descFlux-',-niveauFlux-, '-parentsFlux-' )</values>
 			</Query>
 			
 			<Query fonction="Ieml_Onto_Flux1">
@@ -188,9 +188,9 @@
 				<where> WHERE onto_flux_code='-enfant-'</where>
 			</Query>
 			<Query fonction="Ieml_Onto_existe">
-				<select> SELECT onto_flux_parents,onto_flux_id </select>
-				<from>FROM ieml_onto_flux</from>
-				<where>WHERE onto_flux_code='-tag-'</where>
+				<select> SELECT onto_flux_parents , onto_flux_id   </select>
+				<from> FROM ieml_onto_flux  </from>
+				<where>WHERE onto_flux_code='-tag-' </where>
 			</Query>
 		   <Query fonction="Ieml_Uti_Onto_Flux_existe">
 				<select> SELECT uti_id,onto_flux_id </select>

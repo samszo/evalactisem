@@ -405,7 +405,9 @@ class mysql extends database {
     }
 
     protected function private_close() {
-        mysql_close($this-> link);
+        
+    	mysql_close($this-> link);
+    	
     }
 
 

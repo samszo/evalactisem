@@ -1,6 +1,6 @@
 <?php
    session_start();
-   set_time_limit(300);
+   //set_time_limit(3000);
   //
   // Fichier contenant les definitions de constantes
   define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");

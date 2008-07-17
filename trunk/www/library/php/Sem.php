@@ -832,7 +832,7 @@ Class Sem{
                  		$Td[$j]=$ArrTd[$j];
                  	}else{
                  		if($Td[$j]!=" " && $ArrTd[$j]!=" "){
-                 			$Xul.='<label id="*'.$Td[$j].'**" value="'.$ArrTd[$j].'('.$Td[$j].')"  class="NoSelect" onclick="AfficheIeml(\'*'.$Td[$j].'**\') "  />';
+                 			$Xul.='<label id="*'.$Td[$j].'**" value="'.$ArrTd[$j].'" tooltiptext="'.$ArrTd[$j].'('.$Td[$j].')" crop="end" class="NoSelect" onclick="AfficheIeml(\'*'.$Td[$j].'**\') "  />';
                  		   
                  		}else{
                  			$Xul.='<label id="* **"  value=" " class="NoSelect"  />';
