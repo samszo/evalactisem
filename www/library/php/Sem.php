@@ -403,9 +403,10 @@ Class Sem{
 		if($code=="")
 			$code=$this->Src;
 		$code = stripslashes ($code);
-	    $lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.$code;
+	    //$lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.$code;
+	    $lien = 'http://starparser.ieml.org/cgi-bin/test2.cgi?iemlExpression='.$code;
 		if($this->trace)
-			echo "Sem:Parse:code=".$code."<br/>";
+			echo "Sem:Parse:$lien=".$lien."<br/>";
 			
 	    $oCurl = curl_init($lien);
 		// set options
