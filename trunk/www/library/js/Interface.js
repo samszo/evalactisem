@@ -2,14 +2,11 @@
 E="*";
 P=";";
 
-function ChargeCycle(key){
-	//vérifie que l'onglet n'est pas déjà rempli
-	if(document.getElementById('iemlCycle_'+key).hasChildNodes())
-		return;
-
-	url = urlAjax+"library/php/ExeAjax.php";
-	urlparams="f=IemlCycle&key="+key;
-	AppendResultPost(url,urlparams,document.getElementById('iemlCycle_'+key),false);
+function GetGrille(){
+	//var url = "http://localhost/evalactisem/overlay/CycleGoogleDoc.php";
+	//var grille = GetResult(url);
+	//alert(grille);
+	initDoc();
 }
 
 function show_tooltip(evt)
@@ -42,57 +39,49 @@ function pf_couleur(num, color){
     document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
 }
 function GetFlux(){
-
-    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
-    var meter=document.getElementById('Maj');
-	meter.setAttribute("hidden","false");
-	//AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
+	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
 	
 }
 function SetDonnee(){
+	
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 	
 }
 function RecupDeliciousFlux(){
-	   
+	
 		query_flux=document.getElementById("requette").selectedItem.value;
 		query_graph=document.getElementById("type").selectedItem.value;
 	    
 	 
 	if((query_flux=="GetAllTags")){
-		var meter=document.getElementById('Maj');
-	    meter.setAttribute("hidden","false");
+		
 		AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'DelIiciousTreeGraph','');
-
+		document.getElementById("titre").value="Tags en fonction de count";
 	}
 	
 	if((query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
-		var meter=document.getElementById('Maj');
-	    meter.setAttribute("hidden","false");
+		
 		AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','','');
        
         
         if(document.getElementById("type").selectedItem.value="tagsFbundles")
         	document.getElementById("titre").value="Tags en fonction de count";
         else
-        	document.getElementById("titre").value="Bundles en fonction de Tags";
+        	document.getElementById("titre").value="Bundels en fonction de Tags";
         	
     }else
     	if(query_flux=="GetRecentPosts"){
-    	    var meter=document.getElementById('Maj');
-	        meter.setAttribute("hidden","false");
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
     		AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
             if(document.getElementById("type").selectedItem.value=="tagsFbundles")
-        		document.getElementById("titre").value="Bundles en fonction de Tags";
-       	   else
         		document.getElementById("titre").value="Tags en fonction de count";
+       	   else
+        		document.getElementById("titre").value="Bundels en fonction de Tags";
     }else
         if(query_flux=="GetPosts"){
-            var meter=document.getElementById('Maj');
-	        meter.setAttribute("hidden","false");
+        
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
@@ -123,7 +112,7 @@ function pf_dessin(query)
 }
 
 function DelIiciousTreeGraph(result,param){
-        
+
 	query=document.getElementById("requette").selectedItem.value;
 	query_graph=document.getElementById("type").selectedItem.value;
 	
@@ -193,10 +182,6 @@ function DelIiciousTreeGraph(result,param){
 	}
 	
 	pf_dessin(query_graph);
-	var meter=document.getElementById('progmeter');
-	meter.setAttribute("value","100");
-	document.getElementById('Maj').setAttribute("hidden","true");
-	
    
 }
 
@@ -223,8 +208,7 @@ function Trad_Pars_Ieml(result, param){
         var Descp=new Array();
         var Trad=new Array();
         var Tag=new Array();
-        var arrNoms=new Array();
-        console.log(result);
+
         arrNoms = result.split(E);
         arrNom= arrNoms[0].split(P);
         if(arrNoms[1].length > 1){
@@ -302,7 +286,6 @@ function Trad_Pars_Ieml(result, param){
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
 		url = urlAjax+"library/php/ExeAjax.php";
-		console.log(synIemlM+' '+descpM);
 		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),false);
 		
@@ -314,11 +297,8 @@ function Trad_Pars_Ieml(result, param){
 		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
 	
-  //document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
-  document.getElementById('infosTrad').setAttribute("hidden","false");
-  document.getElementById('treeDicoIeml').setAttribute("hidden","false");
-  document.getElementById('contDonnee').setAttribute("hidden","false");
-	
+  document.getElementById("iemlCycle").setAttribute("hidden","false");
+  document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
 }
 
 
@@ -468,17 +448,17 @@ function Parser(op,type){
 	
 }
 
-
 function GetIemlTreeExp(idTree, col, op){
 
   try {
     var start = new Object();
 	var end = new Object();
 	var tree;
-	var cell = "(";
+	var IemlToParse = "(";
+	var arrIEML = [];
 	var c;
 	var i;
-	var val;
+	var val, niv, maxNiv;
 	
   	if (window.parent != self) 
 		tree = parent.document.getElementById(idTree);
@@ -487,7 +467,8 @@ function GetIemlTreeExp(idTree, col, op){
 	
 	//pour gérer la multisélection
 	var numRanges = tree.view.selection.getRangeCount();
-	i=0;	
+	i=0;
+	maxNiv=0;	
 	for (var t = 0; t < numRanges; t++){
 		tree.view.selection.getRangeAt(t,start,end);
 		for (var v = start.value; v <= end.value; v++){
@@ -495,29 +476,84 @@ function GetIemlTreeExp(idTree, col, op){
 			val = tree.view.getCellText(v,c);
 			
 			if(val!=""){
-				cell += val;
-				if(i==2){
-					//ajoute une virgule et un opérateur toute les 3 expressions
-					cell += ","+op;  
-					i=-1;
-				}
-				//alert(i+" "+cell);
+				//enregistre l'expression
+		        //et le niveau le plus haut
+		        niv = GetIemlLayer(val);
+		        arrIEML.push(new Array(val, niv));
+		        if(niv>maxNiv)
+		        	maxNiv=niv;
 				i++;
 			}
 		}
 	}
-	//vérifie si la dernière virgule est bien mise
-	if(i==0)
-		//supprime le dernier opérateur
-		cell = cell.substring(0, cell.length-1)
-	else  	
-		cell += ","
+	//met à jour chaque expression suivant le niveau le plus haut
+	//nécessaire pour que l'expression soit valide pour le parser
+	//if(trace)
+		console.log('interface:GetIemlTreeExp:'+maxNiv);   
+	
+	for (var i = 0; i < arrIEML.length; i++){
+		if(arrIEML[i][1]<maxNiv){
+			//met à jour le layer de l'expression
+			arrIEML[i][0]= SetIemlMaxLayer(arrIEML[i],maxNiv); 	
+		}
+		IemlToParse += arrIEML[i][0]+op;
+	}
+	//supprime le dernier opérateur
+	IemlToParse = IemlToParse.substring(0, IemlToParse.length-1);
 	//finalise l'expression
-	cell += ")";
-	//alert(cell);
-	return cell;
-  } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" cell="+cell); }
+	IemlToParse += ")";
+
+	return IemlToParse;
+
+  } catch(ex2){ alert("histogrammes:GetIemlTreeExp:"+ex2+" IemlToParse="+IemlToParse); }
 }
+
+
+function GetIemlLayer(ieml){
+  try {
+	//récupère le dernier caractère
+	var c = ieml.substr(ieml.length-1,1);
+	var niv;
+	if(c==":")
+		niv = 1;
+	if(c==".")
+		niv = 2;
+	if(c=="-")
+		niv = 3;
+	if(c=="'")
+		niv = 4;
+	if(c==",")
+		niv = 5;
+	if(c=="_")
+		niv = 6;
+	//if(trace)
+		console.log('interface:GetIemlLayer:niv='+niv+' c='+c);   
+	
+	return niv;
+
+  } catch(ex2){ alert("interfaces:GetIemlLayer:"+ex2+" ieml="+ieml); }
+}
+
+function SetIemlMaxLayer(arrIEML,maxNiv){
+
+  try {
+	if(arrIEML[1]<1 && maxNiv>=1)
+		arrIEML[0] += ":";
+	if(arrIEML[1]<2 && maxNiv>=2)
+		arrIEML[0] += ".";
+	if(arrIEML[1]<3 && maxNiv>=3)
+		arrIEML[0] += "-";
+	if(arrIEML[1]<4 && maxNiv>=4)
+		arrIEML[0] += "'";
+	if(arrIEML[1]<5 && maxNiv>=5)
+		arrIEML[0] += ",";
+	if(arrIEML[1]<6 && maxNiv>=6)
+		arrIEML[0] += "'";
+	
+	return arrIEML[0];
+  } catch(ex2){ alert("interfaces:SetIemlMaxLayer:"+ex2+" ieml="+ieml); }
+}
+
 
 
 function recup_dictio(){
@@ -533,7 +569,6 @@ function recup_dictio(){
 function AddPostIemlDelicios(){
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Afficher','')
 	var meter=document.getElementById('Maj');
-	document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
 	meter.setAttribute("hidden","false");
 	
 }
@@ -544,6 +579,7 @@ function SupprimeDelicious(result,prarm){
 		meter.setAttribute("value","100");
 	    alert(result);
 		document.getElementById('Maj').setAttribute("hidden","true");
+	    document.getElementById('Maj').setAttribute("hidden","true");
 	    window.location.href = "exit.php";
 }
 function Afficher(result,prarm){
@@ -581,11 +617,68 @@ function GoUrl(url){
 		
 }
 function CreaNoeud(){
-    document.getElementById('webFrame1').setAttribute("hidden","false");
-    document.getElementById('webFrame1').setAttribute("src","library/svg/iemlMenuBoussole.xul");
-	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.svg");
+
+	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.xul");
 }
 
+function handleQueryResponse(response) {
+      
+        // Send the query with a callback function
+        if (response.isError()) {
+          alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+          return;
+        }
+
+        var data = response.getDataTable(); 
+        var xul = [];
+        xul.push('<listbox id="iemlCycle" >');
+
+        // Header row
+        xul.push('<listcols>')
+        //xul.push('<tr><th>Seq</th>');
+        for (var col = 0; col < data.getNumberOfColumns(); col++) {
+          xul.push('<listcol flex="1">' + this.escapeHtml(data.getColumnLabel(col)) + '</listcol>');
+        }
+        xul.push('</listcols>');
+
+        for (var row = 0; row < data.getNumberOfRows(); row++) {
+          //xul.push('<tr><td align="right">' + (row + 1) + '</td>');
+          xul.push("<listitem>")
+          for (var col = 0; col < data.getNumberOfColumns(); col++) {
+            xul.push(data.getColumnType(col) == 'number' ? '< align="right">' : '<listcell label="');
+            xul.push(escapeHtml(data.getFormattedValue(row, col)));
+            xul.push('" />');
+          
+          }
+          xul.push('</listitem>');
+        }
+        xul.push('</listbox>');
+        var parser=new DOMParser();
+        ListBox=parser.parseFromString(xul.join(''),"text/xml");
+        alert(xul.join(''));
+        //document.getElementById('tpIemlCycle').appendChild(ListBox.documentElement);
+       
+      }
+
+function escapeHtml(text) {
+        if (text == null)
+          return '';
+
+        return text.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+ }
+
+function initialize () {
+        var query = new google.visualization.Query('http://spreadsheets.google.com/tq?key=p8PAs8y8e1x2YTS7Zgag7Nw&hl=en');
+        query.send(handleQueryResponse);  // Send the query with a callback function
+}
+
+function GetCycleIeml(){
+	 google.load("visualization", "1");
+	 google.setOnLoadCallback(initialize);
+}
 function SelectionCycle(){
 Table=window.parent.frames['iemlCycle'].document.getElementById('')
 window.parent.frames['iemlCycle'].document.getElementById('O:.B:M:.-').setAttribute('style',"background-color:green");
@@ -595,30 +688,4 @@ function ModifTrad(){
 table=window.parent.frames('webFrame').document.getElementById('Points')
 window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
 }
-
-function ShowDialog(){
-        
-  try {
-        
-        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-        var lbl = "tutu";
-        //valider le libellé 
-        //http://developer.mozilla.org/fr/docs/Extraits_de_code:Dialogues_et_invites
-        var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                                .getService(Components.interfaces.nsIPromptService);
-        var input = {value: lbl};
-        var check = {value: false};
-        result = prompts.prompt(window, "Validation critère", "Valider ou modifier la règle", input, null, check);
-        // input.value contient la chaîne de caractères saisie par l'utilisateur
-        // check.value indique l'état de la case à cocher
-        // result - contient true si l'utilisateur a cliqué sur OK      
-        if(!result)
-                return;
-        lbl = input.value;
-        //lbl = Utf8.encode(lbl);
-        alert(lbl);
- 
-  } catch(ex2){console.log("Interface:ShowDialog:"+ex2);}
- }       
-        
 
