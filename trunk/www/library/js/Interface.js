@@ -4,6 +4,7 @@ P=";";
 
 function ChargeCycle(key){
 	//vérifie que l'onglet n'est pas déjà rempli
+	document.getElementById('keyGrid').value=key;
 	if(document.getElementById('iemlCycle_'+key).hasChildNodes())
 		return;
     document.getElementById('label_Maj').setAttribute('value','Veuillez patienter le chargement de cycle est en cours...');
@@ -644,8 +645,8 @@ function GoUrl(url){
 		
 }
 function CreaNoeud(){
-    document.getElementById('webFrame1').setAttribute("hidden","false");
-    document.getElementById('webFrame1').setAttribute("src","library/svg/iemlMenuBoussole.xul");
+    //document.getElementById('webFrame1').setAttribute("hidden","false");
+    //document.getElementById('webFrame1').setAttribute("src","library/svg/iemlMenuBoussole.xul");
 	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.svg");
 }
 

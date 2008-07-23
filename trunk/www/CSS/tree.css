@@ -4,8 +4,8 @@ treechildren::-moz-tree-row(utilisateur){background-color: green;}
 treechildren::-moz-tree-row(dictio){background-color: yellow;}
 .NoSelect{
 	 display:block;
-	 width:85px;
-	 hieght:45px;
+	 width:50px;
+	 height:45px;
    	 border:1px outset #dbecff;
 	 background-color: #206040;
 	 font-family:Arial;
