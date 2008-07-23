@@ -176,7 +176,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 										<button label="Ajouter" oncommand="AddTrad();"/>	
 										<button label="Supprimer" oncommand="SupTrad();"/>
 										<button label="Modifier" oncommand="ModifTrad();"/>
-										<button label="Créer un noeud" oncommand="CreaNoeud();"/>
+										<button label="Afficher la boussole" oncommand="CreaNoeud();"/>
 										<label id="trad-Sup-message" hidden="true" />			
 										<label id="trad-message" hidden="true" />
 										<label id="trad-Sup-message" hidden="true" />			
@@ -202,7 +202,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											<box id="tpNoTrad" flex="1" />
 								         </tabpanel>
 								         <tabpanel>
-
+											<label id="keyGrid" hidden="true" />
 											<tabbox flex="1" orient="horizontal" >
 											    <tabs orient="vertical" >
 											        <tab label="Dictionnaire" />

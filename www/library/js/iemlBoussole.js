@@ -99,31 +99,6 @@
     	
     }
     
-    function BoucleHideShow(iemlCode, gId){
-		
-		var id;
-		    	
-		for (var i = 1; i <= maxEnfant; i++) {
-			id = 'g_'+iemlCode+gId+i;
-			if(trace=="true")
-			    dump("iemlBoussole:BoucleHideShow:id="+id +"document.getElementById(id) "+document.getElementById(id));
-			if(!document.getElementById(id))return;
-			//modifie la visibilité du pavé
-			if(document.getElementById(id).getAttribute("visibility")=="hidden"){
-				document.getElementById(id).setAttribute("visibility","visible");
-				HidePave(id,gId);
-			}else{
-				document.getElementById(id).setAttribute("visibility","hidden");
-				//gère les pavés enfants
-				HidePave(id,gId);
-				if(trace=="true")
-					//supprime les RecordPoint
-					DelRecordPoint();
-			}
-	
-		}
-
-    }
    
     function HidePave(idSrc){
 
@@ -149,12 +124,14 @@
     }
     
     function SelectPave(evt,idDst,idSrc){
-        if(window.parent.frames['webFrame1'])
-        trace=window.parent.frames['webFrame1'].document.getElementById("trace").getAttribute("value")
-		if(window.parent.frames['webFrame1'] && window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="true")
-			CreaDynaPave(evt);
-        if(window.parent.frames['webFrame1'] && window.parent.frames['webFrame1'].document.getElementById("creaPoint").getAttribute("value")=="true")
-        	ShowRecordPoint(evt);
+
+		if(window.parent.document.getElementById('webFrame1').getAttribute("src")!=""){
+			if(window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="true")
+				CreaDynaPave(evt);
+	        if(window.parent.frames['webFrame1'].document.getElementById("creaPoint").getAttribute("value")=="true")
+	        	ShowRecordPoint(evt);
+		}
+		
 
 		//met à jour la branche suivant le choix du pavé
 	   	var tgt = evt.target;
@@ -433,10 +410,13 @@
  
 function SelectionCycle(evt){
     
-	if(!window.parent.document.getElementById('GridCycle'))
+	if(!window.parent.document.getElementById('keyGrid'))
 		return;
 
-   
+    var keyGrid = window.parent.document.getElementById('keyGrid').value;
+	if(keyGrid=="")
+		return;
+
     var idBranS=[];
     var idBranD=[];
 	var tgt = evt.target;
@@ -476,7 +456,7 @@ function SelectionCycle(evt){
 	}
 	//les ids de la Grille	 
 	
-	row=window.parent.document.getElementById('CycleRows').childNodes; 
+	row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 
 	
 	// mettre a jour les cellules de la grille
 	
@@ -485,14 +465,15 @@ function SelectionCycle(evt){
 		
 		//if(rowChild.length==0) break;
             for(k=1;k<rowChild.length;k++){		
-				idNoeud=rowChild[k].getAttribute("id");
+				idLabel=rowChild[k].getAttribute("id");
+				idNoeud=idLabel.substring(22);
 		 		for(var j=0 ; j < 2 ; j++){
 		           if(idBranS[j]!=''){
 		          
 					if( idNoeud.charAt(1)== idBranS[j] ||  idNoeud.charAt(3)== idBranS[j] || idNoeud.charAt(6)== idBranS[j] || idNoeud.charAt(8)== idBranS[j]|| idNoeud.substring(1,3)== idBranS[j] || idNoeud.substring(2,4)== idBranS[j]|| idNoeud.substring(1,3)== idBranS[j]){
 			         	   	//window.parent.console.log(idNoeud);
-			         	   	window.parent.document.getElementById(idNoeud).removeAttribute('class');
-			         	 	window.parent.document.getElementById(idNoeud).setAttribute('hidden',"true");
+			         	   	window.parent.document.getElementById(idLabel).removeAttribute('class');
+			         	 	window.parent.document.getElementById(idLabel).setAttribute('hidden',"true");
 			         	 	
 			       	}
 			      }
@@ -514,7 +495,14 @@ function SelectionCycle(evt){
 
 function InitGrille(iemlCode){
   
-  	row=window.parent.document.getElementById('CycleRows').childNodes; 
+	if(!window.parent.document.getElementById('keyGrid'))
+		return;
+
+    var keyGrid = window.parent.document.getElementById('keyGrid').value;
+	if(keyGrid=="")
+		return;
+    
+  	row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 
 	for(var i=1 ; i < row.length; i++){
 		rowChild=row[i].childNodes;
             for(k=1;k<rowChild.length;k++){	
