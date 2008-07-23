@@ -230,6 +230,7 @@ function AppendResultPost(url,urlparams,doc,ajoute) {
 		}
 		//ajoute le résultat
 		doc.appendChild(resultDoc.documentElement);
+		
 	}
 	dump("AppendResultPost OUT \n");
    } catch(ex2){alert(ex2);dump("::"+ex2);}

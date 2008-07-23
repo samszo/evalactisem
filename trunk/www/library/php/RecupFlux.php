@@ -2,8 +2,7 @@
    require('../php-delicious/php-delicious.inc.php');
    require('../../param/Constantes.php');
    require_once ("../../param/ParamPage.php");
-   session_start();
-  
+   
    $oDelicious=$_SESSION['Delicious'];
    
    $requette= $_GET["requette"];
@@ -33,18 +32,21 @@
    }
    
   if($requette=="GetAllTags"){
-    $oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
+    $result_G=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
-    $result_F="<Tags> $AllTag[0] </Tags><Count> $AllTag[1] </Count>";
-    Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+    $result_F="<tags> $AllTag[0] </tags><count> $AllTag[1] </count>";
+    $flux="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
+    SaveXmlFlux($flux);
+    
     $Activite->AddActi('RAT',$iduti);
-  	
+  	echo  $flux;
   }
   
   if($requette=="GetAllPosts"){
   	if ($aPosts = $oDelicious->GetAllPosts('',true)){
+  		
   		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
-	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+	  	//SaveXmlFlux($result_F);
   	 }else {
 	        echo $oDelicious->LastErrorString();
 	 }
@@ -58,7 +60,7 @@
   	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date,true)){
   	 	
   		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
-	  	//Donneegraph($result_F,$AllTag,$requete_g,$iduti);
+	  	
 	 
   	}else {
 	        echo $oDelicious->LastErrorString();
@@ -107,14 +109,9 @@ function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
 
 // creation de fichier XML du resultat
 
-function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
-	global $oSaveFlux;
-	global $objSite;
+function SaveXmlFlux($Xml){
 	
-    	$result_G=$oSaveFlux->GraphTagBund($objSite,$iduti);
-    	
-    	echo $result_G="<marque ieml='t.u.-'> <tags> $AllTag[0] </tags><count> $AllTag[1] </count> ".$result_G." </marque>";
-		
+
     	//Creation de fichier loginFlux.xml 
     	
     	$name_file=md5(XmlFlux).".xml";
@@ -124,7 +121,7 @@ function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
 			}
 		
     	$fichier = fopen(Flux_PATH.$name_file,"w");
-	    fwrite($fichier,$result_G);
+	    fwrite($fichier,$Xml);
 	    fclose($fichier);
     	
    

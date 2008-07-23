@@ -333,16 +333,17 @@ class Xul{
                 
                 $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']";
                 $Q = $this->site->XmlParam->GetElements($Xpath);
+                
                 if($id==-1){
                         $container="true";
                         
                         //récupère la valeur par defaut
                         $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='GetTreeChildren_".$type."']/from";
                         $attrs =$this->site->XmlParam->GetElements($Xpath);
-                        
+
                         
                         if($attrs[0]["niv"])
-                                $id = $attrs[0]["niv"];
+                               $id = $attrs[0]["niv"];
                         
                 }
                 
@@ -497,7 +498,7 @@ class Xul{
                 //$ihm .= '</vbox>'.$splitter;
         return $ihm;    
     }
-    function TableFlux($sTag,$sDesc,$sUrl,$sDate,$sNote){
+       function TableFlux($sTag,$sDesc,$sUrl,$sDate,$sNote){
         
                 $sTag=$_POST["tag"];
                 $sDesc=$_POST["desc"];
@@ -565,7 +566,7 @@ class Xul{
     }
         
     
-   function GetTreeIemlOnto($type){
+       function GetTreeIemlOnto($type){
                         
         //adresse de la datasource
                         $label="Dictionnaire Ieml";
@@ -579,63 +580,60 @@ class Xul{
                         
                         if($this->trace)
                 echo "Xul:GetTree_ieml_onto:Cols".print_r($Cols)."<br/>";
-                            $tree='<vbox flex="1" style="background-color:yellow;" >'.EOL;
+                $tree='<vbox flex="1" style="background-color:yellow;" >'.EOL;
                 $tree.='<label value="'.$label.'" style="font:arial;size:10;color:blue"  />'.EOL;
                 $tree.='<box id="'.$this->site->scope["box"].'" flex="1"  class="editableTree" >'.EOL;
-                        $tree.='<tree id="'.$type.'"
-                                                flex="1"
-                                                style="width:600; height:400"
-                                                onselect="Select_Dictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
-                                                typesource="'.$type.'"  
-                                                Treeid="'.$type.'">'.EOL;
-                                                
-                                                //le conteneur doit avoir comme id id pour editableTree
-                                $tree.= '<treecols >'.EOL;
-                                                         $tree.= '<treecol id="treecol_Tagdel"  primary="true" label="Tag Delicious"  persist="width ordinal hidden" />'.EOL;
-                                                        $tree.= '<splitter class="tree-splitter"/>'.EOL;
-                                                                $tree.= '<treecol id="treecol_descp"  label="Description"  persist="width ordinal hidden" />'.EOL;
-                                                                $tree.= '<splitter class="tree-splitter"/>'.EOL;
-                                                            $tree.= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />'.EOL;
-                                        $tree.= '</treecols>'.EOL;  
-                                                $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio']";
-                                        $Q = $this->site->XmlParam->GetElements($Xpath);
-                                        $sql = $Q[0]->select.$Q[0]->from;
-
-
-                                                $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
-                                                $db->connect();
-                                                $req = $db->query($sql);
-                                                $db->close();
-                                                $tree .= '<treechildren>'.EOL;
-                                        $tree.= '<treeitem container="true" open="false">'.EOL;
+                 $tree.='<tree id="'.$type.'"
+                      flex="1"
+                      style="width:600; height:400"
+                      onselect="Select_Dictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
+                      typesource="'.$type.'"  
+                      Treeid="'.$type.'">'.EOL;
+                      //le conteneur doit avoir comme id id pour editableTree
+                       $tree.= '<treecols >'.EOL;
+                             $tree.= '<treecol id="treecol_Tagdel"  primary="true" label="Tag Delicious"  persist="width ordinal hidden" />'.EOL;
+                             $tree.= '<splitter class="tree-splitter"/>'.EOL;
+                             $tree.= '<treecol id="treecol_descp"  label="Description"  persist="width ordinal hidden" />'.EOL;
+                             $tree.= '<splitter class="tree-splitter"/>'.EOL;
+                             $tree.= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />'.EOL;
+                       $tree.= '</treecols>'.EOL;  
+                       $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio']";
+                       $Q = $this->site->XmlParam->GetElements($Xpath);
+                       $sql = $Q[0]->select.$Q[0]->from;
+                       $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
+                       $db->connect();
+                       $req = $db->query($sql);
+                       $db->close();
+                       $tree .= '<treechildren>'.EOL;
+                          $tree.= '<treeitem container="true" open="false">'.EOL;
                                 $tree.= '<treerow>'.EOL;
                                          $tree.= '<treecell label="Dictionnaire ieml"/>' .EOL;
                                  $tree.= '</treerow>'.EOL;
                                  $tree .= '<treechildren>'.EOL;
-                                                 while($reponse=mysql_fetch_array($req)){
-                                                        $tree.= '<treeitem container="true" open="false">'.EOL;
-                                                $tree.= '<treerow>'.EOL;
-                                                        $tree.= '<treecell label="'.$reponse[0].'"/>' .EOL;
-                                                $tree.= '</treerow>'.EOL;
-                                                        $tree.= $this->GetTreeChildrenDictio($reponse[0],$reponse[1]);
-                                                        $tree.= '</treeitem>'.EOL;
+                                   while($reponse=mysql_fetch_array($req)){
+                                     $tree.= '<treeitem container="true" open="false">'.EOL;
+                                           $tree.= '<treerow>'.EOL;
+                                                 $tree.= '<treecell label="'.$reponse[0].'"/>' .EOL;
+                                            $tree.= '</treerow>'.EOL;
+                                            $tree.= $this->GetTreeChildrenDictio($reponse[0],$reponse[1]);
+                                      $tree.= '</treeitem>'.EOL;
 
 
                                         }
-                                        $tree .= '</treechildren>'.EOL;
-                                        $tree.= '</treeitem>'.EOL;
-                                        $tree .= '</treechildren>'.EOL;
-                                                $tree.='</tree>'.EOL;
-                                                $tree.='</box>'.EOL;
-                                                $tree.='</vbox>'.EOL;
-                                                if($this->trace)
-                                 					echo "Xul:GetTree_ieml_onto:tree". $tree."<br/>";      
-                                                return $tree;
+                                   $tree .= '</treechildren>'.EOL;
+                            $tree.= '</treeitem>'.EOL;
+                      $tree .= '</treechildren>'.EOL;
+                 $tree.='</tree>'.EOL;
+              $tree.='</box>'.EOL;
+            $tree.='</vbox>'.EOL;
+            if($this->trace)
+            echo "Xul:GetTree_ieml_onto:tree". $tree."<br/>";      
+            return $tree;
 
 
    }
         
-   function GetTreeChildrenDictio($parent,$id){
+   	   function GetTreeChildrenDictio($parent,$id){
         $container="false";
                 
         $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio_children']";

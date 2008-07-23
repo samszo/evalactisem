@@ -526,11 +526,10 @@ function InitGrille(iemlCode){
 }
 
 function AfficheIeml(id){
-    descp=document.getElementById(id).value;
-    Ieml_lib=descp.split('(');
+    descp=document.getElementById(id).textContent;
     id=id.replace('*','').replace('**','');
     document.getElementById('code-trad-ieml').setAttribute('value',id);
-	document.getElementById('lib-trad-ieml').setAttribute('value',Ieml_lib[0]);
+	document.getElementById('lib-trad-ieml').setAttribute('value',descp);
 	
 }
 function RequestIemlCycle(){

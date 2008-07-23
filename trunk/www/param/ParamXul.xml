@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by samszo (lsd) -->
 <XmlParams>
-	<XmlParam nom="GetOntoTree" datasource="http://localhost/evalactisem/library/CreaRdfTree.php">
+	<XmlParam nom="GetOntoTree" datasource="http://localhost/evalactisem/library/CreaRdfTree.php"> 
 		<Querys>
 			<Query fonction="ieml">
 				<select>SELECT ieml_id id, ieml_code code, ieml_lib lib, ieml_niveau niveau, ieml_parent type </select>
@@ -219,16 +219,16 @@
 				<where> WHERE onto_flux_parents='-1'</where>
 			</Query>
 		    <Query fonction="repres_graph_flux">
-				<select> SELECT i.onto_flux_code,i.onto_flux_id </select>
+				<select> SELECT i.onto_flux_code,i.onto_flux_id, i.onto_flux_parents </select>
 				<from> FROM ieml_onto_flux i
 				       INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND i.onto_flux_id=u.onto_flux_id
 				</from>
 				<where> WHERE i.onto_flux_niveau=0</where>
 			</Query>
 		    <Query fonction="repres_graph_flux1">
-				<select> SELECT count( onto_flux_parents ) </select>
-				<from>  FROM ieml_foret_flux</from>
-				<where> WHERE onto_flux_parents =-parent-</where>
+				<select> SELECT onto_flux_code </select>
+				<from>  FROM ieml_onto_flux</from>
+				<where> WHERE onto_flux_id =-parent-</where>
 			</Query>
 		    <Query fonction="flux_utilisateur">
 				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
@@ -312,13 +312,30 @@
 			<select>SELECT oe.onto_flux_id id, oe.onto_flux_code code, oe.onto_flux_desc lib, oe.onto_flux_niveau niveau, oe.onto_flux_parents type </select>
 			
 				<from niv="0"> FROM ieml_onto_flux oe
-                               INNER JOIN ieml_foret_flux op ON oe.onto_flux_id = op.onto_flux_id AND op.onto_flux_parents =-parent-
-				               INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND oe.onto_flux_id=u.onto_flux_id
+                               INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND oe.onto_flux_parents =-parent- AND oe.onto_flux_id = u.onto_flux_id
 				</from>
 				
 				<where></where>
 			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','desc-param0-'],[0,1])"/>
 		</Query>	
+	   	<Query fonction="GetTreeChildren_flux1" >
+			<Cols>
+				<col tag="id" parse="Integer" hidden="true"/>
+				<col tag="lib" hidden="false"/>
+				<col tag="code" hidden="false"/>
+				<col tag="niveau" hidden="true"/>
+				<col tag="parent" hidden="true"/>
+			</Cols>
+			<select>SELECT oe.onto_flux_id id, oe.onto_flux_code code, oe.onto_flux_desc lib, oe.onto_flux_niveau niveau, oe.onto_flux_parents parent </select>
+			
+				<from niv="0"> FROM ieml_onto_flux oe
+                               INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND oe.onto_flux_id =u.onto_flux_id
+				</from>
+				
+				<where></where>
+			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','desc-param0-'],[0,1])"/>
+		</Query>	
+	   	
 	   	<Query>	
 	   		<select>SELECT i.onto_flux_id, i.onto_flux_code, i.onto_flux_desc, i.onto_flux_niveau,i.onto_flux_parents </select>
 			<from > FROM ieml_onto_flux i
