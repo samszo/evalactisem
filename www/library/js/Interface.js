@@ -2,11 +2,22 @@
 E="*";
 P=";";
 
-function GetGrille(){
-	//var url = "http://localhost/evalactisem/overlay/CycleGoogleDoc.php";
-	//var grille = GetResult(url);
-	//alert(grille);
-	initDoc();
+function ChargeCycle(key){
+	//vérifie que l'onglet n'est pas déjà rempli
+	if(document.getElementById('iemlCycle_'+key).hasChildNodes())
+		return;
+    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter le chargement de cycle est en cours...');
+    var meter=document.getElementById('Maj');
+	meter.setAttribute("hidden","false");
+	meter.setAttribute("value","50");
+	
+	url = urlAjax+"library/php/ExeAjax.php";
+	urlparams="f=IemlCycle&key="+key;
+	AppendResultPost(url,urlparams,document.getElementById('iemlCycle_'+key),false);
+	meter.setAttribute("value","100");
+	meter.setAttribute("hidden","true");
+	document.getElementById('label_Maj').setAttribute("hidden","true");
+		
 }
 
 function show_tooltip(evt)
@@ -39,49 +50,58 @@ function pf_couleur(num, color){
     document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
 }
 function GetFlux(){
+
+    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
+    var meter=document.getElementById('Maj');
+	meter.setAttribute("hidden","false");
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
 	
 }
 function SetDonnee(){
-	
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 	
 }
 function RecupDeliciousFlux(){
-	
+	   
+
 		query_flux=document.getElementById("requette").selectedItem.value;
 		query_graph=document.getElementById("type").selectedItem.value;
 	    
 	 
 	if((query_flux=="GetAllTags")){
-		
+		var meter=document.getElementById('Maj');
+	    meter.setAttribute("hidden","false");
 		AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags"+"&req="+query_graph,'DelIiciousTreeGraph','');
-		document.getElementById("titre").value="Tags en fonction de count";
+
 	}
 	
 	if((query_flux=="GetAllBundles")||(query_flux=="GetAllPosts")){
-		
+		var meter=document.getElementById('Maj');
+	    meter.setAttribute("hidden","false");
 		AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette="+query_flux+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','','');
        
         
         if(document.getElementById("type").selectedItem.value="tagsFbundles")
         	document.getElementById("titre").value="Tags en fonction de count";
         else
-        	document.getElementById("titre").value="Bundels en fonction de Tags";
+        	document.getElementById("titre").value="Bundles en fonction de Tags";
         	
     }else
     	if(query_flux=="GetRecentPosts"){
+    	    var meter=document.getElementById('Maj');
+	        meter.setAttribute("hidden","false");
     		tag=document.getElementById("id-tag").value;
     		count=document.getElementById("id-count").value;
     		AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette="+query_flux+"&tag="+tag+"&count="+count+"&req="+document.getElementById("type").selectedItem.value ,'DelIiciousTreeGraph','');
             if(document.getElementById("type").selectedItem.value=="tagsFbundles")
-        		document.getElementById("titre").value="Tags en fonction de count";
+        		document.getElementById("titre").value="Bundles en fonction de Tags";
        	   else
-        		document.getElementById("titre").value="Bundels en fonction de Tags";
+        		document.getElementById("titre").value="Tags en fonction de count";
     }else
         if(query_flux=="GetPosts"){
-        
+            var meter=document.getElementById('Maj');
+	        meter.setAttribute("hidden","false");
     		tag=document.getElementById("id-tag").value;
     		url=document.getElementById("id-url").value;
     		date=document.getElementById("id-date").value;
@@ -112,7 +132,7 @@ function pf_dessin(query)
 }
 
 function DelIiciousTreeGraph(result,param){
-
+        
 	query=document.getElementById("requette").selectedItem.value;
 	query_graph=document.getElementById("type").selectedItem.value;
 	
@@ -182,6 +202,10 @@ function DelIiciousTreeGraph(result,param){
 	}
 	
 	pf_dessin(query_graph);
+	var meter=document.getElementById('progmeter');
+	meter.setAttribute("value","100");
+	document.getElementById('Maj').setAttribute("hidden","true");
+	
    
 }
 
@@ -208,7 +232,8 @@ function Trad_Pars_Ieml(result, param){
         var Descp=new Array();
         var Trad=new Array();
         var Tag=new Array();
-
+        var arrNoms=new Array();
+        console.log(result);
         arrNoms = result.split(E);
         arrNom= arrNoms[0].split(P);
         if(arrNoms[1].length > 1){
@@ -286,6 +311,7 @@ function Trad_Pars_Ieml(result, param){
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
 		url = urlAjax+"library/php/ExeAjax.php";
+		console.log(synIemlM+' '+descpM);
 		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),false);
 		
@@ -297,8 +323,11 @@ function Trad_Pars_Ieml(result, param){
 		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
 	
-  document.getElementById("iemlCycle").setAttribute("hidden","false");
-  document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
+  //document.getElementById("iemlCycle").setAttribute("src","testGoogleDoc.php");
+  document.getElementById('infosTrad').setAttribute("hidden","false");
+  document.getElementById('treeDicoIeml').setAttribute("hidden","false");
+  document.getElementById('contDonnee').setAttribute("hidden","false");
+	
 }
 
 
@@ -448,6 +477,7 @@ function Parser(op,type){
 	
 }
 
+
 function GetIemlTreeExp(idTree, col, op){
 
   try {
@@ -553,9 +583,6 @@ function SetIemlMaxLayer(arrIEML,maxNiv){
 	return arrIEML[0];
   } catch(ex2){ alert("interfaces:SetIemlMaxLayer:"+ex2+" ieml="+ieml); }
 }
-
-
-
 function recup_dictio(){
 	var res;
 	for(i=0;i<1990;i++){
@@ -569,6 +596,7 @@ function recup_dictio(){
 function AddPostIemlDelicios(){
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Afficher','')
 	var meter=document.getElementById('Maj');
+	document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
 	meter.setAttribute("hidden","false");
 	
 }
@@ -579,7 +607,6 @@ function SupprimeDelicious(result,prarm){
 		meter.setAttribute("value","100");
 	    alert(result);
 		document.getElementById('Maj').setAttribute("hidden","true");
-	    document.getElementById('Maj').setAttribute("hidden","true");
 	    window.location.href = "exit.php";
 }
 function Afficher(result,prarm){
@@ -617,68 +644,11 @@ function GoUrl(url){
 		
 }
 function CreaNoeud(){
-
-	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.xul");
+    document.getElementById('webFrame1').setAttribute("hidden","false");
+    document.getElementById('webFrame1').setAttribute("src","library/svg/iemlMenuBoussole.xul");
+	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.svg");
 }
 
-function handleQueryResponse(response) {
-      
-        // Send the query with a callback function
-        if (response.isError()) {
-          alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-          return;
-        }
-
-        var data = response.getDataTable(); 
-        var xul = [];
-        xul.push('<listbox id="iemlCycle" >');
-
-        // Header row
-        xul.push('<listcols>')
-        //xul.push('<tr><th>Seq</th>');
-        for (var col = 0; col < data.getNumberOfColumns(); col++) {
-          xul.push('<listcol flex="1">' + this.escapeHtml(data.getColumnLabel(col)) + '</listcol>');
-        }
-        xul.push('</listcols>');
-
-        for (var row = 0; row < data.getNumberOfRows(); row++) {
-          //xul.push('<tr><td align="right">' + (row + 1) + '</td>');
-          xul.push("<listitem>")
-          for (var col = 0; col < data.getNumberOfColumns(); col++) {
-            xul.push(data.getColumnType(col) == 'number' ? '< align="right">' : '<listcell label="');
-            xul.push(escapeHtml(data.getFormattedValue(row, col)));
-            xul.push('" />');
-          
-          }
-          xul.push('</listitem>');
-        }
-        xul.push('</listbox>');
-        var parser=new DOMParser();
-        ListBox=parser.parseFromString(xul.join(''),"text/xml");
-        alert(xul.join(''));
-        //document.getElementById('tpIemlCycle').appendChild(ListBox.documentElement);
-       
-      }
-
-function escapeHtml(text) {
-        if (text == null)
-          return '';
-
-        return text.replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
- }
-
-function initialize () {
-        var query = new google.visualization.Query('http://spreadsheets.google.com/tq?key=p8PAs8y8e1x2YTS7Zgag7Nw&hl=en');
-        query.send(handleQueryResponse);  // Send the query with a callback function
-}
-
-function GetCycleIeml(){
-	 google.load("visualization", "1");
-	 google.setOnLoadCallback(initialize);
-}
 function SelectionCycle(){
 Table=window.parent.frames['iemlCycle'].document.getElementById('')
 window.parent.frames['iemlCycle'].document.getElementById('O:.B:M:.-').setAttribute('style',"background-color:green");
@@ -688,4 +658,30 @@ function ModifTrad(){
 table=window.parent.frames('webFrame').document.getElementById('Points')
 window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
 }
+
+function ShowDialog(){
+        
+  try {
+        
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+        var lbl = "tutu";
+        //valider le libellé 
+        //http://developer.mozilla.org/fr/docs/Extraits_de_code:Dialogues_et_invites
+        var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                                .getService(Components.interfaces.nsIPromptService);
+        var input = {value: lbl};
+        var check = {value: false};
+        result = prompts.prompt(window, "Validation critère", "Valider ou modifier la règle", input, null, check);
+        // input.value contient la chaîne de caractères saisie par l'utilisateur
+        // check.value indique l'état de la case à cocher
+        // result - contient true si l'utilisateur a cliqué sur OK      
+        if(!result)
+                return;
+        lbl = input.value;
+        //lbl = Utf8.encode(lbl);
+        alert(lbl);
+ 
+  } catch(ex2){console.log("Interface:ShowDialog:"+ex2);}
+ }       
+        
 

@@ -816,10 +816,10 @@ Class Sem{
 	        $a=eregi_replace('style=\'width:[[:digit:]]*px;\'|style=\'display:none;\'|style=\'width:[[:digit:]]*;\'' ,'',$a);
 	        $a=eregi_replace('<td[[:space:]]*>' ,'<td> ',$a);
 	        $ArrTr=explode("<tr>",$a);
-	        $Xul.='<grid  id="GridCycle" style="width:200px"  >';
+	        $Xul.='<grid  id="GridCycle" >';
 			$cell=explode("<td>",$ArrTr[0]);
 			$Xul.='<columns id="cols">';	
-			for($j=1;$j<sizeof($cell)/2;$j++){
+			for($j=1;$j<(sizeof($cell)/2);$j++){
 				
 				$Xul.='<column id="col_'.$j.'" ></column>';
 			}
@@ -833,10 +833,10 @@ Class Sem{
                  		$Td[$j]=$ArrTd[$j];
                  	}else{
                  		if($Td[$j]!=" " && $ArrTd[$j]!=" "){
-                 			$Xul.='<label id="*'.$Td[$j].'**" value="'.$ArrTd[$j].'" tooltiptext="'.$ArrTd[$j].'('.$Td[$j].')" crop="end" class="NoSelect" onclick="AfficheIeml(\'*'.$Td[$j].'**\') "  />';
+                 			$Xul.='<label id="*'.$Td[$j].'**"   tooltiptext="'.$Td[$j].'"  class="NoSelect" onclick="AfficheIeml(\'*'.$Td[$j].'**\') ">'.$ArrTd[$j].' </label>';
                  		   
                  		}else{
-                 			$Xul.='<label id="* **"  value=" " class="NoSelect"  />';
+                 			$Xul.='<label id="* **"    ></label>';
                  			
                  		}
                  	}

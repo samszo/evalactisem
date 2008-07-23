@@ -4,13 +4,16 @@ treechildren::-moz-tree-row(utilisateur){background-color: green;}
 treechildren::-moz-tree-row(dictio){background-color: yellow;}
 .NoSelect{
 	 display:block;
-	 width:100px;
+	 width:85px;
+	 hieght:45px;
    	 border:1px outset #dbecff;
-	 background-color: #6699CC;
-	 font-family:Arial, Helvetica, Sans-Serif;
+	 background-color: #206040;
+	 font-family:Arial;
      font-size:7pt;
+     font-weight: bold;
      line-height:15pt;
      text-align:center;
+     color:#EEE8AA;
 }
 
 .NoSelect:hover{ 

@@ -75,7 +75,7 @@ class BookMark{
          $Q = $objSite->XmlParam->GetElements($Xpath);
          $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
          $from = str_replace("-poster-", 0,$from);
-         $sql = $Q[0]->select.$from;
+         echo $sql = $Q[0]->select.$from;
          $result = $db->query($sql);
          $db->close();
         //boucle sur les tag traduit 

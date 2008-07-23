@@ -26,7 +26,7 @@ class SauvFlux{
 		
 		$desc_Band="bundels";
 		$niv_Band=0;
-		$parent_Band="";
+		$parent_Band=-1;
 		$desc="tag";
 		$niv=1;
 		
@@ -38,36 +38,34 @@ class SauvFlux{
 				   $tags=$aPost['tags']." ";
 				   $name.=$aPost['name'].";";
 	               $tag.=$aPost['tags']." ";
-				   
+				   $bundles.=$aPost['name'].";";
+	               $counts.=(sizeof(explode(" ",$tags))-1).";";
 	               $Xpath=Xpath('Ieml_Onto_existe');
 				   $Q=$objSite->XmlParam->GetElements($Xpath);
 				   $where=str_replace("-tag-",$aPost['name'],$Q[0]->where);
-				   $sql=$Q[0]->select.$Q[0]->from." ".$where;
+				   $sql=$Q[0]->select.' '.$Q[0]->from.' '.$where;
 				   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				   $db->connect();
+				   $link=$db->connect();
 				   $req = $db->query($sql);
-				   if(@mysql_num_rows($req)==0){
+				   $reponse=@mysql_fetch_assoc($req);
+				   $rows=@mysql_num_rows($req);
+				   $db->close($link);
+				   if($rows==0){
 					    
 		           	    $Xpath=Xpath('Ieml_Onto_Flux');
 		           	    $Q=$objSite->XmlParam->GetElements($Xpath);
 		           	    $value = str_replace("-descFlux-",$desc_Band,$Q[0]->values);
 						$value = str_replace("-codeFlux-",addslashes($aPost['name']),$value );
-						$value = str_replace("-niveauFlux-",$niveau_Band,$value );
-						$value = str_replace("-parentsFlux-", $parents_Band,$value );
-					    $sql = $Q[0]->insert.$value;
+						$value = str_replace("-niveauFlux-",$niv_Band,$value );
+						$value = str_replace("-parentsFlux-", 0 ,$value );
+					    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+				        $link1=$db->connect();
+						$sql = $Q[0]->insert.$value;
 					    $req = $db->query($sql);
 			  	        $idparentflux=mysql_insert_id();
-					    $this->flux_uti($objSite,$iduti,$idparentflux,$db);
-			  	        
-			  	       
-					   $Xpath=Xpath('Flux_Foret');
-			           
-					   $Q=$objSite->XmlParam->GetElements($Xpath);
-			           $values=str_replace("-idFlux-",$idparentflux,$Q[0]->values);
-					   $values=str_replace("-idparentsFlux-",0,$values);
-					   $sql = $Q[0]->insert.$values;
-					   $req = $db->query($sql);
-			           $enfant=explode(" ",$tags);
+			  	        $db->close($link1);
+					    $this->flux_uti($objSite,$iduti,$idparentflux);
+			  	        $enfant=explode(" ",$tags);
 				      
 				     for($i=0;$i<sizeof($enfant)-1;$i++){				  
 				    
@@ -76,13 +74,17 @@ class SauvFlux{
 		               
 		               $where=str_replace("-tag-",$enfant[$i],$Q[0]->where);
 					   $sql=$Q[0]->select.$Q[0]->from." ".$where;
-			           $res = $db->query($sql);
-					   $result=mysql_fetch_array($res);
-					   $parents=$result[0].$aPost['name'].";";
+			            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+				       $link3=$db->connect();
+					   $res = $db->query($sql);
+					   $result=@mysql_fetch_array($res);
+					   $lignes=@mysql_num_rows($res);
+					   $db->close($link3);
+					   $parents=$result[0].$idparentflux.";";
 					   $id=$result[1];
 	                   $idpred=$id;
-	                  
-					   if(@mysql_num_rows($res)==0){
+	                   
+					   if($lignes==0){
 						    
 					   	    $Xpath=Xpath('Ieml_Onto_Flux');
 	
@@ -91,95 +93,53 @@ class SauvFlux{
 					   	    $value = str_replace("-descFlux-",$desc,$Q[0]->values);
 							$value = str_replace("-codeFlux-",$enfant[$i],$value );
 							$value = str_replace("-niveauFlux-",$niv,$value );
-							$value = str_replace("-parentsFlux-",$aPost['name'].";",$value );
+							$value = str_replace("-parentsFlux-",$idparentflux.";",$value );
 						    
-							$Xpath=Xpath('Flux_Foret');
+							
 							$sql = $Q[0]->insert.$value;
+							$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+				            $link4=$db->connect();
 							$req = $db->query($sql);
 						    $idflux=mysql_insert_id();
-					        
-					        $Q=$objSite->XmlParam->GetElements($Xpath);
-					        $values=str_replace("-idFlux-",$idflux,$Q[0]->values);
-					        $values=str_replace("-idparentsFlux-",$idparentflux,$values);
-					        $sql = $Q[0]->insert.$values;
-					        $req = $db->query($sql);
-
+						    $db->close($link4);
 					        $idpred=$id;
 				           
 					   }else
-				        	if(@mysql_num_rows($res)!=0){
+				        	if($lignes!=0){
 				              
 				        	   $Xpath=Xpath('Ieml_Onto_Flux1');
 				               $Q=$objSite->XmlParam->GetElements($Xpath);
 				               
 				               $where=str_replace("-enfant-",$enfant[$i],$Q[0]->where);
-				               $update=str_replace("-parentsFlux-",$parents,$Q[0]->update);
-				                
+				               $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+				               $link5=$db->connect();
+				               $update=str_replace("-parentsFlux-",$parents,$Q[0]->update); 
 				               $sql=$update.$where;
 				               $req = $db->query($sql);
-	
 				               $Xpath=Xpath('foret_update_parent');
 				               $Q=$objSite->XmlParam->GetElements($Xpath);
 				               $where=str_replace("-Fluxid-",$id,$Q[0]->where);
 				               $sql=$Q[0]->select.$Q[0]->from." ".$where;
 				               $req = $db->query($sql);
 				               $resl=mysql_fetch_array($req);
+				               $db->close($link5);
 				               $parent=$resl[0];
-				               if(($idpred==$id)&&($parent!=-1)){
-	
-				               	        $Xpath=Xpath('Flux_Foret');
-										$sql = $Q[0]->insert.$value;
-										$req = $db->query($sql);
-									    $idflux=mysql_insert_id();
-								        
-								        $Q=$objSite->XmlParam->GetElements($Xpath);
-								        $values=str_replace("-idFlux-",$id,$Q[0]->values);
-								        $values=str_replace("-idparentsFlux-",$idparentflux,$values);
-								        $sql = $Q[0]->insert.$values;
-								        $req = $db->query($sql);
-								        $db->close();
-								        $idpred=$id;
-				               	
-				               }else{
-					               
-					               	   $Xpath=Xpath('Ieml_Onto_foret_update');
-						               $Q=$objSite->XmlParam->GetElements($Xpath);
-						               $where=str_replace("-idFlux-",$id,$Q[0]->where);
-						               $update=str_replace("-idparentsFlux-",$idparentflux,$Q[0]->update);
-						               $sql=$update.$where;
-						               $req = $db->query($sql);
-					               	   
-				                      // echo $id." ".$idpred;
-				                       $idpred=$id;
-				               }
+				              
 				               
 							}
 				        
 						}
 			             
 				   }else{
-				   	 $reponse=mysql_fetch_assoc($req);
-				   	 $Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
-					 $Q=$objSite->XmlParam->GetElements($Xpath);
-					 $where=str_replace("-idflux-",$reponse['onto_flux_id'],$Q[0]->where);
-					 $where=str_replace("-iduti-",$iduti,$where);
-					 $sql=$Q[0]->select.$Q[0]->from.$where;
-					 $r = $db->query($sql);
-					 
-					 if(@mysql_num_rows($r)==0)				   	 
-				   	 	$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id'],$db);
+				   	 
+				   	 		   	 
+				   	 	$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
 				   	
 				   }
-			$db->close();  		 
+			  		 
 			}
 		
-					 $Xpath=Xpath('Ieml_foret_update');
-					 $Q=$objSite->XmlParam->GetElements($Xpath);
-					 $sql=$Q[0]->update.$Q[0]->where;
-					 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-					 $db->connect();
-					 $req = $db->query($sql);
-					 $db->close();
+					
 		        	
 		} 
 		 else {
@@ -188,11 +148,12 @@ class SauvFlux{
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
 	   	 
-		 return "<marque ieml='t.u.-'> <bundles> $name </bundles> <Nbrtag > $aTag </Nbrtag> </marque>"; 
+	   	 
+		 return "<bundles> $name </bundles><nbrtag> $counts </nbrtag>"; 
 	   	 
 	}
 	
-    function aGetAllTags($objSite,$oDelicious,$iduti){
+     function aGetAllTags($objSite,$oDelicious,$iduti){
 		
 		
 		$desc="tag";
@@ -211,9 +172,13 @@ class SauvFlux{
 	               $where=str_replace("-tag-",addslashes($aPost['tag']),$Q[0]->where);
 				   $sql=$Q[0]->select.$Q[0]->from." ".$where;
 				   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				   $db->connect();
+				   $link=$db->connect();
 				   $req = $db->query($sql);
-				   if(@mysql_num_rows($req)==0){
+				   $row=@mysql_num_rows($req);
+				   $reponse=@mysql_fetch_assoc($req);
+				   $db->close($link);
+				   
+				   if($row==0){
 					 		
 				   			$Xpath=Xpath('Ieml_Onto_Flux');
 							$Q=$objSite->XmlParam->GetElements($Xpath);
@@ -221,39 +186,25 @@ class SauvFlux{
 					   	    $value = str_replace("-descFlux-",$desc,$Q[0]->values);
 							$value = str_replace("-codeFlux-",addslashes($aPost['tag']),$value );
 							$value = str_replace("-niveauFlux-",$niv,$value );
-							$value = str_replace("-parentsFlux-",$parentsFlux,$value );
+							$value = str_replace("-parentsFlux-",0,$value );
+							$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+				            $link1=$db->connect();
 							$sql = $Q[0]->insert.$value;
 						    $req = $db->query($sql);
-						    $idflux=mysql_insert_id();
-					        
-						    $Xpath=Xpath('Flux_Foret');
-							$Q=$objSite->XmlParam->GetElements($Xpath);
-					        $values=str_replace("-idFlux-",$idflux,$Q[0]->values);
-					        $values=str_replace("-idparentsFlux-",-1,$values);
-					        $sql = $Q[0]->insert.$values;
-					        $req = $db->query($sql);
-				            $this->flux_uti($objSite,$iduti,$idflux,$db);
-					        $db->close();
+						    $idflux= mysql_insert_id();
+						    $db->close($link1);
+				            $this->flux_uti($objSite,$iduti,$idflux);
+					       
 	  
 				   }else{
-	  	   			 $reponse=mysql_fetch_assoc($req);
-				   	 $Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
-					 $Q=$objSite->XmlParam->GetElements($Xpath);
-					 $where=str_replace("-idflux-",$reponse['onto_flux_id'],$Q[0]->where);
-					 $where=str_replace("-iduti-",$iduti,$where);
-					 $sql=$Q[0]->select.$Q[0]->from.$where;
-					 $r = $db->query($sql);
-					 
-					 if(@mysql_num_rows($r)==0)				   	 
-				   	 	
-					 $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id'],$db);
+	  	   			
+				   	   	 
+				   	 	$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
 				   	
 				   }
-				    $db->close();
+				    
 	 		} 
-	  	    
-		    
-	 		
+	
 		}else {
 		        echo $oDelicious->LastErrorString();
 		 }
@@ -262,7 +213,7 @@ class SauvFlux{
 		 $result=$tag."*".$count; 
 		
 
-		 //$result=str_replace("(.*)&(.*)","et",$result);
+		 $result=str_replace("(.*)&(.*)","et",$result);
 		 return $result;
 	}
 
@@ -306,25 +257,26 @@ class SauvFlux{
 		$sql=$Q[0]->select.$from.$Q[0]->where;
 		$reponse = $db->query($sql);
 		$db->close();
-		while($result=mysql_fetch_array($reponse)){
-			$parents.=$result[0].";";
-			$Xpath=Xpath("repres_graph_flux1");
-			$Q=$objSite->XmlParam->GetElements($Xpath);
-			$where=str_replace("-parent-",$result[1],$Q[0]->where);
-			$sql=$Q[0]->select.$Q[0]->from.$where;
-			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-			$db->connect();
-			$res = $db->query($sql);
-			$db->close();
-			$resu=mysql_fetch_array($res);
-			$count.=$resu[0].";";
+		while($result=mysql_fetch_assoc($reponse)){
+			
+			$parent=explode(";",$result['onto_flux_parents']);
+			$count.=(sizeof($parent)-1).";";
+			for($i=0;$i<sizeof($parent)-1;$i++){
+				$Xpath =Xpath("repres_graph_flux1");
+				$where=str_replace("-parent-",$parent[$i],$Q[0]->where);
+				$sql=$Q[0]->select.$Q[0]->from.$where;
+				$r = $db->query($sql);
+				$reponse=mysql_fetch_array($r);
+				$parents.=$reponse[0].";";;
+			}
+			
 			//echo $parents."*".$count;
 
 		}
 		
 		$result="<bundles> $parents </bundles><nbrtag> $count </nbrtag>";
 		 
-		return $result;
+		//return $result;
 	
 }
 
@@ -339,7 +291,7 @@ class SauvFlux{
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
 		$db->connect();
 		$req = $db->query($sql);
-		$res=mysql_fetch_array($req);
+		$res=@mysql_fetch_array($req);
 		if( @mysql_num_rows($req)==0){
 			$Xpath=Xpath('Enrg_Utilisateur');
 			$Q=$objSite->XmlParam->GetElements($Xpath);
@@ -354,19 +306,31 @@ class SauvFlux{
 		return $res[0]  ;
 	}
 	
-	function flux_uti($objSite,$uti_id,$flux_id,$db){
-		
-		$Xpath=Xpath('flux_utilisateur');
+	function flux_uti($objSite,$uti_id,$flux_id){
+		$Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
 		$Q=$objSite->XmlParam->GetElements($Xpath);
-		$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
-		$values=str_replace("-idflux-",$flux_id,$values);
-		$sql=$Q[0]->insert.$values;
-		if($this->trace)
-			echo "SaveFlux:flux_uti:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
+		$where=str_replace("-idflux-",$flux_id,$Q[0]->where);
+		$where=str_replace("-iduti-",$uti_id,$where);
+		
 		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		$db->connect();
-		$db->query($sql);
-		$db->close();
+		$link=$db->connect();
+		$sql=$Q[0]->select.$Q[0]->from.$where;
+		$r = $db->query($sql);
+		
+		if(@mysql_num_rows($r)==0){				   	 
+			  	
+			$Xpath=Xpath('flux_utilisateur');
+			$Q=$objSite->XmlParam->GetElements($Xpath);
+			$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
+			$values=str_replace("-idflux-",$flux_id,$values);
+			$sql=$Q[0]->insert.$values;
+			$db->query($sql);
+			if($this->trace)
+				echo "SaveFlux:flux_uti:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
+			
+			
+			$db->close($link);
+		}
 	}
 
     
