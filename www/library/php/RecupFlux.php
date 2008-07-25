@@ -32,6 +32,7 @@
    }
    
   if($requette=="GetAllTags"){
+  	
     $result_G=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $result_F="<tags> $AllTag[0] </tags><count> $AllTag[1] </count>";

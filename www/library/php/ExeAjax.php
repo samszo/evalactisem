@@ -291,8 +291,8 @@
        
 	   	function Table_Flux($sTag,$sUrl,$sDesc,$sDate,$sNote){
        	
-       $objXul = new Xul($objSite);
-       return $objXul->TableFlux($sTag,$sUrl,$sDesc,$sDate,$sNote);
+       	$objXul = new Xul($objSite);
+       	return $objXul->TableFlux($sTag,$sUrl,$sDesc,$sDate,$sNote);
 	}
        
 	   	function SavePalette($color){
@@ -315,7 +315,7 @@
            }
 	       print_r($arrColor);  
 	   }
-	   function IemlCycle($key){
+	   	function IemlCycle($key){
 	   		global $objSite;
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
  			return $sem->GetCycle($key);                           
