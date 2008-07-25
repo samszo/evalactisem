@@ -45,5 +45,13 @@
     
 </vbox>
 </hbox>
-		
+<box>
+<svg width="1000" height="1000" id="SVGglobal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	
+		<circle id="ShowMenuXul" cx="25px" cy="300px" r="6" fill="green" onclick="DesactiveMenu();" />
+	    <text id="ShowMenuTextXul" x="39px" y="300px" font-size="9pt" >Desactiver Menu </text>
+	
+</svg>
+</box>
+	
 </window>

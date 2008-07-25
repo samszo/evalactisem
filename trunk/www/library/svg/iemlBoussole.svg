@@ -61,7 +61,12 @@
 		<g id="CreaPave">
 			<g id="ShowPave" transform="scale(0.4) translate(-100,100)" onmouseover="ModifTxtMouseOver(evt)">
 				<polygon id="dynaPave"  iemlCode="*O:**" onclick="SelectPave(evt,'*F:**');ShowHidePave(this.id);" class="styleO" points="" />
+			    
 			    <g id="Pave">
+			    </g>
+			    <g id="Outils" >
+			    	<circle id="ShowMenu" cx="150px" cy="1100px" r="20" fill="green" onclick="ActiveMenu();" />
+			    	<text id="ShowMenuText" x="190px" y="1100px" style="font-size:25pt;" >Activer Menu</text>
 			    </g>
 			</g>
 			
@@ -99,7 +104,7 @@
 			<g id="g_*(O:|M:)**" iemlCode="*(O:|M:)**" onmouseover="ModifTxtMouseOver(evt)" name="events">
 				<polygon id="g_*(O:|M:)**_0" iemlCode="*(O:|M:)**" iemlSelect="*(O:|M:)**" onclick="ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 357.128,139.549 356.962,0.882 "/>
 				<polygon id="g_*(O:|M:)**-1" iemlCode="*(O:|M:)**" iemlSelect="*(O:|M:)**" onclick="ShowHidePave('g_*(O:|M:)**');" class="styleF"   points="278.628,139.549 239.128,71.55 356.962,0.882"/>
-				<line id="g_*(O:|M:)**-2"    iemlCode="*(O:|M:)**" visibility="hidden"  marker-end="url(#Triangle)" class='styleLineSrcDst' x1= "239" y1="71.55" x2="345" y2="131.5" />
+				<line id="g_*(O:|M:)**-2"    iemlCode="*(O:|M:)**"  onclick="ShowHidePave('g_*(O:|M:)**_0')" visibility="hidden"  marker-end="url(#Triangle)" class='styleLineSrcDst' x1= "239" y1="71.55" x2="345" y2="131.5" />
   
 				<polygon id="g_*(O:|M:)**_1" iemlCode="*M:E:.**" visibility="hidden" onclick="SelectionCycle(evt);SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');ShowHidePave(this.id);" class="styleM"  points="278.229,208.217 317.509,208.217 297.869,242.233 278.23,276.249 258.592,242.233 238.953,208.217 "/>
 				<polygon id="g_*(O:|M:)**_2" iemlCode="*M:E:.**" visibility="hidden" onclick="SelectionCycle(evt);SelectPave(evt,'*(O:|M:)**');ShowHidePave('g_*(O:|M:)**');ShowHidePave(this.id);" class="styleE"  points="317.509,208.217 357.142,276.501 278.23,276.249  "/>
@@ -684,8 +689,8 @@
 				</g>
 				<text id="txtRecordPoint" x="0" y="500" class="styleFontMouseOver"> </text>
 			</g>
-			<text id="txtPrimitives" x="50" y="186" transform="rotate(-30)" class="styleFontBranche">PRIMITIVE</text>
-			<text id="txtEvents" x="280" y="-64" transform="rotate(30)" class="styleFontBranche">EVENT</text>
+			<text id="txtPrimitives" onclick="ShowHidePave('g_*F:**_0')" x="50" y="186" transform="rotate(-30)" class="styleFontBranche">PRIMITIVE</text>
+			<text id="txtEvents" onclick="ShowHidePave('g_*(O:|M:)**_0')" x="280" y="-64" transform="rotate(30)" class="styleFontBranche">EVENT</text>
 			<text id="txtMouseOver" x="0" y="35" class="styleFontMouseOver"> </text>
 		</g>
 
