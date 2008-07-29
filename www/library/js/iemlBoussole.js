@@ -126,7 +126,7 @@
     function SelectPave(evt,idDst,idSrc){
         if(!window.parent.document.getElementById('webFrame1'))
         	return;
-		if(window.parent.document.getElementById('webFrame1').getAttribute("src")!=""){
+		if(window.parent.document.getElementById('webFrame1').getAttribute("src")!="" && window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint")){
 			if(window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="true")
 				CreaDynaPave(evt);
 	        if(window.parent.frames['webFrame1'].document.getElementById("creaPoint").getAttribute("value")=="true")

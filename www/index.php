@@ -96,7 +96,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		 <groupbox orient="horizontal" flex="1" >
 			<caption <?php echo $lbl;?> />
 				<vbox>
-					<groupbox orient="vertical" >
+					<groupbox orient="vertical" hidden="true" >
 						<caption label="Flux del.icio.us"/>
 							<label id="selctreq" value="" hidden="true"/>
 							<label value="requête" />
@@ -121,7 +121,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 			     			
 					</groupbox>
 					
-					<groupbox orient="vertical" >
+					<groupbox orient="vertical" hidden="true" >
 						<caption label="Graphique"/>
 						    <label value="Titre" hidden="true"/>
 							<textbox persist="value" hidden="true" id="titre" value=""/>
@@ -135,8 +135,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
 					</groupbox>
 					
-					<groupbox orient="vertical" >
-						<caption label="Administration"/>
+					<groupbox orient="vertical" hidden="true">
+						<caption label="Administration" />
 						
 			    			<button id="AdminDelicious" label="Suppimer mon compte" tooltiptext="Voir l'histogramme" onclick="SupprimerCompteDelicious();"/>
 

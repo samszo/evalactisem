@@ -68,7 +68,6 @@ function RecupDeliciousFlux(){
 
 		query_flux=document.getElementById("requette").selectedItem.value;
 		query_graph=document.getElementById("type").selectedItem.value;
-	    
 	 
 	if((query_flux=="GetAllTags")){
 		var meter=document.getElementById('Maj');
@@ -234,7 +233,7 @@ function Trad_Pars_Ieml(result, param){
         var Trad=new Array();
         var Tag=new Array();
         var arrNoms=new Array();
-        console.log(result);
+        //console.log(result);
         arrNoms = result.split(E);
         arrNom= arrNoms[0].split(P);
         if(arrNoms[1].length > 1){
@@ -312,7 +311,8 @@ function Trad_Pars_Ieml(result, param){
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
 		url = urlAjax+"library/php/ExeAjax.php";
-		console.log(synIemlM+' '+descpM);
+		if(trace)
+			console.log(synIemlM+' '+descpM);
 		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),false);
 		
@@ -519,7 +519,7 @@ function GetIemlTreeExp(idTree, col, op){
 	}
 	//met à jour chaque expression suivant le niveau le plus haut
 	//nécessaire pour que l'expression soit valide pour le parser
-	//if(trace)
+	if(trace)
 		console.log('interface:GetIemlTreeExp:'+maxNiv);   
 	
 	for (var i = 0; i < arrIEML.length; i++){
@@ -557,7 +557,7 @@ function GetIemlLayer(ieml){
 		niv = 5;
 	if(c=="_")
 		niv = 6;
-	//if(trace)
+	if(trace)
 		console.log('interface:GetIemlLayer:niv='+niv+' c='+c);   
 	
 	return niv;
@@ -682,7 +682,7 @@ function ShowDialog(){
         //lbl = Utf8.encode(lbl);
         alert(lbl);
  
-  } catch(ex2){console.log("Interface:ShowDialog:"+ex2);}
+  } catch(ex2){alert("Interface:ShowDialog:"+ex2);}
  }       
         
 
