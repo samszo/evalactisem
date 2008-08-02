@@ -57,7 +57,7 @@ function GetFlux(){
 	meter.setAttribute("hidden","false");
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
-	
+
 }
 function SetDonnee(){
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
@@ -176,7 +176,9 @@ function DelIiciousTreeGraph(result,param){
 			
 		}
 	}
-	
+		
+	//affiche directement les outils de traduction
+	/*
 	Tree= document.getElementById("TableFlux");
 	if(Tree.hasChildNodes())
 	 	Tree.removeChild(Tree.lastChild);
@@ -202,6 +204,10 @@ function DelIiciousTreeGraph(result,param){
 	}
 	
 	pf_dessin(query_graph);
+	*/
+	SetDonnee();	
+	
+	
 	var meter=document.getElementById('progmeter');
 	meter.setAttribute("value","100");
 	document.getElementById('Maj').setAttribute("hidden","true");
@@ -246,19 +252,20 @@ function Trad_Pars_Ieml(result, param){
        for(i=0;i<arrNom.length-1;i++){
                 
                 trad=TradIeml.recherchez(arrNom[i]);
+		        console.log("interface:Trad_Pars_Ieml:trad="+trad);
                 
                 if(trad!=E){
                         ieml=trad.split(E);
                         iemlTrad=ieml[0].split(P);
-                                if(iemlTrad.length>2){
+                        if(iemlTrad.length>2){
                                 in_array="false";
-                                    for(j=0;j<Descp.length;j++){
+                                for(j=0;j<Descp.length;j++){
                                     	if(arrNom[i]==Tag[j]){
 		                                    in_array="true";
 		                                    
 		                                }
 		                         }
-		                            if(in_array=="false"){
+	                            if(in_array=="false"){
 		                            synIemlM+=TradIeml.syntaxe_ieml(ieml[0])+E;
 		                            MultiTrad+=ieml[0]+E;
 		                           	FluxM+=arrNom[i]+P;
@@ -266,13 +273,13 @@ function Trad_Pars_Ieml(result, param){
                               
                                   }
                            
-                        }else
+                        }else{
                             if(iemlTrad.length==2){
                                 synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
                                 SignlTrad+=ieml[0];
                                 FluxS+=arrNom[i]+P;
                                 descpS+=ieml[1];
-
+							}
                         }
                         
                 }else{
@@ -304,7 +311,7 @@ function Trad_Pars_Ieml(result, param){
 	if(FluxS.length>2){
 		
 		var url = urlAjax+"library/php/ExeAjax.php";
-		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
+		var urlparams="f=GetTreeTrad&flux="+Utf8.decode(FluxS)+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
 		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
 
 	}
@@ -341,13 +348,22 @@ function Trad(id,src){
 	var iFrame =document.getElementById(id);
     iFrame.setAttribute("src",src);
 }
+
+
 function AddTrad(){
 	
 	var libIeml=document.getElementById("lib-trad-ieml");
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
-	
-    alert(libIeml.value);
+    
+	if(codeIeml.value==""){
+		alert("Veuillez sélectionner une expression IEML");
+		return
+	}	
+	if(codeFlux.value==""){
+		alert("Veuillez sélectionner un tag del.icio.us");
+		return
+	}	
 	
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
 	
@@ -394,15 +410,18 @@ function SupTrad()
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
    
-    alert(libIeml.value);
-	url = urlExeAjax+"?f=SupTrad&codeIeml="+codeIeml.value+"libIeml="+libIeml.value+"&codeflux="+codeFlux.value;
-   
-	//vérification des valeursboxlistJ
-	if(codeIeml.value=="" || codeFlux.value=="")
-		document.getElementById("trad-message").value = "Veuillez sélectionner une traduction";
-	else
-		AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
-		SetDonnee();
+	if(codeIeml.value==""){
+		alert("Veuillez sélectionner une expression IEML");
+		return
+	}	
+	if(codeFlux.value==""){
+		alert("Veuillez sélectionner un tag del.icio.us");
+		return
+	}	
+
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
+
+	SetDonnee();
 		
 }
 function startSelectTab()
@@ -469,13 +488,17 @@ function Select_Trad(id,treecol){
 }
 function Parser(op,type){
     var tree = document.getElementById("Signl_Trad");
-    Iemlcode=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn("treecol_Signl_Trad"));
     //prise en compte de la sélection multiple
     Iemlcode=GetIemlTreeExp("Signl_Trad", 2, op);
+    if(Iemlcode==")"){
+    	alert("Veuillez sélectionner un ou plusieurs Tags traduits");
+    	return;
+	}    
 	var url = urlAjax+"library/php/ExeAjax.php?f=GetGraph&code="+Iemlcode+"&type="+type;
 	url = GetResult(url);
 	Trad('webFrame',url);
-	
+	var tabStatIeml = document.getElementById('tabStatIeml')
+	document.getElementById('tbIframe').selectedTab=tabStatIeml;	
 }
 
 
@@ -615,14 +638,12 @@ function Afficher(result,prarm){
 	var meter=document.getElementById('progmeter');
 	meter.setAttribute("value","100");
 	if(result==''){
-		alert("il n y pas deS Posts recents à mettre a jour");
+		alert("il n'y pas de Posts recents à mettre a jour");
 		document.getElementById('Maj').setAttribute("hidden","true");
 	}else{
-		
 		message='Les Posts suivants ont ete mis a jour: ';
 		alert(message+result);
 		document.getElementById('Maj').setAttribute("hidden","true");
-	    document.getElementById('Maj').setAttribute("hidden","true");
 	}
 }
 function SupprimerCompteDelicious(){
@@ -644,11 +665,17 @@ function GoUrl(url){
 	
 		
 }
-function CreaNoeud(){
-    //document.getElementById('webFrame1').setAttribute("hidden","false");
-    //document.getElementById('webFrame1').setAttribute("src","library/svg/iemlMenuBoussole.xul");
-	document.getElementById('webFrame').setAttribute("src","library/svg/iemlBoussole.svg");
+function ShowBoussole(){
+    document.getElementById('webFrame1').setAttribute("hidden","false");
+	document.getElementById('webFrame').setAttribute("hidden","true");
 }
+
+function ShowBookmark(compte){
+    document.getElementById('webFrame1').setAttribute("hidden","true");
+	document.getElementById('webFrame').setAttribute("hidden","false");
+	document.getElementById('webFrame').setAttribute("src","http://del.icio.us/"+compte);
+}
+
 
 function SelectionCycle(){
 Table=window.parent.frames['iemlCycle'].document.getElementById('')
@@ -656,8 +683,8 @@ window.parent.frames['iemlCycle'].document.getElementById('O:.B:M:.-').setAttrib
 
 }
 function ModifTrad(){
-table=window.parent.frames('webFrame').document.getElementById('Points')
-window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
+	table=window.parent.frames('webFrame').document.getElementById('Points')
+	window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
 }
 
 function ShowDialog(){

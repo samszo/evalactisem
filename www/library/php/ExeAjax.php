@@ -12,6 +12,15 @@
 
         $resultat = "";
 
+        if($_SESSION['Delicious']){
+		   $oDelicious=$_SESSION['Delicious'];
+	   }else{
+	       	$oDelicious = new PhpDelicious("plevy4", "1plotin");
+			$_SESSION['loginSess']="plevy4";
+			$_SESSION['Delicious']=$oDelicious;
+			$_SESSION['iduti']="3";
+	   }
+        
         if(isset($_POST['f'])){
               $fonction = $_POST['f'];
             
@@ -149,7 +158,7 @@
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
                 return $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);
                 
-                }
+        }
                 
         
         function SetOnto($type,$col,$id,$valeur){

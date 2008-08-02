@@ -756,7 +756,9 @@ Class Sem{
                 $from=str_replace("-codeFlux-",$codeflux, $Q[0]->from);
                 $from=str_replace("-codeIeml-", $codeIeml, $from);
                 $from=str_replace("-Iemllib-",utf8_decode($libIeml), $from);
-                echo $sql = $Q[0]->select.$from.$Q[0]->where;
+                $sql = $Q[0]->select.$from.$Q[0]->where;
+                //if($this->trace)
+                	echo "Sem:Sup_Trad:sql1=".$sql."<br/>";
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
                 $db->connect();
                 $result = $db->query($sql);
@@ -766,17 +768,22 @@ Class Sem{
                 //requête pour Supprimer une traduction
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
-                //echo $Q;
                 $where = str_replace("-idflux-", $res[0], $Q[0]->where);
-                $where = str_replace("-idIeml-", $res[1], $where);
-                
+                $where = str_replace("-idIeml-", $res[1], $where);               
                 $sql = $Q[0]->delete.$Q[0]->from.$where;
+                //if($this->trace)
+                	echo "Sem:Sup_Trad:sql2=".$sql."<br/>";
                 $result = $db->query($sql);
+
                 //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
                 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";
                 $Q = $objSite->XmlParam->GetElements($Xpath);
+                $where = str_replace("-idIeml-", $res[1], $Q[0]->where);
                 $sql = $Q[0]->delete.$Q[0]->from.$where;
+                //if($this->trace)
+                	echo "Sem:Sup_Trad:sql3=".$sql."<br/>";
                 $result = $db->query($sql);
+
                 $message = mysql_affected_rows()." traduction supprime";
                 $db->close();
                  $Activite->AddActi("DelTrad",$iduti);

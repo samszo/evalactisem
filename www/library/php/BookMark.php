@@ -82,40 +82,41 @@ class BookMark{
    		// pour chaque tag  il faut recupper l'url correspondante
     	
     	while($reponse=mysql_fetch_assoc($result)){     
-    		$Posts=$oDelicious->GetPosts($reponse['onto_flux_code'],'','', true);
+    		$Posts=$oDelicious->GetAllPosts($reponse['onto_flux_code'],true);
     		if($this->trace)
 					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
-    		foreach($Posts as $Post){
-    			$PostIeml=$oIeml->GetPosts('','',$Post['url'],true);
-    			if($this->trace)
-					echo "BookMark.php:MajPostIeml:Imel".print_r($PostIeml)."<br/>";
-    			
-				// Si le login ni pas dans la description de post ou le tag n exite pas dans le post on ajoute le post
-					
-				if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])||!in_array($reponse['ieml_code'],$PostIeml['tags'])){
-    				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
-    				$AddPost=$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
-    				if($this->trace)
-    			    	echo "BookMark.php:MajPostIeml:AddPost".print_r($AddPost)."<br/>";
-    			} 
-    			
-    			
-    			
-					$postMAJ.= $Post['url']." ";
-            }
-        	
-            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
-            
-            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		 	$db->connect();  
-    		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='update_posted_tag']";
-        	$Q = $objSite->XmlParam->GetElements($Xpath);
-        	$where=str_replace("-IdIeml-",$reponse['ieml_id'],$Q[0]->where);
-        	$where=str_replace("-IdFlux-",$reponse['onto_flux_id'],$where);
-        	$sql = $Q[0]->update.$where;
-        	$res = $db->query($sql);
-         	$db->close();
-         	
+			if($Posts){
+	    		foreach($Posts as $Post){
+	    			$PostIeml=$oIeml->GetPosts('','',$Post['url'],true);
+	    			if($this->trace)
+						echo "BookMark.php:MajPostIeml:Imel".print_r($PostIeml)."<br/>";
+	    			
+					// Si le login ni pas dans la description de post ou le tag n exite pas dans le post on ajoute le post
+						
+					if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])||!in_array($reponse['ieml_code'],$PostIeml['tags'])){
+	    				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
+	    				$AddPost=$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
+	    				if($this->trace)
+	    			    	echo "BookMark.php:MajPostIeml:AddPost".print_r($AddPost)."<br/>";
+	    			} 
+	    			
+	    			
+	    			
+						$postMAJ.= $Post['url']." ";
+	            }
+	        	
+	            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
+	            
+	            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+			 	$db->connect();  
+	    		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='update_posted_tag']";
+	        	$Q = $objSite->XmlParam->GetElements($Xpath);
+	        	$where=str_replace("-IdIeml-",$reponse['ieml_id'],$Q[0]->where);
+	        	$where=str_replace("-IdFlux-",$reponse['onto_flux_id'],$where);
+	        	$sql = $Q[0]->update.$where;
+	        	$res = $db->query($sql);
+	         	$db->close();
+			}         	
     	}
          $Activite= new Acti();
     	 $Activite->AddActi("MajCptIeml",$_SESSION['iduti']);

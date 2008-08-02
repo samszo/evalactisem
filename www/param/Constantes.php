@@ -3,9 +3,10 @@
    //set_time_limit(3000);
   //
   // Fichier contenant les definitions de constantes
-  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
-  
-	// *** chemin de toutes les bases et les spip en service ***
+  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
+  define ("PathRoot","C:/wamp/www/evalactisem");
+
+  // *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/php/");
 	// *** Define the path to the SVG class dir. ***
 	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
