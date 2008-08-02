@@ -2,8 +2,14 @@
    require('../php-delicious/php-delicious.inc.php');
    require('../../param/Constantes.php');
    require_once ("../../param/ParamPage.php");
-   
-   $oDelicious=$_SESSION['Delicious'];
+      
+      if($_SESSION['Delicious']){
+	   $oDelicious=$_SESSION['Delicious'];
+   }else{
+       	$oDelicious = new PhpDelicious("plevy4", "1plotin");
+		$_SESSION['loginSess']="plevy4";
+		$_SESSION['Delicious']=$oDelicious;
+   }
    
    $requette= $_GET["requette"];
    $requete_g=$_GET["req"];

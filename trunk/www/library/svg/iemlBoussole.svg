@@ -64,7 +64,7 @@
 			    
 			    <g id="Pave">
 			    </g>
-			    <g id="Outils" >
+			    <g id="Outils" visibility="hidden" >
 			    	<circle id="ShowMenu" cx="150px" cy="1100px" r="20" fill="green" onclick="ActiveMenu();" />
 			    	<text id="ShowMenuText" x="190px" y="1100px" style="font-size:25pt;" >Activer Menu</text>
 			    </g>

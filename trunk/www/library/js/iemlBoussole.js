@@ -554,8 +554,6 @@ function RequestIemlCycle(){
 }
 function GetCycle(result){
 	console.log(result);
-	
-	
 }
 function ActiveMenu(){
     
