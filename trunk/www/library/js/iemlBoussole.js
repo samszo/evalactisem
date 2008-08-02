@@ -124,15 +124,15 @@
     }
     
     function SelectPave(evt,idDst,idSrc){
-        if(!window.parent.document.getElementById('webFrame1'))
-        	return;
-		if(window.parent.document.getElementById('webFrame1').getAttribute("src")!="" && window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint")){
-			if(window.parent.frames['webFrame1'].document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="true")
-				CreaDynaPave(evt);
-	        if(window.parent.frames['webFrame1'].document.getElementById("creaPoint").getAttribute("value")=="true")
-	        	ShowRecordPoint(evt);
+        if(!window.parent.document.getElementById('ifBoussole')){
+			if(window.parent.document.getElementById('ifBoussole').getAttribute("src")!="" 
+					&& window.parent.frames['ifBoussole'].document.getElementById("DynaPaveCreaPoint")){
+				if(window.parent.frames['ifBoussole'].document.getElementById("DynaPaveCreaPoint").getAttribute("value")=="true")
+					CreaDynaPave(evt);
+		        if(window.parent.frames['ifBoussole'].document.getElementById("creaPoint").getAttribute("value")=="true")
+		        	ShowRecordPoint(evt);
+			}
 		}
-		
 
 		//met à jour la branche suivant le choix du pavé
 	   	var tgt = evt.target;
