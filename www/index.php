@@ -256,7 +256,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									</vbox >
 						         </tabpanel>
 						        <tabpanel>
-										<iframe style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
+										<iframe id="ifBoussole" style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
 						         </tabpanel>
 						        <tabpanel>
 										<iframe id="webFrame" flex="1"  src=""  />
