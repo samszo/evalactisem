@@ -247,12 +247,16 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    </tabs>
 						    <tabpanels flex="1"  >
 						        <tabpanel >
+						        	<!-- 
+						          	-->
 									<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
 						         </tabpanel>
 						        <tabpanel>
 									<vbox flex="1" >
 						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
 										<iframe flex="1" src="http://del.icio.us/ieml"  />
+						        	<!-- 
+						          	-->
 									</vbox >
 						         </tabpanel>
 						        <tabpanel>

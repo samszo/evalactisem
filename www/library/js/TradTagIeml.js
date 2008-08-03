@@ -1,5 +1,5 @@
 function Traduction(){
-subject = new Array( 1990);
+var subject = new Array( 1990);
 subject[0]=["ideas","fusu","TBASSSAS","fusu","id\u00e9e","ideas.html","semantic","image mentale",];
 subject[1]=["relations","jn","SUBT","jn","relation","relations.html","semantic","banalit\u00e9",];
 subject[2]=["ideas","koko","BSUBBSUB","koko","id\u00e9e","ideas.html","semantic","paix",];

@@ -15,7 +15,7 @@ class Acti{
 		//recuperation de l'id de l'activité
 		$Xpath = "/XmlParams/XmlParam[@nom='Activite']/Querys/Query[@fonction='Select_Acti_id']";
 		$Q=$objSite->XmlParam->GetElements($Xpath);
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 		$db->connect();
 		$where=str_replace('-codeActi-',$code,$Q[0]->where);
 		$sql=$Q[0]->select.$Q[0]->from." ".$where;

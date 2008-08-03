@@ -1,5 +1,20 @@
 <?php
+session_start();
+//set_time_limit(3000);
+
+   if($_SESSION['Delicious']){
+	   $oDelicious=$_SESSION['Delicious'];
+   }else{
+   		//pour le debuggage
+       	$oDelicious = new PhpDelicious("plevy4", "1plotin");
+		$_SESSION['loginSess']="plevy4";
+		$_SESSION['Delicious']=$oDelicious;
+		$_SESSION['iduti']="2";
+   }
+
 require_once ("Constantes.php");
+
+
 
 // vérification du site en cours
 if(isset($_GET['site'])){
