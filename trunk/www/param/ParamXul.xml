@@ -8,11 +8,6 @@
 				<from> FROM ieml_onto </from>
 				<where> </where>
 			</Query>
-			<Query fonction="10eF">
-				<select>SELECT 10ef_id, 10ef_code code, 10ef_lib lib, 10ef_niveau niveau, 10ef_parent type </select>
-				<from> FROM ieml_10ef </from>
-				<where> </where>
-			</Query>
 			<Query fonction="get_hierarchie_ieml1">
 				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
 				<from> FROM ieml_onto De </from>
@@ -22,11 +17,6 @@
 				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
 				<from> FROM ieml_onto De </from>
 				<where> WHERE De.ieml_parent LIKE '%-SoCode-'</where>
-			</Query>
-			<Query fonction="get_hierarchie_10eF1">
-				<select>SELECT De.10ef_id DeId, De.10ef_code DeCode </select>
-				<from> FROM ieml_10ef De </from>
-				<where> WHERE De.10ef_niveau = 1</where>
 			</Query>
 			<Query fonction="get_hierarchie_Dictio_children">
 				<select>SELECT  ieml_lib, ieml_code</select>
@@ -53,11 +43,6 @@
 			<Query fonction="ieml">
 				<select>SELECT ieml_id id, ieml_code code, ieml_lib lib, ieml_niveau niveau, ieml_parent type </select>
 				<from> FROM ieml_onto </from>
-				<where> </where>
-			</Query>
-			<Query fonction="10eF">
-				<select>SELECT id, 10ef_code code, 10ef_lib lib, 10ef_niveau niveau, 10ef_type type </select>
-				<from> FROM ieml_10ef </from>
 				<where> </where>
 			</Query>
 			<Query fonction="get_hierarchie_ieml1">
@@ -88,11 +73,8 @@
 			</Query>
 		    <Query fonction="ExeAjax_recup_id">
 				<select>SELECT f.onto_flux_id,o.ieml_id   </select>
-				<from> 	FROM ieml_onto_flux f 
-				        INNER JOIN ieml_onto o on f.onto_flux_code='-codeFlux-' and o.ieml_code="-Iemlcode-" 
-				        INNER JOIN ieml_uti_onto_flux u on u.onto_flux_id = f.onto_flux_id AND u.uti_id ='-iduti-'
-				</from>
-				<where> </where>
+				<from> 	FROM ieml_onto_flux f, ieml_onto o </from>
+				<where> WHERE f.onto_flux_code='-codeFlux-' and o.ieml_code="-Iemlcode-" </where>
 			</Query>
 			<Query fonction="Get_Id_Flux">
 				<select>SELECT onto_flux_id</select>
@@ -105,7 +87,7 @@
 				<where> WHERE ieml_lib = "-libieml-" </where>
 			</Query>
 		    <Query fonction="ExeAjax-AddTrad-VerifExist">
-				<select>SELECT COUNT(1) </select>
+				<select>SELECT trad_id </select>
 				<from> FROM ieml_trad De  </from>
 				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- </where>
 			</Query>
@@ -197,27 +179,6 @@
 				<from> FROM ieml_uti_onto_flux </from>
 				<where> WHERE onto_flux_id=-idflux- AND uti_id=-iduti-</where>
 			</Query>
-		    <Query fonction="Flux_Foret">
-				<insert> INSERT INTO ieml_foret_flux (onto_flux_id,onto_flux_parents)</insert>
-				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
-			</Query>
-		    <Query fonction="Ieml_Onto_foret_update">
-				<update> UPDATE ieml_foret_flux SET onto_flux_parents='-idparentsFlux-'</update>
-				<where> WHERE onto_flux_id='-idFlux-'</where>
-			</Query>
-		    <Query fonction="foret_update_parent">
-				<select> SELECT onto_flux_parents</select>
-				<from> FROM ieml_foret_flux</from>
-				<where>	WHERE onto_flux_id=-Fluxid-</where>
-			</Query>
-		    <Query fonction="Ieml_Onto_foret_update">
-				<update> UPDATE ieml_foret_flux SET onto_flux_parents='-idparentsFlux-'</update>
-				<where> WHERE onto_flux_id='-idFlux-'</where>
-			</Query>
-		    <Query fonction="Ieml_foret_update">
-				<update> UPDATE ieml_foret_flux SET onto_flux_parents='0'</update>
-				<where> WHERE onto_flux_parents='-1'</where>
-			</Query>
 		    <Query fonction="repres_graph_flux">
 				<select> SELECT i.onto_flux_code,i.onto_flux_id, i.onto_flux_parents </select>
 				<from> FROM ieml_onto_flux i
@@ -229,6 +190,20 @@
 				<select> SELECT onto_flux_code </select>
 				<from>  FROM ieml_onto_flux</from>
 				<where> WHERE onto_flux_id =-parent-</where>
+			</Query>
+		    <Query fonction="VerifPartageTrad">
+				<select> SELECT COUNT(1) nb </select>
+				<from> FROM ieml_trad_partage </from>
+				<where> WHERE trad_id=-idTrad- AND uti_id=-idUti- </where>
+			</Query>			
+		    <Query fonction="SupPartageTrad">
+				<delete> DELETE  </delete>
+				<from> FROM  ieml_trad_partage </from>
+				<where> WHERE  trad_id=-idTrad- AND uti_id=-idUti- </where>
+			</Query>			
+		    <Query fonction="InsertPartageTrad">
+				<insert> INSERT INTO ieml_trad_partage (uti_id,trad_id)</insert>
+				<values> VALUES ( '-idUti-','-idTrad-')</values>
 			</Query>
 		    <Query fonction="flux_utilisateur">
 				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
@@ -247,11 +222,6 @@
 				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
 				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
 			</Query>
-			<Query fonction="Insert_ieml_foret">
-				<insert> INSERT INTO ieml_foret (ieml_id,ieml_parent)</insert>
-				<values> VALUES ('-idieml-' , '-idparent-')</values>
-			</Query>
-			
 		   <Query fonction="Delete_Ieml_uti_Onto_Flux">
 				<delete> DELETE  </delete>
 				<from> FROM  `ieml_uti_onto_flux` </from>

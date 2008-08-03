@@ -61,7 +61,7 @@
       var $iLastError = 0;
       
       /************************ constructor ************************/
-      function PhpDelicious($sUsername, $sPassword, $iCacheTime = 10) {
+      function PhpDelicious($sUsername, $sPassword, $iCacheTime = 3600) {
          // assign parameters
          $this->sUsername = $sUsername;
          $this->sPassword = $sPassword;

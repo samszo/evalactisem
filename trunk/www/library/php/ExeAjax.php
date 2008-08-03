@@ -1,7 +1,6 @@
 <?php
         $ajax = true;
         require('../php-delicious/php-delicious.inc.php');
-        require('../../param/Constantes.php');
         require_once ("../../param/ParamPage.php");
         
         
@@ -11,15 +10,6 @@
 
 
         $resultat = "";
-
-        if($_SESSION['Delicious']){
-		   $oDelicious=$_SESSION['Delicious'];
-	   }else{
-	       	$oDelicious = new PhpDelicious("plevy4", "1plotin");
-			$_SESSION['loginSess']="plevy4";
-			$_SESSION['Delicious']=$oDelicious;
-			$_SESSION['iduti']="3";
-	   }
         
         if(isset($_POST['f'])){
               $fonction = $_POST['f'];
@@ -76,7 +66,8 @@
                 	    break;
                 case 'GetTreeTrad':
         	        	$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd']);
-                	   
+        	        	//Pour le débugage
+        	        	//$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
         	        	break;
                 case 'InsertIemlOnto':
                 	   $resultat=InsertIemlOnto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
@@ -117,18 +108,33 @@
 			
         	global $objSite;
 
+        	$arrBdd=explode(";",$bdd);		    
+        	$arrFlux=explode(";",$flux);
+        	
         	if($type=="Signl_Trad"){
 			
 				$arrTrad=explode(";",$trad);
 			    $arrDescp=explode(";",$descp);
+			    
+			    //vérifie le partage de traduction
+                $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+			    for($i=0;$i<sizeof($arrTrad);$i++){
+			    	//vérifie que l'on traite une trad auto
+			    	if(!in_array($arrTrad[$i], $arrBdd)) {
+				    	$idTrad = $sem->Add_Trad($arrDescp[$i],$arrFlux[$i],$arrTrad[$i],$objSite->infos["UTI_TRAD_AUTO"],true);
+						if(!$sem->VerifPartageTrad($idTrad,$_SESSION['iduti'])){
+							unset($arrTrad[$i]);
+							unset($arrDescp[$i]);
+							unset($arrFlux[$i]);
+						}
+			    	}
+				}
+			    
         	}elseif($type=="Multi_Trad"){
         		$arrTrad=explode("*",$trad);
 			    $arrDescp=explode("*",$descp);
         	}
 		    
-        	$arrBdd=explode(";",$bdd);
-		    
-        	$arrFlux=explode(";",$flux);
         	$objXul = new Xul($objSite);
         	
         	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
@@ -156,7 +162,16 @@
         
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-                return $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);
+			    //vérifie le partage de traduction
+		    	$idTrad = $sem->Add_Trad($libIeml,$codeflux,$codeIeml,$objSite->infos["UTI_TRAD_AUTO"],true);
+				if($sem->VerifPartageTrad($idTrad,$_SESSION['iduti'])){
+                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);
+				}else{
+                	$message = $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);
+					
+				}
+                
+                return $message;
                 
         }
                 

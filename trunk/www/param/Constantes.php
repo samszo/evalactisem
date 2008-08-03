@@ -1,10 +1,9 @@
 <?php
-   session_start();
-   //set_time_limit(3000);
   //
   // Fichier contenant les definitions de constantes
-  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
-  define ("PathRoot","C:/wamp/www/evalactisem");
+  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
+	//pour le débubbage
+   //define ("PathRoot","C:/wamp/www/evalactisem");
 
   // *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/php/");
@@ -17,7 +16,7 @@
 	
   define ("DEFSITE", "local");
 
-  $DB_OPTIONS = array (
+  $dbOptions = array (
 		'ERROR_DISPLAY' => true
 		);
   
@@ -48,8 +47,9 @@
 	"DEF_LAT" => 45,
 	"DEF_LNG" => 1,
 	"DEF_ZOOM" => 4,
-	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
-	"gmKey" => gmKey
+  	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
+	"UTI_TRAD_AUTO" => 1,
+  	"gmKey" => gmKey
 	); 
 $SiteThyp = array(
 	"PATH_WEB" => "http://localhost/evalactisem/", 
@@ -64,6 +64,7 @@ $SiteThyp = array(
 	"DEF_LNG" => 1,
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
+	"UTI_TRADAUTO" => 4,
 	"gmKey" => gmKey
 	); 
 $SiteMundi = array(
@@ -79,6 +80,7 @@ $SiteMundi = array(
 	"DEF_LNG" => 1,
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
+	"UTI_TRADAUTO" => 4,
 	"gmKey" => gmKey
 	); 
 	

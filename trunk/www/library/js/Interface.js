@@ -1,6 +1,6 @@
    
-E="*";
-P=";";
+var E="*";
+var P=";";
 
 function ChargeCycle(key){
 	//vérifie que l'onglet n'est pas déjà rempli
@@ -55,14 +55,15 @@ function GetFlux(){
     document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
+
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
 	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
 
 }
 function SetDonnee(){
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
-	
 }
+
 function RecupDeliciousFlux(){
 	   
 
@@ -205,6 +206,7 @@ function DelIiciousTreeGraph(result,param){
 	
 	pf_dessin(query_graph);
 	*/
+
 	SetDonnee();	
 	
 	
@@ -252,7 +254,8 @@ function Trad_Pars_Ieml(result, param){
        for(i=0;i<arrNom.length-1;i++){
                 
                 trad=TradIeml.recherchez(arrNom[i]);
-		        console.log("interface:Trad_Pars_Ieml:trad="+trad);
+                if(trace)
+			        console.log("interface:Trad_Pars_Ieml:trad="+trad);
                 
                 if(trad!=E){
                         ieml=trad.split(E);
@@ -308,12 +311,16 @@ function Trad_Pars_Ieml(result, param){
 	//affiche le tree des singles trad
 	var doc = document.getElementById('contDonnee');
 		doc.setAttribute("hidden","false");
-	if(FluxS.length>2){
 		
-		var url = urlAjax+"library/php/ExeAjax.php";
-		var urlparams="f=GetTreeTrad&flux="+Utf8.decode(FluxS)+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
-		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
+	//if(trace)
+    	console.log("interface:Trad_Pars_Ieml:FluxS="+FluxS);
+    	console.log("interface:Trad_Pars_Ieml:FluxM="+FluxM);
+    	console.log("interface:Trad_Pars_Ieml:FluxN="+FluxN);
 
+	if(FluxS.length>2){
+		var url = urlAjax+"library/php/ExeAjax.php";
+		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
+		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
 	}
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){

@@ -40,95 +40,52 @@ class SauvFlux{
 	               $tag.=$aPost['tags']." ";
 				   $bundles.=$aPost['name'].";";
 	               $counts.=(sizeof(explode(" ",$tags))-1).";";
-	               $Xpath=Xpath('Ieml_Onto_existe');
-				   $Q=$objSite->XmlParam->GetElements($Xpath);
-				   $where=str_replace("-tag-",$aPost['name'],$Q[0]->where);
-				   $sql=$Q[0]->select.' '.$Q[0]->from.' '.$where;
-				   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				   $link=$db->connect();
-				   $req = $db->query($sql);
-				   $reponse=@mysql_fetch_assoc($req);
-				   $rows=@mysql_num_rows($req);
-				   $db->close($link);
-				   if($rows==0){
-					    
-		           	    $Xpath=Xpath('Ieml_Onto_Flux');
-		           	    $Q=$objSite->XmlParam->GetElements($Xpath);
-		           	    $value = str_replace("-descFlux-",$desc_Band,$Q[0]->values);
-						$value = str_replace("-codeFlux-",addslashes($aPost['name']),$value );
-						$value = str_replace("-niveauFlux-",$niv_Band,$value );
-						$value = str_replace("-parentsFlux-", 0 ,$value );
-					    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				        $link1=$db->connect();
-						$sql = $Q[0]->insert.$value;
-					    $req = $db->query($sql);
-			  	        $idparentflux=mysql_insert_id();
-			  	        $db->close($link1);
+	               
+	               $reponse= $this->VerifFluxExiste($objSite,$aPost['name']);			   
+
+	               if($reponse){
+			   			$idparentflux= $this->InsertFlux($objSite,$desc,$aPost['name'],$niv,0);					 		
 					    $this->flux_uti($objSite,$iduti,$idparentflux);
-			  	        $enfant=explode(" ",$tags);
-				      
-				     for($i=0;$i<sizeof($enfant)-1;$i++){				  
-				    
-				       $Xpath=Xpath('Ieml_Onto_existe');
-		               $Q=$objSite->XmlParam->GetElements($Xpath);
-		               
-		               $where=str_replace("-tag-",$enfant[$i],$Q[0]->where);
-					   $sql=$Q[0]->select.$Q[0]->from." ".$where;
-			            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				       $link3=$db->connect();
-					   $res = $db->query($sql);
-					   $result=@mysql_fetch_array($res);
-					   $lignes=@mysql_num_rows($res);
-					   $db->close($link3);
-					   $parents=$result[0].$idparentflux.";";
-					   $id=$result[1];
-	                   $idpred=$id;
-	                   
-					   if($lignes==0){
-						    
-					   	    $Xpath=Xpath('Ieml_Onto_Flux');
-	
-					   	    $Q=$objSite->XmlParam->GetElements($Xpath);
-						  
-					   	    $value = str_replace("-descFlux-",$desc,$Q[0]->values);
-							$value = str_replace("-codeFlux-",$enfant[$i],$value );
-							$value = str_replace("-niveauFlux-",$niv,$value );
-							$value = str_replace("-parentsFlux-",$idparentflux.";",$value );
-						    
-							
-							$sql = $Q[0]->insert.$value;
-							$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				            $link4=$db->connect();
-							$req = $db->query($sql);
-						    $idflux=mysql_insert_id();
-						    $db->close($link4);
-					        $idpred=$id;
-				           
-					   }else
-				        	if($lignes!=0){
-				              
-				        	   $Xpath=Xpath('Ieml_Onto_Flux1');
-				               $Q=$objSite->XmlParam->GetElements($Xpath);
-				               
-				               $where=str_replace("-enfant-",$enfant[$i],$Q[0]->where);
-				               $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				               $link5=$db->connect();
-				               $update=str_replace("-parentsFlux-",$parents,$Q[0]->update); 
-				               $sql=$update.$where;
-				               $req = $db->query($sql);
-				               $Xpath=Xpath('foret_update_parent');
-				               $Q=$objSite->XmlParam->GetElements($Xpath);
-				               $where=str_replace("-Fluxid-",$id,$Q[0]->where);
-				               $sql=$Q[0]->select.$Q[0]->from." ".$where;
-				               $req = $db->query($sql);
-				               $resl=mysql_fetch_array($req);
-				               $db->close($link5);
-				               $parent=$resl[0];
-				              
-				               
+			  	        $enfant=explode(" ",$tags);			      
+					    for($i=0;$i<sizeof($enfant)-1;$i++){				  
+				    		
+					    	$reponse= $this->VerifFluxExiste($objSite,$enfant[$i]);			   
+					    	
+						   $parents=$reponse['onto_flux_parents'].$idparentflux.";";
+						   $id=$reponse['onto_flux_id'];
+		                   $idpred=$id;
+		                   
+						   if($lignes==0){
+							    
+				   				$idflux= $this->InsertFlux($objSite,$desc,$enfant[$i],$niv,$idparentflux);					 		
+							    $idflux=mysql_insert_id();
+						        $idpred=$id;
+					           
+						   }else
+					        	if($lignes!=0){
+					              
+					        	   $Xpath=Xpath('Ieml_Onto_Flux1');
+					               $Q=$objSite->XmlParam->GetElements($Xpath);
+					               
+					               $where=str_replace("-enfant-",$enfant[$i],$Q[0]->where);
+					               $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+					               $link5=$db->connect();
+					               $update=str_replace("-parentsFlux-",$parents,$Q[0]->update); 
+					               $sql=$update.$where;
+					               $req = $db->query($sql);
+					               $Xpath=Xpath('foret_update_parent');
+					               $Q=$objSite->XmlParam->GetElements($Xpath);
+					               $where=str_replace("-Fluxid-",$id,$Q[0]->where);
+					               $sql=$Q[0]->select.$Q[0]->from." ".$where;
+					               $req = $db->query($sql);
+					               $resl=mysql_fetch_array($req);
+					               $db->close($link5);
+					               $parent=$resl[0];
+					              
+					               
+								}
+					        
 							}
-				        
-						}
 			             
 				   }else{
 				   	 
@@ -158,6 +115,9 @@ class SauvFlux{
 		
 		$desc="tag";
 		$niv=1;
+	   $tags ="";
+	   $count="";
+       $tag="";
 		
 		if ($aPosts = $oDelicious->GetAllTags()) {
 	  	  foreach ($aPosts as $aPost) { 
@@ -166,41 +126,12 @@ class SauvFlux{
 				   $count.=$aPost['count'].";";
 	  	           $tag.=$aPost['tag'].";";
 				   
-	  	           $Xpath=Xpath('Ieml_Onto_existe');
-	               $Q=$objSite->XmlParam->GetElements($Xpath);
-	               
-	               $where=str_replace("-tag-",addslashes($aPost['tag']),$Q[0]->where);
-				   $sql=$Q[0]->select.$Q[0]->from." ".$where;
-				   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				   $link=$db->connect();
-				   $req = $db->query($sql);
-				   $row=@mysql_num_rows($req);
-				   $reponse=@mysql_fetch_assoc($req);
-				   $db->close($link);
-				   
-				   if($row==0){
-					 		
-				   			$Xpath=Xpath('Ieml_Onto_Flux');
-							$Q=$objSite->XmlParam->GetElements($Xpath);
-						  	
-					   	    $value = str_replace("-descFlux-",$desc,$Q[0]->values);
-							$value = str_replace("-codeFlux-",addslashes($aPost['tag']),$value );
-							$value = str_replace("-niveauFlux-",$niv,$value );
-							$value = str_replace("-parentsFlux-",0,$value );
-							$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-				            $link1=$db->connect();
-							$sql = $Q[0]->insert.$value;
-						    $req = $db->query($sql);
-						    $idflux= mysql_insert_id();
-						    $db->close($link1);
-				            $this->flux_uti($objSite,$iduti,$idflux);
-					       
-	  
+	  	           $reponse= $this->VerifFluxExiste($objSite,$aPost['tag']);			   
+				   if(!$reponse){
+			   			$idflux= $this->InsertFlux($objSite,$desc,$aPost['tag'],$niv,0);					 		
+			            $this->flux_uti($objSite,$iduti,$idflux);
 				   }else{
-	  	   			
-				   	   	 
 				   	 	$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
-				   	
 				   }
 				    
 	 		} 
@@ -248,7 +179,7 @@ class SauvFlux{
  
     function GraphTagBund($objSite,$iduti){
 	
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 		$db->connect();
 		
 		$Xpath =Xpath("repres_graph_flux");
@@ -288,21 +219,24 @@ class SauvFlux{
 		$sql=$Q[0]->select.$Q[0]->from.$where;
 		if($this->trace)
 			echo "SaveFlux:utilisateur:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 		$db->connect();
 		$req = $db->query($sql);
+		$db->close();
 		$res=@mysql_fetch_array($req);
 		if( @mysql_num_rows($req)==0){
 			$Xpath=Xpath('Enrg_Utilisateur');
 			$Q=$objSite->XmlParam->GetElements($Xpath);
 			$values=str_replace("-login-",$uti_login,$Q[0]->values);
 			$sql=$Q[0]->insert.$values;
-			
-			$reponse = $db->query($sql);
+			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+			$db->connect();
+			$db->query($sql);
 			$uti_id=mysql_insert_id();
+			$db->close();
 			return $uti_id;
 		}
-		$db->close();
+
 		return $res[0]  ;
 	}
 	
@@ -312,28 +246,67 @@ class SauvFlux{
 		$where=str_replace("-idflux-",$flux_id,$Q[0]->where);
 		$where=str_replace("-iduti-",$uti_id,$where);
 		
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
-		$link=$db->connect();
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+		$db->connect();
 		$sql=$Q[0]->select.$Q[0]->from.$where;
 		$r = $db->query($sql);
+		$db->close();
 		
 		if(@mysql_num_rows($r)==0){				   	 
 			  	
+			$db1 = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 			$Xpath=Xpath('flux_utilisateur');
 			$Q=$objSite->XmlParam->GetElements($Xpath);
 			$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 			$values=str_replace("-idflux-",$flux_id,$values);
 			$sql=$Q[0]->insert.$values;
-			$db->query($sql);
+			$db1->query($sql);
 			if($this->trace)
 				echo "SaveFlux:flux_uti:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
-			
-			
-			$db->close($link);
+			$db1->close();
 		}
+		
 	}
 
-    
+
+	function InsertFlux($objSite,$descFlux,$codeFlux,$niveauFlux,$parentsFlux){
+
+		$Xpath=Xpath('Ieml_Onto_Flux');
+		$Q=$objSite->XmlParam->GetElements($Xpath);
+	  	
+   	    $value = str_replace("-descFlux-",$descFlux,$Q[0]->values);
+		$value = str_replace("-codeFlux-",utf8_decode(addslashes($codeFlux)),$value);
+		$value = str_replace("-niveauFlux-",$niveauFlux,$value );
+		$value = str_replace("-parentsFlux-",$parentsFlux,$value );
+		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+        $db->connect();
+		$sql = $Q[0]->insert.$value;
+	    $req = $db->query($sql);
+	    $idflux= mysql_insert_id();
+	    $db->close();
+	    
+	    return $idflux;
+				
+	}
+
+	
+	function VerifFluxExiste($objSite,$tag){
+
+		$Xpath=Xpath('Ieml_Onto_existe');
+        $Q=$objSite->XmlParam->GetElements($Xpath);
+               
+        $where=str_replace("-tag-",addslashes(utf8_decode($tag)),$Q[0]->where);
+	   $sql=$Q[0]->select.$Q[0]->from." ".$where;
+	   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	   $db->connect();
+	   $req = $db->query($sql);
+	   $reponse=@mysql_fetch_assoc($req);
+	   $db->close();
+			    
+	   return $reponse;
+				
+	}
+	
 }
 	
 	
