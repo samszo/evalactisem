@@ -720,6 +720,47 @@ Class Sem{
 				return true;
    }
 
+	public function GetAutoTradSup($idUti){
+		//récupère les traductions automatiques supprimées par l'utilisateur
+		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='GetTradAutoSup']";
+		$Q = $this->site->XmlParam->GetElements($Xpath);
+		$from = str_replace("-idUti-", $idUti, $Q[0]->from);
+		$sql = $Q[0]->select.$from.$Q[0]->where;	
+		//echo $sql."<br/>"; 
+		$db = new mysql ($this->site->infos["SQL_HOST"]
+			, $this->site->infos["SQL_LOGIN"]
+			, $this->site->infos["SQL_PWD"]
+			, $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$req = $db->query($sql);
+		$db->close();
+		return $req;
+	
+	}
+   
+	public function VerifTradUtiFlux($idUti,$idFlux){
+		//récupère les traductions automatiques supprimées par l'utilisateur
+		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='VerifTradUtiFlux']";
+		$Q = $this->site->XmlParam->GetElements($Xpath);
+		$from = str_replace("-idUti-", $idUti, $Q[0]->from);
+		$where = str_replace("-idFlux-", $idFlux, $Q[0]->where);
+		$sql = $Q[0]->select.$from.$where;	
+		//echo $sql."<br/>"; 
+		$db = new mysql ($this->site->infos["SQL_HOST"]
+			, $this->site->infos["SQL_LOGIN"]
+			, $this->site->infos["SQL_PWD"]
+			, $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$req = $db->query($sql);
+		$db->close();
+        $rs=mysql_fetch_array($req);
+		if($rs[0]>0)
+			return true;
+		else
+	        return false;
+	
+	}
+	
    function SupPartageTrad($idTrad,$idUti){
    			
    			//vérifie le partage

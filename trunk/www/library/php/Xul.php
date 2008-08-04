@@ -425,16 +425,53 @@ class Xul{
             if($type=="No_Trad"){
                   $ihm .= ' onselect="Select_NoTrad(\''.$type.'\',\'treecol_descp\');">'; 
                   $ihm .= '<treecols >';
-                      $ihm .= '<treecol id="treecol_Tagdel"  primary="'.$primary.'" label="Tag Delicious"   persist="width ordinal hidden" />';
+                      $ihm .= '<treecol id="treecol_TagdelType" flex="1"  label="Traductions automatiques"   persist="width ordinal hidden" />';
+                  	  $ihm .= '<treecol id="treecol_Tagdel" flex="1"  primary="'.$primary.'" label="Tag del.icio.us"   persist="width ordinal hidden" />';
                       $ihm .= '<splitter class="tree-splitter"/>';
                   $ihm .= '</treecols>';
-                  $ihm .= '<treechildren>';  
-                  for($i=0;$i<sizeof($flux)-1;$i++){
+                  $ihm .= '<treechildren>';
+                  //ajoute les trad auto supprimées  
+                  for($i=0;$i<sizeof($trad);$i++){
+                  	if($i==0){
+                  		$ihm .= '<treeitem container="true" open="true" >';
+                        	$ihm .= '<treerow properties="Dictio" >';
+                        		$ihm .= '<treecell label="'.utf8_encode(" supprimées").'"/>';
+                        		$ihm .= '<treecell label=""/>';
+                        	$ihm .= '</treerow>';
+                  		$ihm .= '<treechildren>';
+                  	}
                     $ihm .= '<treeitem >';
-                        $ihm .= '<treerow>';
+                        $ihm .= '<treerow properties="utilisateur" >';
+                        	$ihm .= '<treecell label=""/>';
+                        	$ihm .= '<treecell label="'.$trad[$i].'"/>';
+                        $ihm .= '</treerow>';
+                     $ihm .= '</treeitem>'; 
+                   }
+                   if($i!=0){
+                   	$ihm .= '</treechildren>';
+                    $ihm .= '</treeitem>'; 
+                   }
+                   
+                   //ajoute les no trad
+                  for($i=0;$i<sizeof($flux);$i++){
+                  	if($i==0){
+                  		$ihm .= '<treeitem container="true" open="true" >';
+                        	$ihm .= '<treerow properties="Dictio" >';
+                        		$ihm .= '<treecell label="'.utf8_encode(" non trouvées").'"/>';
+                        		$ihm .= '<treecell label=""/>';
+                        	$ihm .= '</treerow>';
+                  		$ihm .= '<treechildren>';
+                  	}
+                  	$ihm .= '<treeitem >';
+                        $ihm .= '<treerow properties="Dictio" >';
+                        	$ihm .= '<treecell label=""/>';
                         	$ihm .= '<treecell label="'.$flux[$i].'"/>';
                         $ihm .= '</treerow>';
                      $ihm .= '</treeitem>'; 
+                   }
+                   if($i!=0){
+                   	$ihm .= '</treechildren>';
+                    $ihm .= '</treeitem>'; 
                    }
                    $ihm .= '</treechildren>';
                    $ihm .= '</tree>';
@@ -448,7 +485,7 @@ class Xul{
                    $ihm .= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />';
                   $ihm .= '</treecols>';
                   $ihm .= '<treechildren>';    
-                  for($i=0;$i<sizeof($flux);$i++){
+                  for($i=0;$i<=sizeof($flux);$i++){
                   	if($flux[$i]!=""){
                      $ihm .= '<treeitem container="true" open="true">';
                         $ihm .= '<treerow>';
@@ -478,7 +515,7 @@ class Xul{
 	                      $arrTrad = explode(";",$trad[$i]);
 	                      for($j=0;$j<sizeof($arrTrad)-1;$j++){
 	                         $ihm .= '<treeitem >';  
-		                         $ihm .= '<treerow>';
+		                         $ihm .= '<treerow properties="dictio">';
 		                             $ihm .= '<treecell label=""/>' ;        
 		                             $ihm .= '<treecell  label="'.$arrDescp[$j].'" />';  
 		                             $ihm .= '<treecell  label="'.$arrTrad[$j].'"/>' ;

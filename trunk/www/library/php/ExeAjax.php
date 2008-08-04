@@ -107,7 +107,8 @@
         function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
 			
         	global $objSite;
-
+            $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+        	
         	$arrBdd=explode(";",$bdd);		    
         	$arrFlux=explode(";",$flux);
         	
@@ -117,7 +118,6 @@
 			    $arrDescp=explode(";",$descp);
 			    
 			    //vérifie le partage de traduction
-                $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
 			    for($i=0;$i<sizeof($arrTrad);$i++){
 			    	//vérifie que l'on traite une trad auto
 			    	if(!in_array($arrTrad[$i], $arrBdd)) {
@@ -130,11 +130,24 @@
 			    	}
 				}
 			    
-        	}elseif($type=="Multi_Trad"){
+        	}
+        	if($type=="Multi_Trad"){
         		$arrTrad=explode("*",$trad);
 			    $arrDescp=explode("*",$descp);
         	}
-		    
+        	if($type=="No_Trad"){
+        		//récupère les traduction automatiques supprimmées par l'utilisateur
+        		$rows = $sem->GetAutoTradSup($_SESSION['iduti']);
+        		$arrTrad = array();
+   				while($r = mysql_fetch_assoc($rows))
+				{
+					//vérifie que le tag n'a pas été retraduit
+					if(!$sem->VerifTradUtiFlux($_SESSION['iduti'],$r['onto_flux_id']))
+						array_push($arrTrad, $r['onto_flux_code']);
+				}
+			    
+        	}
+        	
         	$objXul = new Xul($objSite);
         	
         	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
