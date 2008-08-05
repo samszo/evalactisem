@@ -956,7 +956,7 @@ Class Sem{
                  		$Td[$j]=$ArrTd[$j];
                  	}else{
                  		if($Td[$j]!=" " && $ArrTd[$j]!=" "){
-                 			$Xul.='<label id="'.$key.'*'.$Td[$j].'**"   tooltiptext="'.$Td[$j].'"  class="NoSelect" onclick="AfficheIeml(\'*'.$Td[$j].'**\') ">'.$ArrTd[$j].' </label>';
+                 			$Xul.='<label id="'.$key.'*'.$Td[$j].'**"   tooltiptext="'.$Td[$j].'"  class="NoSelect" onclick="AfficheIeml(\''.$key.'*'.$Td[$j].'**\') ">'.$ArrTd[$j].' </label>';
                  		   
                  		}else{
                  			$Xul.='<label id="* **"    ></label>';

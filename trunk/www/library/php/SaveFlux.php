@@ -106,8 +106,8 @@ class SauvFlux{
      function aGetAllTags($objSite,$oDelicious,$iduti){
 		
 		
-		$desc="tag";
-		$niv=1;
+	   $desc="tag";
+	   $niv=1;
 	   $tags ="";
 	   $count="";
        $tag="";

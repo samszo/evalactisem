@@ -303,7 +303,7 @@
        	document.getElementById("creaPoint").setAttribute("value","true");
        	document.getElementById("Points_status").setAttribute("style","background-color:green")
        }
-}
+	}
     function Trace(){
      if(document.getElementById("trace").getAttribute("value")=="true"){
         document.getElementById("Trace_status").setAttribute("style","background-color:red");
@@ -541,9 +541,11 @@ function InitGrille(iemlCode){
 }
 
 function AfficheIeml(id){
+	
+	console.log(id.substring(23));
     descp=document.getElementById(id).textContent;
     id=id.replace('*','').replace('**','');
-    document.getElementById('code-trad-ieml').setAttribute('value',id);
+    document.getElementById('code-trad-ieml').setAttribute('value',id.substring(23));
 	document.getElementById('lib-trad-ieml').setAttribute('value',descp);
 	
 }
@@ -563,7 +565,7 @@ function ActiveMenu(){
 }
 function DesactiveMenu(){
    
-   window.parent.frames['webFrame'].document.getElementById('Outils').setAttribute("visibility","visible");
+    window.parent.frames['webFrame'].document.getElementById('Outils').setAttribute("visibility","visible");
  	window.parent.document.getElementById('webFrame1').setAttribute("src"," ");
 	window.parent.document.getElementById('webFrame1').setAttribute("hidden","true");
 }

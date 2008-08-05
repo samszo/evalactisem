@@ -298,11 +298,27 @@ function Trad_Pars_Ieml(result, param){
 		                
              }
         }
-       
+       F='';
        	var bdd = arrNoms[1].replace(/\\/g, "");
-        synIemlS+=bdd;
-        FluxS+=arrNoms[3];
-        descpS+=arrNoms[2];
+        Arrbdd=bdd.split(';');
+        Flux=arrNoms[3].split(';');
+        desc=arrNoms[2].split(';');
+        for(l=0;l< Flux.length ; l++){
+        	in_array=false;
+        	for(m=0; m < Arrbdd.length ; m++){
+        		console.log('flux='+Flux[l]+'/Arrbdd='+Arrbdd[m]);
+        		if(Arrbdd[m]== Flux[l] ){
+        			
+        			in_array=true;
+        		}
+        	}
+        	if(in_array==false){
+        			FluxS+=Flux[l]+';';
+        			descpS+=desc[l]+';';
+        			
+        	}
+        }
+       //synIemlS=bdd;
 
 	//affiche les infos de traduction
 	 document.getElementById("TableFlux").setAttribute("hidden","true");
