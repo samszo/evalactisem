@@ -263,7 +263,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 										<iframe id="ifBoussole" style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
 						         </tabpanel>
 						        <tabpanel>
-										<iframe id="webFrame" flex="1"  src=""  />
+										<iframe id="webFrame" flex="1"  src="http://localhost/evalactisem/flex_ieml/ieml.html"  />
 						         </tabpanel>
 						    </tabpanels>
 						</tabbox>
