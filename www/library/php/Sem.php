@@ -724,8 +724,8 @@ Class Sem{
 		//récupère les traductions automatiques supprimées par l'utilisateur
 		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='GetTradAutoSup']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
-		$from = str_replace("-idUti-", $idUti, $Q[0]->from);
-		$sql = $Q[0]->select.$from.$Q[0]->where;	
+		$where = str_replace("-idUti-", $idUti, $Q[0]->where);
+		$sql = $Q[0]->select.$Q[0]->from.$where;	
 		//echo $sql."<br/>"; 
 		$db = new mysql ($this->site->infos["SQL_HOST"]
 			, $this->site->infos["SQL_LOGIN"]

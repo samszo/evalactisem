@@ -6,10 +6,10 @@ session_start();
 	   $oDelicious=$_SESSION['Delicious'];
    }else{
    		//pour le debuggage
-       	$oDelicious = new PhpDelicious("plevy4", "1plotin");
-		$_SESSION['loginSess']="plevy4";
+       	$oDelicious = new PhpDelicious("samszo", "Lucky71");
+		$_SESSION['loginSess']="samszo";
 		$_SESSION['Delicious']=$oDelicious;
-		$_SESSION['iduti']="2";
+		$_SESSION['iduti']="3";
    }
 
 require_once ("Constantes.php");
