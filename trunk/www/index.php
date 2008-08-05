@@ -184,9 +184,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								<tabbox flex="1" >
 								    <tabs >
 								        <tab label="Tags traduits" />
-								        <tab label="Tags avec plusieurs traduction" />
-								        <tab label="Tags sans traduction" />
-								        <tab label="Dictionnaire et Cycles" />
+								        <tab label="Tags à traduire" />
 								    </tabs>
 								    <tabpanels flex="1"  >
 								        <tabpanel >
@@ -199,37 +197,48 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											</vbox >
 								         </tabpanel>
 								        <tabpanel>
-											<vbox flex="1" >
-												<box id="tpMultiTrad" flex="1" />
-											</vbox >
-								         </tabpanel>
-								        <tabpanel>
-											<vbox flex="1" >
-												<box id="tpNoTrad" flex="1" />
-											</vbox >
-								         </tabpanel>
-								         <tabpanel>
-											<label id="keyGrid" hidden="true" />
-											<tabbox flex="1" orient="horizontal" >
+											<tabbox flex="1" >
 											    <tabs orient="vertical" >
-											        <tab label="Dictionnaire" />
-											        <tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
-											        <tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+											        <tab label="Tags avec plusieurs traduction" />
+											        <tab label="Tags sans traduction" />
+											        <tab label="Dictionnaire et Cycles" />
 											    </tabs>
 											    <tabpanels flex="1"  >
 											        <tabpanel >
-														<vbox id="treeDicoIeml" flex="1"  />
+														<vbox flex="1" >
+															<box id="tpMultiTrad" flex="1" />
+														</vbox >
 											         </tabpanel>
 											        <tabpanel>
-														<box  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg"  />
+														<vbox flex="1" >
+															<box id="tpNoTrad" flex="1" />
+														</vbox >
 											         </tabpanel>
 											         <tabpanel>
-														<box id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
+														<label id="keyGrid" hidden="true" />
+														<tabbox flex="1" orient="horizontal" >
+														    <tabs orient="vertical" >
+														        <tab label="Dictionnaire" />
+														        <tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+														        <tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+														    </tabs>
+														    <tabpanels flex="1"  >
+														        <tabpanel >
+																	<vbox id="treeDicoIeml" flex="1"  />
+														         </tabpanel>
+														        <tabpanel>
+																	<box  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg"  />
+														         </tabpanel>
+														         <tabpanel>
+																	<box id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
+														        </tabpanel>
+														    </tabpanels>
+														</tabbox>
+			
 											        </tabpanel>
 											    </tabpanels>
 											</tabbox>
-
-								        </tabpanel>
+								         </tabpanel>
 								    </tabpanels>
 								</tabbox>
 							</vbox>

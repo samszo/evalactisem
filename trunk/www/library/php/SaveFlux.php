@@ -43,7 +43,7 @@ class SauvFlux{
 	               
 	               $reponse= $this->VerifFluxExiste($objSite,$aPost['name']);			   
 
-	               if($reponse){
+	               if(!$reponse){
 			   			$idparentflux= $this->InsertFlux($objSite,$desc,$aPost['name'],$niv,0);					 		
 					    $this->flux_uti($objSite,$iduti,$idparentflux);
 			  	        $enfant=explode(" ",$tags);			      
@@ -58,10 +58,9 @@ class SauvFlux{
 						   if($lignes==0){
 							    
 				   				$idflux= $this->InsertFlux($objSite,$desc,$enfant[$i],$niv,$idparentflux);					 		
-							    $idflux=mysql_insert_id();
-						        $idpred=$id;
+						        $idpred=$idflux;
 					           
-						   }else
+						   }else{
 					        	if($lignes!=0){
 					              
 					        	   $Xpath=Xpath('Ieml_Onto_Flux1');
@@ -84,24 +83,18 @@ class SauvFlux{
 					              
 					               
 								}
-					        
 							}
+					    }
 			             
 				   }else{
 				   	 
-				   	 		   	 
 				   	 	$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
 				   	
 				   }
-			  		 
-			}
-		
-					
-		        	
-		} 
-		 else {
-		        echo $oDelicious->LastErrorString();
-		 }
+			}				   	 		        	
+		}else {
+			echo $oDelicious->LastErrorString();
+		}
 	   	 $sTag=explode(" ", $tag);
 	   	 $aTag=implode(";", $sTag);
 	   	 
@@ -242,6 +235,9 @@ class SauvFlux{
 	
 	function flux_uti($objSite,$uti_id,$flux_id){
 		$Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
+		if(!$flux_id){
+			$toto=1;
+		}
 		$Q=$objSite->XmlParam->GetElements($Xpath);
 		$where=str_replace("-idflux-",$flux_id,$Q[0]->where);
 		$where=str_replace("-iduti-",$uti_id,$where);
