@@ -2,6 +2,9 @@
 
 treechildren::-moz-tree-row(utilisateur){background-color: green;}
 treechildren::-moz-tree-row(dictio){background-color: yellow;}
+treechildren::-moz-tree-line(HelpUti){visibility:true;}
+treechildren::-moz-tree-cell-text(HelpUti){color:blue;}
+
 .NoSelect{
 	 display:block;
 	 width:50px;
