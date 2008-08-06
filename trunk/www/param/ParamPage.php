@@ -9,7 +9,7 @@ session_start();
        	$oDelicious = new PhpDelicious("samszo", "Lucky71");
 		$_SESSION['loginSess']="samszo";
 		$_SESSION['Delicious']=$oDelicious;
-		$_SESSION['iduti']="3";
+		$_SESSION['iduti']="2";
    }
 
 require_once ("Constantes.php");

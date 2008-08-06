@@ -65,9 +65,11 @@
         	        	$resultat=Recup_onto_trad();
                 	    break;
                 case 'GetTreeTrad':
-        	        	$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd']);
         	        	//Pour le débugage
-        	        	//$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
+                		if($_GET['debug'])
+        	        		$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
+                		else
+        	        		$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd']);
         	        	break;
                 case 'InsertIemlOnto':
                 	   $resultat=InsertIemlOnto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);

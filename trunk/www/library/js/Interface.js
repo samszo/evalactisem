@@ -298,28 +298,12 @@ function Trad_Pars_Ieml(result, param){
 		                
              }
         }
-       F='';
-       	var bdd = arrNoms[1].replace(/\\/g, "");
-        Arrbdd=bdd.split(';');
-        Flux=arrNoms[3].split(';');
-        desc=arrNoms[2].split(';');
-        for(l=0;l< Flux.length ; l++){
-        	in_array=false;
-        	for(m=0; m < Arrbdd.length ; m++){
-        		console.log('flux='+Flux[l]+'/Arrbdd='+Arrbdd[m]);
-        		if(Arrbdd[m]== Flux[l] ){
-        			
-        			in_array=true;
-        		}
-        	}
-        	if(in_array==false){
-        			FluxS+=Flux[l]+';';
-        			descpS+=desc[l]+';';
-        			
-        	}
-        }
-       //synIemlS=bdd;
 
+       	var bdd = arrNoms[1].replace(/\\/g, "");
+        synIemlS+=bdd;
+        FluxS+=arrNoms[3];
+        descpS+=arrNoms[2];
+        
 	//affiche les infos de traduction
 	 document.getElementById("TableFlux").setAttribute("hidden","true");
 	 document.getElementById('infosTrad').setAttribute("hidden","false");
@@ -474,9 +458,12 @@ function Select_NoTrad(id,treecol){
 	
 	var tree = document.getElementById(id);
   	var txtcode_flux=document.getElementById("code-trad-flux");
+	  var txtcode_ieml = document.getElementById("code-trad-ieml");
+	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
   	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   	txtcode_flux.value=selection.firstChild.lastChild.getAttribute("label");
-    
+    txtcode_ieml.value = "";
+    txtlib_ieml.value = "";
    
     
 }
@@ -490,23 +477,41 @@ function Select_Dictio(id,treecol1,treecol2){
   	txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol2));
     txtcode_ieml.value= tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol1));
 }
-function Select_Trad(id,treecol){
+function Select_Trad(id,treecolTag,treecolTrad,treecolIeml){
   try{
-  var tree = document.getElementById(id);
-  var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
-     
- 	  var parent=tree.contentView.getParentIndex(tree.currentIndex);
-	  var parentItem=tree.contentView.getItemAtIndex(parent);
+	  var tree = document.getElementById(id);
+     var tag = GetTreeValSelect(id,treecolTag);
+     var iemlCode = GetTreeValSelect(id,treecolIeml);
 	  var txtcode_ieml = document.getElementById("code-trad-ieml");
 	  var txtcode_flux=document.getElementById("code-trad-flux");
 	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
-	  txtcode_ieml.value= selection.firstChild.lastChild.getAttribute("label");
-	  txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol));
-	  txtcode_flux.value=parentItem.firstChild.firstChild.getAttribute("label");
-  
+
+     if(tag=="" && iemlCode==""){
+	 	txtcode_flux.value= "";
+		txtlib_ieml.value="";
+		txtcode_ieml.value="";
+     	return;
+     }
+	  var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
+     
+     if(tag!=""){
+	 	txtcode_flux.value= tag;
+		txtlib_ieml.value="";
+		txtcode_ieml.value="";
+     }
+     	
+     if(iemlCode!=""){
+		var parent=tree.contentView.getParentIndex(tree.currentIndex);
+		txtcode_ieml.value= iemlCode;
+		txtlib_ieml.value=GetTreeValSelect(id,treecolTrad);
+		txtcode_flux.value=tree.view.getCellText(parent,tree.treeBoxObject.columns[treecolTag]);
+     }
+     	  
   }
   		 
- catch(e){}
+ catch(e){
+  console.log("interface:Select_Trad:"+e+""); 
+ }
   
 }
 function Parser(op,type){

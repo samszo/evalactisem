@@ -43,7 +43,7 @@ if($con==1){
 }elseif($con==3){
 	$lbl = "label='Del.icio.us API access throttled.'" ;
 }else{  
-	$lbl = "label='Traduction del.icio.us -> IEML ' style='color:blue;size:32px'"; 
+	$lbl = "label='Traduction del.icio.us -> IEML ' style='color:blue;font-size:150%'"; 
 }
 
 header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
@@ -52,7 +52,6 @@ echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="CSS/tree.css" type="text/css"?' . '>' . "\n");
 echo ('<' . '?xml-stylesheet href="CSS/iemlCycleCss.css" type="text/css"?' . '>' . "\n");
-//echo ('<' . '?xml-stylesheet rel="stylesheet" href="xbl/editableTree/demo.css" type="text/css" title="css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload=" ">
@@ -118,7 +117,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<caption label="IEML"/>
 						
 			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
-			    			<button hidden="false" id="PostTo" label="Mettre à jour del.icio.us" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
+			    			<button hidden="false" id="PostTo" label="Mettre à jour delicious" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
 			     			
 					</groupbox>
 					
@@ -157,16 +156,19 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<vbox id="infosTrad" hidden="true" flex="1" >
 								<hbox >
 									<groupbox orient="horizontal" >
-										<caption label="Tag del.icio.us"/>
+										<caption label="Tag delicious"/>
 									    <label id="id-trad-flux" hidden="true"/>
-										<label hidden="true" value="code :"/><label id="code-trad-flux" style="background-color:red" />
-									    <label hidden="true" value="descriptif : "/><label hidden="true" id="lib-trad-flux" style="background-color:red" />
+										<label hidden="true" value="code :"/><label id="code-trad-flux" style="color:red;font-size:150%" />
+									    <label hidden="true" value="descriptif : "/><label hidden="true" id="lib-trad-flux" style="color:red;font-size:150%" />
 									</groupbox>
 									<groupbox orient="horizontal" >
 										<caption label="Expression IEML"/>
 									    <label id="id-trad-ieml" hidden="true"/>
-										<label value="code :"/><label id="code-trad-ieml" style="background-color:red" />
-										<label value="descriptif : "/><label id="lib-trad-ieml" style="background-color:red" />
+										<label value="descriptif : " hidden="true"/><label id="lib-trad-ieml" style="color:red;font-size:150%" />
+										<label value="code :" hidden="true" />
+										<label style="color:red;font-size:150%" value=" *" />
+										<label id="code-trad-ieml" style="color:red;font-size:150%" />
+										<label style="color:red;font-size:150%" value="** " />
 									</groupbox>
 								</hbox>
 								<hbox>
@@ -179,8 +181,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 										<label id="trad-message" hidden="true" />
 								</hbox>
 							<vbox id="contDonnee" flex="1" hidden="true" >
-								<label style="background-color:yellow" value="Traduction automatique" />
-								<label style="background-color:green" value="Traduction de <?php echo $_SESSION['loginSess']; ?>" />
 								<tabbox flex="1" >
 								    <tabs >
 								        <tab label="Tags traduits" />
@@ -198,7 +198,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								         </tabpanel>
 								        <tabpanel>
 											<tabbox flex="1" >
-											    <tabs orient="vertical" >
+											    <tabs >
 											        <tab label="Tags avec plusieurs traduction" />
 											        <tab label="Tags sans traduction" />
 											        <tab label="Dictionnaire et Cycles" />
@@ -206,11 +206,17 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											    <tabpanels flex="1"  >
 											        <tabpanel >
 														<vbox flex="1" >
+															<hbox>
+																<label  style='color:blue;font-size:150%' value="Choissez une traduction puis " />
+																<button label="Ajouter" oncommand="AddTrad();"/>	
+															</hbox>
 															<box id="tpMultiTrad" flex="1" />
 														</vbox >
 											         </tabpanel>
 											        <tabpanel>
 														<vbox flex="1" >
+															<label  style='color:blue;font-size:150%' value="Choisissez un tag del.icio.us" />
+															<label  style='color:blue;font-size:150%' value="puis une expression IEML dans l'onglet 'Dictionnaire et Cycles' " />
 															<box id="tpNoTrad" flex="1" />
 														</vbox >
 											         </tabpanel>
