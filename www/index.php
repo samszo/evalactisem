@@ -172,8 +172,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									</groupbox>
 								</hbox>
 								<hbox>
-										<button label="Ajouter" oncommand="AddTrad();"/>	
-										<button label="Supprimer" oncommand="SupTrad();"/>
+										<button hidden="true" label="Ajouter" oncommand="AddTrad();"/>	
+										<button hidden="true" label="Supprimer" oncommand="SupTrad();"/>
 										<button hidden="true" label="Modifier" oncommand="ModifTrad();"/>
 										<label id="trad-Sup-message" hidden="true" />			
 										<label id="trad-message" hidden="true" />
@@ -190,6 +190,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								        <tabpanel >
 											<vbox flex="1" >
 												<hbox>
+													<button label="Supprimer la traduction" oncommand="SupTrad();"/>
 													<button label="Voir les primitives" oncommand="Parser('|','Primitive')"/>	
 													<button label="Voir les événements" oncommand="Parser('|','Event');"/>
 												</hbox>
@@ -197,53 +198,56 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 											</vbox >
 								         </tabpanel>
 								        <tabpanel>
-											<tabbox flex="1" >
-											    <tabs >
-											        <tab label="Tags avec plusieurs traduction" />
-											        <tab label="Tags sans traduction" />
-											        <tab label="Dictionnaire et Cycles" />
-											    </tabs>
-											    <tabpanels flex="1"  >
-											        <tabpanel >
-														<vbox flex="1" >
-															<hbox>
-																<label  style='color:blue;font-size:150%' value="Choissez une traduction puis " />
-																<button label="Ajouter" oncommand="AddTrad();"/>	
-															</hbox>
-															<box id="tpMultiTrad" flex="1" />
-														</vbox >
-											         </tabpanel>
-											        <tabpanel>
-														<vbox flex="1" >
-															<label  style='color:blue;font-size:150%' value="Choisissez un tag del.icio.us" />
-															<label  style='color:blue;font-size:150%' value="puis une expression IEML dans l'onglet 'Dictionnaire et Cycles' " />
-															<box id="tpNoTrad" flex="1" />
-														</vbox >
-											         </tabpanel>
-											         <tabpanel>
-														<label id="keyGrid" hidden="true" />
-														<tabbox flex="1" orient="horizontal" >
-														    <tabs orient="vertical" >
-														        <tab label="Dictionnaire" />
-														        <tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
-														        <tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
-														    </tabs>
-														    <tabpanels flex="1"  >
-														        <tabpanel >
-																	<vbox id="treeDicoIeml" flex="1"  />
-														         </tabpanel>
-														        <tabpanel>
-																	<box  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg"  />
-														         </tabpanel>
-														         <tabpanel>
-																	<box id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
-														        </tabpanel>
-														    </tabpanels>
-														</tabbox>
-			
-											        </tabpanel>
-											    </tabpanels>
-											</tabbox>
+								        	<vbox flex="1">
+												<label  style='color:blue;' value="1. Choisissez un tag dans les onglets 'Tag(s) trouvé(s)' ou 'Tag(s) non trouvé(s)'" />
+												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
+												<hbox>
+													<label  style='color:blue;' value="3." />
+													<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
+												</hbox>
+												<tabbox flex="1" >
+												    <tabs >
+												        <tab label="Tag(s) trouvé(s)" />
+												        <tab label="Tag(s) non trouvé(s)" />
+												        <tab label="Dictionnaire et Cycles" />
+												    </tabs>
+												    <tabpanels flex="1"  >
+												        <tabpanel >
+															<vbox flex="1" >
+																<box id="tpMultiTrad" flex="1" />
+															</vbox >
+												         </tabpanel>
+												        <tabpanel>
+															<vbox flex="1" >
+																<box id="tpNoTrad" flex="1" />
+															</vbox >
+												         </tabpanel>
+												         <tabpanel>
+												         	<vbox flex="1">
+																<label id="keyGrid" hidden="true" />
+																<tabbox flex="1" orient="horizontal" >
+																    <tabs orient="vertical" >
+																        <tab label="Dictionnaire" />
+																        <tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+																        <tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+																    </tabs>
+																    <tabpanels flex="1"  >
+																        <tabpanel >
+																			<vbox id="treeDicoIeml" flex="1"  />
+																         </tabpanel>
+																        <tabpanel>
+																			<box  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg"  />
+																         </tabpanel>
+																         <tabpanel>
+																			<box id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
+																        </tabpanel>
+																    </tabpanels>
+																</tabbox>
+															</vbox>			
+												        </tabpanel>
+												    </tabpanels>
+												</tabbox>
+											</vbox>
 								         </tabpanel>
 								    </tabpanels>
 								</tabbox>

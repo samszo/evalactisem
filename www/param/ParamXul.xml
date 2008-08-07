@@ -198,9 +198,7 @@
 					LEFT JOIN ieml_uti_onto uo ON uo.ieml_id = t.ieml_id
 					LEFT JOIN ieml_trad_partage tp ON tp.trad_id = t.trad_id
 				</from>
-				<where> WHERE tp.trad_id IS NULL AND uo.ieml_id IS NULL
-							AND uo.uti_id =-idUti- AND tp.uti_id =-idUti-
-				</where>
+				<where> WHERE uo.uti_id = -idUti- AND tp.trad_id IS NULL </where>
 			</Query>			
 		    <Query fonction="VerifTradUtiFlux">
 				<select> SELECT COUNT(1) nb </select>

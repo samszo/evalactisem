@@ -139,7 +139,7 @@
         	}
         	if($type=="No_Trad"){
         		//récupère les traduction automatiques supprimmées par l'utilisateur
-        		$rows = $sem->GetAutoTradSup($_SESSION['iduti']);
+        		$rows = $sem->GetAutoTradSup($objSite->infos["UTI_TRAD_AUTO"]);
         		$arrTrad = array();
    				while($r = mysql_fetch_assoc($rows))
 				{

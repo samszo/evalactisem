@@ -31,7 +31,7 @@ function AppendResult(url,doc,ajoute) {
 	dump("AppendResult IN "+url+"\n");
 	p = new XMLHttpRequest();
 	p.onload = null;
-	p.open("GET", url, false);
+	p.open("GET", encodeURI(url), false);
 	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	p.send(null);
 

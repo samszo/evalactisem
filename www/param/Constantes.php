@@ -1,9 +1,9 @@
 <?php
   //
   // Fichier contenant les definitions de constantes
-  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
+  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
 	//pour le débubbage
-   define ("PathRoot","C:/wamp/www/evalactisem");
+   //define ("PathRoot","C:/wamp/www/evalactisem");
 
   // *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/php/");
@@ -14,7 +14,7 @@
 
   define ("TRACE", false);
   
-  define ("DEFSITE", "local");
+  define ("DEFSITE", "mundi");
 
   $dbOptions = array (
 		'ERROR_DISPLAY' => true
@@ -64,7 +64,7 @@ $SiteThyp = array(
 	"DEF_LNG" => 1,
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
-	"UTI_TRADAUTO" => 4,
+	"UTI_TRAD_AUTO" => 4,
 	"gmKey" => gmKey
 	); 
 $SiteMundi = array(
@@ -80,7 +80,7 @@ $SiteMundi = array(
 	"DEF_LNG" => 1,
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
-	"UTI_TRADAUTO" => 4,
+	"UTI_TRAD_AUTO" => 4,
 	"gmKey" => gmKey
 	); 
 	
