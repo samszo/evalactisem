@@ -372,7 +372,7 @@ function AddTrad(){
 		return
 	}	
 	
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value,"","","trad-message");
+	GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
 	
 	SetDonnee();
 	
@@ -426,7 +426,7 @@ function SupTrad()
 		return
 	}	
 
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value,""," ","trad-message");
+	GetResult(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+Utf8.encode(libIeml.value)+"&codeflux="+Utf8.encode(codeFlux.value));
 
 	SetDonnee();
 		
@@ -517,7 +517,7 @@ function Select_Trad(id,treecolTag,treecolTrad,treecolIeml){
 function Parser(op,type){
     var tree = document.getElementById("Signl_Trad");
     //prise en compte de la sélection multiple
-    Iemlcode=GetIemlTreeExp("Signl_Trad", 2, op);
+    Iemlcode=GetIemlTreeExp("Signl_Trad", 3, op);
     if(Iemlcode==")"){
     	alert("Veuillez sélectionner un ou plusieurs Tags traduits");
     	return;

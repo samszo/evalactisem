@@ -793,7 +793,7 @@ Class Sem{
 		        
 		        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_recup_id']";
 		        $Q = $objSite->XmlParam->GetElements($Xpath);
-		        $where=str_replace("-codeFlux-", Trim(utf8_decode($codeflux)), $Q[0]->where);
+		        $where=str_replace("-codeFlux-", utf8_decode($codeflux), $Q[0]->where);
                 $where=str_replace("-Iemlcode-",Trim($codeIeml), $where);
                 $sql = $Q[0]->select.$Q[0]->from.$where;
                 if($this->trace)
