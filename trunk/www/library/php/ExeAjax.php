@@ -1,6 +1,5 @@
 <?php
         $ajax = true;
-        require('../php-delicious/php-delicious.inc.php');
         require_once ("../../param/ParamPage.php");
         
         
@@ -96,7 +95,10 @@
                 	$resultat=GetPalette();
                 	break;
                 case 'IemlCycle':
-                	$resultat=IemlCycle($_POST['key']);
+                	if($_GET['debug'])
+                		$resultat=IemlCycle($_GET['key']);
+                	else
+	                	$resultat=IemlCycle($_POST['key']);
                 	break;
                
        }
@@ -179,12 +181,15 @@
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
 			    //vérifie le partage de traduction
 		    	$idTrad = $sem->Add_Trad($libIeml,$codeflux,$codeIeml,$objSite->infos["UTI_TRAD_AUTO"],true);
-				if($sem->VerifPartageTrad($idTrad,$_SESSION['iduti'])){
-                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);
-				}else{
-                	$message = $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);
-					
-				}
+		    	if($idTrad){
+					if($sem->VerifPartageTrad($idTrad,$_SESSION['iduti'])){
+	                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);
+					}else{
+	                	$message = $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);						
+					}
+		    	}else{
+		    		$message = utf8_encode("Problème lors de la vérification du partage");
+		    	}
                 
                 return $message;
                 
