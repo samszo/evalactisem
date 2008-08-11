@@ -124,6 +124,7 @@
     }
     
     function SelectPave(evt,idDst,idSrc){
+    	/*a vérfier
         if(!window.parent.document.getElementById('ifBoussole')){
 			if(window.parent.document.getElementById('ifBoussole').getAttribute("src")!="" 
 					&& window.parent.frames['ifBoussole'].document.getElementById("DynaPaveCreaPoint")){
@@ -133,7 +134,8 @@
 		        	ShowRecordPoint(evt);
 			}
 		}
-
+		*/
+		
 		//met à jour la branche suivant le choix du pavé
 	   	var tgt = evt.target;
 		var cssSrc1,cssSrc2,cssDst, visiDst, iemlCode;
@@ -410,7 +412,7 @@
   }
  
 function SelectionCycle(evt){
-    
+
 	if(!window.parent.document.getElementById('keyGrid'))
 		return;
 
@@ -418,8 +420,6 @@ function SelectionCycle(evt){
 	if(keyGrid=="")
 		return;
 
-    var idBranS=[];
-    var idBranD=[];
 	var tgt = evt.target;
 	var iemlCode=tgt.getAttribute("iemlCode");
 	
@@ -427,98 +427,78 @@ function SelectionCycle(evt){
 	
 	InitGrille(iemlCode);
 	
+	//parse le code ieml
+	var arrParse = ParseIemlCode(iemlCode); 
+
+	
+	//les ids de la Grille	 
+	var row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 	
+	// mettre a jour les cellules de la grille
+	for(var i=0 ; i < row.length; i++){
+		var rowChild=row[i].childNodes;
+		
+		//if(rowChild.length==0) break;
+        for(k=0;k<rowChild.length;k++){		
+			var idLabel=rowChild[k].getAttribute("id");
+			//récupère les primitives
+			var arrPrms=rowChild[k].getAttribute("primitives").split(";");
+			//récupère les events
+			var arrEvts=rowChild[k].getAttribute("events").split(";");
+			//vérifie les primitives
+	 		for(var j=0 ; j < arrParse[0].length ; j++){
+	 		
+	           	if(arrParse[0][j]!=''){
+		           	// change la class le case qui contient l'expression
+					if(inArray(arrPrms, arrParse[0][j])){
+			        	window.parent.document.getElementById(idLabel).setAttribute('class','Select');
+			       	}
+		      	}
+		   	}
+			//vérifie les events
+	 		for(var j=0 ; j < arrParse[1].length ; j++){
+	 		
+	           	if(arrParse[1][j]!=''){
+		           	// change la class le case qui contient l'expression
+					if(inArray(arrEvts, arrParse[1][j])){
+			        	window.parent.document.getElementById(idLabel).setAttribute('class','Select');
+			       	}
+		      	}
+		   	}
+		}		
+	}
+
+}  
+
+function ParseIemlCode(iemlCode) {
+
 	iemlCode=iemlCode.replace('*','');
 	iemlCode=iemlCode.replace('**','');
 	
-	//le cas ou l'id de la branche et de la forme **A:A:.*
-	if(iemlCode.length > 3){
-		idBranArr=iemlCode.split(":.");
-		
-		if(idBranArr[0].charAt(1) == ":"){
-			idBranS=idBranArr[0].split(':');
-			 	
-		}else{
-			idBranS[0]=idBranArr[0];
-			idBranS[1]='';
-		}
-		
-		if(idBranArr[1].charAt(1) == ":"){
-			idBranD=idBranArr[1].split(':');
-		}else{
-			idBranD[0]=idBranArr[1].replace(":");
-			idBranD[1]='';
-		}
-	}else{
-		//le cas ou id et de la forme a.
-		idBranS[0]=iemlCode.replace(':','').replace('.','');
-		idBranS[1]='';
-		idBranD[0]='';
-		idBranD[1]='';
+	//récupère les events
+	var arrEvts = iemlCode.split(".");
+	var arrPrms = [];
+	//récupère les primitives
+	for(var k=0;k<arrEvts.length;k++){		
+    	arrPrms.push(arrEvts[k].replace(':',''));		
 	}
-	//les ids de la Grille	 
+	var arrParse=[];
+	arrParse.push(arrPrms);
+	arrParse.push(arrEvts);
 	
-	row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 
-	
-	// mettre a jour les cellules de la grille
+	return arrParse;
 
-	
-	
-	for(var i=1 ; i < row.length; i++){
-		rowChild=row[i].childNodes;
-		
-		//if(rowChild.length==0) break;
-            for(k=0;k<rowChild.length;k++){		
-				idLabel=rowChild[k].getAttribute("id");
-				idNoeud=idLabel.substring(23);
-				
-		 		for(var j=0 ; j < 2 ; j++){
-		 		
-		           if(idBranS[j]!=''){
-		           
-		           //Expression reguliere = le mot recherché
-		           
-		           var ExprS = new RegExp(idBranS[j]);
-		           
-		           // Expression regulière de type wa,wo,we,wu
-		           
-		           var Exp=new RegExp("w[auoe]");
-		           
-		           //si le mot recherché contient w[auoe] on le remplace par le vide  
-		           
-		           if(Exp.test(idBranS[j])==false){
-		           		chaine=idNoeud.replace(Exp," ");
-		           		
-		           	}else
-		           		chaine=idNoeud;
-		           	// deslectionne le case qui conteint le mot cherché
-		           
-					if(ExprS.test(chaine)==true){
-			         	   
-			         	   		window.parent.document.getElementById(idLabel).removeAttribute('class');
-			         	 		window.parent.document.getElementById(idLabel).setAttribute('hidden',"true");
-			         		
-			       	}
-			      }
-			      
-				    if(idBranD[j]!=''){
-				    var ExprB = new RegExp(idBranS[j]);
-				    if(Exp.test(idBranD[j])==false){
-		           		chaine=idNoeud.replace(Exp," ");
-		           		window.parent.console.log(chaine);
-		           	}else
-		           		chaine=idNoeud;
-					if( ExprB.test(chaine)==true){
-						    
-			         	 		window.parent.document.getElementById(idNoeud).removeAttribute('class');
-			         	 		window.parent.document.getElementById(idNoeud).setAttribute('hidden','true');
-			         	    
-			        }
-			   }
-			}
-		
-		}		
+}
+
+function inArray(arr, value) {
+	var i;
+	for (i=0; i < arr.length; i++) {
+		if (arr[i] === value) {
+			return true;
+		}
 	}
-}  
+	return false;
+};
+
 
 function InitGrille(iemlCode){
   
@@ -532,11 +512,10 @@ function InitGrille(iemlCode){
   	row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 
 	for(var i=1 ; i < row.length; i++){
 		rowChild=row[i].childNodes;
-            for(k=1;k<rowChild.length;k++){	
-  		       idNoeud=rowChild[k].getAttribute("id")
-			   window.parent.document.getElementById(idNoeud).setAttribute('class',"NoSelect");
-			   window.parent.document.getElementById(idNoeud).setAttribute('hidden',"false");
-			}
+        for(k=0;k<rowChild.length;k++){	
+  		       	idLabel=rowChild[k].getAttribute("id")
+        		window.parent.document.getElementById(idLabel).setAttribute('class','NoSelect');
+		}
 	}
 }
 

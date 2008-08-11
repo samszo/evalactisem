@@ -1,9 +1,9 @@
 <?php
   //
   // Fichier contenant les definitions de constantes
-  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
+  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
 	//pour le débubbage
-   //define ("PathRoot","C:/wamp/www/evalactisem");
+   define ("PathRoot","C:/wamp/www/evalactisem");
 
   // *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/php/");
@@ -11,10 +11,10 @@
 	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
   // Include the class files.
 	require_once(TT_CLASS_BASE."AllClass.php");
-
+	
   define ("TRACE", false);
   
-  define ("DEFSITE", "mundi");
+  define ("DEFSITE", "local");
 
   $dbOptions = array (
 		'ERROR_DISPLAY' => true

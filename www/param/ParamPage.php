@@ -2,17 +2,21 @@
 session_start();
 //set_time_limit(3000);
 
-   if($_SESSION['Delicious']){
+	if($_SESSION['loginSess']){
+		$_SESSION['loginSess']="samszo";
+		$_SESSION['iduti']="2";
+	}
+
+	require_once ("Constantes.php");
+	
+	if($_SESSION['Delicious']){
 	   $oDelicious=$_SESSION['Delicious'];
-   }else{
+   	}else{
    		//pour le debuggage
        	$oDelicious = new PhpDelicious("samszo", "Lucky71");
-		$_SESSION['loginSess']="samszo";
 		$_SESSION['Delicious']=$oDelicious;
-		$_SESSION['iduti']="2";
    }
 
-require_once ("Constantes.php");
 
 
 

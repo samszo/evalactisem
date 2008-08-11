@@ -51,7 +51,7 @@ header ("title: Saisi des diagnosics d'accessibilité");
 echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="CSS/tree.css" type="text/css"?' . '>' . "\n");
-echo ('<' . '?xml-stylesheet href="CSS/iemlCycleCss.css" type="text/css"?' . '>' . "\n");
+echo ('<' . '?xml-stylesheet href="CSS/iemlCycle.css" type="text/css"?' . '>' . "\n");
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload=" ">
@@ -176,9 +176,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 										<button hidden="true" label="Supprimer" oncommand="SupTrad();"/>
 										<button hidden="true" label="Modifier" oncommand="ModifTrad();"/>
 										<label id="trad-Sup-message" hidden="true" />			
-										<label id="trad-message" hidden="true" />
-										<label id="trad-Sup-message" hidden="true" />			
-										<label id="trad-message" hidden="true" />
+										<label id="trad-message" hidden="false" style="color:blue;font-size:150%" />
 								</hbox>
 							<vbox id="contDonnee" flex="1" hidden="true" >
 								<tabbox flex="1" >
@@ -202,7 +200,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 												<label  style='color:blue;' value="1. Choisissez un tag dans les onglets 'Tag(s) trouvé(s)' ou 'Tag(s) non trouvé(s)'" />
 												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
 												<hbox>
-													<label  style='color:blue;' value="3." />
+													<label  style='color:blue;' value="3. Cliquez ici" />
 													<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
 												</hbox>
 												<tabbox flex="1" >
@@ -236,10 +234,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 																			<vbox id="treeDicoIeml" flex="1"  />
 																         </tabpanel>
 																        <tabpanel>
-																			<box  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg"  />
+																			<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" flex='1' />
 																         </tabpanel>
 																         <tabpanel>
-																			<box id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
+																			<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
 																        </tabpanel>
 																    </tabpanels>
 																</tabbox>
@@ -282,7 +280,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 										<iframe id="ifBoussole" style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
 						         </tabpanel>
 						        <tabpanel>
-										<iframe id="webFrame" flex="1"  src="http://localhost/evalactisem/flex_ieml/ieml.html"  />
+						        		<box id="bIemlStat" flex="1">
+											<iframe id="fIemlStat" flex="1"  src=""  />
+										</box>
 						         </tabpanel>
 						    </tabpanels>
 						</tabbox>

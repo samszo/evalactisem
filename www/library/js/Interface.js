@@ -7,7 +7,7 @@ function ChargeCycle(key){
 	document.getElementById('keyGrid').value=key;
 	if(document.getElementById('iemlCycle_'+key).hasChildNodes())
 		return;
-    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter le chargement de cycle est en cours...');
+    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter, le chargement du cycle est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
 	meter.setAttribute("value","50");
@@ -362,6 +362,7 @@ function AddTrad(){
 	var libIeml=document.getElementById("lib-trad-ieml");
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
+    var message=document.getElementById("trad-message");
     
 	if(codeIeml.value==""){
 		alert("Veuillez sélectionner une expression IEML");
@@ -372,7 +373,7 @@ function AddTrad(){
 		return
 	}	
 	
-	GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
+	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
 	
 	SetDonnee();
 	
@@ -426,7 +427,8 @@ function SupTrad()
 		return
 	}	
 
-	GetResult(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+Utf8.encode(libIeml.value)+"&codeflux="+Utf8.encode(codeFlux.value));
+	var message=document.getElementById("trad-message");
+	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value);
 
 	SetDonnee();
 		
@@ -524,7 +526,9 @@ function Parser(op,type){
 	}    
 	var url = urlAjax+"library/php/ExeAjax.php?f=GetGraph&code="+Iemlcode+"&type="+type;
 	url = GetResult(url);
-	Trad('webFrame',url);
+
+	GoUrl(url,'bIemlStat');
+	
 	var tabStatIeml = document.getElementById('tabStatIeml')
 	document.getElementById('tbIframe').selectedTab=tabStatIeml;	
 }
@@ -682,10 +686,10 @@ function SupprimerCompteDelicious(){
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Delet_Compte_Delicious",'SupprimeDelicious','');
 	
 }
-function GoUrl(url){
+function GoUrl(url,idBox){
 	
-	box=document.getElementById('TableFlux');
-	box.removeChild(box.lastChild);
+	box=document.getElementById(idBox);
+	box.removeChild(box.firstChild);
 	ifram=document.createElement("iframe");
 	ifram.setAttribute("src",url);
 	ifram.setAttribute("flex","1");

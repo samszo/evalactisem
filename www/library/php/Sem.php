@@ -229,7 +229,7 @@ Class Sem{
 		if($this->trace)
 			echo "Sem.php:GetSvgPie:code".$code."<br/>";
 			
-			$xml = $this->Parse($code);
+		$xml = $this->Parse($code);
 		 
 		if(is_object($xml)){
 			
@@ -237,46 +237,7 @@ Class Sem{
 					echo "Sem.php:GetSvgPie:xml".print_r($xml)."<br/>";
 		
 				//$xmlEvent = simplexml_load_file("../param/events.xml");
-				$arrPrims =array();
-				$arrEvents = array();
-				//construction des tableaux du nombre d'occurrence
-				foreach($xml->xpath("/ieml/group//genOp[@layer='event']") as $genOps){
-					if($this->trace)
-						echo "Sem.php:GetSvgPie:genOps".print_r($genOps)."<br/>";
-					$a = $genOps->attributes();
-					foreach ($genOps->children() as $tag=>$val) {
-						if(array_key_exists($tag,$arrEvents)){
-							$arrEvents[$tag]=$arrEvents[$tag]+1;
-						}else{
-							$arrEvents[$tag]=1;
-						}
-						if($this->trace)
-							echo "Sem.php:GetSvgPie:tag=".$tag."<br/>";
-						
-						//récupére les paramètres du tag
-						$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-						//calcul le tableau des éléments
-						$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
-						foreach ($prims as $prim) {
-							//exclusion des vides
-							if($prim!="." && $prim!=".."){
-								//construction des occurences
-								if(array_key_exists($prim,$arrPrims)){
-									$arrPrims[$prim]=$arrPrims[$prim]+1;
-								}else{
-									$arrPrims[$prim]=1;
-								}				
-							}
-						}
-							
-					}
-				}
-				if($this->trace)
-					echo "Sem.php:GetSvgPie:arrEvents=".print_r($arrEvents)."<br/>";
-				if($this->trace)
-					echo "Sem.php:GetSvgPie:arrPrims=".print_r($arrPrims)."<br/>";
-				$this->Events = $arrEvents;	
-				$this->Primis = $arrPrims;	
+				$this->GetOccurrence($xml);
 				
 				//construction des données de l'event
 				$arrDon = $this->GetDonneeEvents();
@@ -344,6 +305,54 @@ Class Sem{
 	   
 }
 	
+	function GetOccurrence($xml){
+		
+		$arrPrims =array();
+		$arrEvents = array();
+		//construction des tableaux du nombre d'occurrence
+		$Xpath = "/ieml/group//genOp[@layer='event']";
+		$Xpath = "//genOp[@layer='event']";
+		foreach($xml->xpath($Xpath) as $genOps){
+			if($this->trace)
+				echo "Sem.php:GetOccurrence:genOps".print_r($genOps)."<br/>";
+			$a = $genOps->attributes();
+			foreach ($genOps->children() as $tag=>$val) {
+				if(array_key_exists($tag,$arrEvents)){
+					$arrEvents[$tag]=$arrEvents[$tag]+1;
+				}else{
+					$arrEvents[$tag]=1;
+				}
+				if($this->trace)
+					echo "Sem.php:GetOccurrence:tag=".$tag."<br/>";
+				
+				//récupére les paramètres du tag
+				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+				//calcul le tableau des éléments
+				$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
+				foreach ($prims as $prim) {
+					//exclusion des vides
+					if($prim!="." && $prim!=".."){
+						//construction des occurences
+						if(array_key_exists($prim,$arrPrims)){
+							$arrPrims[$prim]=$arrPrims[$prim]+1;
+						}else{
+							$arrPrims[$prim]=1;
+						}				
+					}
+				}
+					
+			}
+		}
+	
+		if($this->trace)
+			echo "Sem.php:GetOccurrence:arrEvents=".print_r($arrEvents)."<br/>";
+		if($this->trace)
+			echo "Sem.php:GetOccurrence:arrPrims=".print_r($arrPrims)."<br/>";
+		$this->Events = $arrEvents;	
+		$this->Primis = $arrPrims;	
+				
+	}
+
 	function GetDonneeEvents(){
 		
 		//construction des données de event
@@ -353,14 +362,15 @@ Class Sem{
 		foreach ($this->Events as $tag=>$val) {
 			$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
 			$noms .= $event[0]["descriptor"].";";
-		    $donnees .= $val.";";	
+		    $donnees .= $val.";";
+		    $codes .= $tag.";";	
 		}
 		if($noms!=''|| $donnees!=''){
 			$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
 		}
 		$file=$titre."_".XmlGraphIeml;
 		$this->CreatFileXml($ExpIemlXml,$file);
-		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
+		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre,"codes"=>$codes);
 		
 	}
 	
@@ -377,12 +387,13 @@ Class Sem{
 			if($this->trace)
 				echo "Sem.php:GetDonneePrimis://primitive[@compact='".$tag.".']<br/>";
 			$noms .= $primis[0]["descriptor"].";";
-		    $donnees .= $val.";";	
+		    $donnees .= $val.";";
+		    $tags .= $tag.";";	
 		}
 		$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
 		$file=$titre."_".XmlGraphIeml;
 		$this->CreatFileXml($ExpIemlXml,$file);
-		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre);
+		return array("noms"=>$noms,"donnees"=>$donnees,"titre"=>$titre,"codes"=>$tags);
 		
 	}
 	
@@ -772,7 +783,7 @@ Class Sem{
 		    $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 			$db->connect();
 			$db->query($sql);
-            $message = mysql_affected_rows()." traduction supprime";
+            $message = mysql_affected_rows().utf8_encode(" traduction automatique supprimée");
 			$db->close();
 
 			return $message;
@@ -803,60 +814,66 @@ Class Sem{
                 $res=mysql_fetch_array($result);
                 $db->close();
                 
-                //vérifie que la trad existe
-                $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where=str_replace("-idflux-", $res[0], $Q[0]->where);
-                $where=str_replace("-idIeml-", $res[1],$where);
-                $sql = $Q[0]->select.$Q[0]->from.$where;
-   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-		        $db->connect();   
-                $result = $db->query($sql);
-                $db->close();
-                $rs=mysql_fetch_array($result);
-                if(!$rs){
-	                // insertion dans la table de traductions des identifiants
-	                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
+                if($res){
+                
+	                //vérifie que la trad existe
+	                $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
 	                $Q = $objSite->XmlParam->GetElements($Xpath);
-	                $values=str_replace("-idflux-", $res[0], $Q[0]->values);
-	                $values=str_replace("-idIeml-", $res[1],$values);
-	                $sql = $Q[0]->insert.$values;
+	                $where=str_replace("-idflux-", $res[0], $Q[0]->where);
+	                $where=str_replace("-idIeml-", $res[1],$where);
+	                $sql = $Q[0]->select.$Q[0]->from.$where;
 	   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 			        $db->connect();   
-	                $db->query($sql);
-		    		$idTrad= mysql_insert_id();
+	                $result = $db->query($sql);
 	                $db->close();
-		    		
-	                //insertion de la traduction dans la table des utilisateurs
-	                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
-	                $Q = $objSite->XmlParam->GetElements($Xpath);
-	                $values=str_replace("-idieml-", $res[1],$Q[0]->values);
-	                $values=str_replace("-iduti-", $iduti, $values);
-	                $sql = $Q[0]->insert.$values;
-	   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-			        $db->connect();   
-	                $db->query($sql);
-	                $message = mysql_affected_rows()." traduction ajoutée";
-	                $db->close();
+	                $rs=mysql_fetch_array($result);
 	                
-	                if($iduti==$objSite->infos["UTI_TRAD_AUTO"]){
-	                	//insertion du partage de la trad
-		                $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='InsertPartageTrad']";
+	                if(!$rs){
+		                // insertion dans la table de traductions des identifiants
+		                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
 		                $Q = $objSite->XmlParam->GetElements($Xpath);
-		                $values=str_replace("-idTrad-", $idTrad,$Q[0]->values);
-		                $values=str_replace("-idUti-", $_SESSION['iduti'], $values);
+		                $values=str_replace("-idflux-", $res[0], $Q[0]->values);
+		                $values=str_replace("-idIeml-", $res[1],$values);
 		                $sql = $Q[0]->insert.$values;
 		   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 				        $db->connect();   
 		                $db->query($sql);
-		                $db->close();		                	                	
-	                }
-                	
-	                $Activite->AddActi("AddTrad",$iduti);
-                
-                }else
-                	$idTrad = $rs['trad_id'];                
-                
+			    		$idTrad= mysql_insert_id();
+		                $db->close();
+			    		
+		                //insertion de la traduction dans la table des utilisateurs
+		                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
+		                $Q = $objSite->XmlParam->GetElements($Xpath);
+		                $values=str_replace("-idieml-", $res[1],$Q[0]->values);
+		                $values=str_replace("-iduti-", $iduti, $values);
+		                $sql = $Q[0]->insert.$values;
+		   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+				        $db->connect();   
+		                $db->query($sql);
+		                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** ajoutée");
+		                $db->close();
+		                
+		                if($iduti==$objSite->infos["UTI_TRAD_AUTO"]){
+		                	//insertion du partage de la trad
+			                $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='InsertPartageTrad']";
+			                $Q = $objSite->XmlParam->GetElements($Xpath);
+			                $values=str_replace("-idTrad-", $idTrad,$Q[0]->values);
+			                $values=str_replace("-idUti-", $_SESSION['iduti'], $values);
+			                $sql = $Q[0]->insert.$values;
+			   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+					        $db->connect();   
+			                $db->query($sql);
+			                $db->close();		                	                	
+		                }
+	                	
+		                $Activite->AddActi("AddTrad",$iduti);
+	                
+	                }else{
+	                	$idTrad = $rs['trad_id'];                
+                	}
+                }else{
+                	return false;
+                }
                 if($getId)
                 	return $idTrad;
                 else
@@ -878,31 +895,39 @@ Class Sem{
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
                 $db->connect();
                 $result = $db->query($sql);
-               
+               	$db->close();
                 $res=mysql_fetch_array($result);
                 
+                if($res){
                 //requête pour Supprimer une traduction
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where = str_replace("-idflux-", $res[0], $Q[0]->where);
-                $where = str_replace("-idIeml-", $res[1], $where);               
-                $sql = $Q[0]->delete.$Q[0]->from.$where;
-                if($this->trace)
-                	echo "Sem:Sup_Trad:sql2=".$sql."<br/>";
-                $result = $db->query($sql);
-
-                //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $where = str_replace("-idIeml-", $res[1], $Q[0]->where);
-                $sql = $Q[0]->delete.$Q[0]->from.$where;
-                //if($this->trace)
-                	echo "Sem:Sup_Trad:sql3=".$sql."<br/>";
-                $result = $db->query($sql);
-
-                $message = mysql_affected_rows()." traduction supprime";
-                $db->close();
-                 $Activite->AddActi("DelTrad",$iduti);
+	                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
+	                $Q = $objSite->XmlParam->GetElements($Xpath);
+	                $where = str_replace("-idflux-", $res[0], $Q[0]->where);
+	                $where = str_replace("-idIeml-", $res[1], $where);               
+	                $sql = $Q[0]->delete.$Q[0]->from.$where;
+	                if($this->trace)
+	                	echo "Sem:Sup_Trad:sql2=".$sql."<br/>";
+                	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	                $db->query($sql);
+               		$db->close();
+	                
+	                //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
+	                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_uti_onto']";
+	                $Q = $objSite->XmlParam->GetElements($Xpath);
+	                $where = str_replace("-idIeml-", $res[1], $Q[0]->where);
+	                $sql = $Q[0]->delete.$Q[0]->from.$where;
+	                if($this->trace)
+	                	echo "Sem:Sup_Trad:sql3=".$sql."<br/>";
+                	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	                $db->query($sql);
+               		$db->close();
+	                		
+	                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** supprimée");
+                }else{
+	                $message = utf8_encode("Problème lors de la suppression");
+                }
+                
+                $Activite->AddActi("DelTrad",$iduti);
                 return $message;
         
    }
@@ -930,46 +955,70 @@ Class Sem{
 		
 		if($this->trace)
 			echo "Sem.php:GetCycle:sResult".$sResult."<br/>";
-			eregi('<TABLE (.*) >(.*)</TABLE>',$sResult, $chaine);
-		    eregi('(<BODY (.*) >)(.*)</BODY>',$chaine[0], $Html);
-	        eregi('(<td (.*) >)',$Html[0], $chaine);
-	   
-	        $a=eregi_replace('class=\'[[:alnum:]]* \'|class=\'[[:alpha:]]*\'|<br/>|colspan=[[:digit:]]*|class=hd' ,' ',$chaine[0]);
-	        $a=eregi_replace('<p style=\'height:[[:digit:]]*px;\'>.</td>' ,'<td>',$a);
-	        $a=eregi_replace('style=\'width:[[:digit:]]*px;\'|style=\'display:none;\'|style=\'width:[[:digit:]]*;\'' ,'',$a);
-	        $a=eregi_replace('<td[[:space:]]*>' ,'<td> ',$a);
-	        $ArrTr=explode("<tr>",$a);
-	        $Xul.='<grid  id="'.$key.'GridCycle" >';
-			$cell=explode("<td>",$ArrTr[0]);
-			$Xul.='<columns id="cols">';	
-			for($j=1;$j<(sizeof($cell)/2);$j++){
-				
-				$Xul.='<column id="col_'.$j.'" ></column>';
-			}
-			$Xul.='</columns>';
-		    $Xul.='<rows id="'.$key.'CycleRows">';
-	        for($i=1;$i<sizeof($ArrTr)-1;$i++){
+			
+		eregi('<TABLE (.*) >(.*)</TABLE>',$sResult, $chaine);
+	    eregi('(<BODY (.*) >)(.*)</BODY>',$chaine[0], $Html);
+        eregi('(<td (.*) >)',$Html[0], $chaine);
+   
+        $a=eregi_replace('class=\'[[:alnum:]]* \'|class=\'[[:alpha:]]*\'|<br/>|colspan=[[:digit:]]*|class=hd' ,' ',$chaine[0]);
+        $a=eregi_replace('<p style=\'height:[[:digit:]]*px;\'>.</td>' ,'<td>',$a);
+        $a=eregi_replace('style=\'width:[[:digit:]]*px;\'|style=\'display:none;\'|style=\'width:[[:digit:]]*;\'' ,'',$a);
+        $a=eregi_replace('<td[[:space:]]*>' ,'<td> ',$a);
+        $ArrTr=explode("<tr>",$a);
+        $Xul.='<grid id="'.$key.'GridCycle" flex="1" >';
+		$cell=explode("<td>",$ArrTr[0]);
+		$Xul.='<columns id="cols">';	
+		for($j=1;$j<(sizeof($cell)/2);$j++){
+			
+			$Xul.='<column id="col_'.$j.'" ></column>';
+		}
+		$Xul.='</columns>';
+	    $Xul.='<rows id="'.$key.'CycleRows">';
+        for($i=1;$i<sizeof($ArrTr)-1;$i++){
                  $ArrTd=explode("<td>",$ArrTr[$i]);
                  $Xul.='<row id="row_'.$i.'" >';
                  for($j=3;$j<sizeof($ArrTd);$j++){
-                 	if($i%2!=0){
-                 		$Td[$j]=$ArrTd[$j];
+                 if($i%2!=0){
+                 	$Td[$j]=$ArrTd[$j];
+                 }else{
+                 	if($Td[$j]!=" " && $ArrTd[$j]!=" "){
+                 		//récupère le parse de l'expression
+           				$xml = $this->Parse(trim($Td[$j]));
+						$toolTip = $Td[$j];
+						$class = "NoSelect";						
+           				if(is_object($xml)){							
+							if($this->trace)
+								echo "Sem.php:GetCycle:xml".print_r($xml)."<br/>";
+							$this->GetOccurrence($xml);
+							//récupère les primitives
+							$arrDon = $this->GetDonneePrimis();
+							$Primis = " primitives='".$arrDon["codes"]."' ";						
+							//récupère les events
+							$arrDon = $this->GetDonneeEvents();
+							$Events = " events='".$arrDon["codes"]."' ";						
+							$toolTip .= $Primis.$Events;						
+							$error = "";
+						}else{
+							$Primis = " primitives='' ";						
+							$Events = " events='' ";
+							$error = $xml;						
+							$class = "Error";						
+						}
+                 		$Xul.='<label id="'.$key.'*'.$Td[$j].'**" '.$Primis.$Events.'   tooltiptext="'.$toolTip.'"  class="'.$class.'" onclick="AfficheIeml(\''.$key.'*'.$Td[$j].'**\') ">'.$ArrTd[$j].' '.$error.' </label>';
+                 	   
                  	}else{
-                 		if($Td[$j]!=" " && $ArrTd[$j]!=" "){
-                 			$Xul.='<label id="'.$key.'*'.$Td[$j].'**"   tooltiptext="'.$Td[$j].'"  class="NoSelect" onclick="AfficheIeml(\''.$key.'*'.$Td[$j].'**\') ">'.$ArrTd[$j].' </label>';
-                 		   
-                 		}else{
-                 			$Xul.='<label id="* **"    ></label>';
-                 			
-                 		}
+                 		$Xul.='<label id="* **"    ></label>';
+                 		
                  	}
                  }
-	        	 $Xul.='</row>';
+                 }
+        	 $Xul.='</row>';
             }
-             $Xul.='</rows>';
-		     $Xul.='</grid>';
-		    echo $Xul;
+        $Xul.='</rows>';
+	    $Xul.='</grid>';
+	    echo $Xul;
    }
+   
 	
 }
 ?>

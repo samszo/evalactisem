@@ -1,6 +1,5 @@
 <?php 
-require('../../param/Constantes.php');
-session_start();
+require('../../param/ParamPage.php');
 header("Content-type: image/svg+xml");
 
 
