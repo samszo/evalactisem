@@ -277,7 +277,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									</vbox >
 						         </tabpanel>
 						        <tabpanel>
+									<vbox flex="1" >
+										<label  style='color:blue;' value="Vous pouvez utiliser la boussole IEML pour filtrer les expressions des cycles" />
 										<iframe id="ifBoussole" style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
+									</vbox>
 						         </tabpanel>
 						        <tabpanel>
 						        		<box id="bIemlStat" flex="1">
