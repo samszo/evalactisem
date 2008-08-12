@@ -2,6 +2,11 @@
 var E="*";
 var P=";";
 
+function OuvreLienOnglet(lien){
+	window.open(lien);
+}
+
+
 function ChargeCycle(key){
 	//vérifie que l'onglet n'est pas déjà rempli
 	document.getElementById('keyGrid').value=key;
