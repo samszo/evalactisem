@@ -305,51 +305,100 @@ Class Sem{
 	   
 }
 	
-	function GetOccurrence($xml){
+	function GetOccuEvents($xml){
 		
-		$arrPrims =array();
-		$arrEvents = array();
 		//construction des tableaux du nombre d'occurrence
-		$Xpath = "/ieml/group//genOp[@layer='event']";
 		$Xpath = "//genOp[@layer='event']";
 		foreach($xml->xpath($Xpath) as $genOps){
 			if($this->trace)
-				echo "Sem.php:GetOccurrence:genOps".print_r($genOps)."<br/>";
+				echo "Sem.php:GetOccuEvents:genOps".print_r($genOps)."<br/>";
 			$a = $genOps->attributes();
 			foreach ($genOps->children() as $tag=>$val) {
-				if(array_key_exists($tag,$arrEvents)){
-					$arrEvents[$tag]=$arrEvents[$tag]+1;
+				if(array_key_exists($tag,$this->Events)){
+					$this->Events[$tag]=$this->Events[$tag]+1;
 				}else{
-					$arrEvents[$tag]=1;
+					$this->Events[$tag]=1;
 				}
 				if($this->trace)
-					echo "Sem.php:GetOccurrence:tag=".$tag."<br/>";
+					echo "Sem.php:GetOccuEvents:tag=".$tag."<br/>";
+				
 				
 				//récupére les paramètres du tag
 				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-				//calcul le tableau des éléments
+				//calcul le tableau des primitives de l'event
 				$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
 				foreach ($prims as $prim) {
 					//exclusion des vides
 					if($prim!="." && $prim!=".."){
 						//construction des occurences
-						if(array_key_exists($prim,$arrPrims)){
-							$arrPrims[$prim]=$arrPrims[$prim]+1;
+						if(array_key_exists($prim,$this->Primis)){
+							$this->Primis[$prim]=$this->Primis[$prim]+1;
 						}else{
-							$arrPrims[$prim]=1;
+							$this->Primis[$prim]=1;
 						}				
 					}
 				}
 					
 			}
 		}
+		
+		
+	}
+
+	function AjouteOccu($key,$arr){
+		
+		if(array_key_exists($key,$arr)){
+			$arr[$key]=$arr[$key]+1;
+		}else{
+			$arr[$key]=1;
+		}
+		
+		return $arr;	
+	}
 	
+	function GetOccuPrimis($xml){
+		
+		//construction des tableaux du nombre d'occurrence
+		$Xpath = "//genOp[@layer='primitive']";
+		foreach($xml->xpath($Xpath) as $genOps){
+			if($this->trace)
+				echo "Sem.php:GetOccuPrimis:genOps".print_r($genOps)."<br/>";
+			$a = $genOps->attributes();
+			foreach ($genOps->children() as $tag=>$val) {
+				$this->Primis = $this->AjouteOccu($tag,$this->Primis);
+				//gestion des regroupement de primitive
+				if($tag=="O"){
+					$this->Primis = $this->AjouteOccu("A",$this->Primis);
+					$this->Primis = $this->AjouteOccu("U",$this->Primis);
+				}
+				if($tag=="M"){
+					$this->Primis = $this->AjouteOccu("T",$this->Primis);
+					$this->Primis = $this->AjouteOccu("B",$this->Primis);
+					$this->Primis = $this->AjouteOccu("S",$this->Primis);
+				}
+					
+				if($this->trace)
+					echo "Sem.php:GetOccuPrimis:tag=".$tag."<br/>";						
+			}
+		}
+		
+		
+	}
+	
+	
+	function GetOccurrence($xml){
+		
+		$this->Events =array();
+		$this->Primis = array();
+		
+		$this->GetOccuPrimis($xml);
+		$this->GetOccuEvents($xml);
+		
+		
 		if($this->trace)
-			echo "Sem.php:GetOccurrence:arrEvents=".print_r($arrEvents)."<br/>";
+			echo "Sem.php:GetOccurrence:arrEvents=".print_r($this->Events)."<br/>";
 		if($this->trace)
-			echo "Sem.php:GetOccurrence:arrPrims=".print_r($arrPrims)."<br/>";
-		$this->Events = $arrEvents;	
-		$this->Primis = $arrPrims;	
+			echo "Sem.php:GetOccurrence:arrPrims=".print_r($this->Primis)."<br/>";
 				
 	}
 
@@ -731,7 +780,7 @@ Class Sem{
 				return true;
    }
 
-	public function GetAutoTradSup($idUti){
+	function GetAutoTradSup($idUti){
 		//récupère les traductions automatiques supprimées par l'utilisateur
 		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='GetTradAutoSup']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
@@ -749,7 +798,7 @@ Class Sem{
 	
 	}
    
-	public function VerifTradUtiFlux($idUti,$idFlux){
+	function VerifTradUtiFlux($idUti,$idFlux){
 		//récupère les traductions automatiques supprimées par l'utilisateur
 		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='VerifTradUtiFlux']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
@@ -965,6 +1014,12 @@ Class Sem{
         $a=eregi_replace('style=\'width:[[:digit:]]*px;\'|style=\'display:none;\'|style=\'width:[[:digit:]]*;\'' ,'',$a);
         $a=eregi_replace('<td[[:space:]]*>' ,'<td> ',$a);
         $ArrTr=explode("<tr>",$a);
+        
+        //lien vers le googledoc
+        $Xul .= "<vbox flex='1' >";
+		$Xul.="<label class='text-link' onclick=\"OuvreLienOnglet('".$lien."');\" value='Consulter le GoogleDoc' />";
+		
+        //construction de la grille
         $Xul.='<grid id="'.$key.'GridCycle" flex="1" >';
 		$cell=explode("<td>",$ArrTr[0]);
 		$Xul.='<columns id="cols">';	
@@ -1016,6 +1071,9 @@ Class Sem{
             }
         $Xul.='</rows>';
 	    $Xul.='</grid>';
+        
+	    $Xul .= "</vbox>";
+	    
 	    echo $Xul;
    }
    

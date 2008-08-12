@@ -479,6 +479,16 @@ function ParseIemlCode(iemlCode) {
 	var arrPrms = [];
 	//récupère les primitives
 	for(var k=0;k<arrEvts.length;k++){		
+    	//ajoute les primitives des composés
+    	if(arrEvts[k]=="M:"){
+	    	arrPrms.push('B');		
+	    	arrPrms.push('S');		
+	    	arrPrms.push('T');		
+    	}
+    	if(arrEvts[k]=="O:"){
+	    	arrPrms.push('A');		
+	    	arrPrms.push('U');		
+    	}
     	arrPrms.push(arrEvts[k].replace(':',''));		
 	}
 	var arrParse=[];
@@ -514,7 +524,9 @@ function InitGrille(iemlCode){
 		rowChild=row[i].childNodes;
         for(k=0;k<rowChild.length;k++){	
   		       	idLabel=rowChild[k].getAttribute("id")
-        		window.parent.document.getElementById(idLabel).setAttribute('class','NoSelect');
+        		//ne change pas les cellules en erreur
+        		if(window.parent.document.getElementById(idLabel).getAttribute('class')!='Error')
+	        		window.parent.document.getElementById(idLabel).setAttribute('class','NoSelect');
 		}
 	}
 }
