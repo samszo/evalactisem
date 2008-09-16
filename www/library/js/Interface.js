@@ -1,6 +1,7 @@
    
 var E="*";
 var P=";";
+var S=":";
 
 function OuvreLienOnglet(lien){
 	window.open(lien);
@@ -246,25 +247,41 @@ function Trad_Pars_Ieml(result, param){
         var Trad=new Array();
         var Tag=new Array();
         var arrNoms=new Array();
-        //console.log(result);
+        var CoucheM="";
+        var CoucheS="";
+        
+        //traduction sauvegarder dans la BDD
         arrNoms = result.split(E);
+       
+        
+        //flux
         arrNom= arrNoms[0].split(P);
+       
+      
         if(arrNoms[1].length > 1){
         
 	        Descp=arrNoms[2].split(P);
 	        Trad=arrNoms[1].split(P);
 	        Tag=arrNoms[3].split(P);
+	        Couche=arrNoms[4].split(P);
+	        Descp=arrNoms[2].split(P);
+	        Trad=arrNoms[1].split(P);
+	        Tag=arrNoms[3].split(P);
         }
+        
        
        for(i=0;i<arrNom.length-1;i++){
                 
+                //traduire les tags
                 trad=TradIeml.recherchez(arrNom[i]);
+                
                 if(trace)
 			        console.log("interface:Trad_Pars_Ieml:trad="+trad);
-                
-                if(trad!=E){
+                //calcul des flux multi-trad
+                if(trad!="**"){
                         ieml=trad.split(E);
                         iemlTrad=ieml[0].split(P);
+                        //iemlCouche=ieml[2].split(S);
                         if(iemlTrad.length>2){
                                 in_array="false";
                                 for(j=0;j<Descp.length;j++){
@@ -278,17 +295,23 @@ function Trad_Pars_Ieml(result, param){
 		                            MultiTrad+=ieml[0]+E;
 		                           	FluxM+=arrNom[i]+P;
 		                            descpM+=ieml[1]+E;
+		                            CoucheM+=ieml[2]+E;
+		                            //console.log("Interfce:Trad_Pars_Ieml:CoucheM="+CoucheM);
                               
-                                  }
+                               }
                            
                         }else{
+                            //Signl trad
                             if(iemlTrad.length==2){
                                 synIemlS+=TradIeml.syntaxe_ieml(ieml[0]);
                                 SignlTrad+=ieml[0];
                                 FluxS+=arrNom[i]+P;
                                 descpS+=ieml[1];
+                                CoucheS+=ieml[2];
+                                //console.log("Interfce:Trad_Pars_Ieml:CoucheS="+CoucheS);
+                                
 							}
-                        }
+                       }
                         
                 }else{
                     in_array="false";       
@@ -305,9 +328,11 @@ function Trad_Pars_Ieml(result, param){
         }
 
        	var bdd = arrNoms[1].replace(/\\/g, "");
+        //flux singles trad trouvées + trad manuels: il faut pas les ajoutées directement
         synIemlS+=bdd;
         FluxS+=arrNoms[3];
         descpS+=arrNoms[2];
+        CoucheS+=arrNoms[4];
         
 	//affiche les infos de traduction
 	 document.getElementById("TableFlux").setAttribute("hidden","true");
@@ -317,14 +342,15 @@ function Trad_Pars_Ieml(result, param){
 	var doc = document.getElementById('contDonnee');
 		doc.setAttribute("hidden","false");
 		
-	//if(trace)
-    	console.log("interface:Trad_Pars_Ieml:FluxS="+FluxS);
-    	console.log("interface:Trad_Pars_Ieml:FluxM="+FluxM);
+	if(trace){
+    	console.log("interface:Trad_Pars_Ieml:FluxS="+FluxS+" : "+descpS );
+    	console.log("interface:Trad_Pars_Ieml:FluxM="+FluxM +" : "+descpM);
     	console.log("interface:Trad_Pars_Ieml:FluxN="+FluxN);
-
+    }
+    console.log("interface:Trad_Pars_Ieml:FluxN="+FluxN);
 	if(FluxS.length>2){
 		var url = urlAjax+"library/php/ExeAjax.php";
-		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd;
+		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd+"&couche="+CoucheS;
 		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
 	}
 	//ajoute le tree des multi trad
@@ -332,14 +358,14 @@ function Trad_Pars_Ieml(result, param){
 		url = urlAjax+"library/php/ExeAjax.php";
 		if(trace)
 			console.log(synIemlM+' '+descpM);
-		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd;
+		urlparams="f=GetTreeTrad&flux="+FluxM+"&trad="+synIemlM+"&descp="+descpM+"&type=Multi_Trad&primary=true&bdd="+bdd+"&couche="+CoucheM;
 		AppendResultPost(url,urlparams,document.getElementById('tpMultiTrad'),false);
 		
     }
 	//ajoute le tree des no trad
 	if(FluxN.length>2){
 		url = urlAjax+"library/php/ExeAjax.php";
-		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd;
+		urlparams="f=GetTreeTrad&flux="+FluxN+"&trad=&descp=&type=No_Trad&primary=false&bdd="+bdd+"&couche=";
 		AppendResultPost(url,urlparams,document.getElementById('tpNoTrad'),false);
 	}
 	
@@ -484,11 +510,11 @@ function Select_Dictio(id,treecol1,treecol2){
   	txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol2));
     txtcode_ieml.value= tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol1));
 }
-function Select_Trad(id,treecolTag,treecolTrad,treecolIeml){
+function Select_Trad(id,treecolTag,treecolTrad,treecolIeml,type){
   try{
 	  var tree = document.getElementById(id);
-     var tag = GetTreeValSelect(id,treecolTag);
-     var iemlCode = GetTreeValSelect(id,treecolIeml);
+      var tag = GetTreeValSelect(id,treecolTag);
+      var iemlCode = GetTreeValSelect(id,treecolIeml);
 	  var txtcode_ieml = document.getElementById("code-trad-ieml");
 	  var txtcode_flux=document.getElementById("code-trad-flux");
 	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
@@ -506,12 +532,18 @@ function Select_Trad(id,treecolTag,treecolTrad,treecolIeml){
 		txtlib_ieml.value="";
 		txtcode_ieml.value="";
      }
-     	
-     if(iemlCode!=""){
+     
+     if(iemlCode!="" ){
+       
 		var parent=tree.contentView.getParentIndex(tree.currentIndex);
+		var GrandParent=tree.contentView.getParentIndex(parent);
+		
 		txtcode_ieml.value= iemlCode;
 		txtlib_ieml.value=GetTreeValSelect(id,treecolTrad);
-		txtcode_flux.value=tree.view.getCellText(parent,tree.treeBoxObject.columns[treecolTag]);
+		if(GrandParent==0 || GrandParent==-1 )
+			txtcode_flux.value=tree.view.getCellText(parent,tree.treeBoxObject.columns[treecolTag]);
+		else
+			txtcode_flux.value=tree.view.getCellText(GrandParent,tree.treeBoxObject.columns[treecolTag]);
      }
      	  
   }

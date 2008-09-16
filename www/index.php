@@ -183,11 +183,14 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								    <tabs >
 								        <tab label="Tags traduits" />
 								        <tab label="Tags à traduire" />
+								        <tab label="Dictionnaire et Cycles" />
 								    </tabs>
 								    <tabpanels flex="1"  >
 								        <tabpanel >
 											<vbox flex="1" >
+												
 												<hbox>
+												    
 													<button label="Supprimer la traduction" oncommand="SupTrad();"/>
 													<button label="Voir les primitives" oncommand="Parser('|','Primitive')"/>	
 													<button label="Voir les événements" oncommand="Parser('|','Event');"/>
@@ -207,7 +210,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 												    <tabs >
 												        <tab label="Tag(s) trouvé(s)" />
 												        <tab label="Tag(s) non trouvé(s)" />
-												        <tab label="Dictionnaire et Cycles" />
+												        
 												    </tabs>
 												    <tabpanels flex="1"  >
 												        <tabpanel >
@@ -220,33 +223,41 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 																<box id="tpNoTrad" flex="1" />
 															</vbox >
 												         </tabpanel>
-												         <tabpanel>
-												         	<vbox flex="1">
-																<label id="keyGrid" hidden="true" />
-																<tabbox flex="1" orient="horizontal" >
-																    <tabs orient="vertical" >
-																        <tab label="Dictionnaire" />
-																        <tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
-																        <tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
-																    </tabs>
-																    <tabpanels flex="1"  >
-																        <tabpanel >
-																			<vbox id="treeDicoIeml" flex="1"  />
-																         </tabpanel>
-																        <tabpanel>
-																			<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" flex='1' />
-																         </tabpanel>
-																         <tabpanel>
-																			<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
-																        </tabpanel>
-																    </tabpanels>
-																</tabbox>
-															</vbox>			
-												        </tabpanel>
+												        
 												    </tabpanels>
 												</tabbox>
 											</vbox>
 								         </tabpanel>
+								          <tabpanel>
+											<vbox flex="1">
+												<label id="keyGrid" hidden="true" />
+												<label  style='color:blue;' value="1. Choisissez un tag dans les onglets 'Tag(s) trouvé(s)' dans la partie qu'est après votre login" />
+												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
+												<label  style='color:blue;' value="3. Cliquer sur 'Ajouter'" />
+												<hbox>
+												    <button label="Ajouter la traduction" oncommand="AddTrad();"/>
+													
+												</hbox>
+												<tabbox flex="1" orient="horizontal" >
+													<tabs orient="vertical" >
+														<tab label="Dictionnaire" />
+														<tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+														<tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+													</tabs>
+													<tabpanels flex="1"  >
+														<tabpanel >
+															<vbox id="treeDicoIeml" flex="1"  />
+														</tabpanel>
+														<tabpanel>
+															<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" flex='1' />
+														</tabpanel>
+														<tabpanel>
+															<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
+														</tabpanel>
+													</tabpanels>
+												</tabbox>
+											</vbox>			
+										 </tabpanel>
 								    </tabpanels>
 								</tabbox>
 							</vbox>
