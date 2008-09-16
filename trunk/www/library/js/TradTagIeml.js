@@ -2221,6 +2221,7 @@ this.recherchez=function(searchString) {
   var source="";
   var dis="";
   var sour="";
+  var couche="";
   if ( hitList.length > 0) {
     idxentries = "";
     for ( var j = 0; j < hitList.length; j++) {
@@ -2232,19 +2233,22 @@ this.recherchez=function(searchString) {
         
       } else {
         disc=disc+( hit[ descriptor])+";";
+       
       }
       
       source=source+( hit[ displayableKey])+";";
+      couche=couche+( hit[0])+";";
       dis=dis+( hit[ alphabet1])+";";
+      
     }
    
   
 
 }
  
-//source=this.syntaxe_ieml(source);
-	
-	return source+"*"+disc;
+
+	//console.log(source+"***"+disc+"******"+couche+"--------------");
+	return source+"*"+disc+"*"+couche;
 }
 
 // Fonction pour changer la syntaxe des motes ieml
@@ -2344,7 +2348,7 @@ this.recherchez=function(searchString) {
 		 
 		   sour=sour+";";
 		  }
-	
+	  
 	   return sour;
 
 	}
@@ -2353,7 +2357,7 @@ this.recherchez=function(searchString) {
 	
 	return subject[i][0]+"*"+this.syntaxe_ieml(subject[i][1]+";")+"*"+subject[i][7];
 	
-	}
+}
 
 this.Niveau_ieml=function(ieml){
 	var niv;

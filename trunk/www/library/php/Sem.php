@@ -743,12 +743,70 @@ Class Sem{
                
                 $result = $db->query($sql);
                 $db->close();
+                $i=0;
     			while($reponse=mysql_fetch_array($result)){
-    				$Trad.=$reponse[1].";";
-    				$Desc.=$reponse[2].";";
-    				$Tag.=$reponse[0].";";
+    				   
+    				    $arrTrad[$i]=$reponse[1];
+	    				$arrDesc[$i]=$reponse[2];
+	    				$arrTag[$i]=$reponse[0];
+	    				$arrCouche[$i]=$this->GetIemlLevel($reponse[1]);
+	    				$i++;
+	    				
     			}
+    			if(sizeof($arrTag)!=0){
+    				$temps=array_keys(array_unique($arrTag));
+    				$diff=array_diff(array_keys($arrTag),$temps);
+    	            foreach($diff as  $k=>$v ){
+    			    	$Diff[]=$arrTag[$k];
+    			    }
+    			    $diff=array_unique($Diff);
+    			    if(sizeof($diff)!=0){
+    					foreach( $diff as  $k=>$v ){
+		    				$TradNoeud="";
+		    				$DescNoeud="";
+		    				$CoucheNoeud="";
+		    				$TagNoeud="";
+	    					foreach($arrTag  as $key=>$val  ){
+		    				 	if($val==$v){
+		    				 		$TradNoeud.=$arrTrad[$key]."#";
+		    						$DescNoeud.=$arrDesc[$key]."#";
+		    						$CoucheNoeud.=$arrCouche[$key]."#";
+		    						$TagNoeud=$val;
+		    						
+		    					}
+	    					}
+		    				$Trad.=$TradNoeud.";";
+			    			$Desc.=$DescNoeud.";";
+			    			$Couche.=$CoucheNoeud.";";
+			    			$Tag.=$TagNoeud.";";
+		    			}
+	    			
+    				}else{
+    				   
+    				   	$Trad=implode(";",$arrTrad);
+	    				$Desc=implode(";",$arrDesc);;
+	    				$Tag=implode(";",$arrTag);
+	    				$Couche=implode(";",$arrCouche);;
+    		 	}
+    		
+		   		foreach($arrTag  as $key=>$val  ){
+		   			if(!in_array($val,$Diff)){
+			    	
+			    		$Trad.=$val."#;";
+			    		$Desc.=$val."#;";
+			    		$Couche.=$val."#;";
+			    		$Tag.=$val.";";
+			    	}
+			    }
+		    
+    		}else{
+    			$Trad=";";
+    			$Desc=";";
+    			$Couche=";";
+    			$Tag=";";
+    		}
     			
+  			    
     			// recuperartion de fichier xml
     			if($this->trace)
     			echo "Sem.php:RecupOntoTrad:file:".$file;
@@ -757,7 +815,7 @@ Class Sem{
 					$xml = simplexml_load_file($file);
 			    }
     			
-    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag);
+    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag).'*'.$Couche;
                
      }   
      
@@ -857,7 +915,7 @@ Class Sem{
                 $where=str_replace("-Iemlcode-",Trim($codeIeml), $where);
                 $sql = $Q[0]->select.$Q[0]->from.$where;
                 if($this->trace)
-                  echo"ExeAjex:AddTrad:sql:$sql ";
+                  //fb("ExeAjex:AddTrad:sql:$sql ");
         		
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
@@ -909,7 +967,8 @@ Class Sem{
 			                $values=str_replace("-idTrad-", $idTrad,$Q[0]->values);
 			                $values=str_replace("-idUti-", $_SESSION['iduti'], $values);
 			                $sql = $Q[0]->insert.$values;
-			   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+			   				
+			                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 					        $db->connect();   
 			                $db->query($sql);
 			                $db->close();		                	                	
@@ -1077,6 +1136,19 @@ Class Sem{
 	    echo $Xul;
    }
    
-	
+function GetIemlLevel($IemlExp){
+	$l=substr($IemlExp,strlen($IemlExp)-1);
+	switch ($l){
+		case '.' :  
+			$level="event";break;
+		case '-' :  
+			$level="relations";break;
+		case '\'': 
+			$level="ideas";break;
+		case '[a-z]':
+			$level="elements";break;
+	}
+		return $level;
+}
 }
 ?>

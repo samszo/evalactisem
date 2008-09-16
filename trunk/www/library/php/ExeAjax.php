@@ -66,9 +66,9 @@
                 case 'GetTreeTrad':
         	        	//Pour le débugage
                 		if($_GET['debug'])
-        	        		$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd']);
+        	        		$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd'],$GET['couche']);
                 		else
-        	        		$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd']);
+        	        		$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd'],$_POST['couche']);
         	        	break;
                 case 'InsertIemlOnto':
                 	   $resultat=InsertIemlOnto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
@@ -108,19 +108,19 @@
         
 
         
-        function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd){
+        function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
 			
         	global $objSite;
             $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-        	
         	$arrBdd=explode(";",$bdd);		    
         	$arrFlux=explode(";",$flux);
+        	
         	
         	if($type=="Signl_Trad"){
 			
 				$arrTrad=explode(";",$trad);
 			    $arrDescp=explode(";",$descp);
-			    
+			    $arrCouche=explode(";",$couche);
 			    //vérifie le partage de traduction
 			    for($i=0;$i<sizeof($arrTrad);$i++){
 			    	//vérifie que l'on traite une trad auto
@@ -138,6 +138,7 @@
         	if($type=="Multi_Trad"){
         		$arrTrad=explode("*",$trad);
 			    $arrDescp=explode("*",$descp);
+			    $arrCouche=explode("*",$couche);
         	}
         	if($type=="No_Trad"){
         		//récupère les traduction automatiques supprimmées par l'utilisateur
@@ -154,7 +155,7 @@
         	
         	$objXul = new Xul($objSite);
         	
-        	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd);  
+        	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd,$arrCouche);  
             
         	return stripslashes($ihm);
         }
