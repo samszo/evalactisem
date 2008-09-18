@@ -135,7 +135,7 @@
 				<where> where ieml_id=-IdIeml- AND onto_flux_id=-IdFlux-</where>
 			</Query>
 			<Query fonction="Tree_dynamique">
-				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_lib</select>
+				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_lib, u.uti_id</select>
 				<from> FROM ieml_onto_flux f
 					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id
                        INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id

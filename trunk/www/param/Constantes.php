@@ -1,16 +1,16 @@
 <?php
   //
   // Fichier contenant les definitions de constantes
-  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
+  define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
 	//pour le débubbage
-   define ("PathRoot","C:/wamp/www/evalactisem");
+   //define ("PathRoot","C:/wamp/www/evalactisem");
 
   // *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/php/");
 	// *** Define the path to the SVG class dir. ***
 	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
   // Include the class files.
-	require_once(TT_CLASS_BASE."AllClass.php");
+  require_once(TT_CLASS_BASE."AllClass.php");
 	
   define ("TRACE", false);
   
@@ -23,6 +23,7 @@
   define ("MaxMarker", 300);
   define ("DELIM",'*');
   define ("DELIM_P",';');
+  define ("DELIM_FLUX","array_delim");
   define ("jsPathRoot",PathRoot."/library/js/");
   
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");

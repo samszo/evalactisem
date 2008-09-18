@@ -1,4 +1,6 @@
 <primitives>
+<primitive compact='M.' integral='(T.|S.|B.)' descriptor='nouns' />
+<primitive compact='O.' integral='(A.|U.)' descriptor='verbs' />
 <primitive compact='U.' descriptor='virtuel' />
 <primitive compact='A.' descriptor='actuel' />
 <primitive compact='S.' descriptor='signe' />

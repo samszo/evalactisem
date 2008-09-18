@@ -346,8 +346,8 @@ function Trad_Pars_Ieml(result, param){
     	console.log("interface:Trad_Pars_Ieml:FluxS="+FluxS+" : "+descpS );
     	console.log("interface:Trad_Pars_Ieml:FluxM="+FluxM +" : "+descpM);
     	console.log("interface:Trad_Pars_Ieml:FluxN="+FluxN);
+	    console.log("interface:Trad_Pars_Ieml:FluxN="+FluxN);
     }
-    console.log("interface:Trad_Pars_Ieml:FluxN="+FluxN);
 	if(FluxS.length>2){
 		var url = urlAjax+"library/php/ExeAjax.php";
 		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd+"&couche="+CoucheS;

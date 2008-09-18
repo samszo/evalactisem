@@ -1,13 +1,9 @@
 <?php
-set_time_limit(3000);
-require('library/php-delicious/php-delicious.inc.php');
-require('param/Constantes.php');
-define('DELICIOUS_USER', $_POST['login_uti']);
-define('DELICIOUS_PASS', $_POST['mdp_uti']);
-
 session_start();
 extract($_SESSION,EXTR_OVERWRITE);
 extract($_POST,EXTR_OVERWRITE);
+require('param/ParamPage.php');
+
 
 function ChercheAbo ()
 	{
@@ -16,11 +12,16 @@ function ChercheAbo ()
 		
 		$login=$_POST['login_uti'];
 		$mdp=$_POST['mdp_uti'];
+		if(TRACE)
+			echo "index:ChercheAbo:login:".$_POST['login_uti']." mdp=".$_POST['mdp_uti']."<br/>";
    	   	
 		if(($login!="")&&($mdp!="")){
-	    	$oDelicious = new PhpDelicious($login, $mdp);
+			$oDelicious = new PhpDelicious($login, $mdp);
 			$_SESSION['loginSess']=$login;
+			$_SESSION['mdpSess']=$mdp;
 			$_SESSION['Delicious']=$oDelicious;
+			if(TRACE)
+				echo "ParamPage:Debug:oDelicious=".$oDelicious->sUsername."<br/>";
 			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
 			$con=$oDelicious->LastError();
 			if ($con==2)
@@ -29,9 +30,9 @@ function ChercheAbo ()
 				include("login.php");
 				exit;
 			}
-			}else{
-				include("login.php");
-				exit;
+		}else{
+			include("login.php");
+			exit;
 		}
 }
 

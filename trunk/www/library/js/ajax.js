@@ -91,10 +91,6 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 
 	    this.req = new XMLHttpRequest();										// XMLHttpRequest natif (Gecko, Safari, Opera, IE7)
 
-		try {
-	    	netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");		// Mozilla Security
-	   	} catch (e) {}
-
 		this.req.onreadystatechange = function () { processReqChange(); }
 		this.req.open("GET", this.url,true);
 		this.req.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
@@ -137,10 +133,6 @@ function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
 
 	    this.req = new XMLHttpRequest();										// XMLHttpRequest natif (Gecko, Safari, Opera, IE7)
 
-		try {
-	    	netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");		// Mozilla Security
-	   	} catch (e) {}
-
 		this.req.onreadystatechange = function () { processReqChange(); }
         
 		this.req.open("POST", this.url,true);
@@ -181,13 +173,6 @@ function processReqChange() {
 
 		if (this.req.status == 200) {			// detécter problèmes de format
 
-			try {
-    			netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-   			} catch (e) {}
-
-			try {
-	   			//console.log(this.req.responseText);
-			} catch (e) {}
 
 			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
 			

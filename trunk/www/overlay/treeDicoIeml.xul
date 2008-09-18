@@ -32,14 +32,14 @@
 <treerow>
 <treecell label=""/>
 <treecell  label="virtuel" />
-<treecell  label="U."/>
+<treecell  label="U:"/>
 </treerow>
 </treeitem>
 <treeitem >
 <treerow>
 <treecell label=""/>
 <treecell  label="signe" />
-<treecell  label="S."/>
+<treecell  label="S:"/>
 
 </treerow>
 </treeitem>
@@ -47,14 +47,14 @@
 <treerow>
 <treecell label=""/>
 <treecell  label="actuel" />
-<treecell  label="A."/>
+<treecell  label="A:"/>
 </treerow>
 </treeitem>
 <treeitem >
 <treerow>
 <treecell label=""/>
 <treecell  label="être" />
-<treecell  label="B."/>
+<treecell  label="B:"/>
 </treerow>
 </treeitem>
 <treeitem >
@@ -62,7 +62,7 @@
 <treerow>
 <treecell label=""/>
 <treecell  label="chose" />
-<treecell  label="T."/>
+<treecell  label="T:"/>
 </treerow>
 </treeitem>
 </treechildren>
