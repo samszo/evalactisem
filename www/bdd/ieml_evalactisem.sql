@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Serveur: localhost
--- Généré le : Sam 02 Août 2008 à 22:02
+-- Généré le : Sam 16 Août 2008 à 10:34
 -- Version du serveur: 5.0.45
 -- Version de PHP: 5.2.5
 
@@ -264,7 +264,7 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (180, 0x742e682e2d, 'héritage spirituel', 3, 'relations', '2008-05-09'),
 (181, 0x6b2e752e2d742e752e2d642e752e2d27, 'prémonitoire', 5, 'ideas', '2008-05-09'),
 (182, 0x752e752e2d662e6f2e2d27, 'musique', 5, 'ideas', '2008-05-09'),
-(183, 0x552e, 'virtuel', 1, 'elements', '2008-05-09'),
+(183, 0x553a, 'virtuel', 1, 'elements', '2008-05-09'),
 (184, 0x732e652e2d742e752e2d27, 'opération arithmétique', 5, 'ideas', '2008-05-09'),
 (185, 0x6f2e792e2d77652e682e2d, 'orienter la recherche', 5, 'ideas', '2008-05-09'),
 (186, 0x6f2e6f2e2d6d2e6f2e2d732e792e2d27, 'critique sociale', 5, 'ideas', '2008-05-09'),
@@ -809,7 +809,7 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (724, 0x702e702e2d6b2e6f2e2d27, 'production / échange / consommation', 5, 'ideas', '2008-05-09'),
 (725, 0x752e752e2d6c2e6f2e2d732e792e2d27, 'cartographie sémantique', 5, 'ideas', '2008-05-09'),
 (726, 0x6b2e6f2e2d6e2e6f2e2d27, 'justice', 5, 'ideas', '2008-05-09'),
-(727, 0x532e, 'signe', 1, 'elements', '2008-05-09'),
+(727, 0x533a, 'signe', 1, 'elements', '2008-05-09'),
 (728, 0x682e682e2d732e6f2e2d27, 'transcendance', 5, 'ideas', '2008-05-09'),
 (729, 0x6b2e6f2e2d732e6f2e2d27, 'gouvernement', 5, 'ideas', '2008-05-09'),
 (730, 0x6b2e652e2d6b2e612e2d77612e652e2d27, 'suivre une discipline', 5, 'ideas', '2008-05-09'),
@@ -1104,7 +1104,7 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (1019, 0x6b2e642e2d, 'Ouest', 3, 'relations', '2008-05-09'),
 (1020, 0x6c2e692e2d622e692e2d742e752e2d27, 'simulé', 5, 'ideas', '2008-05-09'),
 (1021, 0x742e652e2d6d2e752e2d77612e652e2d27, 'mise en scène / réalisation', 5, 'ideas', '2008-05-09'),
-(1022, 0x412e, 'actuel', 1, 'elements', '2008-05-09'),
+(1022, 0x413a, 'actuel', 1, 'elements', '2008-05-09'),
 (1023, 0x77752e742e2d, 'comprendre les causes', 3, 'relations', '2008-05-09'),
 (1024, 0x6b2e682e2d, 'création collective', 3, 'relations', '2008-05-09'),
 (1025, 0x622e6f2e2d752e752e2d732e792e2d27, '(à venir)', 5, 'ideas', '2008-05-09'),
@@ -1727,7 +1727,7 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (1641, 0x776f2e612e2d, 'trouver sa juste place', 3, 'relations', '2008-05-09'),
 (1642, 0x6b2e776f2e2d, 'école de pensée', 3, 'relations', '2008-05-09'),
 (1643, 0x652e682e2d, 'suivre une méthode d''interpretation', 3, 'relations', '2008-05-09'),
-(1644, 0x422e, 'être', 1, 'elements', '2008-05-09'),
+(1644, 0x423a, 'être', 1, 'elements', '2008-05-09'),
 (1645, 0x6c2e692e2d742e692e2d27, 'fermeture / sac', 5, 'ideas', '2008-05-09'),
 (1646, 0x6e2e6f2e2d612e612e2d732e792e2d27, '(à venir)', 5, 'ideas', '2008-05-09'),
 (1647, 0x662e6f2e2d632e632e2d27, '(à venir)', 5, 'ideas', '2008-05-09'),
@@ -1950,7 +1950,7 @@ INSERT INTO `ieml_onto` (`ieml_id`, `ieml_code`, `ieml_lib`, `ieml_niveau`, `iem
 (1864, 0x6c2e692e2d6c2e692e2d742e752e2d27, 'en réseau', 5, 'ideas', '2008-05-09'),
 (1865, 0x672e622e2d, 'bruit / erreur de transmission', 3, 'relations', '2008-05-09'),
 (1866, 0x6f2e642e2d, 'être irresponsable', 3, 'relations', '2008-05-09'),
-(1867, 0x542e, 'chose', 1, 'elements', '2008-05-09'),
+(1867, 0x543a, 'chose', 1, 'elements', '2008-05-09'),
 (1868, 0x6d2e612e2d6d2e612e2d27, 'famille', 5, 'ideas', '2008-05-09'),
 (1869, 0x6d2e6f2e2d732e6f2e2d732e752e2d27, 'intéressant', 5, 'ideas', '2008-05-09'),
 (1870, 0x742e6f2e2d642e6f2e2d732e752e2d27, 'pertinent', 5, 'ideas', '2008-05-09'),
