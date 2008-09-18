@@ -914,8 +914,9 @@ Class Sem{
 		        $where=str_replace("-codeFlux-", utf8_decode($codeflux), $Q[0]->where);
                 $where=str_replace("-Iemlcode-",Trim($codeIeml), $where);
                 $sql = $Q[0]->select.$Q[0]->from.$where;
+               
                 if($this->trace)
-                  //fb("ExeAjex:AddTrad:sql:$sql ");
+                  echo ("ExeAjex:AddTrad:sql:$sql ");
         		
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
