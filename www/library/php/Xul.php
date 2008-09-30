@@ -507,11 +507,11 @@ class Xul{
 	                        	$Trad .= '</treerow>'.EOL;
 	                        	
                             if(in_array($trad[$k],$bdd)){
-                            	$arrDescp = explode("#",$descp[$k]);
+                            	fb($arrDescp = explode("#",$descp[$k]));
 	                      		$arrTrad = explode("#",$trad[$k]);
 	                      		$arrCouche=explode("#",$couche[$k]);
 	                            $TradUti .= $Trad.'<treechildren>'.EOL;
-	                            for($j=0;$j<sizeof($arrTrad)-1;$j++){
+	                            for($j=0;$j<sizeof($arrTrad);$j++){
 	                            	
 	                            	$TradUti .= '<treeitem id="'.$couche[$k].'_'.$k.'" container="true" open="true">'.EOL;
 	                             		$TradUti .= '<treerow>'.EOL;

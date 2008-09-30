@@ -732,7 +732,7 @@ Class Sem{
    
    function RecupOntoTrad(){
     	global $objSite;	
-    	
+    	$Diff=array();
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 		        $db->connect();   
                 	// requête pour vérifier l'existence de la traduction
@@ -743,14 +743,14 @@ Class Sem{
                
                 $result = $db->query($sql);
                 $db->close();
-                $i=0;
+               
     			while($reponse=mysql_fetch_array($result)){
     				   
     				    $arrTrad[$i]=$reponse[1];
 	    				$arrDesc[$i]=$reponse[2];
 	    				$arrTag[$i]=$reponse[0];
 	    				$arrCouche[$i]=$this->GetIemlLevel($reponse[1]);
-	    				$i++;
+	    				
 	    				
     			}
     			if(sizeof($arrTag)!=0){
@@ -760,6 +760,7 @@ Class Sem{
     			    	$Diff[]=$arrTag[$k];
     			    }
     			    $diff=array_unique($Diff);
+    			   
     			    if(sizeof($diff)!=0){
     					foreach( $diff as  $k=>$v ){
 		    				$TradNoeud="";
@@ -780,24 +781,25 @@ Class Sem{
 			    			$Couche.=$CoucheNoeud.";";
 			    			$Tag.=$TagNoeud.";";
 		    			}
+		    			foreach($arrTag  as $key=>$val  ){
+				   			if(!in_array($val,$Diff)){
+					    	
+					    		$Trad.=$arrTrad[$key].";";
+					    		$Desc.=$$arrDesc[$key].";";
+					    		$Couche.=$arrCouche[$key].";";
+					    		$Tag.=$val.";";
+					    	}
+					    }
 	    			
     				}else{
     				   
-    				   	$Trad=implode(";",$arrTrad);
-	    				$Desc=implode(";",$arrDesc);;
-	    				$Tag=implode(";",$arrTag);
-	    				$Couche=implode(";",$arrCouche);;
+    				   	
+	    				$Desc=implode(";",$arrDesc).";";
+	    				$Tag=implode(";",$arrTag).";";
+	    				$Couche=implode(";",$arrCouche).";";
     		 	}
     		
-		   		foreach($arrTag  as $key=>$val  ){
-		   			if(!in_array($val,$Diff)){
-			    	
-			    		$Trad.=$val."#;";
-			    		$Desc.=$val."#;";
-			    		$Couche.=$val."#;";
-			    		$Tag.=$val.";";
-			    	}
-			    }
+		   		
 		    
     		}else{
     			$Trad=";";
@@ -809,12 +811,12 @@ Class Sem{
   			    
     			// recuperartion de fichier xml
     			if($this->trace)
-    			echo "Sem.php:RecupOntoTrad:file:".$file;
+    				echo "Sem.php:RecupOntoTrad:file:".$file;
     			$file=Flux_PATH.md5(XmlFlux).".xml";
     			if (file_exists($file)){
 					$xml = simplexml_load_file($file);
 			    }
-    			
+    			fb($Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag).'*'.$Couche);
     			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag).'*'.$Couche;
                
      }   
