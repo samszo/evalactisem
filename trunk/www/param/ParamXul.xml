@@ -157,6 +157,15 @@
 		<rdf tag="ieml_code"/>
 		<rdf tag="ieml_desc"/>
 	</XmlParam>
+	<query>
+	SELECT COUNT(*) nb, f.onto_flux_code
+FROM ieml_onto_flux f
+INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id
+INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+INNER JOIN ieml_uti_onto u ON u.uti_id =3
+AND u.ieml_id = i.ieml_id
+GROUP BY f.onto_flux_code
+HAVING nb > 1<query>
 	
 	<XmlParam nom="GetOntoFlux" datasource="http://localhost/evalactisem/library/CreaRdfTable.php">
 		<Querys>

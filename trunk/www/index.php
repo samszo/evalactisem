@@ -301,13 +301,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						         </tabpanel>
 						    </tabpanels>
 						</tabbox>
-
-
-
-
-
-
-
 					</vbox>
 				</hbox>
 			</groupbox>
