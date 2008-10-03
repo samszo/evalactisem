@@ -249,7 +249,6 @@ function Trad_Pars_Ieml(result, param){
         var arrNoms=new Array();
         var CoucheM="";
         var CoucheS="";
-        
         //traduction sauvegarder dans la BDD
         arrNoms = result.split(E);
        
@@ -779,6 +778,7 @@ function ShowDialog(){
         alert(lbl);
  
   } catch(ex2){alert("Interface:ShowDialog:"+ex2);}
+  
  }       
         
 
