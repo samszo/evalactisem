@@ -743,6 +743,11 @@ Class Sem{
     			// récupperation des tags qui on plusieurs traduction 
     			$resul=$this->GetDonneeBdd($objSite,"GetTradUtiMulti"); 
    			    while($repons=mysql_fetch_assoc($resul)){
+   			            $T="";
+   			            $D="";
+   			            $Tra="";
+   			            $Des="";
+   			            $C="";
    			    		$MultiCouche=$this->GetDonneeBdd($objSite,"GetTrad",true,$repons["onto_flux_code"],true,$repon["ieml_parent"]);
    			    	    while($rep=mysql_fetch_assoc($MultiCouche)){
    			    	    	// récupération des tags qui ont la même couche ieml
@@ -754,20 +759,20 @@ Class Sem{
    			    	        $Tra.=$T."#";
    			    	        $Des.=$D."#";
    			    	        $C.=$rep["ieml_parent"]."#";
-   			    	       
-   			    	        
    			    	    }
+   			    	   
    			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
    			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
    			    	       $Tra.=$SCouches["ieml_code"]."#";
    			    	       $Des.=$SCouches["ieml_lib"]."#";
    			    	       $C.=$SCouches["ieml_parent"]."#";
    			    	    }
+   			    	    
    			    	    $Tag.=$repons["onto_flux_code"].";";
    			    	    $Trad.=$Tra.";";
    			    	    $Desc.=$Des.";"; 
    			    	    $Couche.=$C.";";
-   			    	    
+   			    	   
    			    	}
    			    	
    			    	 
@@ -779,6 +784,7 @@ Class Sem{
     			if (file_exists($file)){
 					$xml = simplexml_load_file($file);
 			    }
+			    fb($Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag)."*".$Couche);
     			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag)."*".$Couche;
                
      }   
@@ -796,7 +802,7 @@ Class Sem{
         	$from = str_replace("-couche-",$couche,$from);
         }
         $sql = $Q[0]->select.$from;
-      
+        fb($sql);
         $result = $db->query($sql);
         $db->close($link);
         return($result);
