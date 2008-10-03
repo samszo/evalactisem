@@ -732,94 +732,75 @@ Class Sem{
    
    function RecupOntoTrad(){
     	global $objSite;	
-    	$Diff=array();
-                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-		        $db->connect();   
-                	// requête pour vérifier l'existence de la traduction
-                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Tree_dynamique']";
-                $Q = $objSite->XmlParam->GetElements($Xpath);
-                $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
-                $sql = $Q[0]->select.$from;
-               
-                $result = $db->query($sql);
-                $db->close();
-               
-    			while($reponse=mysql_fetch_array($result)){
-    				   
-    				    $arrTrad[$i]=$reponse[1];
-	    				$arrDesc[$i]=$reponse[2];
-	    				$arrTag[$i]=$reponse[0];
-	    				$arrCouche[$i]=$this->GetIemlLevel($reponse[1]);
-	    				
-	    				
+    	
+   				$result=$this->GetDonneeBdd($objSite,"GetTradUtiSignle",$link);
+    			while($reponse=mysql_fetch_assoc($result)){
+    				$Trad.=$reponse["ieml_code"]."#;";
+    				$Desc.=$reponse["ieml_lib"].";";
+    				$Tag.=$reponse["onto_flux_code"].";";
+    				$Couche.=$reponse["ieml_parent"].";";
     			}
-    			if(sizeof($arrTag)!=0){
-    				$temps=array_keys(array_unique($arrTag));
-    				$diff=array_diff(array_keys($arrTag),$temps);
-    	            foreach($diff as  $k=>$v ){
-    			    	$Diff[]=$arrTag[$k];
-    			    }
-    			    $diff=array_unique($Diff);
-    			   
-    			    if(sizeof($diff)!=0){
-    					foreach( $diff as  $k=>$v ){
-		    				$TradNoeud="";
-		    				$DescNoeud="";
-		    				$CoucheNoeud="";
-		    				$TagNoeud="";
-	    					foreach($arrTag  as $key=>$val  ){
-		    				 	if($val==$v){
-		    				 		$TradNoeud.=$arrTrad[$key]."#";
-		    						$DescNoeud.=$arrDesc[$key]."#";
-		    						$CoucheNoeud.=$arrCouche[$key]."#";
-		    						$TagNoeud=$val;
-		    						
-		    					}
-	    					}
-		    				$Trad.=$TradNoeud.";";
-			    			$Desc.=$DescNoeud.";";
-			    			$Couche.=$CoucheNoeud.";";
-			    			$Tag.=$TagNoeud.";";
-		    			}
-		    			foreach($arrTag  as $key=>$val  ){
-				   			if(!in_array($val,$Diff)){
-					    	
-					    		$Trad.=$arrTrad[$key].";";
-					    		$Desc.=$$arrDesc[$key].";";
-					    		$Couche.=$arrCouche[$key].";";
-					    		$Tag.=$val.";";
-					    	}
-					    }
-	    			
-    				}else{
-    				   
-    				   	
-	    				$Desc=implode(";",$arrDesc).";";
-	    				$Tag=implode(";",$arrTag).";";
-	    				$Couche=implode(";",$arrCouche).";";
-    		 	}
-    		
-		   		
-		    
-    		}else{
-    			$Trad=";";
-    			$Desc=";";
-    			$Couche=";";
-    			$Tag=";";
-    		}
-    			
-  			    
+    			// récupperation des tags qui on plusieurs traduction 
+    			$resul=$this->GetDonneeBdd($objSite,"GetTradUtiMulti"); 
+   			    while($repons=mysql_fetch_assoc($resul)){
+   			    		$MultiCouche=$this->GetDonneeBdd($objSite,"GetTrad",true,$repons["onto_flux_code"],true,$repon["ieml_parent"]);
+   			    	    while($rep=mysql_fetch_assoc($MultiCouche)){
+   			    	    	// récupération des tags qui ont la même couche ieml
+   			    	    	$GetCoucheMulti=$this->GetDonneeBdd($objSite,"GetCouche",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
+   			    	    	while($Couches=mysql_fetch_assoc($GetCoucheMulti)){
+   			    	        	$T.=$Couches["ieml_code"].":";
+   			    	        	$D.=$Couches["ieml_lib"].":";
+   			    	        }
+   			    	        $Tra.=$T."#";
+   			    	        $Des.=$D."#";
+   			    	        $C.=$rep["ieml_parent"]."#";
+   			    	       
+   			    	        
+   			    	    }
+   			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
+   			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
+   			    	       $Tra.=$SCouches["ieml_code"]."#";
+   			    	       $Des.=$SCouches["ieml_lib"]."#";
+   			    	       $C.=$SCouches["ieml_parent"]."#";
+   			    	    }
+   			    	    $Tag.=$repons["onto_flux_code"].";";
+   			    	    $Trad.=$Tra.";";
+   			    	    $Desc.=$Des.";"; 
+   			    	    $Couche.=$C.";";
+   			    	    
+   			    	}
+   			    	
+   			    	 
+   			    
     			// recuperartion de fichier xml
     			if($this->trace)
-    				echo "Sem.php:RecupOntoTrad:file:".$file;
+    			echo "Sem.php:RecupOntoTrad:file:".$file;
     			$file=Flux_PATH.md5(XmlFlux).".xml";
     			if (file_exists($file)){
 					$xml = simplexml_load_file($file);
 			    }
-    			fb($Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag).'*'.$Couche);
-    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag).'*'.$Couche;
+    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag)."*".$Couche;
                
      }   
+   
+     function GetDonneeBdd($objSite,$function,$getTag=false,$tag="",$getCouche=false,$couche=""){
+   		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+		$link=$db->connect();   
+        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='".$function."']";
+        $Q = $objSite->XmlParam->GetElements($Xpath);
+        $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+        if($getTag){
+        	$from = str_replace("-tag-",$tag,$from);
+        }
+        if($getCouche){
+        	$from = str_replace("-couche-",$couche,$from);
+        }
+        $sql = $Q[0]->select.$from;
+      
+        $result = $db->query($sql);
+        $db->close($link);
+        return($result);
+   }
      
    function VerifPartageTrad($idTrad,$idUti){
    			
@@ -916,9 +897,8 @@ Class Sem{
 		        $where=str_replace("-codeFlux-", utf8_decode($codeflux), $Q[0]->where);
                 $where=str_replace("-Iemlcode-",Trim($codeIeml), $where);
                 $sql = $Q[0]->select.$Q[0]->from.$where;
-               
                 if($this->trace)
-                  echo ("ExeAjex:AddTrad:sql:$sql ");
+                  echo"ExeAjex:AddTrad:sql:$sql ";
         		
                 $result = $db->query($sql);
                 $res=mysql_fetch_array($result);
@@ -970,8 +950,7 @@ Class Sem{
 			                $values=str_replace("-idTrad-", $idTrad,$Q[0]->values);
 			                $values=str_replace("-idUti-", $_SESSION['iduti'], $values);
 			                $sql = $Q[0]->insert.$values;
-			   				
-			                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+			   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 					        $db->connect();   
 			                $db->query($sql);
 			                $db->close();		                	                	
@@ -1138,7 +1117,6 @@ Class Sem{
 	    
 	    echo $Xul;
    }
-   
 function GetIemlLevel($IemlExp){
 	$l=substr($IemlExp,strlen($IemlExp)-1);
 	switch ($l){
@@ -1152,6 +1130,7 @@ function GetIemlLevel($IemlExp){
 			$level="elements";break;
 	}
 		return $level;
-}
+}  
+	
 }
 ?>

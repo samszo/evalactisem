@@ -1,39 +1,27 @@
 <?php
 session_start();
-set_time_limit(3000);
+//set_time_limit(3000);
 
-	if(!$_SESSION['loginSess']){
-		$_SESSION['loginSess']="samszo";
-		$_SESSION['mdpSess']="Lucky71";
-		$_SESSION['iduti']="2";
-		$_SESSION['loginSess']="plevy4";
-		$_SESSION['mdpSess']="1plotin";
-		$_SESSION['iduti']="3";
-		//$oDelicious = new PhpDelicious("", "1plotin");
-	}
+	
 
 	require_once ("Constantes.php");
 	
-	if(TRACE)
-		echo "ParamPage:_SESSION['loginSess']=".$_SESSION['loginSess']."<br/>";
-		
-   	$oDelicious = new PhpDelicious($_SESSION['loginSess'], $_SESSION['mdpSess']);
-   	$_SESSION['Delicious']=$oDelicious;
-	if(TRACE)
-		echo "ParamPage:Debug:oDelicious:login=".$oDelicious->sUsername." mdp=".$oDelicious->sPassword."<br/>";
-   
-//Vérification du mode connecté
-if(isset($_GET['NoConnect'])){
-	//$oDelicious->iCacheTime = 1000000000;
-}
-   
+	if($_SESSION['Delicious']){
+	   $oDelicious=$_SESSION['Delicious'];
+   	}else{
+   		//pour le debuggage
+       	$oDelicious = new PhpDelicious("samszo", "Lucky71");
+		$_SESSION['Delicious']=$oDelicious;
+   }
+
+
 
 
 // vérification du site en cours
 if(isset($_GET['site'])){
 	$site = $_GET['site'];
 }else{
-	if(!session_is_registered("site"))
+	if(!session_is_registered("Site"))
 		$site = DEFSITE;
 }
 
