@@ -441,10 +441,10 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                   $ihm .= '</treerow>'.EOL;
                 $ihm .= '<treechildren>'.EOL;
                }
-               $ihm .= '<treeitem >'.EOL;
+               $ihm .= '<treeitem id="treeitemSup_'.$i.'">'.EOL;
                  $ihm .= '<treerow >'.EOL;
                    $ihm .= '<treecell label=""/>'.EOL;
-                   $ihm .= '<treecell label="'.utf8_encode($t).'"/>'.EOL;
+                   $ihm .= '<treecell id="TtreeitemSup__'.$i.'" label="'.utf8_encode($t).'"/>'.EOL;
                  $ihm .= '</treerow>'.EOL;
                $ihm .= '</treeitem>'.EOL; 
                $i++;
@@ -457,17 +457,17 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
             $i=0;
             foreach($flux as $k=>$f){
               if($i==0){
-                 $ihm .= '<treeitem container="true" open="true" >'.EOL;
+                 $ihm .= '<treeitem container="true" open="true"  >'.EOL;
                    $ihm .= '<treerow properties="Dictio" >'.EOL;
                      $ihm .= '<treecell label="'.utf8_encode(" non trouvées").'"/>'.EOL;
                      $ihm .= '<treecell label=""/>'.EOL;
                   $ihm .= '</treerow>'.EOL;
                  $ihm .= '<treechildren>'.EOL;
               }
-              $ihm .= '<treeitem >'.EOL;
+              $ihm .= '<treeitem id="treeitem_'.$i.'">'.EOL;
                 $ihm .= '<treerow properties="Dictio" >'.EOL;
                   $ihm .= '<treecell label=""/>'.EOL;
-                  $ihm .= '<treecell label="'.$f.'"/>'.EOL;
+                  $ihm .= '<treecell id="Ttreeitem_'.$i.'" label="'.$f.'"/>'.EOL;
                 $ihm .= '</treerow>'.EOL;
               $ihm .= '</treeitem>'.EOL; 
               $i++;
