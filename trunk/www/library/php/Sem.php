@@ -743,8 +743,7 @@ Class Sem{
     			// récupperation des tags qui on plusieurs traduction 
     			$resul=$this->GetDonneeBdd($objSite,"GetTradUtiMulti"); 
    			    while($repons=mysql_fetch_assoc($resul)){
-   			            $T="";
-   			            $D="";
+   			            
    			            $Tra="";
    			            $Des="";
    			            $C="";
@@ -752,6 +751,9 @@ Class Sem{
    			    	    while($rep=mysql_fetch_assoc($MultiCouche)){
    			    	    	// récupération des tags qui ont la même couche ieml
    			    	    	$GetCoucheMulti=$this->GetDonneeBdd($objSite,"GetCouche",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
+   			    	    	$T="";
+   			                $D="";
+   			                
    			    	    	while($Couches=mysql_fetch_assoc($GetCoucheMulti)){
    			    	        	$T.=$Couches["ieml_code"].":";
    			    	        	$D.=$Couches["ieml_lib"].":";
@@ -760,7 +762,7 @@ Class Sem{
    			    	        $Des.=$D."#";
    			    	        $C.=$rep["ieml_parent"]."#";
    			    	    }
-   			    	   
+   			    	    
    			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
    			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
    			    	       $Tra.=$SCouches["ieml_code"]."#";
@@ -802,7 +804,6 @@ Class Sem{
         	$from = str_replace("-couche-",$couche,$from);
         }
         $sql = $Q[0]->select.$from;
-        fb($sql);
         $result = $db->query($sql);
         $db->close($link);
         return($result);

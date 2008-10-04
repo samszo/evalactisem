@@ -487,13 +487,14 @@ function startSelectTab()
 
 }
 function Select_NoTrad(id,treecol){
-	
+
 	var tree = document.getElementById(id);
   	var txtcode_flux=document.getElementById("code-trad-flux");
-	  var txtcode_ieml = document.getElementById("code-trad-ieml");
-	  var txtlib_ieml=document.getElementById("lib-trad-ieml");
+	var txtcode_ieml = document.getElementById("code-trad-ieml");
+	var txtlib_ieml=document.getElementById("lib-trad-ieml");
   	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
-  	txtcode_flux.value=selection.firstChild.lastChild.getAttribute("label");
+  	IdTreecell=selection.getAttribute('id');
+  	txtcode_flux.value=document.getElementById("T"+IdTreecell).getAttribute('label');
     txtcode_ieml.value = "";
     txtlib_ieml.value = "";
    
