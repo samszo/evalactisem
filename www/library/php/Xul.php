@@ -508,6 +508,7 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                      	$arrTrad = explode("#",$trad[$k]);
                         $arrCouche=explode("#",$couche[$k]);
                         $arrDescp=explode("#",$descp[$k]);
+                        
                         $TradUti .= $Trad.'<treechildren>'.EOL;
                         for($j=0;$j<sizeof($arrTrad)-1;$j++){
                            $arrDescps=explode(":",$arrDescp[$j]);
@@ -518,8 +519,8 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                                 $TradUti .= '<treecell label="'.$arrCouche[$j].'"/>'.EOL ;
                               $TradUti .= '</treerow>'.EOL;
                         $TradUti .= '<treechildren>'.EOL;
-                        for($l=0;$l<sizeof($arrTrads);$l++){  
-                           $TradUti .= $this->AddTreeItemTrad($type.'_'.$k.'_'.$trad[$k],"", array("","",$arrDescps[$l],$arrTrads[$l]));
+                        for($l=0;$l<sizeof($arrTrads)-1;$l++){  
+                           $TradUti .= $this->AddTreeItemTrad($type.'_'.$k.$l,"", array("","",$arrDescps[$l],$arrTrads[$l]));
                         }
                         $TradUti .= '</treechildren>'.EOL;
                            $TradUti .= '</treeitem>'.EOL;
@@ -528,7 +529,7 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                         $TradUti .= '</treeitem>'.EOL;
                     }else{
                         $TradAuto .= $Trad.'<treechildren>'.EOL;
-                          $TradAuto .= $this->AddTreeItemTrad($type.'_'.$k.'_'.$trad[$k],"",array("","",$descp[$k],$trad[$k]));
+                          $TradAuto .= $this->AddTreeItemTrad($type.'_'.$l.$k,"",array("","",$descp[$k],$trad[$k]));
                         $TradAuto .= '</treechildren>'.EOL;
                       $TradAuto .= '</treeitem>'.EOL;
                                                 
@@ -587,15 +588,15 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
     
 	function AddTreeItemTrad($id, $style, $cells){
 		
-		$item = '<treeitem id="'.$id.'" >';  
-        $item .= '<treerow '.$style.' >';
+		$item = '<treeitem id="'.$id.'" >'.EOL;  
+        $item .= '<treerow '.$style.' >'.EOL;
         foreach($cells as $cell){
-        	$item .= '<treecell label="'.$cell.'"  />' ;      	
+        	$item .= '<treecell label="'.$cell.'"  />'.EOL ;      	
         }
-        $item .= '</treerow>';
-        $item .= '</treeitem>';
+        $item .= '</treerow>'.EOL;
+        $item .= '</treeitem>'.EOL;
 		
-        return $item;
+        return($item);
 		
 	}
        function TableFlux($sTag,$sDesc,$sUrl,$sDate,$sNote){

@@ -765,7 +765,7 @@ Class Sem{
    			    	    
    			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
    			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
-   			    	       $Tra.=$SCouches["ieml_code"]."#";
+   			    	       $Tra.=$SCouches["ieml_code"].":#";
    			    	       $Des.=$SCouches["ieml_lib"]."#";
    			    	       $C.=$SCouches["ieml_parent"]."#";
    			    	    }
