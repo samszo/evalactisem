@@ -519,7 +519,7 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                                 $TradUti .= '<treecell label="'.$arrCouche[$j].'"/>'.EOL ;
                               $TradUti .= '</treerow>'.EOL;
                         $TradUti .= '<treechildren>'.EOL;
-                        for($l=0;$l<sizeof($arrTrads)-1;$l++){  
+                        for($l=0;$l<sizeof($arrTrads);$l++){  
                            $TradUti .= $this->AddTreeItemTrad($type.'_'.$k.$l,"", array("","",$arrDescps[$l],$arrTrads[$l]));
                         }
                         $TradUti .= '</treechildren>'.EOL;
