@@ -765,6 +765,7 @@ Class Sem{
    			    	    
    			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
    			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
+   			    	       fb($Des);
    			    	       $Tra.=$SCouches["ieml_code"].":#";
    			    	       $Des.=$SCouches["ieml_lib"]."#";
    			    	       $C.=$SCouches["ieml_parent"]."#";
@@ -786,7 +787,7 @@ Class Sem{
     			if (file_exists($file)){
 					$xml = simplexml_load_file($file);
 			    }
-			    fb($Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag)."*".$Couche);
+			    
     			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag)."*".$Couche;
                
      }   
@@ -804,6 +805,7 @@ Class Sem{
         	$from = str_replace("-couche-",$couche,$from);
         }
         $sql = $Q[0]->select.$from;
+       
         $result = $db->query($sql);
         $db->close($link);
         return($result);
@@ -893,82 +895,39 @@ Class Sem{
    				
    				if($iduti==-1)
 	   				$iduti=$_SESSION['iduti'];
-   					   				
-   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-		        $db->connect();   
-		        
+   				
 		        //recuperation des identifiants ieml_id et ieml_onto_flux
-		        
-		        $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax_recup_id']";
-		        $Q = $objSite->XmlParam->GetElements($Xpath);
-		        $where=str_replace("-codeFlux-", utf8_decode($codeflux), $Q[0]->where);
-                $where=str_replace("-Iemlcode-",Trim($codeIeml), $where);
-                $sql = $Q[0]->select.$Q[0]->from.$where;
-                if($this->trace)
-                  echo"ExeAjex:AddTrad:sql:$sql ";
-        		
-                $result = $db->query($sql);
-                $res=mysql_fetch_array($result);
-                $db->close();
-                
+		        $res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml) ));
+		       
                 if($res){
                 
 	                //vérifie que la trad existe
-	                $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='ExeAjax-AddTrad-VerifExist']";
-	                $Q = $objSite->XmlParam->GetElements($Xpath);
-	                $where=str_replace("-idflux-", $res[0], $Q[0]->where);
-	                $where=str_replace("-idIeml-", $res[1],$where);
-	                $sql = $Q[0]->select.$Q[0]->from.$where;
-	   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-			        $db->connect();   
-	                $result = $db->query($sql);
-	                $db->close();
-	                $rs=mysql_fetch_array($result);
+	                
+	                $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-",$res[0],$res[1] ));
 	                
 	                if(!$rs){
 		                // insertion dans la table de traductions des identifiants
-		                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-AddTrad-Insert']";
-		                $Q = $objSite->XmlParam->GetElements($Xpath);
-		                $values=str_replace("-idflux-", $res[0], $Q[0]->values);
-		                $values=str_replace("-idIeml-", $res[1],$values);
-		                $sql = $Q[0]->insert.$values;
-		   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-				        $db->connect();   
-		                $db->query($sql);
-			    		$idTrad= mysql_insert_id();
-		                $db->close();
-			    		
+		                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',"-idflux-","-idIeml-", $res[0],$res[1]);
+		               
 		                //insertion de la traduction dans la table des utilisateurs
-		                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ieml_uti_onto']";
-		                $Q = $objSite->XmlParam->GetElements($Xpath);
-		                $values=str_replace("-idieml-", $res[1],$Q[0]->values);
-		                $values=str_replace("-iduti-", $iduti, $values);
-		                $sql = $Q[0]->insert.$values;
-		   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-				        $db->connect();   
-		                $db->query($sql);
+		                $this->RequeteInsert($objSite,'ieml_uti_onto',"-idieml-","-iduti-", $res[1],$iduti);
+		                
 		                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** ajoutée");
-		                $db->close();
 		                
 		                if($iduti==$objSite->infos["UTI_TRAD_AUTO"]){
 		                	//insertion du partage de la trad
-			                $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='InsertPartageTrad']";
-			                $Q = $objSite->XmlParam->GetElements($Xpath);
-			                $values=str_replace("-idTrad-", $idTrad,$Q[0]->values);
-			                $values=str_replace("-idUti-", $_SESSION['iduti'], $values);
-			                $sql = $Q[0]->insert.$values;
-			   				$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-					        $db->connect();   
-			                $db->query($sql);
-			                $db->close();		                	                	
+		                	 $this->RequeteInsert($objSite,'InsertPartageTrad',"-idTrad-","-idUti-", $idTrad, $_SESSION['iduti']);
+			                               	                	
 		                }
 	                	
 		                $Activite->AddActi("AddTrad",$iduti);
 	                
 	                }else{
+	                	
 	                	$idTrad = $rs['trad_id'];                
                 	}
                 }else{
+                	    
                 	return false;
                 }
                 if($getId)
@@ -976,6 +935,35 @@ Class Sem{
                 else
 	                return $message;
   
+   }
+   function RequeteSelect($objSite,$function,$var1,$var2,$val1,$val2){
+   	 
+   	   $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
+	   $Q = $objSite->XmlParam->GetElements($Xpath);
+	   $where=str_replace($var1, $val1, $Q[0]->where);
+	   $where=str_replace($var2, $val2,$where);
+	   $sql = $Q[0]->select.$Q[0]->from.$where;
+	   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	   $link=$db->connect();   
+	   $result = $db->query($sql);
+	   $db->close($link);
+	                return ($result);
+   	
+   }
+   function RequeteInsert($objSite,$function,$var1,$var2,$val1,$val2){
+   
+   	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='".$function."']";
+   	 $Q = $objSite->XmlParam->GetElements($Xpath);
+	 $values=str_replace($var1, $val1, $Q[0]->values);
+     $values=str_replace($var2, $val2,$values);
+	 $sql = $Q[0]->insert.$values;
+	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	 $link=$db->connect();   
+	 $db->query($sql);
+	 $idTrad= mysql_insert_id();
+     $db->close($link);
+     		return $idTrad;
+   	
    }
    function Sup_Trad($codeIeml,$libIeml,$codeflux){
    	global $objSite;
@@ -1124,19 +1112,29 @@ Class Sem{
 	    
 	    echo $Xul;
    }
-function GetIemlLevel($IemlExp){
+function GetIemlLevel($IemlExp,$getlevel=true){
 	$l=substr($IemlExp,strlen($IemlExp)-1);
 	switch ($l){
 		case '.' :  
 			$level="event";break;
+			$niv=2;
 		case '-' :  
-			$level="relations";break;
+			$level="relations";
+			$niv=3;
+			break;
 		case '\'': 
-			$level="ideas";break;
+			$level="ideas";
+			$niv=4;
+			break;
 		case '[a-z]':
-			$level="elements";break;
+			$level="elements";
+			$niv=3;
+			break;
 	}
+	if($getlevel)
 		return $level;
+	else
+		return $niv;
 }  
 	
 }
