@@ -11,9 +11,11 @@
 	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
   // Include the class files.
   require_once(TT_CLASS_BASE."AllClass.php");
-	
+  define ("PointV", ';');
+  define ("Diaz", '#');
+  define ("Virgule", ',');
+  define ("Etoil", '*');
   define ("TRACE", false);
-  
   define ("DEFSITE", "local");
 
   $dbOptions = array (

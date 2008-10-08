@@ -62,6 +62,10 @@
 	</XmlParam>
 	<XmlParam nom="GetOntoTrad" >
 		<Querys>
+			<Query fonction="Ieml_Onto">
+				<insert> INSERT INTO ieml_onto (ieml_id,ieml_code,ieml_lib,ieml_niveau,ieml_parent)</insert>
+				<values> VALUES (' ', '-Iemlcode-' , '-Iemllib-',-Imelniveau-, '-Iemlparent-' )</values>
+			</Query>
 			<Query fonction="ieml-flux">
 				<select>SELECT t.ieml_id,t.onto_flux_id,i.ieml_code,i.ieml_lib </select>
 				<from> FROM ieml_trad t
@@ -70,6 +74,20 @@
 				        
 				</from>
 				<where></where>
+			</Query>
+			<Query fonction="GetTradAutoSup">
+				<select> SELECT of.onto_flux_code, of.onto_flux_id </select>
+				<from> FROM ieml_trad t
+					INNER JOIN ieml_onto_flux of ON of.onto_flux_id = t.onto_flux_id
+					LEFT JOIN ieml_uti_onto uo ON uo.ieml_id = t.ieml_id
+					LEFT JOIN ieml_trad_partage tp ON tp.trad_id = t.trad_id
+				</from>
+				<where> WHERE uo.uti_id = -idUti- AND tp.trad_id IS NULL </where>
+			</Query>	
+			 <Query fonction="ExeAjax_recup_id_flux">
+				<select>SELECT f.onto_flux_id   </select>
+				<from> 	FROM ieml_onto_flux f </from>
+				<where> WHERE f.onto_flux_code='-codeFlux-'  </where>
 			</Query>
 		    <Query fonction="ExeAjax_recup_id">
 				<select>SELECT f.onto_flux_id,o.ieml_id   </select>
@@ -130,7 +148,7 @@
 				<insert> INSERT INTO ieml_uti_onto (uti_id,ieml_id)</insert>
 				<values> VALUES ('-iduti-' , '-idieml-')</values>
 			</Query>
-			<Query fonction="update_posted_tag">
+			<Query fonction="update_posted_tag"> 
 				<update> update ieml_trad SET trad_post=1</update>
 				<where> where ieml_id=-IdIeml- AND onto_flux_id=-IdFlux-</where>
 			</Query>
@@ -141,6 +159,10 @@
                        INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
                        INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id
                 </from>
+			</Query>
+			<Query fonction="InsertPartageTrad">
+				<insert> INSERT INTO ieml_trad_partage (uti_id,trad_id)</insert>
+				<values> VALUES ( '-idUti-','-idTrad-')</values>
 			</Query>
 			<Query fonction="GetTradUtiSignle">
 				<select> SELECT COUNT(*) nb,f.onto_flux_code, i.ieml_code,i.ieml_lib,ieml_parent</select>
@@ -250,15 +272,7 @@
 				<from>  FROM ieml_onto_flux</from>
 				<where> WHERE onto_flux_id =-parent-</where>
 			</Query>
-		    <Query fonction="GetTradAutoSup">
-				<select> SELECT of.onto_flux_code, of.onto_flux_id </select>
-				<from> FROM ieml_trad t
-					INNER JOIN ieml_onto_flux of ON of.onto_flux_id = t.onto_flux_id
-					LEFT JOIN ieml_uti_onto uo ON uo.ieml_id = t.ieml_id
-					LEFT JOIN ieml_trad_partage tp ON tp.trad_id = t.trad_id
-				</from>
-				<where> WHERE uo.uti_id = -idUti- AND tp.trad_id IS NULL </where>
-			</Query>			
+		    		
 		    <Query fonction="VerifTradUtiFlux">
 				<select> SELECT COUNT(1) nb </select>
 				<from> FROM ieml_trad t
