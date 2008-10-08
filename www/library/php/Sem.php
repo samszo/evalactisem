@@ -734,52 +734,56 @@ Class Sem{
     	global $objSite;	
     	
    				$result=$this->GetDonneeBdd($objSite,"GetTradUtiSignle",$link);
-    			while($reponse=mysql_fetch_assoc($result)){
-    				$Trad.=$reponse["ieml_code"]."#;";
-    				$Desc.=$reponse["ieml_lib"].";";
-    				$Tag.=$reponse["onto_flux_code"].";";
-    				$Couche.=$reponse["ieml_parent"].";";
-    			}
+    			if($result){
+	   				while($reponse=mysql_fetch_assoc($result)){
+	    				$Trad.=$reponse["ieml_code"].Virgule.Diaz.PointV;
+	    				$Desc.=$reponse["ieml_lib"].PointV;
+	    				$Tag.=$reponse["onto_flux_code"].PointV;
+	    				$Couche.=$reponse["ieml_parent"].PointV;
+    				}
+   				}
     			// récupperation des tags qui on plusieurs traduction 
     			$resul=$this->GetDonneeBdd($objSite,"GetTradUtiMulti"); 
-   			    while($repons=mysql_fetch_assoc($resul)){
-   			            
-   			            $Tra="";
-   			            $Des="";
-   			            $C="";
-   			    		$MultiCouche=$this->GetDonneeBdd($objSite,"GetTrad",true,$repons["onto_flux_code"],true,$repon["ieml_parent"]);
-   			    	    while($rep=mysql_fetch_assoc($MultiCouche)){
-   			    	    	// récupération des tags qui ont la même couche ieml
-   			    	    	$GetCoucheMulti=$this->GetDonneeBdd($objSite,"GetCouche",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
-   			    	    	$T="";
-   			                $D="";
-   			                
-   			    	    	while($Couches=mysql_fetch_assoc($GetCoucheMulti)){
-   			    	        	$T.=$Couches["ieml_code"].":";
-   			    	        	$D.=$Couches["ieml_lib"].":";
-   			    	        }
-   			    	        $Tra.=$T."#";
-   			    	        $Des.=$D."#";
-   			    	        $C.=$rep["ieml_parent"]."#";
-   			    	    }
-   			    	    
-   			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
-   			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
-   			    	       fb($Des);
-   			    	       $Tra.=$SCouches["ieml_code"].":#";
-   			    	       $Des.=$SCouches["ieml_lib"]."#";
-   			    	       $C.=$SCouches["ieml_parent"]."#";
-   			    	    }
-   			    	    
-   			    	    $Tag.=$repons["onto_flux_code"].";";
-   			    	    $Trad.=$Tra.";";
-   			    	    $Desc.=$Des.";"; 
-   			    	    $Couche.=$C.";";
-   			    	   
-   			    	}
-   			    	
-   			    	 
-   			    
+   			    if($resul){
+	    			while($repons=mysql_fetch_assoc($resul)){
+	   			            
+	   			            $Tra="";
+	   			            $Des="";
+	   			            $C="";
+	   			    		$MultiCouche=$this->GetDonneeBdd($objSite,"GetTrad",true,$repons["onto_flux_code"],true,$repon["ieml_parent"]);
+	   			    	    while($rep=mysql_fetch_assoc($MultiCouche)){
+	   			    	    	// récupération des tags qui ont la même couche ieml
+	   			    	    	$GetCoucheMulti=$this->GetDonneeBdd($objSite,"GetCouche",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
+	   			    	    	$T="";
+	   			                $D="";
+	   			                
+	   			    	    	while($Couches=mysql_fetch_assoc($GetCoucheMulti)){
+	   			    	        	$T.=$Couches["ieml_code"].Virgule;
+	   			    	        	$D.=$Couches["ieml_lib"].Virgule;
+	   			    	        }
+	   			    	        $Tra.=$T.Diaz;
+	   			    	        $Des.=$D.Diaz;
+	   			    	        $C.=$rep["ieml_parent"].Diaz;
+	   			    	    }
+	   			    	    
+	   			            $GetCouche=$this->GetDonneeBdd($objSite,"GetCoucheSignl",true,$repons["onto_flux_code"],true,$rep["ieml_parent"]);
+	   			    	    while($SCouches=mysql_fetch_assoc($GetCouche)){
+	
+	   			    	      $Tra.=$SCouches["ieml_code"].Virgule.Diaz;
+	
+	   			    	       $Des.=$SCouches["ieml_lib"].Diaz;
+	   			    	       $C.=$SCouches["ieml_parent"].Diaz;
+	   			    	    }
+	   			    	    
+	   			    	    $Tag.=$repons["onto_flux_code"].PointV;
+	   			    	    $Trad.=$Tra.PointV;
+	   			    	    $Desc.=$Des.PointV; 
+	   			    	    $Couche.=$C.PointV;
+	   			    	   
+	   			    	}
+	   			    	
+	   			    	  
+   			    }
     			// recuperartion de fichier xml
     			if($this->trace)
     			echo "Sem.php:RecupOntoTrad:file:".$file;
@@ -788,7 +792,7 @@ Class Sem{
 					$xml = simplexml_load_file($file);
 			    }
 			    
-    			return $xml->tags."*".$Trad."*".utf8_encode($Desc)."*".utf8_encode($Tag)."*".$Couche;
+    			return $xml->tags.Etoil.$Trad.Etoil.utf8_encode($Desc).Etoil.utf8_encode($Tag).Etoil.$Couche;
                
      }   
    
@@ -892,22 +896,38 @@ Class Sem{
    function Add_Trad($libIeml,$codeflux,$codeIeml,$iduti=-1,$getId=false){
    				global $objSite;
    				$Activite= new Acti();
-   				
+   				fb($iduti);
    				if($iduti==-1)
 	   				$iduti=$_SESSION['iduti'];
    				
 		        //recuperation des identifiants ieml_id et ieml_onto_flux
 		        $res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml) ));
 		       
-                if($res){
-                
+                if(!$res){
+                 //insert l'expression IEML dans ieml_onto
+                   	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Ieml_Onto']";
+                   	$Q = $objSite->XmlParam->GetElements($Xpath);
+	 				$values=str_replace("-Iemlcode-", Trim($codeIeml), $Q[0]->values);
+     				$values=str_replace("-Iemllib-", Trim($libIeml),$values);
+     				$values=str_replace("-Imelniveau-", Trim($this->GetIemlLevel($codeIeml,false)),$values);
+     				$values=str_replace("-Iemlparent-", Trim($this->GetIemlLevel($codeIeml)),$values);
+	 				$sql = $Q[0]->insert.$values;
+	                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	 				$link=$db->connect();   
+	 				$db->query($sql);
+     				$db->close($link);
+     				//recuperation des identifiants ieml_id et ieml_onto_flux
+		              $res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml)));
+                      fb($codeIeml);
+               
+                }
 	                //vérifie que la trad existe
 	                
-	                $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-",$res[0],$res[1] ));
-	                
+	                $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
+	               
 	                if(!$rs){
 		                // insertion dans la table de traductions des identifiants
-		                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',"-idflux-","-idIeml-", $res[0],$res[1]);
+		                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',"-idflux-","-idIeml-", $res[0] ,$res[1] );
 		               
 		                //insertion de la traduction dans la table des utilisateurs
 		                $this->RequeteInsert($objSite,'ieml_uti_onto',"-idieml-","-iduti-", $res[1],$iduti);
@@ -926,17 +946,14 @@ Class Sem{
 	                	
 	                	$idTrad = $rs['trad_id'];                
                 	}
-                }else{
-                	    
-                	return false;
-                }
+                
                 if($getId)
                 	return $idTrad;
                 else
 	                return $message;
   
    }
-   function RequeteSelect($objSite,$function,$var1,$var2,$val1,$val2){
+  function RequeteSelect($objSite,$function,$var1,$var2,$val1,$val2){
    	 
    	   $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
 	   $Q = $objSite->XmlParam->GetElements($Xpath);
@@ -954,10 +971,11 @@ Class Sem{
    
    	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='".$function."']";
    	 $Q = $objSite->XmlParam->GetElements($Xpath);
-	 $values=str_replace($var1, $val1, $Q[0]->values);
+   	 $values=str_replace($var1, $val1, $Q[0]->values);
      $values=str_replace($var2, $val2,$values);
-	 $sql = $Q[0]->insert.$values;
-	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+     $sql = $Q[0]->insert.$values;
+     fb($sql);
+     $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	 $link=$db->connect();   
 	 $db->query($sql);
 	 $idTrad= mysql_insert_id();

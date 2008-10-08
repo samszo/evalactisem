@@ -103,7 +103,7 @@
                
        }
         
-        echo $resultat; 
+        echo $resultat;  
 
         
 

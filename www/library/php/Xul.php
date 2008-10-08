@@ -505,21 +505,21 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                        $Trad .= '<treecell label="'.$f.'"/>'.EOL ;
                      $Trad .= '</treerow>'.EOL;
                      if(in_array($trad[$k],$bdd)){
-                     	$arrTrad = explode("#",$trad[$k]);
-                        $arrCouche=explode("#",$couche[$k]);
-                        $arrDescp=explode("#",$descp[$k]);
+                     	$arrTrad = explode(Diaz,$trad[$k]);
+                        $arrCouche=explode(Diaz,$couche[$k]);
+                        $arrDescp=explode(Diaz,$descp[$k]);
                         
                         $TradUti .= $Trad.'<treechildren>'.EOL;
                         for($j=0;$j<sizeof($arrTrad)-1;$j++){
-                           $arrDescps=explode(":",$arrDescp[$j]);
-                           $arrTrads=explode(":",$arrTrad[$j]);
+                           $arrDescps=explode(Virgule,$arrDescp[$j]);
+                           $arrTrads=explode(Virgule,$arrTrad[$j]);
                            $TradUti .= '<treeitem id="'.$arrCouche.'_'.$k.'" container="true" open="true">'.EOL;
                              $TradUti .= '<treerow>'.EOL;
                                 $TradUti .= '<treecell label=" "/>'.EOL ;
                                 $TradUti .= '<treecell label="'.$arrCouche[$j].'"/>'.EOL ;
                               $TradUti .= '</treerow>'.EOL;
                         $TradUti .= '<treechildren>'.EOL;
-                        for($l=0;$l<sizeof($arrTrads);$l++){  
+                        for($l=0;$l<sizeof($arrTrads)-1;$l++){  
                            $TradUti .= $this->AddTreeItemTrad($type.'_'.$k.$l,"", array("","",$arrDescps[$l],$arrTrads[$l]));
                         }
                         $TradUti .= '</treechildren>'.EOL;
@@ -527,12 +527,13 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                         }
                         $TradUti .= '</treechildren>'.EOL;
                         $TradUti .= '</treeitem>'.EOL;
+                        
                     }else{
                         $TradAuto .= $Trad.'<treechildren>'.EOL;
                           $TradAuto .= $this->AddTreeItemTrad($type.'_'.$l.$k,"",array("","",$descp[$k],$trad[$k]));
                         $TradAuto .= '</treechildren>'.EOL;
                       $TradAuto .= '</treeitem>'.EOL;
-                                                
+                                                 
                    }
                             
               }
@@ -543,9 +544,9 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                       $ihm .= '<treecell label="'.$flux[$k].'"/>'.EOL ;
                       $ihm .= '</treerow>'.EOL;
                       $ihm .= '<treechildren>'.EOL;
-                      $arrDescp = explode(";",$descp[$k]);
-                      $arrTrad = explode(";",$trad[$k]);
-                      $arrCouche=explode(";",$couche);
+                      $arrDescp = explode(PointV,$descp[$k]);
+                      $arrTrad = explode(PointV,$trad[$k]);
+                      $arrCouche=explode(PointV,$couche);
                       for($j=0;$j<sizeof($arrTrad)-1;$j++){
                         $ihm .= $this->AddTreeItemTrad($type.'_'.$k.'_'.$j.'_'.$arrTrad[$j],"", array("","",$arrDescp[$j],$arrTrad[$j]),$arrCouche[$k]);                                             
                       }
@@ -608,11 +609,11 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                 $sNote=$_POST['note'];
                 
                 
-                $aTag=explode("*",$sTag);
-                $aDesc=explode(";",$sDesc);
-                $aUrl=explode(";",$sUrl);
-                $aDate=explode(";",$sDate);
-                $aNote=explode(";",$sNote);
+                $aTag=explode(Etoil,$sTag);
+                $aDesc=explode(PointV,$sDesc);
+                $aUrl=explode(PointV,$sUrl);
+                $aDate=explode(PointV,$sDate);
+                $aNote=explode(PointV,$sNote);
 
 
                         $table.='<listbox id="boxlist"  flex="1" onclick="GoUrl(this.selectedItem.childNodes[2].getAttribute(\'label\'));">';
