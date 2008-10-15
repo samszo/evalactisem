@@ -6,8 +6,6 @@ $_SESSION = array();
 if (isset($_COOKIE[session_name()])) {    setcookie(session_name(), '', time()-42000, '/');}
 session_destroy ();
 
-
-
 $html.='<html xmlns="http://www.w3.org/1999/xhtml">';
 $html.='<head>';
 $html.='<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />';
