@@ -17,7 +17,8 @@
   define ("Etoil", '*');
   define ("TRACE", false);
   define ("DEFSITE", "local");
-
+  //define ("DEFSITE", "mundi");
+  
   $dbOptions = array (
 		'ERROR_DISPLAY' => true
 		);
