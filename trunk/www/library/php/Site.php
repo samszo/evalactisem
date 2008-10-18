@@ -5,6 +5,7 @@ class Site{
   public $scope;
   public $NbsTopics;
   public $XmlParam;
+  public $trace;
   private $sites;
 
   function __tostring() {
@@ -13,7 +14,6 @@ class Site{
 
   function __construct($sites, $id, $scope, $complet=true) {
 	//echo "new Site $sites, $id, $scope<br/>";
-    print_r($Site);
     $this->sites = $sites;
     $this->id = $id;
     $this->infos = $this->sites[$this->id];
@@ -44,7 +44,39 @@ class Site{
 	//echo "FIN new Site <br/>";
 		
     }
-	
+
+	function utilisateur($uti_login){
+		
+	 	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Verif_Exist_Utilisateur']";
+		
+		$Q=$this->XmlParam->GetElements($Xpath);
+		$where=str_replace("-login-",$uti_login,$Q[0]->where);
+		$sql=$Q[0]->select.$Q[0]->from.$where;
+		if($this->trace)
+			echo "site:utilisateur:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
+		$db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
+		$db->connect();
+		$req = $db->query($sql);
+		$db->close();
+		$res=@mysql_fetch_array($req);
+		if( @mysql_num_rows($req)==0){
+	 		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Enrg_Utilisateur']";
+			$Q=$this->XmlParam->GetElements($Xpath);
+			$values=str_replace("-login-",$uti_login,$Q[0]->values);
+			$sql=$Q[0]->insert.$values;
+			$db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
+			$db->connect();
+			$db->query($sql);
+			$uti_id=mysql_insert_id();
+			$db->close();
+			return $uti_id;
+		}
+
+		return $res[0]  ;
+	}
+    
+    
+    
 	public function EstParent($id)
 	{
 		$arrParent = split("[".DELIM."]", $this->GetParentIds());

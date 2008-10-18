@@ -203,35 +203,6 @@ class SauvFlux{
 		//return $result;
 	
 }
-
-	function utilisateur($objSite,$uti_login){
-		
-		$Xpath=Xpath('Verif_Exist_Utilisateur');
-		$Q=$objSite->XmlParam->GetElements($Xpath);
-		$where=str_replace("-login-",$uti_login,$Q[0]->where);
-		$sql=$Q[0]->select.$Q[0]->from.$where;
-		if($this->trace)
-			echo "SaveFlux:utilisateur:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-		$db->connect();
-		$req = $db->query($sql);
-		$db->close();
-		$res=@mysql_fetch_array($req);
-		if( @mysql_num_rows($req)==0){
-			$Xpath=Xpath('Enrg_Utilisateur');
-			$Q=$objSite->XmlParam->GetElements($Xpath);
-			$values=str_replace("-login-",$uti_login,$Q[0]->values);
-			$sql=$Q[0]->insert.$values;
-			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-			$db->connect();
-			$db->query($sql);
-			$uti_id=mysql_insert_id();
-			$db->close();
-			return $uti_id;
-		}
-
-		return $res[0]  ;
-	}
 	
 	function flux_uti($objSite,$uti_id,$flux_id){
 		$Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
