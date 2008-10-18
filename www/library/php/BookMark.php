@@ -69,7 +69,7 @@ class BookMark{
         $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
          // Recupération des tarductions des tags
          
-	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 		 $db->connect();         	
          $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetTradTag']";
          $Q = $objSite->XmlParam->GetElements($Xpath);
@@ -80,7 +80,7 @@ class BookMark{
          $db->close();
         //boucle sur les tag traduit 
    		// pour chaque tag  il faut recupper l'url correspondante
-    	
+    	$postMAJ = "";
     	while($reponse=mysql_fetch_assoc($result)){     
     		$Posts=$oDelicious->GetAllPosts($reponse['onto_flux_code'],true);
     		if($this->trace)
@@ -107,7 +107,7 @@ class BookMark{
 	        	
 	            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
 	            
-	            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"], $dbOptions);
+	            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 			 	$db->connect();  
 	    		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='update_posted_tag']";
 	        	$Q = $objSite->XmlParam->GetElements($Xpath);

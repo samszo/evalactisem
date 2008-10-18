@@ -158,6 +158,7 @@
         	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd,$arrCouche);  
             
         	//return stripslashes($ihm);
+        	$ihm = str_replace("\'","'",$ihm);
         	return $ihm;
         }
         
@@ -319,8 +320,8 @@
         
 	   	function AddPostIeml(){
 	     	global $objSite;
-	     	$oDelicious=$_SESSION['Delicious'];
-	        $bmark=new  BookMark();
+	   		$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess']);
+	     	$bmark= new  BookMark();
 	         
 	         $bmark->MajPostIeml($objSite,$oDelicious);
 	         
