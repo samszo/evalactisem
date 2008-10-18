@@ -4,7 +4,6 @@
          
    $requette= $_GET["requette"];
    $requete_g=$_GET["req"];
-   $login=$_SESSION['loginSess'];
   // $requette= $_GET["requette"];
    //$requete_g=$_GET["req"];
    $tag=$_GET["tag"];
@@ -14,12 +13,9 @@
   
    $Activite= new Acti();
    $oSaveFlux= new SauvFlux(); 
-
-   $iduti=$oSaveFlux->utilisateur($objSite,$login);
-   $_SESSION['iduti']=$iduti;
-   $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti))  ;
-  
+   $iduti = $_SESSION['iduti'];
    
+   $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti))  ;
    
    if($requette=="GetAllBundles" ){
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);

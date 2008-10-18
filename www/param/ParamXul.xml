@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by samszo (lsd) -->
 <XmlParams>
+	<StarIEML>
+		<go copy="!" opening="˜"/>
+		<slo union="|" difference="^" intersection="&amp;"/>
+		<Mark name="seme" layer="6" closing="_" gted="5"/>
+		<Mark name="phrase" layer="5" closing="," gted="4" gtor="6"/>
+		<Mark name="idea" layer="4" closing="'" gted="3" gtor="5"/>
+		<Mark name="relation" layer="3" closing="-" gted="2" gtor="4"/>
+		<Mark name="event" layer="2" closing="." gted="1" gtor="3"/>
+		<Mark name="primitive" layer="1" closing=":" gtor="2"/>
+	</StarIEML>
 	<XmlParam nom="GetOntoTree" datasource="http://localhost/evalactisem/library/CreaRdfTree.php"> 
 		<Querys>
 			<Query fonction="ieml">

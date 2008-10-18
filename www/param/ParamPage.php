@@ -2,20 +2,17 @@
 session_start();
 //set_time_limit(3000);
 
-	
-
 	require_once ("Constantes.php");
-	
-	if($_SESSION['Delicious']){
+
+	if(isset($_SESSION['Delicious'])){
 	   $oDelicious=$_SESSION['Delicious'];
    	}else{
    		//pour le debuggage
-       	$oDelicious = new PhpDelicious("samszo", "Lucky71");
+		$_SESSION['loginSess']="samszo";
+		$_SESSION['mdpSess']="Lucky71";
+   		$oDelicious = new PhpDelicious("samszo","Lucky71");
 		$_SESSION['Delicious']=$oDelicious;
-   }
-
-
-
+   }   
 
 // vérification du site en cours
 if(isset($_GET['site'])){
@@ -62,5 +59,8 @@ $scope = array(
 
 $objSite = new Site($SITES, $site, $scope, false);
 $objXul= new Xul($objSite);
+
+$_SESSION['iduti']=$objSite->utilisateur($_SESSION['loginSess']);
+
 
 ?>

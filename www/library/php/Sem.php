@@ -44,18 +44,19 @@ Class Sem{
 		$this->site = $Site;	
 		$this->Src = $So;
 
-		$StarParam = $this->site->XmlParam->GetElements("/EvalActiSem/StarIEML");
+		$StarParam = $this->site->XmlParam->GetElements("/XmlParams/StarIEML");
 
 		$this->StarParam = array(
 			"full"=>$StarParam[0]->Seme[0]["full"]
 			, "empty"=>$StarParam[0]->Seme[0]["empty"]
 			, "verb"=>$StarParam[0]->Seme[0]["verb"]
 			, "noun"=>$StarParam[0]->Seme[0]["noun"]
-			, "copy"=>$StarParam[0]->Go[0]["copy"]
-			, "opening"=>$StarParam[0]->Go[0]["opening"]
-			, "union"=>$StarParam[0]->Slo[0]["union"]
-			, "difference"=>$StarParam[0]->Slo[0]["difference"]
-			, "intersection"=>$StarParam[0]->Slo[0]["intersection"]
+			, "copy"=>$StarParam[0]->go["copy"]
+			, "opening"=>$StarParam[0]->go["opening"]
+			, "union"=>$StarParam[0]->slo["union"]
+			, "difference"=>$StarParam[0]->slo["difference"]
+			, "intersection"=>$StarParam[0]->slo["intersection"]
+			, "usl"=>"\\"
 			, "closing"=> array(
 				"seme"=>"_"
 				,"phrase"=>","
@@ -90,6 +91,28 @@ Class Sem{
 	public function GetFlux($Acte){
 		//echo 'On cherche le xpath '.$Xpath.'<br/>';
 		return $this->xml->xpath($Xpath);
+	}
+	
+	public function GetUsl($Couches,$Trads){
+		//construction d'un USL
+		$usl="";
+		$i=0;
+		foreach($Couches as $c){
+			if($c!=""){
+				$usl .= $this->StarParam["usl"];
+				//création de l'expression d'union
+				$arrTrad = split(",",$Trads[$i]);
+				$usl .= "(";
+				foreach($arrTrad as $t){
+					if($t!="")
+						$usl .= $t.$this->StarParam["union"];
+				}
+				$usl = substr($usl,0,-1);
+				$usl .= ")";
+			}
+			$i++;
+		}
+		return $usl;
 	}
 	
 	public function GetDesc($So){
@@ -896,7 +919,8 @@ Class Sem{
    function Add_Trad($libIeml,$codeflux,$codeIeml,$iduti=-1,$getId=false){
    				global $objSite;
    				$Activite= new Acti();
-   				fb($iduti);
+   				if($this->trace)
+	   				fb($iduti);
    				if($iduti==-1)
 	   				$iduti=$_SESSION['iduti'];
    				
@@ -917,8 +941,9 @@ Class Sem{
 	 				$db->query($sql);
      				$db->close($link);
      				//recuperation des identifiants ieml_id et ieml_onto_flux
-		              $res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml)));
-                      fb($codeIeml);
+	              	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml)));
+   					if($this->trace)
+	              		fb($codeIeml);
                
                 }
 	                //vérifie que la trad existe
@@ -974,7 +999,8 @@ Class Sem{
    	 $values=str_replace($var1, $val1, $Q[0]->values);
      $values=str_replace($var2, $val2,$values);
      $sql = $Q[0]->insert.$values;
-     fb($sql);
+	 if($this->trace)
+     	fb($sql);
      $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	 $link=$db->connect();   
 	 $db->query($sql);
@@ -984,7 +1010,8 @@ Class Sem{
    	
    }
    function Sup_Trad($codeIeml,$libIeml,$codeflux){
-   	global $objSite;
+   				$objSite = $this->site;
+   				
    	            $Activite= new Acti();
    				$iduti=$_SESSION['iduti'];
    	            $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad']";

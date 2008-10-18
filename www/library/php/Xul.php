@@ -397,6 +397,9 @@ class Xul{
     
    
 function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
+	
+		$sem = new Sem($this->site,$this->site->infos["XML_Param"], "");
+		
         if($type=="No_Trad"){
                 $label = "Aucunne traduction";
                         $flex = "flex='1'";
@@ -489,7 +492,7 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
           $ihm .= '<splitter class="tree-splitter"/>'.EOL;
           $ihm .= '<treecol id="treecol_Tagdel" flex="2"  primary="'.$primary.'" label="Tag delicious"  persist="width ordinal hidden"  />'.EOL;
           $ihm .= '<splitter class="tree-splitter"/>'.EOL;
-          $ihm .= '<treecol id="treecol_descp" flex="2" label="'.utf8_encode('Tag(s) trouvé(s)').'"  persist="width ordinal hidden" />'.EOL;
+          $ihm .= '<treecol id="treecol_descp" flex="2" label="'.utf8_encode('Libellé IEML').'"  persist="width ordinal hidden" />'.EOL;
           $ihm .= '<splitter class="tree-splitter"/>'.EOL;
           $ihm .= '<treecol id="treecol_'.$type.'" flex="1"  label="IEML"  persist="width ordinal hidden" />'.EOL;
           $ihm .= '</treecols>'.EOL;
@@ -499,41 +502,46 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
                if($type=="Signl_Trad"){
                   if($this->trace)
                      echo "Xul:GetTreeTrad:".print_r($bdd)."<br/>".EOL;  
-                  $Trad = '<treeitem id="'.$type.'_'.$k.'" container="true" open="true">'.EOL;
+	                 $Trad = '<treeitem id="'.$type.'_'.$k.'" container="true" open="true">'.EOL;
                      $Trad .= '<treerow>'.EOL;
-                       $Trad .= '<treecell label=" "/>'.EOL ;
-                       $Trad .= '<treecell label="'.$f.'"/>'.EOL ;
-                     $Trad .= '</treerow>'.EOL;
+                     $Trad .= '<treecell label=" "/>'.EOL ;
+                     $Trad .= '<treecell label="'.$f.'"/>'.EOL ;
+                     $Trad .= '<treecell label=""/>'.EOL ;
                      if(in_array($trad[$k],$bdd)){
                      	$arrTrad = explode(Diaz,$trad[$k]);
                         $arrCouche=explode(Diaz,$couche[$k]);
                         $arrDescp=explode(Diaz,$descp[$k]);
-                        
-                        $TradUti .= $Trad.'<treechildren>'.EOL;
+                        //calcul de l'usl
+	                    $usl=$sem->GetUsl($arrCouche,$arrTrad);
+	                    //fin de l'item delicious
+	                    $Trad .= '<treecell label="'.$usl.'"/>'.EOL ;
+	                    $Trad .= '</treerow>'.EOL;
+	                    
+	                    $TradUti .= $Trad.'<treechildren>'.EOL;
                         for($j=0;$j<sizeof($arrTrad)-1;$j++){
-                           $arrDescps=explode(Virgule,$arrDescp[$j]);
+                        	$arrDescps=explode(Virgule,$arrDescp[$j]);
                            $arrTrads=explode(Virgule,$arrTrad[$j]);
-                           $TradUti .= '<treeitem id="'.$arrCouche.'_'.$k.'" container="true" open="true">'.EOL;
+                           $TradUti .= '<treeitem id="'.$arrCouche[$j].'_'.$k.'" container="true" open="true">'.EOL;
                              $TradUti .= '<treerow>'.EOL;
                                 $TradUti .= '<treecell label=" "/>'.EOL ;
                                 $TradUti .= '<treecell label="'.$arrCouche[$j].'"/>'.EOL ;
                               $TradUti .= '</treerow>'.EOL;
-                        $TradUti .= '<treechildren>'.EOL;
-                        for($l=0;$l<sizeof($arrTrads)-1;$l++){  
-                           $TradUti .= $this->AddTreeItemTrad($type.'_'.$k.$l,"", array("","",$arrDescps[$l],$arrTrads[$l]));
-                        }
-                        $TradUti .= '</treechildren>'.EOL;
+	                        $TradUti .= '<treechildren>'.EOL;
+	                        for($l=0;$l<sizeof($arrTrads)-1;$l++){  
+	                           $TradUti .= $this->AddTreeItemTrad($type.'_'.$k.$l,"", array("","",$arrDescps[$l],$arrTrads[$l]));
+	                        }
+	                        $TradUti .= '</treechildren>'.EOL;
                            $TradUti .= '</treeitem>'.EOL;
                         }
                         $TradUti .= '</treechildren>'.EOL;
-                        $TradUti .= '</treeitem>'.EOL;
-                        
+                        $TradUti .= '</treeitem>'.EOL;                        
                     }else{
-                        $TradAuto .= $Trad.'<treechildren>'.EOL;
-                          $TradAuto .= $this->AddTreeItemTrad($type.'_'.$l.$k,"",array("","",$descp[$k],$trad[$k]));
+	                    //fin de l'item delicious
+	                    $Trad .= '</treerow>'.EOL;
+                    	$TradAuto .= $Trad.'<treechildren>'.EOL;
+                        $TradAuto .= $this->AddTreeItemTrad($type.'_'.$l.$k,"",array("","",$descp[$k],$trad[$k]));
                         $TradAuto .= '</treechildren>'.EOL;
-                      $TradAuto .= '</treeitem>'.EOL;
-                                                 
+                      	$TradAuto .= '</treeitem>'.EOL;
                    }
                             
               }

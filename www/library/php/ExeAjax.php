@@ -66,7 +66,7 @@
                 case 'GetTreeTrad':
         	        	//Pour le débugage
                 		if($_GET['debug'])
-        	        		$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd'],$GET['couche']);
+        	        		$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd'],$_GET['couche']);
                 		else
         	        		$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd'],$_POST['couche']);
         	        	break;
@@ -157,7 +157,8 @@
         	
         	$ihm=$objXul->GetTreeTrad($arrFlux,$arrTrad,$arrDescp,$type,$primary,$arrBdd,$arrCouche);  
             
-        	return stripslashes($ihm);
+        	//return stripslashes($ihm);
+        	return $ihm;
         }
         
         function GetTreeDictio(){

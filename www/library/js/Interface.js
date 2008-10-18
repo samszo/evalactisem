@@ -351,6 +351,7 @@ function Trad_Pars_Ieml(result, param){
 		var url = urlAjax+"library/php/ExeAjax.php";
 		var urlparams="f=GetTreeTrad&flux="+FluxS+"&trad="+synIemlS+"&descp="+descpS+"&type=Signl_Trad&primary=true&bdd="+bdd+"&couche="+CoucheS;
 		AppendResultPost(url,urlparams,document.getElementById('tpSingleTrad'),false);
+		//mise à jour des USL
 	}
 	//ajoute le tree des multi trad
 	if(FluxM.length>2){
@@ -530,30 +531,34 @@ function Select_Trad(id,treecolTag,treecolTrad,treecolIeml,type){
      if(tag!=""){
 	 	txtcode_flux.value= tag;
 		txtlib_ieml.value="";
-		txtcode_ieml.value="";
+		txtcode_ieml.value=iemlCode;
      }
      
-     if(iemlCode!="" ){
+     if(iemlCode!="" && tag=="" ){
        
 		var parent=tree.contentView.getParentIndex(tree.currentIndex);
 		var GrandParent=tree.contentView.getParentIndex(parent);
 		
 		txtcode_ieml.value= iemlCode;
 		txtlib_ieml.value=GetTreeValSelect(id,treecolTrad);
-		if(GrandParent==0 || GrandParent==-1 )
+		if(GrandParent==0 || GrandParent==-1 ){
 			txtcode_flux.value=tree.view.getCellText(parent,tree.treeBoxObject.columns[treecolTag]);
-		else
+		}else{
 			txtcode_flux.value=tree.view.getCellText(GrandParent,tree.treeBoxObject.columns[treecolTag]);
+		}		
      }
+     if(txtlib_ieml.value=="" && txtcode_ieml.value=="")
+		txtcode_flux.value="";
      	  
   }
   		 
  catch(e){
   console.log("interface:Select_Trad:"+e+""); 
  }
-  
 }
+
 function Parser(op,type){
+  try {
     var tree = document.getElementById("Signl_Trad");
     //prise en compte de la sélection multiple
     Iemlcode=GetIemlTreeExp("Signl_Trad", 3, op);
@@ -568,6 +573,12 @@ function Parser(op,type){
 	
 	var tabStatIeml = document.getElementById('tabStatIeml')
 	document.getElementById('tbIframe').selectedTab=tabStatIeml;	
+  } catch(ex2){ alert("interface:Parser:"+ex2); }
+}
+
+function GetIemlUsl(){
+  try {
+  } catch(ex2){ alert("interface:GetIemlUsl:"+ex2); }
 }
 
 
