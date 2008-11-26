@@ -56,7 +56,7 @@ Class Sem{
 			, "union"=>$StarParam[0]->slo["union"]
 			, "difference"=>$StarParam[0]->slo["difference"]
 			, "intersection"=>$StarParam[0]->slo["intersection"]
-			, "usl"=>"\\"
+			, "usl"=>"/"
 			, "closing"=> array(
 				"seme"=>"_"
 				,"phrase"=>","
@@ -331,7 +331,7 @@ Class Sem{
 	function GetOccuEvents($xml){
 		
 		//construction des tableaux du nombre d'occurrence
-		$Xpath = "//genOp[@layer='event']";
+		$Xpath = "//genOp[@layer='L1']";
 		foreach($xml->xpath($Xpath) as $genOps){
 			if($this->trace)
 				echo "Sem.php:GetOccuEvents:genOps".print_r($genOps)."<br/>";
@@ -382,7 +382,7 @@ Class Sem{
 	function GetOccuPrimis($xml){
 		
 		//construction des tableaux du nombre d'occurrence
-		$Xpath = "//genOp[@layer='primitive']";
+		$Xpath = "//genOp[@layer='L0']";
 		foreach($xml->xpath($Xpath) as $genOps){
 			if($this->trace)
 				echo "Sem.php:GetOccuPrimis:genOps".print_r($genOps)."<br/>";
@@ -439,6 +439,8 @@ Class Sem{
 		}
 		if($noms!=''|| $donnees!=''){
 			$ExpIemlXml="<Ieml><noms>".$noms."</noms><donnees>".$donnees."</donnees></Ieml>";
+		}else{
+			$ExpIemlXml="<Ieml><noms>VIDE</noms><donnees>0</donnees></Ieml>";
 		}
 		$file=$titre."_".XmlGraphIeml;
 		$this->CreatFileXml($ExpIemlXml,$file);
@@ -485,7 +487,7 @@ Class Sem{
 	
 		if($code=="")
 			$code=$this->Src;
-		$code = stripslashes ($code);
+		//$code = stripslashes ($code);
 	    //$lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.$code;
 	    $lien = 'http://starparser.ieml.org/cgi-bin/test2.cgi?iemlExpression='.$code;
 		if($this->trace)
@@ -1161,8 +1163,9 @@ function GetIemlLevel($IemlExp,$getlevel=true){
 	$l=substr($IemlExp,strlen($IemlExp)-1);
 	switch ($l){
 		case '.' :  
-			$level="event";break;
+			$level="event";
 			$niv=2;
+			break;
 		case '-' :  
 			$level="relations";
 			$niv=3;

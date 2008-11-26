@@ -100,7 +100,11 @@
                 	else
 	                	$resultat=IemlCycle($_POST['key']);
                 	break;
-               
+                case 'TagCloud':
+	                	$tg = new TagCloud();
+	                	$tg->GetSvg();
+                	break;
+                	
        }
         
         echo $resultat;  
