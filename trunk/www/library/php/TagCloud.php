@@ -38,7 +38,7 @@ class TagCloud {
           	,array('tag' => 'balayeur','count' => 14)
           	,array('tag' => 'bas layer','count' => 33)
           	,array('tag' => 'abat','count' => 24)
-        	,array('tag' => 'les heures','count' => 12)
+        	,array('tag' => 'les heurts','count' => 120)
         );
 
        	if($book) {
