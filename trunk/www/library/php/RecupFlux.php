@@ -15,7 +15,7 @@
    $oSaveFlux= new SauvFlux(); 
    $iduti = $_SESSION['iduti'];
    
-   $AllTag=explode("*",$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti))  ;
+   $AllTag=$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
    
    if($requette=="GetAllBundles" ){
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
@@ -27,8 +27,7 @@
   	
     $result_G=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
-    $result_F="<tags> $AllTag[0] </tags><count> $AllTag[1] </count>";
-    $flux="<marque ieml='t.u.-'>".$result_F.$result_G."</marque>";
+    $flux="<marque ieml='t.u.-'><tags> ".$AllTag.$result_G."</tags></marque>";
     SaveXmlFlux($flux);
     
     $Activite->AddActi('RAT',$iduti);
