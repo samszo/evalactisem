@@ -30,8 +30,12 @@ class TagCloud {
 		$jsMaxMot="";
 		$liste="";
 
+		//récupération des fan delicious
+		//http://feeds.delicious.com/v2/rss/networkfans/luckysemiosis
+		
         //récupère le bookmark delicious
 		//$book = new PhpDelicious(LOGIN_IEML, MDP_IEML);
+		/*
 		$book = array(
           	array('tag' => 'YO','count' => 20)
           	,array('tag' => 'man','count' => 45)
@@ -40,7 +44,22 @@ class TagCloud {
           	,array('tag' => 'abat','count' => 24)
         	,array('tag' => 'les heurts','count' => 120)
         );
-
+		*/
+		//récupère le boobkmark
+		$xml = simplexml_load_file("http://feeds.delicious.com/v2/rss/aeito");
+		//recupére les tags
+        $tags = $xml->xpath('/rss/channel/item/category');
+        $book = array();
+        //boucle sur tous les tags
+        foreach($tags as $tag){
+        	//récupère les post correspondant au tag
+			$NbTag = simplexml_load_file("http://feeds.delicious.com/v2/rss/aeito/".$tag);
+			//compte le nombre de post
+	        $nb = count($NbTag->xpath('//item'));
+	        //ajoute les valeurs au tableaux        	
+        	array_push($book,array('tag' => $tag,'count' => $nb)); 
+        }
+		
        	if($book) {
         	if($this->trace)
 		    	echo "TagCloud:GetSvg:book".print_r($book)."<br/>";
