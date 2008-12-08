@@ -71,7 +71,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	<script type="text/javascript" > 
 		var grpBox= new GroupBox('box1'); 
 		var TradIeml= new Traduction(); 
-		var Flux;
+		var Flux; var f;
 		var urlExeAjax = "<?php echo ajaxPathWeb; ?>";
 		var urlAjax = "<?php echo PathWeb; ?>";
 	</script>
@@ -270,7 +270,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<tabbox id="tbIframe" flex="1" >
 						    <tabs >
 						        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
-						        <tab label="Bookmark IEML" />
 						        <tab label="Boussole IEML" />
 						        <tab id="tabStatIeml" label="Statistiques IEML" />
 						    </tabs>
@@ -278,15 +277,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						        <tabpanel >
 						        	<!-- 
 						          	-->
-									<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
-						         </tabpanel>
-						        <tabpanel>
-									<vbox flex="1" >
-						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
-										<iframe flex="1" src="http://del.icio.us/ieml"  />
-						        	<!-- 
-						          	-->
-									</vbox >
+						          	<vbox flex="1" >
+										<button label="Mettre à jour le bookmark avec les tags IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="popup();"/>
+										<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+						            </vbox>
 						         </tabpanel>
 						        <tabpanel>
 									<vbox flex="1" >
