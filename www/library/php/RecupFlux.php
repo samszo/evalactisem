@@ -26,7 +26,7 @@
   if($requette=="GetAllTags"){
   	
     $result_G=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
-    $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
+   $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     $flux="<marque ieml='t.u.-'><tags> ".$AllTag.$result_G."</tags></marque>";
     SaveXmlFlux($flux);
     
