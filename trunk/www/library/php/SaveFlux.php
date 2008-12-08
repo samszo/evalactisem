@@ -24,27 +24,31 @@ class SauvFlux{
     
 	function aGetAllBundles($objSite,$oDelicious,$iduti){
 	 set_time_limit(5000);
+	    
+	    
 		if ($aPosts = $oDelicious->GetAllBundles()) {
 		  foreach ($aPosts as $aPost) {	
-		  	$name.=$aPost['name'].";";
-		  	$reponse= $this->VerifFluxExiste($objSite,$aPost['name']);
-		  	if(!$reponse){
-			  $idflux= $this->InsertFlux($objSite,$aPost['name']);
-			  $this->flux_uti($objSite,$iduti,$idflux);
-		    }else{
-		      $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
-		    }
-		    $ArrTags=explode(" ",$aPost["tags"]);
-			foreach($ArrTags as $tag){
-			   $reponse= $this->VerifFluxExiste($objSite,$tag);			   
-			   if(!$reponse){
-				$idflux= $this->InsertFlux($objSite,$tag);					 		
-				$this->flux_uti($objSite,$iduti,$idflux);
-			   }else{
-				$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
-			   }
-		    }
-		}
+		  	if($aPost['name']!='IEML'){
+			  	$name.=$aPost['name'].";";
+			  	$reponse= $this->VerifFluxExiste($objSite,$aPost['name']);
+			  	if(!$reponse){
+				  $idflux= $this->InsertFlux($objSite,$aPost['name']);
+				  $this->flux_uti($objSite,$iduti,$idflux);
+			    }else{
+			      $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
+			    }
+			    $ArrTags=explode(" ",$aPost["tags"]);
+				foreach($ArrTags as $tag){
+				   $reponse= $this->VerifFluxExiste($objSite,$tag);			   
+				   if(!$reponse){
+					$idflux= $this->InsertFlux($objSite,$tag);					 		
+					$this->flux_uti($objSite,$iduti,$idflux);
+				   }else{
+					$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
+				   }
+			    }
+		   }
+		 }
 	   }else {
 		 echo $oDelicious->LastErrorString();
 	   } 
@@ -55,6 +59,7 @@ class SauvFlux{
      	set_time_limit(5000);
 		if ($aPosts = $oDelicious->GetAllTags()) {
 	  	  foreach ($aPosts as $aPost) { 
+	  	  	$arrTradTag=$this->GetTradBdd($objSite,$iduti);
 	  	  	$tag.=$aPost['tag'].";";
 		    $reponse= $this->VerifFluxExiste($objSite,$aPost['tag']);			   
 			if(!$reponse){
@@ -64,6 +69,7 @@ class SauvFlux{
 				$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
 			  }
 		   } 
+	  	  
 	     }else {
 		   echo $oDelicious->LastErrorString();
 		}	
@@ -189,6 +195,18 @@ class SauvFlux{
 	   $db->close();	    
 	  	return $reponse;
 				
+	}
+	function GetTradBdd($objSite,$iduti){
+		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetTradBdd']";
+		$Q=$objSite->XmlParam->GetElements($Xpath);        
+        $from=str_replace("-iduti-",$iduti,$Q[0]->from);
+	    $sql=$Q[0]->select.$from;
+	    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	    $db->connect();
+	    $req = $db->query($sql);
+	    $reponse=@mysql_fetch_assoc($req);
+	    $db->close();	    
+	  	return $reponse;
 	}
 	
 }
