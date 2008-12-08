@@ -76,14 +76,35 @@ function RefreshResult(response, params) {
 	document.getElementById(arrP[0]).value = response;
 	AjaxRequest(arrP[1],"AfficheResult",arrP[2])
 }
+function processReqChange() {
 
+	try {
+	   	////console.log("state:"+this.req.readyState);
+	} catch (e) {}
+
+	if (this.req.readyState == 4) {		// quand le fichier est chargé
+		
+
+		if (this.req.status == 200) {			// detécter problèmes de format
+
+
+			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
+			
+			eval(this.fonction_sortie+"(this.req.responseText)");
+            
+		} else {
+
+			alert("Il y avait un probleme avec le XML: " + this.req.statusText);
+
+		}
+	}
+}
 function AjaxRequest(url,fonction_sortie,params,id) {
    
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
  	this.params = params;
 	this.id=id;
-	//alert(params);
 
 	var ajaxRequest = this;
 
@@ -162,29 +183,7 @@ function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
 
 }
 
-function processReqChange() {
 
-	try {
-	   	////console.log("state:"+this.req.readyState);
-	} catch (e) {}
-
-	if (this.req.readyState == 4) {		// quand le fichier est chargé
-		
-
-		if (this.req.status == 200) {			// detécter problèmes de format
-
-
-			//eval(this.fonction_sortie+"(this.req.responseXML.documentElement)");
-			
-			eval(this.fonction_sortie+"(this.req.responseText)");
-            
-		} else {
-
-			alert("Il y avait un probleme avec le XML: " + this.req.statusText);
-
-		}
-	}
-}
 
 function AppendResultPost(url,urlparams,doc,ajoute) {
   
