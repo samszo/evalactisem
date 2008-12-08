@@ -447,11 +447,11 @@
       
       function AddBundle($sName, $aTags) {
          $this->Delay();
-         
-         if ($aResult = $this->DeliciousRequest('tags/bundles/set', array('bundle' => $sName, 'tags' => implode(' ', $aTags)))) {
+         if ($aResult = $this->DeliciousRequest('tags/bundles/set', array('bundle' => $sName, 'tags' => $aTags))) {
             return $this->GetBoolReturn($aResult['content']);
+        
          } 
-         return false;
+        return false;
       }
       
       function DeleteBundle($sName) {
