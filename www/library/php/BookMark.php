@@ -63,7 +63,26 @@ class BookMark{
 			$this->NbPost = $i;
 			
 	}
-    
+    function AddTagIeml($objSite,$oDelicious){
+    	
+    	  // Recupération des tarductions des tags
+         
+	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+		 $db->connect();         	
+         $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetIemlTag']";
+         $Q = $objSite->XmlParam->GetElements($Xpath);
+         $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
+         $from = str_replace("-poster-", 0,$from);
+         $sql = $Q[0]->select.$from;
+         $result = $db->query($sql);
+         $db->close();
+         
+         
+        
+    	//Verifier si le bundles Ieml existe 
+    	  //$DeliciousRespense=$oDelicious->AddBundle();
+    	
+    }
 	function MajPostIeml( $objSite,$oDelicious){
      	 
         $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
@@ -81,29 +100,28 @@ class BookMark{
         //boucle sur les tag traduit 
    		// pour chaque tag  il faut recupper l'url correspondante
     	$postMAJ = "";
-    	while($reponse=mysql_fetch_assoc($result)){     
+    	while($reponse=mysql_fetch_assoc($result)){    
     		$Posts=$oDelicious->GetAllPosts($reponse['onto_flux_code'],true);
+    		echo $Posts;
     		if($this->trace)
 					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
 			if($Posts){
 	    		foreach($Posts as $Post){
-	    			$PostIeml=$oIeml->GetPosts('','',$Post['url'],true);
-	    			if($this->trace)
-						echo "BookMark.php:MajPostIeml:Imel".print_r($PostIeml)."<br/>";
-	    			
 					// Si le login ni pas dans la description de post ou le tag n exite pas dans le post on ajoute le post
 						
-					if(!eregi($_SESSION['loginSess'],$PostIeml['notes'])||!in_array($reponse['ieml_code'],$PostIeml['tags'])){
-	    				$notes=$PostIeml['notes'].$_SESSION['loginSess'].";";
-	    				$AddPost=$oIeml->AddPost($Post['url'],$Post['desc'],$notes,$reponse['ieml_code'],true);
-	    				if($this->trace)
+					if(!in_array($reponse['ieml_code'],$Post['tags'])){
+					$aTags=implode(" ",$Post['tags']);
+					$aTags.=" ".$reponse['ieml_code'];
+					$Tags.=$reponse['ieml_code']." ";
+					$AddPost=$oDelicious->AddPost($Post['url'],$Post['desc'],$Post['notes'],$aTags,true);
+	    			if($this->trace)
 	    			    	echo "BookMark.php:MajPostIeml:AddPost".print_r($AddPost)."<br/>";
 	    			} 
-	    			
-	    			
-	    			
 						$postMAJ.= $Post['url']." ";
 	            }
+	        	// creation de bundle ieml avec les tags traduites en ieml
+	        	 $arrTag=explode(" ",$Tags );
+	        	 $oDelicious->AddBundle('IEML',$Tags );
 	        	
 	            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
 	            
