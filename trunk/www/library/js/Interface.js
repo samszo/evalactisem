@@ -698,11 +698,12 @@ function recup_dictio(){
 }
 
 function AddPostIemlDelicios(){
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Afficher','')
-	var meter=document.getElementById('Maj');
-	document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
-	meter.setAttribute("hidden","false");
 	
+	var meter=opener.document.getElementById('Maj');
+	AjaxRequest("library/php/ExeAjax.php?f=AddPostIeml",'Afficher','');
+	opener.document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
+	meter.setAttribute("hidden","false");
+	return false;
 }
 
 function SupprimeDelicious(result,prarm){
@@ -713,17 +714,23 @@ function SupprimeDelicious(result,prarm){
 		document.getElementById('Maj').setAttribute("hidden","true");
 	    window.location.href = "exit.php";
 }
+function popup(){
+	 f=open("popup.xul","traget","width=400, height=100");
+}
 function Afficher(result,prarm){
 	
-	var meter=document.getElementById('progmeter');
+	var meter=opener.document.getElementById('progmeter');
 	meter.setAttribute("value","100");
-	if(result==''){
+	if(result==''){	
+		
 		alert("il n'y pas de Posts recents à mettre a jour");
-		document.getElementById('Maj').setAttribute("hidden","true");
+		opener.document.getElementById('Maj').setAttribute("hidden","true");
+		
 	}else{
+		
 		message='Les Posts suivants ont ete mis a jour: ';
 		alert(message+result);
-		document.getElementById('Maj').setAttribute("hidden","true");
+		window.close();
 	}
 }
 function SupprimerCompteDelicious(){
