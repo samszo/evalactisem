@@ -722,10 +722,9 @@ function Afficher(result,prarm){
 	var meter=opener.document.getElementById('progmeter');
 	meter.setAttribute("value","100");
 	if(result==''){	
-		
 		alert("il n'y pas de Posts recents à mettre a jour");
 		opener.document.getElementById('Maj').setAttribute("hidden","true");
-		
+		window.close();
 	}else{
 		
 		message='Les Posts suivants ont ete mis a jour: ';

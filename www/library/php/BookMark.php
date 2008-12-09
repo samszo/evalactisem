@@ -85,7 +85,7 @@ class BookMark{
     }
 	function MajPostIeml( $objSite,$oDelicious){
      	 
-        $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
+        $oDelicious = new PhpDelicious(LOGIN_IEML, MDP_IEML);
          // Recupération des tarductions des tags
          
 	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
@@ -100,9 +100,10 @@ class BookMark{
         //boucle sur les tag traduit 
    		// pour chaque tag  il faut recupper l'url correspondante
     	$postMAJ = "";
+    	
     	while($reponse=mysql_fetch_assoc($result)){    
-    		$Posts=$oDelicious->GetAllPosts($reponse['onto_flux_code'],true);
-    		echo $Posts;
+    		$Posts=$oDelicious->GetPosts();
+    		print_r($Posts);
     		if($this->trace)
 					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
 			if($Posts){
@@ -121,6 +122,7 @@ class BookMark{
 	            }
 	        	// creation de bundle ieml avec les tags traduites en ieml
 	        	 $arrTag=explode(" ",$Tags );
+	        	 $oDelicious->GetBundle('IEML');
 	        	 $oDelicious->AddBundle('IEML',$Tags );
 	        	
 	            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
@@ -195,6 +197,24 @@ class BookMark{
 				unlink($fichier);
 	  }
    }
+	function Lire_XmlFile($file){
+	    $name_file=md5(XmlFlux.$file).".xml";
+	    if(file_exists(Flux_PATH.$name_file)){
+	      $xml = simplexml_load_file(Flux_PATH.$name_file);
+	                                
+	    }
+	        return $xml->xpath('/marque/url');
+	}
+	function GetPost($tag){
+		$xml=$this-> Lire_XmlFile("Posts");
+		foreach($xml as $aPost){
+			$aTags=explode(" ",$aPost['tag']);
+		    if(in_array($tag,$aTags)){
+				$Post[]=$xml->$aPost->text;
+			}
+		}
+		//print_r($Post);
+	}
 }
 
 ?>

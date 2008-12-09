@@ -38,20 +38,20 @@
   	if ($aPosts = $oDelicious->GetAllPosts('',true)){
   		
   		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
-	  	//SaveXmlFlux($result_F);
+	  	SaveXmlFlux($result_F,"Posts");
   	 }else {
 	        echo $oDelicious->LastErrorString();
 	 }
     $Activite->AddActi("RAP",$iduti);
-	 
+	  
   }
   
  
   if($requette=="GetPosts"){
   	
-  	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date,true)){
+  	if ($aPosts = $oDelicious->GetPosts($tag,$url,$date)){
   	 	
-  		echo $result_F=$oSaveFlux->aGetPosts($aPosts,'xml');
+  		echo $result_F=$oSaveFlux->aGetPosts($aPosts);
 	  	
 	 
   	}else {
@@ -101,12 +101,12 @@ function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
 
 // creation de fichier XML du resultat
 
-function SaveXmlFlux($Xml){
+function SaveXmlFlux($Xml,$file=""){
 	
 
     	//Creation de fichier loginFlux.xml 
     	
-    	$name_file=md5(XmlFlux).".xml";
+    	$name_file=md5(XmlFlux.$file).".xml";
 			if(file_exists(Flux_PATH.$name_file)){
 				unlink(Flux_PATH.$name_file);
 				

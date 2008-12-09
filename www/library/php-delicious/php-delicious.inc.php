@@ -193,14 +193,11 @@
          return false;
       }
       
-      
-      
-      // generic function to get post listings
-      function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1,$MaqueRequest) {
-         $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
-         
-         if (!$oCache->Check()) {
-            if ($sCmd == 'posts/all' && $oCache->Exists()) {
+       // generic function to get bundles
+      function GetListBundle($sCmd, $sName = '') {
+      	   $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
+            if (!$oCache->Check()) {
+            if ($sCmd == 'bundles/all' && $oCache->Exists()) {
                $sLastUpdate = $this->GetLastUpdate();
                   
                $aData = $oCache->Get();
@@ -215,12 +212,66 @@
             $aParameters = array();
          
             // check for optional parameters
+            if ($sName != '') $aParameters['name'] = $sName;
+            
+            if($MaqueRequest=="true"){
+            	if(TRACE)
+            		echo "php-delicious.php:GetList:MaqueRequest".$MaqueRequest."<br/>"; 
+            	// make request
+	             $aResult = $this->DeliciousRequest($sCmd, $aParameters);
+	            if(TRACE)
+            	   	echo "php-delicious.php:GetList:aResult".print_r($aResult)."<br/>"; 
+                $aBundles = array();
+                if($aResult['items']){
+	               foreach ($aResult['items'] as $aCurBundle) {
+	                  $aBundles[] = array(
+	                     'name' => $aCurBundle['attributes']['NAME'],
+	                     'tags' => $aCurBundle['attributes']['TAGS']
+	                  );
+	               }
+                }
+                $oCache->Set($aBundles);
+            
+           }else {
+	               $oCache->Set(false);
+	            }
+            }
+	      
+         $aData = $oCache->Get();
+		 /*ajout samszo
+		 echo "<br/>aData=<br/>";
+		 print_r($aData);
+		 echo "<br/>";
+		 //fin ajout samszo*/
+         //print_r($aData);
+         
+         return $aData['items'];
+      }
+      // generic function to get post listings
+      function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1) {
+         $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
+         
+         if (!$oCache->Check()) {
+            if ($sCmd == 'posts/all' && $oCache->Exists()) {
+               $sLastUpdate = $this->GetLastUpdate();
+                  
+               $aData = $oCache->Get();
+                  
+               if ($aData['last-update'] == $sLastUpdate) {
+                  $oCache->Set($aData);
+                  return $aData['items'];
+                 
+               }
+            }
+            
+            // initialise parameters array
+            $aParameters = array();
+         
+            // check for optional parameters
             if ($sTag != '') $aParameters['tag'] = $sTag;
             if ($sDate != '')  $aParameters['dt'] = $this->ToDeliciousDate($sDate);
             if ($sUrl != '') $aParameters['url'] = $sUrl;
             if ($iCount != -1) $aParameters['count'] = $iCount;
-            
-            if($MaqueRequest=="true"){
             	if(TRACE)
             		echo "php-delicious.php:GetList:MaqueRequest".$MaqueRequest."<br/>"; 
             	// make request
@@ -253,16 +304,16 @@
 	            } else {
 	               $oCache->Set(false);
 	            }
-            }
+            
 	      }
          $aData = $oCache->Get();
 		 /*ajout samszo
-		 echo "<br/>aData=<br/>";
+		 echo "<br/>aData=<br/>"; 
 		 print_r($aData);
 		 echo "<br/>";
 		 //fin ajout samszo*/
          //print_r($aData);
-         
+        
          return $aData['items'];
       }
       
@@ -338,12 +389,16 @@
       function GetPosts(
          $sTag = '', // filter by tag
          $sDate = '', // filter by date - format YYYY-MM-DD HH:MM:SS
-         $sUrl = '', // filter by URL
-         $Mrequest
+         $sUrl = '' // filter by URL
+ 
       ) {
          return $this->GetList('posts/get', $sTag, $sDate, $sUrl,-1,$Mrequest);
       }
-      
+      function GetBundle(
+      	$Name=''//filtre par nom
+      ){
+      	 return $this->GetListBundle('tags/bundles/all', $Name);
+      }
       function GetRecentPosts(
          $sTag = '', // filter by tag
          $iCount = 15, // number of posts to retrieve, min 15, max 100,
@@ -353,8 +408,7 @@
       }
       
       function GetAllPosts(
-         $sTag = '',// filter by tag
-         $Mrequest
+         $sTag = ''// filter by tag
          
       ) { 
          return $this->GetList('posts/all', $sTag, '', '', -1, $Mrequest);

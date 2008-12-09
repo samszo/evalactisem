@@ -48,7 +48,7 @@ class SauvFlux{
 				   }
 			    }
 		   }
-		 }
+		 } 
 	   }else {
 		 echo $oDelicious->LastErrorString();
 	   } 
@@ -76,27 +76,18 @@ class SauvFlux{
 	   return $tag;
 	}
 	
-    function aGetPosts($aPosts,$format_result){
+    function aGetPosts($aPosts){
         foreach ($aPosts as $aPost) { 
-  			$aDesc.=$aPost['desc'].";";
-			$aUrl.=$aPost['url'].";";
-  			$aDate.=$aPost['updated'].";";
-  			$aNote.=$aPost['notes'].";";
-  	        $tag="";
+  			$xml.="<url";
+  			$tag="";
   			foreach($aPost['tags'] as $aTags){
   	    		
-  				$tag.=$aTags.";";
+  				$tag.=$aTags." ";
   	    	}
-  	    	$t.=$tag."*";
-  	    	
+  	    	$xml.="  tag='".$tag."'><![CDATA[".$aPost['url']."]]></url>";
   	    }
-  		
-	    if($format_result=='xml'){
-        	$result="<marque ieml='t.u.-'><tags><![CDATA[$t]]></tags><description><![CDATA[$aDesc]]></description><url><![CDATA[$aUrl]]></url><date><![CDATA[$aDate]]></date><note><![CDATA[$aNote]]></note></marque>";
-	    }else
-	    	if($format_result=='string'){
-	    		$result=$aUrl."#".$aDesc."#".$t."#".$aDate."#".$aNote;
-	    }
+        	$result="<marque ieml='t.u.-'>$xml</marque>";
+	   
      	   
     return $result;
 }
