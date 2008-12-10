@@ -11,7 +11,9 @@ function GetResult(url) {
 	p.onload = null;
 	//p.open("GET", urlExeAjax+"?f=GetCurl&url="+url, false);
 	
-	p.open("GET", encodeURI(url), false);
+	//problème de mauvais encodage du code ieml
+	//p.open("GET", encodeURI(url), false);
+	p.open("GET", url, false);
 	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	p.send(null);
 

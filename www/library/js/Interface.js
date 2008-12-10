@@ -588,7 +588,7 @@ function GetIemlTreeExp(idTree, col, op){
     var start = new Object();
 	var end = new Object();
 	var tree;
-	var IemlToParse = "(";
+	var IemlToParse = "";
 	var arrIEML = [];
 	var c;
 	var i;
@@ -635,7 +635,7 @@ function GetIemlTreeExp(idTree, col, op){
 	//supprime le dernier opérateur
 	IemlToParse = IemlToParse.substring(0, IemlToParse.length-1);
 	//finalise l'expression
-	IemlToParse += ")";
+	IemlToParse += "";
 
 	return IemlToParse;
 
