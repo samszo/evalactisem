@@ -3,7 +3,8 @@
  *  AllClass.php
  * @since 0.0.1
  */
-require_once(PathRoot.'/library/php-delicious/php-delicious.inc.php');
+//require_once(PathRoot.'/library/php-delicious/php-delicious.inc.php');
+require_once (PathRoot.'/library/delicious/library/php-delicious.inc.php');
 require_once (TT_CLASS_BASE."database.php");
 require_once (TT_CLASS_BASE.'XmlParam.php');
 require_once (TT_CLASS_BASE.'EvalActiSem.php');
