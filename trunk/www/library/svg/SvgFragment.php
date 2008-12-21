@@ -19,7 +19,7 @@ class SvgFragment extends SvgElement
         // Call the parent class constructor.
         $this->SvgElement();
         
-        $this->mmWidth = $width;
+        $this->mWidth = $width;
         $this->mHeight = $height;
         $this->mStyle = $style;
         $this->mX = $x;

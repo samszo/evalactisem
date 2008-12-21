@@ -9,8 +9,8 @@ session_start();
    	}else{
    		//pour le debuggage
 		$_SESSION['loginSess']="samszo";
-		$_SESSION['mdpSess']="Lucky71";
-   		$oDelicious = new PhpDelicious("samszo","Lucky71");
+		$_SESSION['mdpSess']="xxxx";
+   		$oDelicious = new PhpDelicious("samszo","xxxx");
 		$_SESSION['Delicious']=$oDelicious;
    }   
 
@@ -46,6 +46,11 @@ if(isset($_GET['UrlNom']))
 	$UrlNom = $_GET['UrlNom'];
 else
 	$UrlNom = "Traduction";
+
+if(isset($_GET['login']))
+	$login = $_GET['login'];
+else
+	$login = 'samszo';
 	
 
 $scope = array(
