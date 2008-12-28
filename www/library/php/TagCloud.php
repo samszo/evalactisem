@@ -200,7 +200,7 @@ class TagCloud {
 			
 		  	//ajoute la taille du bloc texte
 			if($TagIn){
-				$lib = "";//$tag["tag"]." (".$i."_".$j.")";
+				$lib = $tag["tag"]." (".$i."_".$j.")";
 		  		$g->addChild(new SvgText($xT,$y,$lib,"fill:black;font-size:10pt;"));
 			}
 		  	$j++;
