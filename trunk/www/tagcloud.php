@@ -12,7 +12,7 @@
 	require('param/ParamPage.php');
 
 	$tg = new TagCloud();
-	//$tg->SauveBookmarkNetwork("xxxx","xxx")
+	//$tg->SauveBookmarkNetwork("luckysemiosis","Samszo0")
   	
 	header("Content-type: image/svg+xml");
 	$tg->GetSvg($login);

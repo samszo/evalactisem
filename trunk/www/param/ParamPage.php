@@ -9,8 +9,8 @@ session_start();
    	}else{
    		//pour le debuggage
 		$_SESSION['loginSess']="samszo";
-		$_SESSION['mdpSess']="xxxx";
-   		$oDelicious = new PhpDelicious("samszo","xxxx");
+		$_SESSION['mdpSess']="Lucky71";
+   		$oDelicious = new PhpDelicious("samszo","Lucky71");
 		$_SESSION['Delicious']=$oDelicious;
    }   
 
