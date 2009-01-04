@@ -11,13 +11,29 @@ class TagCloud {
   public $width_lien=2;
   public $xTrans;
   public $yTrans;
+  public $xTC;
+  public $yTC;
+  public $xTagG;
+  public $xTagD;
+  public $arrTags;
+  public $arrPosts;
+  public $IntVals;
+  public $nbTag;
+  public $TagNbMax;
+  public $TagNbMin=1;
+  public $TagRectHaut=30;
+  public $TagCircleRay=30;
+  public $TagNbTot;
+  public $nbPost;
+  public $PostCarMax;
   
   function __tostring() {
     return "Cette classe permet de définir et manipuler un TagCloud.<br/>";
     }
 
   function __construct() {
-    $this->trace = TRACE;		
+    $this->trace = TRACE;
+    date_default_timezone_set('UTC');		
   }
 
 
@@ -43,171 +59,455 @@ class TagCloud {
 	}
   
   
- 	 public function GetSvg($login)
+ 	 public function GetSvgPost($login,$ShowAll,$TempsVide,$DateDeb,$DateFin,$NbDeb,$NbFin)
 	{
 		
-		//Calcul les intervalles de taille
-		$Max = 0;
-		$Min = 1;
-		$Tot = 1;
-		$jsMaxMot="";
-		$liste="";
 		
+		//récupère les Posts
+		$Posts = $this->GetPosts($login);
+		if($Posts) {
+        	if($this->trace)
+		    	echo "TagCloud:GetSvgPost:book".print_r($Posts)."<br/>";
+
+			//calcul les posts
+			$this->CalculPosts($Posts,$DateDeb,$DateFin,$NbDeb,$NbFin);
+						
+		  	//initialisation du svg
+			$svg = new SvgDocument("","","","","","SVGglobal","onload=\"\""); 	
+		  	
+		  	//ajoute les liens avec les scripts
+		  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
+		  	
+			//vérifie s'il y a des posts
+		  	if($this->TagNbMax>0){
+				//echo $Max.", ".$Min.", ".$Tot.", ".$nb.", ".$IntVals[0].", ".$IntVals[1];
+			  	//construit la grille du tagcloud
+			  	//la hauteur des lignes de tag est proportionnelle au nombre de post
+			  	$hPost = 600/$this->nbPost; 
+			  	//la largeur des tag est proportionnellele au nombre maximum de tag par post
+				$wTag = 500/$this->TagNbMax; 
+			  	//défini la taille du graphique
+				$svgWidth = $this->GetLargeurTot();
+				//défini le milieu du graphique = racine centrale
+			  	$cxTC = $svgWidth/2;
+				//défini la place de la première couche
+			  	$this->yTC = 10;
+	
+				//initialisation des groupe de graphique
+				$couches = new SvgGroup("","","SVGCouche_".$login);
+				$lignePost = new SvgGroup("","","SVGLignePost_".$login);
+				
+				//construction des lignes de tag
+				$i = 1;
+				foreach($this->arrPosts as  $post)
+				{
+					if($TempsVide){
+					  	//construction de la grille de temps sans tag
+						$this->GetGrilleTemps($couches,$post["diff"],$svgWidth);			  	
+					}
+					
+				  	//ajoute une ligne de tag
+				  	$lignePost->addChild($this->GetLignePost($post,$wTag,$cxTC));
+					
+					$i ++;
+				}
+				//ajoute les groupes graphiques
+				$svg->addChild($couches);
+				$svg->addChild($lignePost);
+				
+				//redimensionne le svg
+				$svg = $this->RedimSvg($ShowAll,$svg,$svgWidth);
+		  	}else{
+		  		$svg->addChild(new SvgText(30,30,"AUCUN POST","fill:black;font-size:30;"));
+		  	}
+			//retourne le svg global
+			$svg->printElement();
+		}
+
+	}
+	
+	public function RedimSvg($ShowAll,$svg,$svgWidth){
+				
+		if($ShowAll){
+			$svg->mPreserveAspectRatio="xMidYMid meet";
+			$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";
+		}else{
+			$svg->mHeight=$this->yTC;
+			$svg->mWidth=$svgWidth;
+			$svg->mX = $this->xTagG;			
+		}
+		return $svg;
+	}
+	
+ 	 public function GetSvgTag($login,$ShowAll,$NbDeb,$NbFin)
+	{
+				
 		//récupère les tags
-		$tags = true;//$this->GetTags($login);
+		$tags = $this->GetTags($login);
 		if($tags) {
         	if($this->trace)
-		    	echo "TagCloud:GetSvg:book".print_r($tags)."<br/>";
+		    	echo "TagCloud:GetSvgTag:book".print_r($tags)."<br/>";
 
-			//calcul les intervales
-			$nbTag=0;
-			$arrTags=array();
-			/*
-			foreach($tags as  $tag)
-			{
-				$nbTag ++;
-				$nb = $tag->description+0;//+0 : gérer des nombres
-				$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
-				$style = "fill:#".$color.";";
-				array_push($arrTags, array("tag"=>$tag->title,"nb"=>$nb,"style"=>$style));
-		    	$Tot += $nb;
-				if($Max < $nb){
-					$Max = $nb;
-				}
-			}
-			$IntVals[0] = ($Max-$Min)/3;
-			$IntVals[1] = ($Max-$Min)/1.5;
-			*/
-
-			//récupère les posts
-			$Posts = $this->GetPosts($login);
-			$nbPost = count($Posts);
-			
-			//calcul les dates et les max
-			$arrPosts=array();
-			$dbl=array();
-			$startTime = time();
-			foreach($Posts as  $post)
-			{
-				//http://fr2.php.net/manual/fr/book.datetime.php#84699
-				$dPost = new DateTime($post->pubDate);
-				//$dPost = date_parse($post->pubDate);
-    			$dDiff  = $this->calc_tl($dPost->format('U'),$startTime);				
-				array_push($arrPosts, array("post"=>$post,"date"=>$dPost,"diff"=>$dDiff,"tags"=>$post->category));
-				$nb = count($post->category);
-				foreach($post->category as $cat){
-					//supprime les doublons
-					if (!in_array($cat."", $dbl)) {
-	  					array_push($dbl,$cat."");
-						//calcul la couleur
-						$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
-						$style = "fill:#".$color.";";
-						//conserve le tag
-						array_push($arrTags, array("tag"=>$cat,"nb"=>1,"style"=>$style));
-					}else{
-						$style = "fill:#".$color.";";
-					}
-				}
-								
-				if($nbMaxTagPost < $nb){
-					$nbMaxTagPost = $nb;
-				}
-			}
-			
+			//calcul les tags
+			$this->CalculTags($tags,$NbDeb,$NbFin);
+						
 		  	//initialisation du svg
-			$svg = new SvgDocument("100%", "100%","","","","SVGglobal","onload=\"\""); 	
+			$svg = new SvgDocument("", "","","","","SVGglobal","onload=\"\""); 	
 		  	
 		  	//ajoute les liens avec les scripts
 		  	//$svg->addChild(new SvgScript(jsPathWeb."svgTagCloud.js"));
 		  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
-			
-			//echo $Max.", ".$Min.", ".$Tot.", ".$nb.", ".$IntVals[0].", ".$IntVals[1];
-		  	//construit la grille du tagcloud
-		  	$hPost = 600/$nbPost;
-			$wTag = 500/$nbMaxTagPost;
-		  	$cxTC = 600;
-		  	$yTC = 0;
-			$xd = 1;
-			$xg = 1;
-			$this->width_lien = $wTag/20;
-			//construit le groupe graphique
-			$i = 1;
-			foreach($arrPosts as  $post)
-			{
-				//ajoute le groupe au graphique global
-			  	$svg->addChild($this->GetLigneTags($i,$arrTags,$post,$hPost,$wTag,$cxTC,$yTC,$xd,$xg));
+		  	
+			//vérifie s'il y a des tags
+		  	if($this->nbTag>0){
+				//défini la taille de la bulle minimum
+				$this->TagCircleRay = $this->PostCarMax/2;
+				//défini la place de la première bulle
+			  	$this->yTC = $this->TagCircleRay*$this->TagNbMax;
+			  	$this->xTC = 20;
 				
-				$i ++;
-			}
+				//construction des lignes de tag
+			  	$ligneTag = $this->GetLigneTags();
+
+			  	//ajoute les groupes graphiques
+				$svg->addChild($ligneTag);
+				
+				
+				//redimensionne le svg
+			  	$this->yTC += $this->TagCircleRay*$this->TagNbMax;
+			  	//défini la taille du graphique
+				$svgWidth = $this->xTC;
+			  	$this->xTagG = 10;
+			  	$this->xTagD = $this->xTC;
+			  	$svg = $this->RedimSvg($ShowAll,$svg,$svgWidth);
+		  	}else{
+		  		$svg->addChild(new SvgText(30,30,"AUCUN TAG","fill:black;font-size:30;"));
+		  	}
+			//retourne le svg global
+			$svg->printElement();
 		}
-		
-		//retourne le svg global
-		$svg->printElement();
+
 	}
 	
-	function GetLigneTags($i,$arrTags,$post,$hPost,$wTag,$cxTC,$yTC,$xd,$xg){
-		//création de la ligne de post
-		$g = new SvgGroup("","","post_".$i,"onclick=\"alert('this.id')\"");
-		//création des emplacements de tag
-		$j=1;
+	function GetLargeurTot(){
+
+		return count($this->arrTags)+($this->PostCarMax*$this->font_size);
+	}
+		
+	function GetGrilleTemps($svg,$arrDiff,$xTC){
+
+		$totNb = 0;
+		$hTemps = 5;
+		foreach($arrDiff as  $d=>$nb)
+		{
+			//ajoute les interval de temps qui ne sont pas vide
+			$style = "fill-opacity:1;";
+			if($nb>0){
+				//calcul l'identifiant
+				$id = $d."_".$nb;
+				switch($d) {	
+		            case 'years':
+		            	$style .=  "fill:black;";
+		            	$height = $nb+$hTemps;//*60*60*24/10000;
+		            	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+		                break;
+		            case 'weeks':
+						$yTC -= $height;
+		                break;
+		            case 'days':
+		            	$height = $nb/$hTemps;//*60*60*24/10000;
+		            	$style .=  "fill:dimgrey;";
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+		                break;
+		            case 'hours':
+		            	$height = $nb/$hTemps;//*60*60/1000;
+		            	$style .=  "fill:grey;";
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+		                break;
+		            case 'minutes':
+		            	$height = $nb/$hTemps;//*60/100;
+		            	$style .=  "fill:darkgrey;";
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+		                break;
+		            case 'seconds':
+		            	$height = $nb/$hTemps;//*10;
+		            	$style .=  "fill:lightgrey;";
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+		                break;
+		        }
+		        //met à jour la profondeur
+		        $this->yTC += $height;
+			}						
+		}
+	}
+	
+	function CalculTags($tags,$NbDeb,$NbFin){
+			//calcul les intervales
+			$this->nbTag=0;
+			$this->arrTags=array();
+			foreach($tags as  $tag)
+			{
+				$nb = $tag->description+0;//+0 : gérer des nombres
+				//vérifie que le nb est dans l'interval
+				if($nb>=$NbDeb && $nb<=$NbFin){
+					$this->nbTag ++;
+					//$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
+					//$color = $this->rgb2hex(array(16,11,204));
+					$color = $this->rgb2hex(array(73,4,7));
+					$style = "fill:#".$color.";";
+					array_push($this->arrTags, array("tag"=>$tag->title,"nb"=>$nb,"style"=>$style));
+			    	$this->TagNbTot += $nb;
+					if($this->TagNbMax < $nb){
+						$this->TagNbMax = $nb;
+					}
+					//calcul le nb de caractère maximum d'une ligne
+					$nbCar = $this->GetLargeurBoiteTexte($tag->title);	
+					if($this->PostCarMax < $nbCar){
+						$this->PostCarMax = $nbCar;
+					}				
+				}
+			}
+			$this->IntVals[0] = ($this->TagNbMax-$Min)/3;
+			$this->IntVals[1] = ($this->TagNbMax-$Min)/1.5;		
+	}
+	
+	function CalculPosts($Posts,$DateDeb,$DateFin,$NbDeb,$NbFin){
+		
+		//calcul les dates et les max
+		$this->nbPost=0;
+		$this->arrPosts=array();
+		$this->arrTags=array();
+		$arrTags=array();
+		$arrPosts=array();
+		$startTime = time();
+		//prise en compte des intervalles de date
+		if($DateDeb)
+			$dDeb = new DateTime($DateDeb);
+		if($DateFin)
+			$dFin = new DateTime($DateFin);
+		foreach($Posts as  $post)
+		{
+			//http://fr2.php.net/manual/fr/book.datetime.php#84699
+			$dPost = new DateTime($post->pubDate);
+			//vérifie les dates
+			if($this->VerifInDate($dPost,$dDeb,$dFin)){
+				//incrémente le nombre de post
+				$this->nbPost++;
+				//calcul l'interval de temps entre les posts
+	    		$dDiff  = $this->calc_tl($dPost->format('U'),$startTime);
+	    		//pour calculer le nouvel interval
+	    		$startTime = $dPost->format('U');				
+				array_push($this->arrPosts, array("post"=>$post,"date"=>$dPost,"diff"=>$dDiff,"tags"=>$post->category));
+				foreach($post->category as $cat){
+					//construction de la clef
+					$keyTag = $this->strtokey($cat."");
+					//vérifie si le tag est déjà conservé
+					if (!$arrTags[$keyTag]) {
+						//calcul la couleur
+						$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
+						$style = "fill:#".$color.";";
+						//conserve le tag
+						$arrTags[$keyTag]= array("tag"=>$cat,"nb"=>1,"style"=>$style);
+					}else{
+						//incrémente le nombre de tag 
+						$arrTags[$keyTag]["nb"]++;
+					}
+				}
+			}
+		}
+		//suprime les tag qui ne sont pas dans l'interval
 		foreach($arrTags as  $tag)
 		{
-			
-			//calcul le placement haut et bas
-			$y = $hPost*$i;
-			
+			if($tag["nb"]>=$NbDeb && $tag["nb"]<=$NbFin){
+				array_push($this->arrTags, $tag);				
+			}
+		}
+		//suprime les posts qui ne sont pas dans l'interval
+		foreach($this->arrPosts as $post)
+		{
+			$TagIn = false;
+			$nbCar = 0;
+			$nb = 0;
+			foreach($post["post"]->category as $cat){
+				foreach($arrTags as  $tag)
+				{
+					if($cat.""==$tag["tag"].""){
+						if($tag["nb"]>=$NbDeb && $tag["nb"]<=$NbFin){
+							$TagIn = true;
+							$nb ++;
+							//calcul le nb de caractère maximum d'une ligne
+							$nbCar += $this->GetLargeurBoiteTexte($cat);	
+						}
+					}
+				}
+			}
+			if($TagIn){
+				//met à jour les intervals
+				array_push($arrPosts, $post);				
+				if($this->TagNbMax < $nb){
+					$this->TagNbMax = $nb;
+				}
+				if($this->PostCarMax < $nbCar){
+					$this->PostCarMax = $nbCar;
+				}
+			}
+		}
+		$this->arrPosts = $arrPosts;
+	}
+
+	function VerifInDate($dPost,$dDeb,$dFin){
+		//vérifie si on a des dates
+		if(!$dDeb && !$dFin)
+			return true;
+		//vérifie si on a une date de début
+		if($dDeb && !$dFin && $dDeb<=$dPost)
+				return true;
+		//vérifie si on a une date de fin
+		if(!$dDeb && $dFin && $dFin>=$dPost)
+			return true;
+		//vérifie si on a une date de début et de fin
+		if($dDeb && $dFin && $dDeb<=$dPost && $dFin>=$dPost)
+			return true;
+		//si aucun cas n'est remplie
+		return false;
+	}
+	
+	function GetLigneTags(){
+		//création de la ligne de post
+		$g = new SvgGroup("","","lignetag_"."");
+		//création des emplacements de tag
+		$j=1;
+		
+		foreach($this->arrTags as  $tag)
+		{
+								
+			//ajoute le cercle
+		  	$g->addChild($this->AddTagCircle($j, $tag));
+		  	
+			$j++;
+		}
+		
+		return $g;
+	}
+
+	function GetLignePost($post,$wTag,$cxTC){
+		//création de la ligne de post
+		$g = new SvgGroup("","","post_".$post["post"]->guid,"onclick=\"alert('".$this->SVG_entities($post["post"]->title)."')\"");
+		//création des emplacements de tag
+		$j=1;
+		//mise à jour des valeurs de position droite gauche
+		$this->xTagG = $cxTC - 10;
+		$this->xTagD = $cxTC + 10;
+		
+		foreach($this->arrTags as  $tag)
+		{
+						
 			//vérifie si on ajoute le texte
-			//$key = array_search($tag["tag"], $post["tags"]);
-			//$xp = "//item[category=\"".$tag["tag"]."\"]/category";
-			//$TagIn = $post["post"]->xpath($xp);        
+			
 			$TagIn = false;
 			foreach($post["post"]->category as $cat){
 				if($cat.""==$tag["tag"].""){
 					$TagIn=true;
 				}
-			}
+			}			
 			
-			//calcul le rayon
-			$r = $this->width_lien;
-			
-			//calcul le placement gauche et droite
-			if ($j%2 == 1){
-				//gauche
-				$x= $cxTC-($this->width_lien*$j)-$this->width_lien-$xg;
-				if($TagIn){
-					$r = $wTag/2;
-					$xT = $x-($r/2);
-					$style = $tag["style"]."fill-opacity:0.3;";
-				}else{
-					$style = $tag["style"]."fill-opacity:0.1;";				
-				}
-			}else{
-				//droite
-				$x = $cxTC+($this->width_lien*$j)+$this->width_lien+$xd;
-				//$x = $cxTC+$xd;
-				//ajoute la taille du texte
-				if($TagIn){
-					$r = $wTag/2;
-					$xT = $x-($r/2);
-					$style = $tag["style"]."fill-opacity:0.3;";
-				}else{
-					$style = $tag["style"]."fill-opacity:0.1;";				
-				}
-			}
-			
-			//ajoute le cercle
-		  	$g->addChild(new SvgCircle($x,$y,$r,$style));
-			
-		  	//ajoute la taille du bloc texte
-			if($TagIn){
-				$lib = $tag["tag"]." (".$i."_".$j.")";
-		  		$g->addChild(new SvgText($xT,$y,$lib,"fill:black;font-size:10pt;"));
-			}
+			//ajoute le rectangle
+		  	$g->addChild($this->AddTagRect($j, $tag, $TagIn));
+		  	
 		  	$j++;
 		}
+		//met à jour la profondeur
+		$this->yTC += $this->TagRectHaut;
+		
 		return $g;
 	}
+	
+	function AddTagCircle($j, $tag) {
 
+
+		$g = new SvgGroup("","","TagCircle_".$j,"");
+		
+		//calcul le rayon
+		$r = $this->TagCircleRay*$tag["nb"];
+  		//met à jour le placement
+		$this->xTC += $r;
+		//et la taille de la police
+		$fontsize = ($tag["nb"]*$this->font_size*2);
+		
+		//calcul le style du texte et son placement
+		$xT = $this->xTC-($r)+$fontsize;
+		$style = $tag["style"]."fill-opacity:0.3;";
+		$lib = $this->SVG_entities($tag["tag"]);
+		
+		//ajoute le cercle
+	  	$g->addChild(new SvgCircle($this->xTC,$this->yTC,$r,$style,"","onclick=\"alert('".$lib." (".$tag["nb"].") ')\""));
+		
+	  	//ajoute le texte
+		$s = "fill:black;font-size:".$fontsize."px;";
+  		$g->addChild(new SvgText($xT,$this->yTC,$lib,$s,"scale:2;"));
+  		
+  		//met à jour le placement
+		$this->xTC += $r;
+  		//if($this->xTC > $this->width_page)
+		//	$this->yTC += $this->xTC;
+			 
+		return $g;
+		
+	}
+
+	function GetLargeurBoiteTexte($str){
+		return (strlen($str)*$this->font_size)+20;
+	}
+	
+	function AddTagRect($j, $tag, $TagIn) {
+
+
+		$g = new SvgGroup("","","TagRect_".$j,"");
+		
+		//calcul la taille du rectangle
+		if($TagIn){
+			$larg = $this->GetLargeurBoiteTexte($tag["tag"]);
+		}else{
+			$larg = $this->font_size;
+		}
+				
+		//calcul le placement gauche et droite
+		if ($j%2 == 1){
+			//gauche
+			$x = $this->xTagG - $larg;
+			$this->xTagG = $x;
+			if($TagIn){
+				$xT = $x + $this->font_size;
+				$style = $tag["style"]."fill-opacity:0.3;";
+			}else{
+				$style = $tag["style"]."fill-opacity:0.1;";				
+			}
+		}else{
+			//droite
+			$x = $this->xTagD;
+			$this->xTagD = $x + $larg;
+			if($TagIn){
+				$xT = $x + $this->font_size;
+				$style = $tag["style"]."fill-opacity:0.3;";
+			}else{
+				$style = $tag["style"]."fill-opacity:0.1;";				
+			}
+		}
+				
+		//ajoute le rectangle
+	  	$g->addChild(new SvgRect($x,$this->yTC,$larg,$this->TagRectHaut,$style));
+		
+	  	//ajoute la taille du bloc texte
+		if($TagIn){
+			$lib = $this->SVG_entities($tag["tag"]);
+	  		$g->addChild(new SvgText($xT,$this->yTC+($this->font_size*2),$lib,"fill:black;font-size:".$this->font_size.";"));
+		}
+		
+		return $g;
+		
+	}
+	
+	
 	function GetTags($login) {
 
 		//récupère le boobkmark
@@ -330,8 +630,51 @@ class TagCloud {
         return $r;
     }
 	
-	
-	
+	public function SVG_entities($str)
+	{
+		//$str = htmlentities($str, ENT_QUOTES);
+		$str = str_replace("'", "\'", $str);   
+		$str = utf8_decode($str);
+	    return preg_replace(array("'&'", "'\"'", "'<'"), array('&#38;', '&#34;','&lt;'), $str);
+	}
+    
+  function stripAccents($string)
+  {
+    return strtr($string,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ',
+		 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+  }
+
+  function strtokey($str)
+  {
+    for ($iii = 0; $iii < strlen($str); $iii++)
+      if (ord($str[$iii]) == 146 || ord($str[$iii]) == 156)
+	$str[$iii] = '-';
+    $key = str_replace("_", "-", $str);
+    $key = str_replace("'", "-", $key);
+
+
+    $key = str_replace("`", "-", $key);
+    $key = str_replace(".", "-", $key);
+    $key = str_replace(" ", "-", $key);
+    $key = str_replace(",", "-", $key);
+    $key = str_replace("{}", "_", $key);
+    $key = str_replace("(", "_", $key);
+    $key = str_replace(")", "_", $key);
+    $key = str_replace("--", "-", $key);
+    $key = str_replace("- -", "-", $key);
+    $key = str_replace("<i>", "", $key);
+    $key = str_replace("</i>", "", $key);
+    $key = str_replace(":", "", $key);
+    $key = str_replace("«", "", $key);
+    $key = str_replace("»", "", $key);
+    $key = str_replace("/", "", $key);
+    $key = str_replace("“", "", $key);
+    $key = str_replace("”", "", $key);
+        
+    $key = strtolower($key);
+    return $this->stripAccents($key);
+  }
+		
   }
 
 ?>
