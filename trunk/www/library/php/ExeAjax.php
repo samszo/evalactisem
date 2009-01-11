@@ -104,6 +104,9 @@
 	                	$tg = new TagCloud();
 	                	$tg->GetSvg();
                 	break;
+                case 'CreaCycle':
+                	    $resultat=CreaCycle($_GET['json']);
+                	    break;  
                 	
        }
         
@@ -371,6 +374,12 @@
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
  			return $sem->GetCycle($key);                           
                 
+	   }
+	   function CreaCycle($json){
+	   		global $objSite;
+ 			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+ 			return $sem->CreaCycle($json);                              
+            
 	   }
 	   
        

@@ -331,7 +331,7 @@ Class Sem{
 	function GetOccuEvents($xml){
 		
 		//construction des tableaux du nombre d'occurrence
-		$Xpath = "//genOp[@layer='event']";
+		$Xpath = "//genOp[@layer='L1']";
 		foreach($xml->xpath($Xpath) as $genOps){
 			if($this->trace)
 				echo "Sem.php:GetOccuEvents:genOps".print_r($genOps)."<br/>";
@@ -382,7 +382,7 @@ Class Sem{
 	function GetOccuPrimis($xml){
 		
 		//construction des tableaux du nombre d'occurrence
-		$Xpath = "//genOp[@layer='primitive']";
+		$Xpath = "//genOp[@layer='L0']";
 		foreach($xml->xpath($Xpath) as $genOps){
 			if($this->trace)
 				echo "Sem.php:GetOccuPrimis:genOps".print_r($genOps)."<br/>";
@@ -514,11 +514,10 @@ Class Sem{
 		
 		
 		//nettoie le résultat du parser
-		
 		$sResult = str_replace("<XMP>","",$sResult);
 	    $sResult = str_replace("</XMP>","",$sResult);
 	    if(eregi('<(.*)>(.*)<(.*)>',$sResult)){
-	    	$sResult = str_replace("<?xml version=\"1.0\"?>"," ",$sResult);
+	    	$sResult = str_replace('<?xml version="1.0" encoding="UTF-8"?>'," ",$sResult);
 			$xml = simplexml_load_string($sResult);
 			  return $xml;
 	    }else{
@@ -1180,6 +1179,51 @@ function GetIemlLevel($IemlExp,$getlevel=true){
 	else
 		return $niv;
 }  
+function CreaCycle($json){
 	
+	$Tab=json_decode($json,true);
+	$html="<table border='1' id='".$Tab[0]['key']."CycleRows'>";
+	foreach($Tab as $row){
+		$html.="<tr>";
+		for($i =0; $i < (sizeof($row)/2)-1; $i++){
+			$html.="<td>";
+			if($row['code'.$i]!= "vide"){
+				//récupère le parse de l'expression
+           		$xml = $this->Parse(trim($row['code'.$i]));
+				$class = "NoSelect";						
+           		if(is_object($xml)){							
+					if($this->trace)
+						echo "Sem.php:GetCycle:xml".print_r($xml)."<br/>";
+						$this->GetOccurrence($xml);
+						//récupère les primitives
+						$arrDon = $this->GetDonneePrimis();
+						$Primis = " primitives='".$arrDon["codes"]."' ";						
+						//récupère les events
+						$arrDon = $this->GetDonneeEvents();
+						$Events = " events='".$arrDon["codes"]."' ";						
+						$title .= $Primis.$Events;						
+						$error = "";
+						$title=$row['code'.$i];
+					}else{
+						$Primis = " primitives='' ";						
+						$Events = " events='' ";
+						$error = $xml;						
+						$class = "Error";
+						$title=	$xml;					
+					}
+					$html.='<a href="#" id="'.$key.'*'.$row['code'.$i].'**" '.$Primis.$Events.' class="'.$class.'" title="'.$title.'" onclick="AfficheIeml(\''.$key.'*'.$row['code'.$i].'**\') " >';
+					$html.=$row['descp'.$i]."</a>";
+					
+           	}else{
+           		$html.='<a href="#" id="* **"  primitives="" events="" class="NoSelect" />';
+					
+           	}
+           $html.="</td>";
+		}
+		$html.="</tr>";	
+	}
+	$html.="</table>";
+	echo $html;
+}
 }
 ?>

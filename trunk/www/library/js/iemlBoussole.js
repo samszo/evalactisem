@@ -432,25 +432,30 @@ function SelectionCycle(evt){
 
 	
 	//les ids de la Grille	 
-	var row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 	
+	iframe=window.parent.frames['iemlCycle_'+keyGrid];
+	tbody=iframe.document.getElementById(keyGrid+'CycleRows').childNodes;
+  	//récuperation des TRs
+  	var row=tbody[0].childNodes; 	
 	// mettre a jour les cellules de la grille
 	for(var i=0 ; i < row.length; i++){
-		var rowChild=row[i].childNodes;
-		
+		var td=row[i].childNodes;
+				
 		//if(rowChild.length==0) break;
-        for(k=0;k<rowChild.length;k++){		
-			var idLabel=rowChild[k].getAttribute("id");
+        for(k=0;k<td.length;k++){	
+        	rowChild=td[k].childNodes;
+        	var idLabel=rowChild[0].getAttribute("id");
+        	console.log(rowChild);
 			//récupère les primitives
-			var arrPrms=rowChild[k].getAttribute("primitives").split(";");
+			var arrPrms=rowChild[0].getAttribute("primitives").split(";");
 			//récupère les events
-			var arrEvts=rowChild[k].getAttribute("events").split(";");
+			var arrEvts=rowChild[0].getAttribute("events").split(";");
 			//vérifie les primitives
 	 		for(var j=0 ; j < arrParse[0].length ; j++){
 	 		
 	           	if(arrParse[0][j]!=''){
 		           	// change la class le case qui contient l'expression
 					if(inArray(arrPrms, arrParse[0][j])){
-			        	window.parent.document.getElementById(idLabel).setAttribute('class','Select');
+						iframe.document.getElementById(idLabel).setAttribute('class','Select');
 			       	}
 		      	}
 		   	}
@@ -460,7 +465,7 @@ function SelectionCycle(evt){
 	           	if(arrParse[1][j]!=''){
 		           	// change la class le case qui contient l'expression
 					if(inArray(arrEvts, arrParse[1][j])){
-			        	window.parent.document.getElementById(idLabel).setAttribute('class','Select');
+						iframe.document.getElementById(idLabel).setAttribute('class','Select');
 			       	}
 		      	}
 		   	}
@@ -518,26 +523,29 @@ function InitGrille(iemlCode){
     var keyGrid = window.parent.document.getElementById('keyGrid').value;
 	if(keyGrid=="")
 		return;
-    
-  	row=window.parent.document.getElementById(keyGrid+'CycleRows').childNodes; 
-	for(var i=1 ; i < row.length; i++){
-		rowChild=row[i].childNodes;
-        for(k=0;k<rowChild.length;k++){	
-  		       	idLabel=rowChild[k].getAttribute("id")
+    iframe=window.parent.frames['iemlCycle_'+keyGrid];
+  	tbody=iframe.document.getElementById(keyGrid+'CycleRows').childNodes;
+  	//récuperation des TRs
+  	var row=tbody[0].childNodes;
+	for(var i=0 ; i < row.length; i++){
+		//recuperat des  TDs
+		td=row[i].childNodes;
+        for(k=0;k<td.length;k++){
+        	    rowChild=td[k].childNodes;
+  		       	idLabel=rowChild[0].getAttribute("id")
         		//ne change pas les cellules en erreur
-        		if(window.parent.document.getElementById(idLabel).getAttribute('class')!='Error')
-	        		window.parent.document.getElementById(idLabel).setAttribute('class','NoSelect');
+        		if(iframe.document.getElementById(idLabel).getAttribute('class')!='Error')
+        			iframe.document.getElementById(idLabel).setAttribute('class','NoSelect');
 		}
 	}
 }
 
 function AfficheIeml(id){
-	
-	console.log(id.substring(23));
+
     descp=document.getElementById(id).textContent;
     id=id.replace('*','').replace('**','');
-    document.getElementById('code-trad-ieml').setAttribute('value',id.substring(23));
-	document.getElementById('lib-trad-ieml').setAttribute('value',descp);
+    window.parent.document.getElementById('code-trad-ieml').setAttribute('value',id);
+    window.parent.document.getElementById('lib-trad-ieml').setAttribute('value',descp);
 	
 }
 function RequestIemlCycle(){

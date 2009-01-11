@@ -6,13 +6,13 @@ session_start();
 
 	if(isset($_SESSION['Delicious'])){
 	   $oDelicious=$_SESSION['Delicious'];
-   	}else{
+   	}/*else{
    		//pour le debuggage
 		$_SESSION['loginSess']="samszo";
 		$_SESSION['mdpSess']="Lucky71";
    		$oDelicious = new PhpDelicious("samszo","Lucky71");
 		$_SESSION['Delicious']=$oDelicious;
-   }   
+   }  */ 
 
 	// vérification du site en cours
 	if(isset($_GET['site'])){

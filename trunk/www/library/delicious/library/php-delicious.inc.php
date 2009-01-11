@@ -35,7 +35,7 @@
    /***************************************************************/
    
    // include required files
-   require('xmlparser.inc.php');
+   //require('xmlparser.inc.php');
    require('cache.inc.php');
    
    // Project Homepage
@@ -67,12 +67,12 @@
    
    
    class PhpDelicious {
-      protected $sUsername; // your del.icio.us username
-      protected $sPassword; // your del.icio.us password
-      protected $iCacheTime; // the length of time in seconds to cache retrieved data
-      protected $oXmlParser; // the XML parser object used to process del.icio.us returned data
-      protected $iLastRequest = null;
-      protected $iLastError = 0;
+        var $sUsername; // your del.icio.us username
+        var $sPassword; // your del.icio.us password
+        var  $iCacheTime; // the length of time in seconds to cache retrieved data
+        var $oXmlParser; // the XML parser object used to process del.icio.us returned data
+        var $iLastRequest = null;
+        var $iLastError = 0;
       
       /************************ constructor ************************/
       
@@ -83,24 +83,24 @@
          $this->iCacheTime = $iCacheTime;
          
          // create instance of XML parser class
-         $this->oXmlParser = new XmlParser();
+        //$this->oXmlParser = new XmlParser();
       }
   
       /************************ private methods ************************/
       
-      protected function FromDeliciousDate($sDate) {
+        function FromDeliciousDate($sDate) {
          return trim(str_replace(array('T', 'Z'), ' ', $sDate));
       }
       
-      protected function ToDeliciousDate($sDate) {
+        function ToDeliciousDate($sDate) {
          return date('Y-m-d\TH:i:s\Z', strtotime($sDate));
       }
       
-      protected function GetBoolReturn($sInput) {
+        function GetBoolReturn($sInput) {
          return ($sInput == 'done' || $sInput == 'ok');
       }
       
-      protected function Delay() {
+        function Delay() {
          // could use microtime but not supported on all systems
          if (!is_null($this->iLastRequest) && time() - $this->iLastRequest < 1) {
             sleep(1);
@@ -109,7 +109,7 @@
          }
       }
       
-      protected function HttpRequest($sCmd) {
+        function HttpRequest($sCmd) {
          // check for curl lib, use in preference to file_get_contents if available
          if (function_exists('curl_init')) {
             // initiate session
@@ -159,7 +159,7 @@
                   if (strstr($http_response_header[0], '401')) {
                      $this->iLastError = PHP_DELICIOUS_ERR_INCORRECT_LOGIN;
                   } else {
-                     return $sResult;
+                      $sResult;
                   } 
                }
             } else {
@@ -169,7 +169,7 @@
          return false;
       }
       
-      protected function DeliciousRequest($sCmd, $aParameters = array()) {
+       function DeliciousRequest($sCmd, $aParameters = array()) {
          if ($this->LastError() >= 1 && $this->LastError() <= 3) {
             return false;
          }
@@ -199,18 +199,15 @@
          }
          
          if ($sXml = $this->HttpRequest($sCmd)) {
+         	
             // return result passed as array
-            if ($aXml = $this->oXmlParser->Parse($sXml)) {
-               return $aXml;
-            } else {
-               $this->iLastError = PHP_DELICIOUS_ERR_XML_PARSE;
-            }
+            
          }  
          return false;
       }
       
       // generic function to get post listings
-      protected function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1) {
+        function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1) {
          $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
          
          if (!$oCache->Check()) {

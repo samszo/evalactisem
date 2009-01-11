@@ -1,7 +1,7 @@
 <?php
-session_start();
-extract($_SESSION,EXTR_OVERWRITE);
-extract($_POST,EXTR_OVERWRITE);
+
+//extract($_SESSION,EXTR_OVERWRITE);
+//extract($_POST,EXTR_OVERWRITE);
 require('param/ParamPage.php');
 
 
@@ -24,6 +24,7 @@ function ChercheAbo ()
 				echo "ParamPage:Debug:oDelicious=".$oDelicious->sUsername."<br/>";
 			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
 			$con=$oDelicious->LastError();
+			
 			if ($con==2)
 			{
 				echo "Incorrect del.icio.us username or password";
@@ -63,7 +64,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	<script src="library/js/groupbox.js"/>
 	<script src="library/js/tree.js"/>
 	<script src="library/js/iemlBoussole.js"/>
-	<script src="http://www.google.com/jsapi" />
  	<script src="library/js/GoogleDoc.js"/>
  	<script src="library/js/utf8.js"/>
 	
@@ -74,6 +74,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var Flux; var f;
 		var urlExeAjax = "<?php echo ajaxPathWeb; ?>";
 		var urlAjax = "<?php echo PathWeb; ?>";
+		var urlSpreadsheet="http://spreadsheets.google.com/pub?key="
+		
 	</script>
 
 		<popupset id="popupset">
@@ -242,18 +244,18 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 												<tabbox flex="1" orient="horizontal" >
 													<tabs orient="vertical" >
 														<tab label="Dictionnaire" />
-														<tab label="Behavior" onclick="ChargeCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
-														<tab label="axial orientation" onclick="ChargeCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+														<tab label="Behavior" onclick="LoadCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+														<tab label="axial orientation" onclick="LoadCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
 													</tabs>
 													<tabpanels flex="1"  >
 														<tabpanel >
 															<vbox id="treeDicoIeml" flex="1"  />
 														</tabpanel>
 														<tabpanel>
-															<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" flex='1' />
+															<iframe name="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" src="" flex="1"/>
 														</tabpanel>
 														<tabpanel>
-															<box  style="overflow:auto"  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1'  />
+															<iframe  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1' src="" />
 														</tabpanel>
 													</tabpanels>
 												</tabbox>
@@ -270,6 +272,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						<tabbox id="tbIframe" flex="1" >
 						    <tabs >
 						        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
+						        <tab label="Bookmark IEML" />
 						        <tab label="Boussole IEML" />
 						        <tab id="tabStatIeml" label="Statistiques IEML" />
 						    </tabs>
@@ -277,10 +280,15 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						        <tabpanel >
 						        	<!-- 
 						          	-->
-						          	<vbox flex="1" >
-										<button label="Mettre à jour le bookmark avec les tags IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="popup();"/>
-										<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
-						            </vbox>
+									<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+						         </tabpanel>
+						        <tabpanel>
+									<vbox flex="1" >
+						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
+										<iframe flex="1" src="http://del.icio.us/ieml"  />
+						        	<!-- 
+						          	-->
+									</vbox >
 						         </tabpanel>
 						        <tabpanel>
 									<vbox flex="1" >
@@ -295,7 +303,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						         </tabpanel>
 						    </tabpanels>
 						</tabbox>
-					</vbox>
+			</vbox>
 				</hbox>
 			</groupbox>
 		</vbox> 
@@ -303,7 +311,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  <script type="text/javascript">
  	//récupération des flux
   GetFlux();
-   
+
  </script>
  
  

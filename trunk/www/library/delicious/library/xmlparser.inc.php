@@ -34,7 +34,7 @@
    /***************************************************************/
    
    class XmlParser {
-      protected $aXmlResult;
+      var $aXmlResult;
       
       public function Parse($sXml) {
          $this->aXmlResult = array();
