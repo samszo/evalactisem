@@ -10,8 +10,9 @@
 } 
 
 .NoSelect{
+	 text-decoration:none;
 	 display:block;
-	 width:50px;
+	 width:100px;
 	 height:45px;
    	 border:1px outset #dbecff;
 	 font-family:Arial;
@@ -19,11 +20,13 @@
      font-weight: bold;
      line-height:15pt;
      text-align:center;
+     color:#000;
 }
 
 .Select{
+	 text-decoration:none;
 	 display:block;
-	 width:50px;
+	 width:100px;
 	 height:45px;
    	 border:1px outset #dbecff;
 	 background-color:yellow;
@@ -37,7 +40,7 @@
 
 .Error{
 	 display:block;
-	 width:50px;
+	 width:100px;
 	 height:45px;
    	 border:1px outset #dbecff;
 	 font-family:Arial;

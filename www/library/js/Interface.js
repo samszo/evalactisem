@@ -698,12 +698,11 @@ function recup_dictio(){
 }
 
 function AddPostIemlDelicios(){
-	
-	var meter=opener.document.getElementById('Maj');
-	AjaxRequest("library/php/ExeAjax.php?f=AddPostIeml",'Afficher','');
-	opener.document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Afficher','')
+	var meter=document.getElementById('Maj');
+	document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
 	meter.setAttribute("hidden","false");
-	return false;
+	
 }
 
 function SupprimeDelicious(result,prarm){
@@ -719,17 +718,15 @@ function popup(){
 }
 function Afficher(result,prarm){
 	
-	var meter=opener.document.getElementById('progmeter');
+	var meter=document.getElementById('progmeter');
 	meter.setAttribute("value","100");
-	if(result==''){	
+	if(result==''){
 		alert("il n'y pas de Posts recents à mettre a jour");
-		opener.document.getElementById('Maj').setAttribute("hidden","true");
-		window.close();
+		document.getElementById('Maj').setAttribute("hidden","true");
 	}else{
-		
 		message='Les Posts suivants ont ete mis a jour: ';
 		alert(message+result);
-		window.close();
+		document.getElementById('Maj').setAttribute("hidden","true");
 	}
 }
 function SupprimerCompteDelicious(){
@@ -799,4 +796,88 @@ function ShowDialog(){
   
  }       
         
+function load(key){
+	google.load("visualization", "1");
+	google.setOnLoadCallback(initialize);
+}
+ function LoadCycle(key){
+	//vérifie que l'onglet n'est pas déjà rempli
+		document.getElementById('keyGrid').value=key;
+		if(window.parent.frames['iemlCycle_'+key].document.getElementById(key+"CycleRows"))
+			return;
+	    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter, le chargement du cycle est en cours...');
+	    var meter=document.getElementById('Maj');
+		meter.setAttribute("hidden","false");
+		meter.setAttribute("value","50");
+  
+     	document.getElementById('iemlCycle_'+key).setAttribute("src","overlay/IemlCycle.php?key="+key)
+     	
+}
+ function initialize() {
+	 //var key="p8PAs8y8e1x2YTS7Zgag7Nw&hl=en";
+     var query = new google.visualization.Query("http://spreadsheets.google.com/tq?key="+key);
+     query.send(handleQueryResponse);  // Send the query with a callback function
+   }
+  
+   // Query response handler function.
+   function handleQueryResponse(response) {
+    
+     if (response.isError()) {
+       alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+       return;
+     }
+
+     var data = response.getDataTable();
+     var html = [];
+     var descp="";
+     var id="";
+     if(document.getElementById(key+"CycleRows"))
+    	 return;
+     // Header row
+     json="[";
+     var j=0;
+     for (var row = 0; row < data.getNumberOfRows()-1; row++) {
+      if(row%2 !=0){
+    	 json+='{"row":'+j+','+'"key":"'+key+'",';
+	     for (var col = 0; col < data.getNumberOfColumns()-1; col++) {
+        	 if(data.getFormattedValue(row, col)!=" "){ 
+	    		   descp=data.getFormattedValue(row, col);
+	    		   id=key+"*"+ escapeHtml(data.getFormattedValue(row-1, col))+"**";
+	    		   if(data.getFormattedValue(row-1, col)=="")
+	    			   code="vide";
+	    		   else
+	    			   code=escapeHtml(data.getFormattedValue(row-1, col));
+	    		   json+='"descp'+col+'":"'+descp+'","code'+col+'":"'+code+'",';
+	    		   // html.push("<td id="+id+" ><a  id='a_"+row+col+ "' href='#' class='NoSelect'>"+descp+"</a></td>");
+	    	  }
+	     }
+	     j++;
+	     json+='},';
+	     json=json.replace(/,}/g,'}')
+      }
+     }
+     json+="]";
+     json=json.replace(/,]/g,']').replace(/\n/g,' ');
+     AjaxRequest("../library/php/ExeAjax.php?f=CreaCycle&json="+json,'creatCycle','');
+     //document.getElementById(key+'_div').innerHTML = html.join('');
+    
+}
+
+   function escapeHtml(text) {
+     if (text == null)
+       return '';
+
+     return text.replace(/&/g, '&amp;')
+       .replace(/</g, '&lt;')
+       .replace(/>/g, '&gt;')
+       .replace(/"/g, '&quot;');
+}
+   function creatCycle(result){
+	   var meter=window.parent.document.getElementById('Maj');
+	   meter.setAttribute("value","100");
+	   meter.setAttribute("hidden","true");
+	   window.parent.document.getElementById('label_Maj').setAttribute("hidden","true");
+	   document.getElementById(key+'_div').innerHTML = result;
+   }
+
 
