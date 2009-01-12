@@ -5,8 +5,8 @@ class TagCloud {
   public $marge=100;
   public $xentre_page=64;
   public $yentre_page=128;
-  public $width_page=200;
-  public $heigth_page=200;
+  public $width=200;
+  public $heigth=200;
   public $font_size=10;
   public $width_lien=2;
   public $xTrans;
@@ -26,7 +26,8 @@ class TagCloud {
   public $TagNbTot;
   public $nbPost;
   public $PostCarMax;
-  
+  public $PostLargMax;
+    
   function __tostring() {
     return "Cette classe permet de définir et manipuler un TagCloud.<br/>";
     }
@@ -79,17 +80,14 @@ class TagCloud {
 		  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
 		  	
 			//vérifie s'il y a des posts
-		  	if($this->TagNbMax>0){
+		  	if($this->PostLargMax>0){
 				//echo $Max.", ".$Min.", ".$Tot.", ".$nb.", ".$IntVals[0].", ".$IntVals[1];
 			  	//construit la grille du tagcloud
-			  	//la hauteur des lignes de tag est proportionnelle au nombre de post
-			  	$hPost = 600/$this->nbPost; 
-			  	//la largeur des tag est proportionnellele au nombre maximum de tag par post
-				$wTag = 500/$this->TagNbMax; 
+			  	$hPost = 32; 
 			  	//défini la taille du graphique
-				$svgWidth = $this->GetLargeurTot();
+				$this->width = $this->PostLargMax;
 				//défini le milieu du graphique = racine centrale
-			  	$cxTC = $svgWidth/2;
+			  	$cxTC = $this->width/2;
 				//défini la place de la première couche
 			  	$this->yTC = 10;
 	
@@ -103,11 +101,11 @@ class TagCloud {
 				{
 					if($TempsVide){
 					  	//construction de la grille de temps sans tag
-						$this->GetGrilleTemps($couches,$post["diff"],$svgWidth);			  	
+						$this->GetGrilleTemps($couches,$post["diff"]);			  	
 					}
 					
 				  	//ajoute une ligne de tag
-				  	$lignePost->addChild($this->GetLignePost($post,$wTag,$cxTC));
+				  	$lignePost->addChild($this->GetLignePost($post,$cxTC));
 					
 					$i ++;
 				}
@@ -116,7 +114,7 @@ class TagCloud {
 				$svg->addChild($lignePost);
 				
 				//redimensionne le svg
-				$svg = $this->RedimSvg($ShowAll,$svg,$svgWidth);
+				$svg = $this->RedimSvg($ShowAll,$svg,$this->width);
 		  	}else{
 		  		$svg->addChild(new SvgText(30,30,"AUCUN POST","fill:black;font-size:30;"));
 		  	}
@@ -130,11 +128,11 @@ class TagCloud {
 				
 		if($ShowAll){
 			$svg->mPreserveAspectRatio="xMidYMid meet";
-			$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";
+			//$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";
+			$svg->mViewBox = "0 0 ".($this->xTagD)." ".($this->yTC)."";
 		}else{
 			$svg->mHeight=$this->yTC;
 			$svg->mWidth=$svgWidth;
-			$svg->mX = $this->xTagG;			
 		}
 		return $svg;
 	}
@@ -156,7 +154,7 @@ class TagCloud {
 		  	
 		  	//ajoute les liens avec les scripts
 		  	//$svg->addChild(new SvgScript(jsPathWeb."svgTagCloud.js"));
-		  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
+		  	$svg->addChild(new SvgScript(jsPathWeb."TagCloud.js"));
 		  	
 			//vérifie s'il y a des tags
 		  	if($this->nbTag>0){
@@ -188,13 +186,8 @@ class TagCloud {
 		}
 
 	}
-	
-	function GetLargeurTot(){
-
-		return count($this->arrTags)+($this->PostCarMax*$this->font_size);
-	}
-		
-	function GetGrilleTemps($svg,$arrDiff,$xTC){
+			
+	function GetGrilleTemps($svg,$arrDiff){
 
 		$totNb = 0;
 		$hTemps = 5;
@@ -209,30 +202,29 @@ class TagCloud {
 		            case 'years':
 		            	$style .=  "fill:black;";
 		            	$height = $nb+$hTemps;//*60*60*24/10000;
-		            	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+		            	$svg->addChild(new SvgRect(0,$this->yTC,$this->width,$height,$style,"","",$id));
 		                break;
 		            case 'weeks':
-						$yTC -= $height;
 		                break;
 		            case 'days':
 		            	$height = $nb/$hTemps;//*60*60*24/10000;
 		            	$style .=  "fill:dimgrey;";
-					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$this->width,$height,$style,"","",$id));
 		                break;
 		            case 'hours':
 		            	$height = $nb/$hTemps;//*60*60/1000;
 		            	$style .=  "fill:grey;";
-					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$this->width,$height,$style,"","",$id));
 		                break;
 		            case 'minutes':
 		            	$height = $nb/$hTemps;//*60/100;
 		            	$style .=  "fill:darkgrey;";
-					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$this->width,$height,$style,"","",$id));
 		                break;
 		            case 'seconds':
 		            	$height = $nb/$hTemps;//*10;
 		            	$style .=  "fill:lightgrey;";
-					  	$svg->addChild(new SvgRect(0,$this->yTC,$xTC,$height,$style,"","",$id));
+					  	$svg->addChild(new SvgRect(0,$this->yTC,$this->width,$height,$style,"","",$id));
 		                break;
 		        }
 		        //met à jour la profondeur
@@ -251,9 +243,7 @@ class TagCloud {
 				//vérifie que le nb est dans l'interval
 				if($nb>=$NbDeb && $nb<=$NbFin){
 					$this->nbTag ++;
-					//$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
-					//$color = $this->rgb2hex(array(16,11,204));
-					$color = $this->rgb2hex(array(73,4,7));
+					$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
 					$style = "fill:#".$color.";";
 					array_push($this->arrTags, array("tag"=>$tag->title,"nb"=>$nb,"style"=>$style));
 			    	$this->TagNbTot += $nb;
@@ -328,28 +318,28 @@ class TagCloud {
 			$TagIn = false;
 			$nbCar = 0;
 			$nb = 0;
+			$PostLargMax=0;
 			foreach($post["post"]->category as $cat){
 				foreach($arrTags as  $tag)
 				{
 					if($cat.""==$tag["tag"].""){
 						if($tag["nb"]>=$NbDeb && $tag["nb"]<=$NbFin){
 							$TagIn = true;
-							$nb ++;
-							//calcul le nb de caractère maximum d'une ligne
-							$nbCar += $this->GetLargeurBoiteTexte($cat);	
+							//calcul la taille max de la ligne
+							$PostLargMax += $this->GetLargeurBoiteTexte($cat);	
 						}
-					}
+					}else{
+						//ajoute un bloc pour chaque tag vide
+						$PostLargMax += $this->font_size/4;
+					}	
 				}
 			}
 			if($TagIn){
-				//met à jour les intervals
+				//met à jour le tableau des posts
 				array_push($arrPosts, $post);				
-				if($this->TagNbMax < $nb){
-					$this->TagNbMax = $nb;
-				}
-				if($this->PostCarMax < $nbCar){
-					$this->PostCarMax = $nbCar;
-				}
+			}
+			if($this->PostLargMax < $PostLargMax){
+				$this->PostLargMax = $PostLargMax;
 			}
 		}
 		$this->arrPosts = $arrPosts;
@@ -390,7 +380,7 @@ class TagCloud {
 		return $g;
 	}
 
-	function GetLignePost($post,$wTag,$cxTC){
+	function GetLignePost($post,$cxTC){
 		//création de la ligne de post
 		$g = new SvgGroup("","","post_".$post["post"]->guid,"onclick=\"alert('".$this->SVG_entities($post["post"]->title)."')\"");
 		//création des emplacements de tag
@@ -440,16 +430,19 @@ class TagCloud {
 		$lib = $this->SVG_entities($tag["tag"]);
 		
 		//ajoute le cercle
-	  	$g->addChild(new SvgCircle($this->xTC,$this->yTC,$r,$style,"","onclick=\"alert('".$lib." (".$tag["nb"].") ')\""));
+		$script = "onclick=\"alert('".$lib." (".$tag["nb"].") ')\"";
+		$script = " onmouseover=\"GrossiMaigriTag(evt)\"";
+		$script .= " onmouseleave=\"MaigriTag(evt)\"";
+		$script .= " grossi='non'";
+		$g->addChild(new SvgCircle($this->xTC,$this->yTC,$r,$style,"",$script));
 		
 	  	//ajoute le texte
 		$s = "fill:black;font-size:".$fontsize."px;";
-  		$g->addChild(new SvgText($xT,$this->yTC,$lib,$s,"scale:2;"));
+  		//$g->addChild(new SvgText($xT,$this->yTC,$lib,$s,"scale:2;"));
+  		$g->addChild(new SvgText($xT,$this->yTC,$lib,$s));
   		
   		//met à jour le placement
 		$this->xTC += $r;
-  		//if($this->xTC > $this->width_page)
-		//	$this->yTC += $this->xTC;
 			 
 		return $g;
 		

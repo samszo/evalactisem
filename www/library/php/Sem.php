@@ -966,7 +966,7 @@ Class Sem{
 		                $Activite->AddActi("AddTrad",$iduti);
 	                
 	                }else{
-	                	
+		                $message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe déjà");
 	                	$idTrad = $rs['trad_id'];                
                 	}
                 
