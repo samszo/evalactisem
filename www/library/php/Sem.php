@@ -1180,8 +1180,8 @@ function GetIemlLevel($IemlExp,$getlevel=true){
 		return $niv;
 }  
 function CreaCycle($json){
-	
-	$Tab=json_decode($json,true);
+	$json=eregi_replace('(%20)*',$json,'');
+	$Tab=json_decode(stripslashes($json),true);
 	$html="<table border='1' id='".$Tab[0]['key']."CycleRows'>";
 	foreach($Tab as $row){
 		$html.="<tr>";
