@@ -57,19 +57,28 @@ class SauvFlux{
 	
      function aGetAllTags($objSite,$oDelicious,$iduti){
      	set_time_limit(5000);
+     	$objSem = new Sem($objSite,$objSite->infos["XML_Param"],"");
 		if ($aPosts = $oDelicious->GetAllTags()) {
 	  	  foreach ($aPosts as $aPost) { 
-	  	  	$arrTradTag=$this->GetTradBdd($objSite,$iduti);
+	  	  	//$arrTradTag=$this->GetTradBdd($objSite,$iduti);
 	  	  	$tag.=$aPost['tag'].";";
-		    $reponse= $this->VerifFluxExiste($objSite,$aPost['tag']);			   
+	  	  	
+	  	  	//vérifie que le tag du flux existe
+		    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
 			if(!$reponse){
-			   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);					 		
-			    $this->flux_uti($objSite,$iduti,$idflux);
-			  }else{
-				$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
-			  }
-		   } 
-	  	  
+				//ajoute un nouveau tag de flux
+			   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
+		  	}else{
+			   	$idflux= $reponse['onto_flux_id'];					 		
+			}
+			//ajoute les traductions automatiques
+		   	$reponse = $objSem->AddTradAuto($idflux,$aPost['tag']);			   
+			
+			//enregistre le flux pour l'utilisateur
+			$this->flux_uti($objSite,$iduti,$idflux);
+						
+	  	  } 
+		   
 	     }else {
 		   echo $oDelicious->LastErrorString();
 		}	
@@ -187,6 +196,7 @@ class SauvFlux{
 	  	return $reponse;
 				
 	}
+		
 	function GetTradBdd($objSite,$iduti){
 		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='GetTradBdd']";
 		$Q=$objSite->XmlParam->GetElements($Xpath);        

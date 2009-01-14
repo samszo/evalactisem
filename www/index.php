@@ -152,7 +152,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				
 				<hbox flex="1">
 						
-						<vbox id='TableFlux'  flex="1"></vbox>
+						<vbox id='TableFlux' hidden="true"  flex="1"></vbox>
 					   
 						
 							
@@ -203,32 +203,13 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								         </tabpanel>
 								        <tabpanel>
 								        	<vbox flex="1">
-												<label  style='color:blue;' value="1. Choisissez un tag dans les onglets 'Tag(s) trouvé(s)' ou 'Tag(s) non trouvé(s)'" />
+												<label  style='color:blue;' value="1. Choisissez un tag" />
 												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
 												<hbox>
 													<label  style='color:blue;' value="3. Cliquez ici" />
 													<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
 												</hbox>
-												<tabbox flex="1" >
-												    <tabs >
-												        <tab label="Tag(s) trouvé(s)" />
-												        <tab label="Tag(s) non trouvé(s)" />
-												        
-												    </tabs>
-												    <tabpanels flex="1"  >
-												        <tabpanel >
-															<vbox flex="1" >
-																<box id="tpMultiTrad" flex="1" />
-															</vbox >
-												         </tabpanel>
-												        <tabpanel>
-															<vbox flex="1" >
-																<box id="tpNoTrad" flex="1" />
-															</vbox >
-												         </tabpanel>
-												        
-												    </tabpanels>
-												</tabbox>
+												<box id="tpNoTrad" flex="1" />
 											</vbox>
 								         </tabpanel>
 								          <tabpanel>

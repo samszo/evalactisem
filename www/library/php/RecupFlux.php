@@ -15,8 +15,10 @@
    $oSaveFlux= new SauvFlux(); 
    $iduti = $_SESSION['iduti'];
    
-   $AllTag=$oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
+   $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
+   $Activite->AddActi('RAT',$iduti);
    
+   /*
    if($requette=="GetAllBundles" ){
     $oSaveFlux->aGetAllTags($objSite,$oDelicious,$iduti);
     echo $result_F=$oSaveFlux->aGetAllBundles($objSite,$oDelicious,$iduti);
@@ -77,11 +79,6 @@ if($requette=="GetRecentPosts"){
 	  	 $Activite->AddActi("RRP",$iduti);
 	}
 
-function Xpath($fonction){
-	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
-	 return $Xpath; 
-}
-
 /*
 function Donneegraph($result_F,$AllTag,$requete_g,$iduti){
 	global $oSaveFlux;
@@ -118,9 +115,10 @@ function SaveXmlFlux($Xml,$file=""){
     	
    
 }
-
-
-
     
+function Xpath($fonction){
+	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
+	 return $Xpath; 
+}
 
  ?>
