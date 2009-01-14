@@ -107,13 +107,29 @@
                 case 'CreaCycle':
                 	    $resultat=CreaCycle($_GET['json']);
                 	    break;  
-                	
+                case 'GetTreeTradUtis':
+                	    $resultat=GetTreeTradUtis();
+                	    break;  
+                case 'GetTreeNoTradUti':
+                	    $resultat=GetTreeNoTradUti();
+                	    break;  
+                	    	    
        }
         
         echo $resultat;  
 
-        
+	function GetTreeNoTradUti(){
+        global $objSite;
+        $xul = new Xul($objSite);
+		return $xul->GetTreeNoTradUti($_SESSION['iduti']);
+	}
 
+	function GetTreeTradUtis(){
+        global $objSite;
+        $xul = new Xul($objSite);
+		return $xul->GetTreeTradUtis(array($objSite->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']));
+		//return $xul->GetTreeTradUtis($_SESSION['iduti']);
+	}
         
         function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
 			
@@ -142,11 +158,13 @@
 				}
 			    
         	}
+        	
         	if($type=="Multi_Trad"){
         		$arrTrad=explode("*",$trad);
 			    $arrDescp=explode("*",$descp);
 			    $arrCouche=explode("*",$couche);
         	}
+        	
         	if($type=="No_Trad"){
         		//récupère les traduction automatiques supprimmées par l'utilisateur
         		$rows = $sem->GetAutoTradSup($objSite->infos["UTI_TRAD_AUTO"]);
@@ -190,7 +208,7 @@
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
 			    //vérifie le partage de traduction
-		    	$idTrad = $sem->Add_Trad($libIeml,$codeflux,$codeIeml,$objSite->infos["UTI_TRAD_AUTO"],true);
+		    	$idTrad = $sem->Add_Trad($libIeml,$codeflux,$codeIeml,$_SESSION['iduti'],true);
 		    	if($idTrad){
 					if($sem->VerifPartageTrad($idTrad,$_SESSION['iduti'])){
 	                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);

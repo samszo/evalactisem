@@ -62,10 +62,34 @@ function GetFlux(){
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
 
-	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
-	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'DelIiciousTreeGraph','');
+	//AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
+	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'ShowTreeTrad','');
 
 }
+
+function ShowTreeTrad(){
+  try {
+		//pour les traduction faites
+		var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeTradUtis";
+		AppendResult(url,document.getElementById('tpSingleTrad'),false);
+
+		//pour les non traduition
+		url = urlAjax+"library/php/ExeAjax.php?f=GetTreeNoTradUti";
+		AppendResult(url,document.getElementById('tpNoTrad'),false);
+
+	  document.getElementById('infosTrad').setAttribute("hidden","false");
+	  document.getElementById('treeDicoIeml').setAttribute("hidden","false");
+	  document.getElementById('contDonnee').setAttribute("hidden","false");
+
+	    var meter=document.getElementById('Maj');
+		meter.setAttribute("value","100");
+		meter.setAttribute("hidden","true");
+		document.getElementById('label_Maj').setAttribute("hidden","true");
+		
+  } catch(ex2){ alert("interface:ShowTreeTrad:"+ex2); }
+}
+
+
 function SetDonnee(){
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Recup_onto_trad" ,'Trad_Pars_Ieml','');
 }
@@ -461,7 +485,7 @@ function SupTrad()
 	var message=document.getElementById("trad-message");
 	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value);
 
-	SetDonnee();
+	ShowTreeTrad();
 		
 }
 function startSelectTab()
