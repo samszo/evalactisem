@@ -945,7 +945,7 @@ Class Sem{
    				
 	   			if($res==-1){	
 		        	//recuperation des identifiants ieml_id et ieml_onto_flux
-		        	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','--',utf8_decode($codeflux),Trim($codeIeml) ));
+		        	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml) ));
 	   			}else{
 	   				//les identifiants sont passés en paramètre
 	   			}
@@ -957,8 +957,9 @@ Class Sem{
 	 				$values=str_replace("-Iemlcode-", addslashes(utf8_decode(Trim($codeIeml))), $Q[0]->values);
      				$values=str_replace("-Iemllib-", Trim($libIeml),$values);
      				$values=str_replace("-Imelniveau-", Trim($this->GetIemlLevel($codeIeml,false)),$values);
-     				$values=str_replace("-Iemlparent-", Trim($this->GetIemlLevel($codeIeml)),$values);
+     				$values=str_replace("-Iemlparent-", Trim($this->GetIemlLevel($codeIeml,true)),$values);
 	 				$sql = $Q[0]->insert.$values;
+	 				echo $sql;
 	                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	 				$link=$db->connect();   
 	 				$db->query($sql);
@@ -1190,7 +1191,7 @@ Class Sem{
 	    
 	    echo $Xul;
    }
-function GetIemlLevel($IemlExp,$getlevel=true){
+function GetIemlLevel($IemlExp,$getlevel){
 	$l=substr($IemlExp,strlen($IemlExp)-1);
 	switch ($l){
 		case '.' :  
