@@ -200,7 +200,7 @@
 		<Querys>
 			<Query fonction="Ieml_Onto">
 				<insert> INSERT INTO ieml_onto (ieml_id,ieml_code,ieml_lib,ieml_niveau,ieml_parent)</insert>
-				<values> VALUES (' ', '-Iemlcode-' , '-Iemllib-',-Imelniveau-, '-Iemlparent-' )</values>
+				<values> VALUES (' ',-Iemlcode-' , '-Iemllib-',-Imelniveau-, '-Iemlparent-' )</values>
 			</Query>
 			<Query fonction="ieml-flux">
 				<select>SELECT t.ieml_id,t.onto_flux_id,i.ieml_code,i.ieml_lib </select>

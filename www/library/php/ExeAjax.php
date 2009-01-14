@@ -197,6 +197,7 @@
         
         // Ajouter une traduction dans la table ieml_onto et onto_trad
         function AddTrad($libIeml,$codeflux,$codeIeml){
+
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
                 return $sem->Add_Trad($libIeml,$codeflux,$codeIeml);

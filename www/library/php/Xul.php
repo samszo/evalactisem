@@ -426,12 +426,12 @@ function GetTreeNoTradUti($idUti){
 	$rs = $sem->RequeteSelect($this->site,'GetTreeNoTradUti','-idUti-','',$idUti,'');
 	$i=0;
 	//construction des tag non traduit de l'utilisateur 
-    $ihmNo = '<treeitem id="NoTrad_'.$idUti.'" container="true" open="true">'.EOL;
+    $ihmNo = '<treeitem id="NoTradUti_'.$idUti.'" container="true" open="true">'.EOL;
 	$ihmNo .= '<treerow>'.EOL;
-	$ihmNo .= '<treecell label="'.utf8_encode("Non trouvé(s)").'"/>'.EOL ;
-	$ihmNo .= '<treecell label=""/>'.EOL ;
-	$ihmNo .= '<treecell label=""/>'.EOL ;
-	$ihmNo .= '<treecell label=""/>'.EOL ;
+	$ihmNo .= '<treecell   label="'.utf8_encode("Non trouvé(s)").'"/>'.EOL ;
+	$ihmNo .= '<treecell   label=""/>'.EOL ;
+	$ihmNo .= '<treecell   label=""/>'.EOL ;
+	$ihmNo .= '<treecell   label=""/>'.EOL ;
 	$ihmNo .= '</treerow>'.EOL;
 	$ihmNo .= '<treechildren>'.EOL;
 	while($r = mysql_fetch_assoc($rs)){
@@ -445,7 +445,7 @@ function GetTreeNoTradUti($idUti){
 	$rs = $sem->RequeteSelect($this->site,'GetTreeTradAutoSupUti','-idUti-','-idUtiAuto-',$idUti,$this->site->infos["UTI_TRAD_AUTO"]);
 	$i=0;
 	//construction des tag non traduit de l'utilisateur 
-    $ihmSup = '<treeitem id="NoTrad_'.$idUti.'" container="true" open="true">'.EOL;
+    $ihmSup = '<treeitem id="NoTrad_Auto_'.$idUti.'" container="true" open="true">'.EOL;
 	$ihmSup .= '<treerow>'.EOL;
 	$ihmSup .= '<treecell label="'.utf8_encode("Trad. Automatique supprimé(s)").'"/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
@@ -454,7 +454,7 @@ function GetTreeNoTradUti($idUti){
 	$ihmSup .= '</treerow>'.EOL;
 	$ihmSup .= '<treechildren>'.EOL;
 	while($r = mysql_fetch_assoc($rs)){
-        $ihmSup .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_id"],"",array("",utf8_encode($r["onto_flux_code"]),$r["ieml_parent"],utf8_encode($r["ieml_lib"]),$r["ieml_code"]));
+        $ihmSup .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_code"],"",array("",utf8_encode($r["onto_flux_code"]),$r["ieml_parent"],utf8_encode($r["ieml_lib"]),$r["ieml_code"]));
 	}
 	//termine le treedes non trouvé
 	$ihmSup .= '</treechildren>'.EOL;
@@ -849,7 +849,7 @@ function GetTreeTrad($flux,$trad,$descp,$type,$primary,$bdd,$couche){
 	function AddTreeItemTrad($id, $style, $cells){
 		
 		$item = '<treeitem id="'.$id.'" >'.EOL;  
-        $item .= '<treerow '.$style.' >'.EOL;
+        $item .= '<treerow id="TreeRow_'.$id.'" '.$style.' >'.EOL;
         foreach($cells as $cell){
         	$item .= '<treecell label="'.$cell.'"  />'.EOL ;      	
         }
