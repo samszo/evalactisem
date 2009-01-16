@@ -430,7 +430,7 @@ function AddTrad(){
 	
 	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
 	
-	SetDonnee();
+	ShowTreeTrad();
 	
 }   
 function RequetteAddTrad(){
@@ -473,7 +473,7 @@ function SupTrad()
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
    
-	if(codeIeml.value==""){
+	if(codeIeml.value=="" || libIeml.value=="" ){
 		alert("Veuillez sélectionner une expression IEML");
 		return
 	}	

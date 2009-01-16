@@ -158,20 +158,20 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 							
 						<vbox id="infosTrad" hidden="true" flex="1" >
 								<hbox >
-									<groupbox orient="horizontal" >
+									<groupbox orient="horizontal" flex="1" >
 										<caption label="Tag delicious"/>
 									    <label id="id-trad-flux" hidden="true"/>
 										<label hidden="true" value="code :"/><label id="code-trad-flux" style="color:red;font-size:150%" />
 									    <label hidden="true" value="descriptif : "/><label hidden="true" id="lib-trad-flux" style="color:red;font-size:150%" />
 									</groupbox>
-									<groupbox orient="horizontal" >
+									<groupbox orient="horizontal" width="300px" >
 										<caption label="Expression IEML"/>
 									    <label id="id-trad-ieml" hidden="true"/>
 										<label value="descriptif : " hidden="true"/><label id="lib-trad-ieml" style="color:red;font-size:150%" />
 										<label value="code :" hidden="true" />
 										<label style="color:red;font-size:150%" value=" *" />
-										<label id="code-trad-ieml" style="color:red;font-size:150%" />
-										<label style="color:red;font-size:150%" value="** " />
+										<label id="code-trad-ieml" style="color:red;font-size:150%;width:100px" crop="center" />
+										<label style="color:red;font-size:150%" value="** " />									
 									</groupbox>
 								</hbox>
 								<hbox>
@@ -215,7 +215,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 								          <tabpanel>
 											<vbox flex="1">
 												<label id="keyGrid" hidden="true" />
-												<label  style='color:blue;' value="1. Choisissez un tag dans les onglets 'Tag(s) trouvé(s)' dans la partie qu'est après votre login" />
+												<label  style='color:blue;' value="1. Choisissez un tag dans l'onglets 'Tags traduire' " />
 												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
 												<label  style='color:blue;' value="3. Cliquer sur 'Ajouter'" />
 												<hbox>
