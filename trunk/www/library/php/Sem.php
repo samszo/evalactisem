@@ -98,7 +98,7 @@ Class Sem{
    			//exclusion des lib incorectes
    			if($r['ieml_lib']!="(à venir)"){
 		   		//ajoute les traductions
-		   		$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idflux,$r['ieml_id']));		    
+		   		$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idflux,$r['ieml_id']));		    
    			}
 	   	}				
 	}
@@ -875,7 +875,26 @@ Class Sem{
 			else
 				return true;
    }
-
+   
+   function VerifPartageTradAuto($idTradAuto,$idUti){
+   			
+   			//vérifie le partage
+	        $Xpath="/XmlParams/XmlParam/Querys/Query[@fonction='VerifPartageTradAuto']";
+		    $Q=$this->site->XmlParam->GetElements($Xpath);
+	        $where=str_replace("-idTrad-",addslashes($idTrad),$Q[0]->where);
+	        $where=str_replace("-idUti-",addslashes($idUti),$where);
+	        $sql=$Q[0]->select.$Q[0]->from." ".$where;
+		    $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+			$db->connect();
+			$result = $db->query($sql);
+			$db->close();
+			$r =  $db->fetch_assoc($result);
+			if($r['nb']==0)
+				return false;
+			else
+				return true;
+   }
+   
 	function GetAutoTradSup($idUti){
 		//récupère les traductions automatiques supprimées par l'utilisateur
 		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='GetTradAutoSup']";
@@ -935,7 +954,7 @@ Class Sem{
    }
    
      
-   function Add_Trad($libIeml,$codeflux,$codeIeml,$iduti=-1,$getId=false,$res=-1){
+   function Add_Trad($codeflux,$codeIeml,$iduti=-1,$getId=false,$res=-1){
    				$objSite = $this->site;
    				$Activite= new Acti();
    				if($this->trace)
@@ -949,59 +968,36 @@ Class Sem{
 	   			}else{
 	   				//les identifiants sont passés en paramètre
 	   			}
+	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
+	   			
+                if(!$rs){
+	                // insertion dans la table de traductions des identifiants
+	                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',"-idflux-","-idIeml-", $res[0] ,$res[1] );
 
-	   			if(!$res){
-                 //insert l'expression IEML dans ieml_onto
-                   	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='Ieml_Onto']";
-                   	$Q = $objSite->XmlParam->GetElements($Xpath);
-	 				$values=str_replace("-Iemlcode-", addslashes(utf8_decode(Trim($codeIeml))), $Q[0]->values);
-     				$values=str_replace("-Iemllib-", Trim($libIeml),$values);
-     				$values=str_replace("-Imelniveau-", Trim($this->GetIemlLevel($codeIeml,false)),$values);
-     				$values=str_replace("-Iemlparent-", Trim($this->GetIemlLevel($codeIeml,true)),$values);
-	 				$sql = $Q[0]->insert.$values;
-	 				echo $sql;
-	                $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-	 				$link=$db->connect();   
-	 				$db->query($sql);
-     				$db->close($link);
-     				//recuperation des identifiants ieml_id et ieml_onto_flux
-	              	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml)));
-   					if($this->trace)
-	              		fb($codeIeml);
-               
-                }
-	                //vérifie que la trad existe
-	                
-	                $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
-	               
-	                if(!$rs){
-		                // insertion dans la table de traductions des identifiants
-		                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',"-idflux-","-idIeml-", $res[0] ,$res[1] );
+                	//vérifie si le code ieml est déjà attribué à l'auteur
+              		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifIemlUtiOnto','-IdIeml-','-IdUti-',$res[1],$iduti));
+                	if(!$verif){		                	
+	                	//insertion de la traduction dans la table des utilisateurs
+		                $this->RequeteInsert($objSite,'ieml_uti_onto',"-idieml-","-iduti-", $res[1],$iduti);		                	
+	                }
 
-	                	//vérifie si le code ieml est déjà attribué à l'auteur
-              			$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifIemlUtiOnto','-IdIeml-','-IdUti-',$res[1],$iduti));
-	                	if(!$verif){		                	
-		                	//insertion de la traduction dans la table des utilisateurs
-			                $this->RequeteInsert($objSite,'ieml_uti_onto',"-idieml-","-iduti-", $res[1],$iduti);		                	
-		                }
-
-		                //insertion du partage de la trad pour l'utilisateur
-	                	$this->RequeteInsert($objSite,'InsertPartageTrad',"-idTrad-","-idUti-", $idTrad, $iduti);
-	                	
-	                	//si l'utilisateur est "automatique" on ajoute un partage à l'utilisateur connecté
-	                	//pour pouvoir supprimer cette traduction par la suite 
-	                	if($iduti==$this->site->infos["UTI_TRAD_AUTO"]){
-	                		$this->RequeteInsert($objSite,'InsertPartageTrad',"-idTrad-","-idUti-", $idTrad, $_SESSION['iduti']);
-	                	}
-		                
-		                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** ajoutée");
-		                
-	                	$Activite->AddActi("AddTrad",$iduti);
-	                
-	                }else{
-		                $message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe déjà");
-	                	$idTrad = $rs['trad_id'];                
+	                //insertion du partage de la trad pour l'utilisateur
+                	$this->RequeteInsert($objSite,'InsertPartageTrad',"-idTrad-","-idUti-", $idTrad, $iduti);
+                	
+                	//si l'utilisateur est "automatique" on ajoute un partage à l'utilisateur connecté
+                	//pour pouvoir supprimer cette traduction par la suite 
+                	if($iduti==$this->site->infos["UTI_TRAD_AUTO"]){
+                		$this->RequeteInsert($objSite,'InsertPartageTrad',"-idTrad-","-idUti-", $idTrad, $_SESSION['iduti']);
                 	}
+	                
+	                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** ajoutée");
+	                
+                	$Activite->AddActi("AddTrad",$iduti);
+                
+                }else{
+	                $message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe déjà");
+                	$idTrad = $rs['trad_id'];                
+                }
                 
                 if($getId)
                 	return $idTrad;
@@ -1043,7 +1039,7 @@ Class Sem{
      		return $idTrad;
    	
    }
-   function Sup_Trad($codeIeml,$libIeml,$codeflux){
+   function Sup_Trad($codeIeml,$codeflux){
    				$objSite = $this->site;
    				
    	            $Activite= new Acti();
@@ -1052,7 +1048,6 @@ Class Sem{
                 $Q = $objSite->XmlParam->GetElements($Xpath);
                 $from=str_replace("-codeFlux-",addslashes(utf8_decode($codeflux)), $Q[0]->from);
                 $from=str_replace("-codeIeml-", $codeIeml, $from);
-                $from=str_replace("-Iemllib-",addslashes(utf8_decode($libIeml)), $from);
                 $sql = $Q[0]->select.$from.$Q[0]->where;
                 if($this->trace)
                 	echo "Sem:Sup_Trad:sql1=".$sql."<br/>";
