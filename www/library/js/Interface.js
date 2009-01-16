@@ -428,7 +428,7 @@ function AddTrad(){
 		return
 	}	
 	
-	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&libIeml="+libIeml.value+"&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
+	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
 	
 	ShowTreeTrad();
 	
@@ -519,12 +519,14 @@ function Select_NoTrad(id,treecol){
 	var txtlib_ieml=document.getElementById("lib-trad-ieml");
   	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   	IdTreeItem=selection.getAttribute('id');
+
   	TreeRow=document.getElementById("TreeRow_"+IdTreeItem);
 
   	//label du tag del.icio.us
   	console.log(TreeRow.childNodes.length);
   	console.log(TreeRow.childNodes[3]);
     txtcode_flux.value=TreeRow.childNodes[3].getAttribute('label');
+
     txtcode_ieml.value = "";
     txtlib_ieml.value = "";
    

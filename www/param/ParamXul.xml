@@ -447,6 +447,11 @@
 				<from> FROM ieml_trad_partage </from>
 				<where> WHERE trad_id=-idTrad- AND uti_id=-idUti- </where>
 			</Query>			
+		    <Query fonction="VerifPartageTrad">
+				<select> SELECT COUNT(1) nb </select>
+				<from> FROM ieml_trad_partage </from>
+				<where> WHERE trad_id=-idTrad- AND uti_id=-idUti- </where>
+			</Query>			
 		    <Query fonction="SupPartageTrad">
 				<delete> DELETE  </delete>
 				<from> FROM  ieml_trad_partage </from>

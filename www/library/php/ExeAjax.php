@@ -40,10 +40,10 @@
                         $resultat = AddDictio($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml']);
                         break;
                 case 'AddTrad':
-                        $resultat = AddTrad(stripslashes($_GET['libIeml']),stripslashes($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
+                        $resultat = AddTrad(stripslashes($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
                         break;
                 case 'SupTrad':
-                        $resultat = SupTrad(stripslashes ($_GET['codeIeml']),stripslashes ($_GET['libIeml']),stripslashes ($_GET['codeflux']));
+                        $resultat = SupTrad(stripslashes ($_GET['codeIeml']),stripslashes ($_GET['codeflux']));
                         break;
                 case 'SetProc':
                         $resultat = SetProc($_GET['id'],$_GET['code'],$_GET['desc']);
@@ -196,25 +196,27 @@
         }
         
         // Ajouter une traduction dans la table ieml_onto et onto_trad
-        function AddTrad($libIeml,$codeflux,$codeIeml){
+        function AddTrad($codeflux,$codeIeml){
 
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-                return $sem->Add_Trad($libIeml,$codeflux,$codeIeml);
+                return $sem->Add_Trad($codeflux,$codeIeml);
                              
  		}
        
-        function SupTrad($codeIeml,$libIeml,$codeflux){
+        function SupTrad($codeIeml,$codeflux){
         
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
 			    //vérifie le partage de traduction
-		    	$idTrad = $sem->Add_Trad($libIeml,$codeflux,$codeIeml,$_SESSION['iduti'],true);
+		    	$idTrad = $sem->Add_Trad($codeflux,$codeIeml,$_SESSION['iduti'],true);
 		    	if($idTrad){
-					if($sem->VerifPartageTrad($idTrad,$_SESSION['iduti'])){
+		    		//vérifie s'il existe une traduction automatique
+					if($sem->VerifPartageTrad($idTrad,$objSite->infos["UTI_TRAD_AUTO"])){
 	                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);
 					}else{
-	                	$message = $sem->Sup_Trad($codeIeml,$libIeml,$codeflux);						
+	                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);
+						$message = $sem->Sup_Trad($codeIeml,$codeflux);						
 					}
 		    	}else{
 		    		$message = utf8_encode("Problème lors de la vérification du partage");
