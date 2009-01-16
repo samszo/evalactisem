@@ -928,7 +928,7 @@ Class Sem{
 		    $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 			$db->connect();
 			$db->query($sql);
-            $message = mysql_affected_rows().utf8_encode(" traduction automatique supprimée");
+            $message = mysql_affected_rows().utf8_encode(" traduction supprimée");
 			$db->close();
 
 			return $message;

@@ -256,7 +256,7 @@
 			<Query fonction="ExeAjax-SupTrad">
 				<select>SELECT f.onto_flux_id,i.ieml_id </select>
 				<from> FROM ieml_onto_flux f  
-				       INNER JOIN ieml_onto i ON f.onto_flux_code="-codeFlux-" AND i.ieml_code="-codeIeml-" AND i.ieml_lib="-Iemllib-"
+				       INNER JOIN ieml_onto i ON f.onto_flux_code="-codeFlux-" AND i.ieml_code="-codeIeml-" 
 				 </from>
 				<where> </where>
 			</Query>

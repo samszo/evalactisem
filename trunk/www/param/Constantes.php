@@ -84,7 +84,7 @@ $SiteMundi = array(
 	"DEF_LNG" => 1,
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
-	"UTI_TRAD_AUTO" => 4,
+	"UTI_TRAD_AUTO" => 1,
 	"gmKey" => gmKey
 	); 
 	
