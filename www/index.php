@@ -60,17 +60,11 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 
 	<script src="library/js/Interface.js"/>
 	<script src="library/js/ajax.js"/>
-	<script src="library/js/TradTagIeml.js"/>
-	<script src="library/js/groupbox.js"/>
-	<script src="library/js/tree.js"/>
 	<script src="library/js/iemlBoussole.js"/>
- 	<script src="library/js/GoogleDoc.js"/>
  	<script src="library/js/utf8.js"/>
 	
 
 	<script type="text/javascript" > 
-		var grpBox= new GroupBox('box1'); 
-		var TradIeml= new Traduction(); 
 		var Flux; var f;
 		var urlExeAjax = "<?php echo ajaxPathWeb; ?>";
 		var urlAjax = "<?php echo PathWeb; ?>";

@@ -12,8 +12,8 @@
 .NoSelect{
 	 text-decoration:none;
 	 display:block;
-	 width:100px;
-	 height:45px;
+	 width:75px;
+	 height:55px;
    	 border:1px outset #dbecff;
 	 font-family:Arial;
      font-size:7pt;
@@ -26,8 +26,8 @@
 .Select{
 	 text-decoration:none;
 	 display:block;
-	 width:100px;
-	 height:45px;
+	 width:75px;
+	 height:55px;
    	 border:1px outset #dbecff;
 	 background-color:yellow;
 	 font-family:Arial;
@@ -40,8 +40,8 @@
 
 .Error{
 	 display:block;
-	 width:100px;
-	 height:45px;
+	 width:75px;
+	 height:55px;
    	 border:1px outset #dbecff;
 	 font-family:Arial;
      font-size:7pt;
