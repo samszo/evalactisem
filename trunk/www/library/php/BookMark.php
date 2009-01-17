@@ -36,35 +36,7 @@ class BookMark{
 		
 	}
 	
-	function GetInfos(){
-
-			//récupère les infos du bookmark
-			$idbook = $this->xml->xpath("/bookmark");
-			$this->id=$idbook[0]['id'] ;
-			$this->titre=$idbook[0]['id'];
-
-			//récupère les post du bookmark
-			$i=0;
-			foreach($this->xml->xpath("//post") as $post){ 
-				$idP = $post['id'];
-				$url = $post->url;
-				$this->Posts[$i]= new Post($this->bookmark,$idP,$url);
-				$j=0;
-				//récupère les tags du bookmark
-				foreach($post->Tags->tag as $tag){
-					$this->Posts[$i]->Tags[$j]=$tag;
-					//ajoute les tag distinct au niveau du bookmark
-					if(!in_array($tag,$this->Tags))
-						array_push($this->Tags,$tag."");
-					$j++;	 
-				}				
-			    $i++;
-			}
-			$this->NbPost = $i;
-			
-	}
-    
-	function MajPostIeml( $objSite,$oDelicious){
+		function MajPostIeml( $objSite,$oDelicious){
      	 
         $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
          // Recupération des tarductions des tags
