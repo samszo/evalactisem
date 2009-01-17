@@ -507,24 +507,15 @@ Class Sem{
 		if($code=="")
 			$code=$this->Src;
 		$code = stripslashes ($code);
-	    //$lien ='https://iemlparser:semantic@www.infoloom.com/cgi-bin/ieml/test2.cgi?iemlExpression='.$code;
 	    $lien = 'http://starparser.ieml.org/cgi-bin/test2.cgi?iemlExpression='.$code;
 		if($this->trace)
 			echo "Sem:Parse:$lien=".$lien."<br/>";
 			
 	    $oCurl = curl_init($lien);
 		// set options
-	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
-		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
+	    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
-		//echo $sCmd."<br/>";
-		//$arrInfos = curl_getinfo($ch);
-		//print_r($arrInfos);
-		//echo "sResult=<br/>";
-		//print_r($sResult);
-		//echo "<br/>";
-		//fin ajout samszo
-
+		
 		// request URL
 		$sResult = curl_exec($oCurl);
 		
@@ -544,9 +535,6 @@ Class Sem{
 	    }else{
 	    	return  $sResult;
 	    }
-		
-	  
-	    
 	}
 
 	function GetEventListener($id,$params){
@@ -563,7 +551,6 @@ Class Sem{
 	
 	function GetChoixNavig($So="", $De="", $Tr="", $NumEtap=-1) {
 
-		
 		//cette fonction permet de construire un menu en xul
 		// la source du menu est une expression ieml par exemple : l.o.-t.o.-we.b.-'
 		// cette expression est le parent (hiérarchie sql) d'une série d'expression ieml 
@@ -700,23 +687,7 @@ Class Sem{
 			$liste= "";
 		
 		return array("liste"=>$liste,"js"=>$jsEvents);
-	}
-
-		/*récupération du n° de couche suivant le dernier caractère de l'expression IEML
-		$Mark = $this->GetMark($end);
-		$close = $Mark[0]["closing"];
-		$Xpath = "/EvalActiSem/StarIEML/Mark[@layer=".($NumEtap-1)."]";
-		$MarkParent = $this->XmlParam->GetElements($Xpath);
-		$closeParent = $MarkParent[0]["closing"];
-		if($this->trace){
-			echo "Sem GetChoixNavig récupère la définition du layer<br/>";
-			print_r($Mark);
-			echo "<br/>close ".$close."<br/>";
-			print_r($MarkParent);
-			echo "<br/>closeParent ".$closeParent."<br/>";
-			echo "sql = ".$sql."<br/>\n";
-		}
-		*/		
+	}		
    function InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent){
  	global $objSite;	
      			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
@@ -920,7 +891,6 @@ Class Sem{
 		$from = str_replace("-idUti-", $idUti, $Q[0]->from);
 		$where = str_replace("-idFlux-", $idFlux, $Q[0]->where);
 		$sql = $Q[0]->select.$from.$where;	
-		//echo $sql."<br/>"; 
 		$db = new mysql ($this->site->infos["SQL_HOST"]
 			, $this->site->infos["SQL_LOGIN"]
 			, $this->site->infos["SQL_PWD"]
@@ -1090,102 +1060,7 @@ Class Sem{
                 return $message;
         
    }
-   function GetCycle($key){
-  	$Xul='';
-   	$lien ='http://spreadsheets.google.com/pub?key='.$key;
-  	
-  	if($this->trace)
-			echo "Sem:GetCycle:lien=".$lien."<br/>";
-			
-	    $oCurl = curl_init($lien);
-	    
-		// set options
-	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
-		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
-		
-		// request URL
-		curl_exec($oCurl);
-		
-		$sResult = curl_exec($oCurl);
-		
-		// close session
-		curl_close($oCurl);
-		
-		if($this->trace)
-			echo "Sem.php:GetCycle:sResult".$sResult."<br/>";
-			
-		eregi('<TABLE (.*) >(.*)</TABLE>',$sResult, $chaine);
-	    eregi('(<BODY (.*) >)(.*)</BODY>',$chaine[0], $Html);
-        eregi('(<td (.*) >)',$Html[0], $chaine);
    
-        $a=eregi_replace('class=\'[[:alnum:]]* \'|class=\'[[:alpha:]]*\'|<br/>|colspan=[[:digit:]]*|class=hd' ,' ',$chaine[0]);
-        $a=eregi_replace('<p style=\'height:[[:digit:]]*px;\'>.</td>' ,'<td>',$a);
-        $a=eregi_replace('style=\'width:[[:digit:]]*px;\'|style=\'display:none;\'|style=\'width:[[:digit:]]*;\'' ,'',$a);
-        $a=eregi_replace('<td[[:space:]]*>' ,'<td> ',$a);
-        $ArrTr=explode("<tr>",$a);
-        
-        //lien vers le googledoc
-        $Xul .= "<vbox flex='1' >";
-		$Xul.="<label class='text-link' onclick=\"OuvreLienOnglet('".$lien."');\" value='Consulter le GoogleDoc' />";
-		
-        //construction de la grille
-        $Xul.='<grid id="'.$key.'GridCycle" flex="1" >';
-		$cell=explode("<td>",$ArrTr[0]);
-		$Xul.='<columns id="cols">';	
-		for($j=1;$j<(sizeof($cell)/2);$j++){
-			
-			$Xul.='<column id="col_'.$j.'" ></column>';
-		}
-		$Xul.='</columns>';
-	    $Xul.='<rows id="'.$key.'CycleRows">';
-        for($i=1;$i<sizeof($ArrTr)-1;$i++){
-                 $ArrTd=explode("<td>",$ArrTr[$i]);
-                 $Xul.='<row id="row_'.$i.'" >';
-                 for($j=3;$j<sizeof($ArrTd);$j++){
-                 if($i%2!=0){
-                 	$Td[$j]=$ArrTd[$j];
-                 }else{
-                 	if($Td[$j]!=" " && $ArrTd[$j]!=" "){
-                 		//récupère le parse de l'expression
-           				$xml = $this->Parse(trim($Td[$j]));
-						$toolTip = $Td[$j];
-						$class = "NoSelect";						
-           				if(is_object($xml)){							
-							if($this->trace)
-								echo "Sem.php:GetCycle:xml".print_r($xml)."<br/>";
-							$this->GetOccurrence($xml);
-							//récupère les primitives
-							$arrDon = $this->GetDonneePrimis();
-							$Primis = " primitives='".$arrDon["codes"]."' ";						
-							//récupère les events
-							$arrDon = $this->GetDonneeEvents();
-							$Events = " events='".$arrDon["codes"]."' ";						
-							$toolTip .= $Primis.$Events;						
-							$error = "";
-						}else{
-							$Primis = " primitives='' ";						
-							$Events = " events='' ";
-							$error = $xml;						
-							$class = "Error";						
-						}
-                 		$Xul.='<label id="'.$key.'*'.$Td[$j].'**" '.$Primis.$Events.'   tooltiptext="'.$toolTip.'"  class="'.$class.'" onclick="AfficheIeml(\''.$key.'*'.$Td[$j].'**\') ">'.$ArrTd[$j].' '.$error.' </label>';
-                 	   
-                 	}else{
-                 		$Xul.='<label id="* **"    ></label>';
-                 		
-                 	}
-                 }
-                 }
-        	 $Xul.='</row>';
-            }
-        $Xul.='</rows>';
-	    $Xul.='</grid>';
-        
-	    $Xul .= "</vbox>";
-	    
-	    echo $Xul;
-   }
 function GetIemlLevel($IemlExp,$getlevel){
 	$l=substr($IemlExp,strlen($IemlExp)-1);
 	switch ($l){

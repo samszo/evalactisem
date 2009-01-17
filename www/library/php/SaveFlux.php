@@ -24,30 +24,26 @@ class SauvFlux{
     
 	function aGetAllBundles($objSite,$oDelicious,$iduti){
 	 set_time_limit(5000);
-	    
-	    
 		if ($aPosts = $oDelicious->GetAllBundles()) {
-		  foreach ($aPosts as $aPost) {	
-		  	if($aPost['name']!='IEML'){
-			  	$name.=$aPost['name'].";";
-			  	$reponse= $this->VerifFluxExiste($objSite,$aPost['name']);
-			  	if(!$reponse){
-				  $idflux= $this->InsertFlux($objSite,$aPost['name']);
-				  $this->flux_uti($objSite,$iduti,$idflux);
-			    }else{
-			      $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
-			    }
-			    $ArrTags=explode(" ",$aPost["tags"]);
-				foreach($ArrTags as $tag){
-				   $reponse= $this->VerifFluxExiste($objSite,$tag);			   
-				   if(!$reponse){
-					$idflux= $this->InsertFlux($objSite,$tag);					 		
-					$this->flux_uti($objSite,$iduti,$idflux);
-				   }else{
-					$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
-				   }
-			    }
-		   }
+		  foreach ($aPosts as $aPost) {
+		  	$name.=$aPost['name'].";";
+		  	$reponse= $this->VerifFluxExiste($objSite,$aPost['name']);
+		  	if(!$reponse){
+			  $idflux= $this->InsertFlux($objSite,$aPost['name']);
+			  $this->flux_uti($objSite,$iduti,$idflux);
+		    }else{
+		      $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
+		    }
+		    $ArrTags=explode(" ",$aPost["tags"]);
+			foreach($ArrTags as $tag){
+			   $reponse= $this->VerifFluxExiste($objSite,$tag);			   
+			   if(!$reponse){
+				$idflux= $this->InsertFlux($objSite,$tag);					 		
+				$this->flux_uti($objSite,$iduti,$idflux);
+			   }else{
+				$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
+			   }
+		    } 
 		 } 
 	   }else {
 		 echo $oDelicious->LastErrorString();
@@ -113,11 +109,10 @@ class SauvFlux{
 		$reponse = $db->query($sql);
 		$db->close();
 		while($result=mysql_fetch_assoc($reponse)){
-			
 			$parent=explode(";",$result['onto_flux_parents']);
 			$count.=(sizeof($parent)-1).";";
 			for($i=0;$i<sizeof($parent)-1;$i++){
-				$Xpath =Xpath("repres_graph_flux1");
+				$Xpath =$this->Xpath("repres_graph_flux1");
 				$where=str_replace("-parent-",$parent[$i],$Q[0]->where);
 				$sql=$Q[0]->select.$Q[0]->from.$where;
 				$r = $db->query($sql);
@@ -136,7 +131,7 @@ class SauvFlux{
 }
 	
 	function flux_uti($objSite,$uti_id,$flux_id){
-		$Xpath=Xpath('Ieml_Uti_Onto_Flux_existe');
+		$Xpath=$this->Xpath('Ieml_Uti_Onto_Flux_existe');
 		if(!$flux_id){
 			$toto=1;
 		}
@@ -151,9 +146,8 @@ class SauvFlux{
 		$db->close();
 		
 		if(@mysql_num_rows($r)==0){				   	 
-			  	
 			$db1 = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-			$Xpath=Xpath('flux_utilisateur');
+			$Xpath=$this->Xpath('flux_utilisateur');
 			$Q=$objSite->XmlParam->GetElements($Xpath);
 			$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 			$values=str_replace("-idflux-",$flux_id,$values);
@@ -168,7 +162,7 @@ class SauvFlux{
 
 
 	function InsertFlux($objSite,$codeFlux){
-		$Xpath=Xpath('Ieml_Onto_Flux');
+		$Xpath=$this->Xpath('Ieml_Onto_Flux');
 		$Q=$objSite->XmlParam->GetElements($Xpath);
 		$value = str_replace("-codeFlux-",utf8_decode(addslashes($codeFlux)),$Q[0]->values);
 			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
@@ -184,7 +178,7 @@ class SauvFlux{
 
 	
 	function VerifFluxExiste($objSite,$tag){
-	   $Xpath=Xpath('Ieml_Onto_existe');
+	   $Xpath=$this->Xpath('Ieml_Onto_existe');
        $Q=$objSite->XmlParam->GetElements($Xpath);        
        $where=str_replace("-tag-",addslashes(utf8_decode($tag)),$Q[0]->where);
 	   $sql=$Q[0]->select.$Q[0]->from." ".$where;
@@ -209,6 +203,11 @@ class SauvFlux{
 	    $db->close();	    
 	  	return $reponse;
 	}
+	function Xpath($fonction){
+	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
+	 return $Xpath; 
+}
+	
 	
 }
 	
