@@ -57,7 +57,7 @@ echo ('<' . '?xml-stylesheet href="CSS/iemlCycle.css" type="text/css"?' . '>' . 
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload=" ">
-
+    <script src="library/js/tree.js"/>
 	<script src="library/js/Interface.js"/>
 	<script src="library/js/ajax.js"/>
 	<script src="library/js/iemlBoussole.js"/>
