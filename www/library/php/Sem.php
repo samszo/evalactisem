@@ -938,6 +938,11 @@ Class Sem{
 	   			}else{
 	   				//les identifiants sont passés en paramètre
 	   			}
+	   			
+	   			if(!$res)
+	                return "ERREUR : la traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** n'a pas été ajoutée");
+	   			
+	   			
 	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
 	   			
                 if(!$rs){
