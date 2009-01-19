@@ -36,7 +36,7 @@ class BookMark{
 		
 	}
 	
-		function MajPostIeml( $objSite,$oDelicious){
+		function Add_Post_Ieml_Delicious( $objSite,$oDelicious){
      	 
         $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
          // Recupération des tarductions des tags
@@ -95,7 +95,7 @@ class BookMark{
     	echo $postMAJ;     
    }
    
-    function DeletCompteDelicious($objSite,$oDelicious,$iduti,$login){
+    function Delet_Compte_Delicious($objSite,$oDelicious,$iduti,$login){
    	 	 
    		 //Suppression des tags de l'utilisateur de la table ieml_uti_onto_flux
    		 

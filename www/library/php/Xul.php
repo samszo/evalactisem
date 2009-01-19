@@ -29,7 +29,7 @@ class Xul{
    }
         
    //Construction de la table des Tags qui n'ont pas de traduction dans le dictionnaire
-   function GetTreeNoTradUti($idUti){
+   function Get_Tree_NoTrad_Uti($idUti){
 	
 	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
 	$type = "No_Trad";
@@ -41,7 +41,7 @@ class Xul{
         flex="1"        
         id="'.$type.'" 
         multiple="true"';
-	$ihm .= ' onselect="Select_NoTrad(\''.$type.'\',\'treecol_Tagdel\');">'.EOL; 
+	$ihm .= ' onselect="SelectNoTrad(\''.$type.'\',\'treecol_Tagdel\');">'.EOL; 
 	$ihm .= '<treecols >'.EOL;
 	$ihm .= '<treecol hidden="false" flex="1" label="Traductions"  persist="width ordinal hidden"  />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
@@ -105,7 +105,7 @@ class Xul{
 }
         
 //Construction de la table des Traduction de le  utilisateur     
-function GetTreeTradUtis($idUtis){
+function Get_Tree_Trad_Utis($idUtis){
 	
 	$type = "Signl_Trad";
 	
@@ -116,7 +116,7 @@ function GetTreeTradUtis($idUtis){
         flex="1"        
         id="'.$type.'" 
         multiple="true"';
-    $ihm .= ' onselect="Select_Trad(\''.$type.'\',1,2,3);">'.EOL;
+    $ihm .= ' onselect="SelectTrad(\''.$type.'\',1,2,3);">'.EOL;
     $ihm .= '<treecols >'.EOL;
 	$ihm .= '<treecol hidden="false" flex="1" label="Traductions"  persist="width ordinal hidden"  />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
@@ -306,7 +306,7 @@ function GetTreeItemTradUti($idUti,$type){
                  $tree.='<tree id="'.$type.'"
                       flex="1"
                       style="width:600; height:400"
-                      onselect="Select_Dictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
+                      onselect="SelectDictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
                       typesource="'.$type.'"  
                       Treeid="'.$type.'">'.EOL;
                       //le conteneur doit avoir comme id id pour editableTree

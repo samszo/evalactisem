@@ -373,7 +373,7 @@ print("<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' 
 print("<rect x='0' y='0' width='".$large."' height='".$haut."' style='fill:".$col1.";' pointer-events='none'/>\n"); 
 if ($titre!="") {faire_titre();};
 faire_gradu();
-print("<g onmouseover='top.show_tooltip(evt)' onmouseout='top.hide_tooltip(evt)'>\n"); 
+print("<g onmouseover='top.ShowTooltip(evt)' onmouseout='top.HideTooltip(evt)'>\n"); 
 switch($type)
 {CASE "histo":
 faire_histo();

@@ -49,8 +49,8 @@
                 case 'Parse':
                         $resultat = Parse($code);
                         break;
-                case 'GetGraph':
-                        $resultat = GetGraph($code,$_GET['type']);
+                case 'ParserIemlExp':
+                        $resultat = ParserIemlExp($code,$_GET['type']);
                         break;
                 case 'GraphGet':
                 	    $resultat=GraphGet($mbook);
@@ -62,14 +62,9 @@
                 		else
         	        		$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd'],$_POST['couche']);
         	        	break;
-                case 'InsertIemlOnto':
-                	   $resultat=InsertIemlOnto($_GET['Iemlcode'],$_GET['Iemllib'],$_GET['Imelparent']);
-                	   break;
-                case 'GetTreeDictio':
-                	   $resultat=GetTreeDictio();
-                	   break;
-                case 'AddPostIeml':
-                	$resultat=AddPostIeml();
+                
+                case 'AddPostIemlDelicios':
+                	$resultat=AddPostIemlDelicios();
                 	break;
                 case 'Delet_Compte_Delicious':
                		$resultat=Delet_Compte_Delicious();
@@ -102,24 +97,17 @@
 	function GetTreeNoTradUti(){
         global $objSite;
         $xul = new Xul($objSite);
-		return $xul->GetTreeNoTradUti($_SESSION['iduti']);
+		return $xul->Get_Tree_NoTrad_Uti($_SESSION['iduti']);
 	}
 
 	function GetTreeTradUtis(){
         global $objSite;
         $xul = new Xul($objSite);
-		return $xul->GetTreeTradUtis(array($objSite->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']));
+		return $xul->Get_Tree_Trad_Utis(array($objSite->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']));
 		//return $xul->GetTreeTradUtis($_SESSION['iduti']);
 	}
         
-        function GetTreeDictio(){
-        	 global $objSite;
-        	 
-        	 $objXul = new Xul($objSite);
-        	  $tree=$objXul->GetTree_ieml_onto("ieml");
-			  return $tree;
-        }
-        
+       
         // Ajouter une traduction dans la table ieml_onto et onto_trad
         function AddTrad($codeflux,$codeIeml){
 
@@ -161,12 +149,12 @@
         }
 
 
-        function GetGraph($code,$type){
+        function ParserIemlExp($code,$type){
         
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
                 
-                $liens = $sem->GetSvgPie($code);                                
+                $liens = $sem->Parser_Ieml_Exp($code);                                
                 
                 //$svg = $objSite->GetCurl($liens["GraphPrimitive"]);
                 //header("Content-Type: image/svg+xml");
@@ -186,35 +174,21 @@
         	
         }
        
-       function InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent){
-	     	global $objSite;     
-	     	$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-	     		     
-	     		     $sem->InsertIemlOnto($Iemlcode,$Iemllib,$Imelparent);
-     	}
-        
-	   	function AddPostIeml(){
+      
+	   	function AddPostIemlDelicious(){
 	     	global $objSite;
 	   		$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess']);
 	     	$bmark= new  BookMark();
 	         
-	         $bmark->MajPostIeml($objSite,$oDelicious);
+	         $bmark->Add_Post_Ieml_Delicious($objSite,$oDelicious);
 	         
 	    }
     
-	   	function Delet_Compte_Delicious(){
-	     global $objSite;
-	     $oDelicious=$_SESSION['Delicious'];
-	     $bmark=new  BookMark();
-	         
-	         return $bmark->DeletCompteDelicious($objSite,$oDelicious,$_SESSION['iduti'],$_SESSION['loginSess']);
-	   
-	   }
-       
+	   	
 	   function CreaCycle($json){
 	   		global $objSite;
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
- 			return $sem->CreaCycle($json);                              
+ 			return $sem->Crea_Cycle($json);                              
        }
 	  
 ?>

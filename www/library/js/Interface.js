@@ -3,10 +3,9 @@ var E="*";
 var P=";";
 var S=":";
 
-function OuvreLienOnglet(lien){
-	window.open(lien);
-}
-function show_tooltip(evt)
+
+
+function ShowTooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
         var  decale_x = matrix.e 
@@ -23,26 +22,24 @@ function show_tooltip(evt)
         }
 }
 
-function hide_tooltip(evt)
+
+function HideTooltip(evt)
 {
         evt.target.ownerDocument.getElementById("tooltip").setAttributeNS(null , "visibility", "hidden")
 }
-function pf_couleur(num, color){
-   
-    document.getElementById("colorpicker" + num).hidePopup();
-    document.getElementById("tb_0" + num).value =color;
-    document.getElementById("tb_0" + num).inputField.style.backgroundColor=color; 
-}
+
 function GetFlux(){
 
     document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
-	
-    AjaxRequest(urlAjax+"library/php/RecupFlux.php",'ShowTreeTrad','');
-}
 
-function ShowTreeTrad(){
+	//AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllPosts&req=GetAllTags",'' ,'');
+	AjaxRequest(urlAjax+"library/php/RecupFlux.php?requette=GetAllTags&req=GetAllTags",'Xul_Ajax_ShowTreeTrad','');
+
+}
+  
+function Xul_Ajax_ShowTreeTrad(){
   try {
 		//pour les traduction faites
 		var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeTradUtis";
@@ -63,21 +60,8 @@ function ShowTreeTrad(){
 		
   } catch(ex2){ alert("interface:ShowTreeTrad:"+ex2); }
 }
-function pf_dessin(query)
-{
-	lien='library/php/stats.php?large='+escape("400");
-	lien=lien+'&query='+query;
-	lien=lien+'&haut='+escape('300');
-	lien=lien+'&titre='+escape(document.getElementById("titre").value);
-	lien=lien+'&type=pie';
-	lien=lien+'&col1='+escape('#FFCC33');
-	lien=lien+'&col2='+escape('#33FFFF');
-	lien=lien+'&col3='+escape('#000066');
-	lien=lien+'&col4='+escape('#000000');
-	document.getElementById("webFrame").setAttribute("src",lien);
-    
-}
-function AddTrad(){
+
+function Sem_AddTrad(){
 	
 	var libIeml=document.getElementById("lib-trad-ieml");
     var codeIeml=document.getElementById("code-trad-ieml");
@@ -95,27 +79,13 @@ function AddTrad(){
 	
 	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
 	
-	ShowTreeTrad();
+	Xul_Ajax_ShowTreeTrad();
 	
 }   
-function RequetteAddTrad(){
-	var libflux= document.getElementById("code-trad-flux");
-	var codeIeml = document.getElementById("code-trad-ieml");
-	var libIeml=document.getElementById("code-trad-flux");
-	var idflux = document.getElementById("id-trad-flux");
-	
-	//vérification des valeurs
-	if(codeIeml.value=="")
-		document.getElementById("trad-message").value = "Veuillez sélectionner une valeur pour chaque langage";
-	else
-		
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddTrad&idflux="+idflux.value+"&libflux="+libflux.value+"&codeIeml="+codeIeml.value,"","","trad-message");
-}
-
 
 //Supression d'une traduction
 
-function SupTrad()
+function Sem_SupTrad()
 {
 	//récupération des valeurs
 	
@@ -135,10 +105,10 @@ function SupTrad()
 	var message=document.getElementById("trad-message");
 	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=SupTrad&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value+"&codeflux="+codeFlux.value);
 
-	ShowTreeTrad();
+	Xul_Ajax_ShowTreeTrad();
 		
 }
-function Select_NoTrad(id,treecol){
+function SelectNoTrad(id,treecol){
 
 	var tree = document.getElementById(id);
   	var txtcode_flux=document.getElementById("code-trad-flux");
@@ -159,7 +129,7 @@ function Select_NoTrad(id,treecol){
    
     
 }
-function Select_Dictio(id,treecol1,treecol2){
+function SelectDictio(id,treecol1,treecol2){
 	
 	var tree = document.getElementById(id);
 	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
@@ -169,7 +139,7 @@ function Select_Dictio(id,treecol1,treecol2){
   	txtlib_ieml.value=tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol2));
     txtcode_ieml.value= tree.view.getCellText(tree.currentIndex,tree.columns.getNamedColumn(treecol1));
 }
-function Select_Trad(id,treecolTag,treecolTrad,treecolIeml,type){
+function SelectTrad(id,treecolTag,treecolTrad,treecolIeml,type){
   try{
 	  var tree = document.getElementById(id);
       var tag = GetTreeValSelect(id,treecolTag);
@@ -215,7 +185,7 @@ function Select_Trad(id,treecolTag,treecolTrad,treecolIeml,type){
  }
 }
 
-function Parser(op,type){
+function ParserIemlExp(op,type){
   try {
     var tree = document.getElementById("Signl_Trad");
     //prise en compte de la sélection multiple
@@ -224,7 +194,7 @@ function Parser(op,type){
     	alert("Veuillez sélectionner un ou plusieurs Tags traduits");
     	return;
 	}    
-	var url = urlAjax+"library/php/ExeAjax.php?f=GetGraph&code="+Iemlcode+"&type="+type;
+	var url = urlAjax+"library/php/ExeAjax.php?f=ParserIemlExp&code="+Iemlcode+"&type="+type;
 	url = GetResult(url);
 
 	GoUrl(url,'bIemlStat');
@@ -345,25 +315,16 @@ function SetIemlMaxLayer(arrIEML,maxNiv){
 	return arrIEML[0];
   } catch(ex2){ alert("interfaces:SetIemlMaxLayer:"+ex2+" ieml="+ieml); }
 }
-function recup_dictio(){
-	var res;
-	for(i=0;i<1990;i++){
-		res=TradIeml.recup_dictio(i);
-		arres=res.split(E);
-		arres[1]=arres[1].substring(0, arres[1].length-1)
-		AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=insert_ieml_onto&Iemlcode="+arres[1]+"&Iemllib="+arres[2]+"&Imelparent="+arres[0],""," ","");
-	}
-}
 
-function AddPostIemlDelicios(){
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Afficher','')
+function BookMark_AddPostIemlDelicios(){
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Ajax_Afficher','')
 	var meter=document.getElementById('Maj');
 	document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
 	meter.setAttribute("hidden","false");
 	
 }
 
-function SupprimeDelicious(result,prarm){
+function Ajax_SupprimeDelicious(result,prarm){
 	
 		var meter=document.getElementById('progmeter');
 		meter.setAttribute("value","100");
@@ -371,10 +332,8 @@ function SupprimeDelicious(result,prarm){
 		document.getElementById('Maj').setAttribute("hidden","true");
 	    window.location.href = "exit.php";
 }
-function popup(){
-	 f=open("popup.xul","traget","width=400, height=100");
-}
-function Afficher(result,prarm){
+
+function Ajax_Afficher(result,prarm){
 	
 	var meter=document.getElementById('progmeter');
 	meter.setAttribute("value","100");
@@ -387,12 +346,12 @@ function Afficher(result,prarm){
 		document.getElementById('Maj').setAttribute("hidden","true");
 	}
 }
-function SupprimerCompteDelicious(){
+function BookMark_SupprimerCompteDelicious(){
     
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
 	document.getElementById('label_Maj').setAttribute("value","La suppression est en cours ...");
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=Delet_Compte_Delicious",'SupprimeDelicious','');
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=DeletCompteDelicious",'Ajax_SupprimeDelicious','');
 	
 }
 function GoUrl(url,idBox){
@@ -404,7 +363,6 @@ function GoUrl(url,idBox){
 	ifram.setAttribute("flex","1");
 	box.appendChild(ifram);
 	
-		
 }
 function ShowBoussole(){
     document.getElementById('webFrame1').setAttribute("hidden","false");
@@ -423,15 +381,10 @@ Table=window.parent.frames['iemlCycle'].document.getElementById('')
 window.parent.frames['iemlCycle'].document.getElementById('O:.B:M:.-').setAttribute('style',"background-color:green");
 
 }
-function ModifTrad(){
-	table=window.parent.frames('webFrame').document.getElementById('Points')
-	window.parent.frames['webFrame'].document.getElementById('palette_status').setAttribute('style',"background-color:green");
-}
-
-        
-function load(key){
+    
+function Load(key){
 	google.load("visualization", "1");
-	google.setOnLoadCallback(initialize);
+	google.setOnLoadCallback(Initialize);
 }
  function LoadCycle(key){
 	//vérifie que l'onglet n'est pas déjà rempli
@@ -446,14 +399,14 @@ function load(key){
      	document.getElementById('iemlCycle_'+key).setAttribute("src","overlay/IemlCycle.php?key="+key)
      	
 }
- function initialize() {
+ function Initialize() {
 	 //var key="p8PAs8y8e1x2YTS7Zgag7Nw&hl=en";
      var query = new google.visualization.Query("http://spreadsheets.google.com/tq?key="+key);
-     query.send(handleQueryResponse);  // Send the query with a callback function
+     query.send(Sem_CreaCycle);  // Send the query with a callback function
    }
   
    // Query response handler function.
-   function handleQueryResponse(response) {
+   function Sem_CreaCycle(response) {
     
      if (response.isError()) {
        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -475,11 +428,11 @@ function load(key){
 	     for (var col = 0; col < data.getNumberOfColumns()-1; col++) {
         	 if(data.getFormattedValue(row, col)!=" "){ 
 	    		   descp=data.getFormattedValue(row, col);
-	    		   id=key+"*"+ escapeHtml(data.getFormattedValue(row-1, col))+"**";
+	    		   id=key+"*"+ EscapeHtml(data.getFormattedValue(row-1, col))+"**";
 	    		   if(data.getFormattedValue(row-1, col)=="")
 	    			   code="vide";
 	    		   else
-	    			   code=escapeHtml(data.getFormattedValue(row-1, col));
+	    			   code=EscapeHtml(data.getFormattedValue(row-1, col));
 	    		   json+='"descp'+col+'":"'+descp+'","code'+col+'":"'+code+'",';
 	    		   // html.push("<td id="+id+" ><a  id='a_"+row+col+ "' href='#' class='NoSelect'>"+descp+"</a></td>");
 	    	  }
@@ -491,12 +444,12 @@ function load(key){
      }
      json+="]";
      json=json.replace(/,]/g,']').replace(/\n/g,' ');
-     AjaxRequest("../library/php/ExeAjax.php?f=CreaCycle&json="+json,'creatCycle','');
-     //document.getElementById(key+'_div').innerHTML = html.join('');
+     AjaxRequest("../library/php/ExeAjax.php?f=CreaCycle&json="+json,'Ajax_AfficheCycle','');
+     
     
 }
 
-   function escapeHtml(text) {
+   function EscapeHtml(text) {
      if (text == null)
        return '';
 
@@ -505,7 +458,7 @@ function load(key){
        .replace(/>/g, '&gt;')
        .replace(/"/g, '&quot;');
 }
-   function creatCycle(result){
+   function Ajax_AfficheCycle(result){
 	   var meter=window.parent.document.getElementById('Maj');
 	   meter.setAttribute("value","100");
 	   meter.setAttribute("hidden","true");
