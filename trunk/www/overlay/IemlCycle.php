@@ -14,7 +14,7 @@
   <script type="text/javascript">
     
   	var key="<?php echo $_GET['key']; ?>";
-  	load(key);
+  	Load(key);
   </script>
     <div id="<?php echo $_GET['key']; ?>_div" style="height:auto;width:auto;"></div>
   </body>

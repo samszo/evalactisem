@@ -5,7 +5,7 @@
 <label value="Dictionnaire Ieml" style="font:arial;size:10;color:blue"  />
 <box  flex="1"  class="editableTree" >
 <tree id="ieml"
-	onselect="Select_Dictio('ieml','treecol_ieml','treecol_descp');"
+	onselect="SelectDictio('ieml','treecol_ieml','treecol_descp');"
 	typesource="ieml"	
 	flex="1"
 	Treeid="ieml">

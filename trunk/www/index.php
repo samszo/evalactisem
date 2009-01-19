@@ -74,8 +74,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 
 		<popupset id="popupset">
 			<popup id="clipmenu" onpopupshowing="javascript:;">
-				<menuitem label="Voir les primitives" oncommand="Parser('|','Primitive');"/>
-				<menuitem label="Voir les événements" oncommand="Parser('|','Event');"/>
+				<menuitem label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive');"/>
+				<menuitem label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
 			</popup>
 		</popupset>
 	<hbox >
@@ -113,8 +113,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="vertical" hidden="true" >
 						<caption label="IEML"/>
 						
-			    			<button id="TypeGraphe" label="Traduire le flux" tooltiptext="Voir l'histogramme" onclick="SetDonnee();"/>
-			    			<button hidden="false" id="PostTo" label="Mettre à jour delicious" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
+			    			<button hidden="false" id="PostTo" label="Mettre à jour delicious" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicios();"/>
 			     			
 					</groupbox>
 					
@@ -169,8 +168,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									</groupbox>
 								</hbox>
 								<hbox>
-										<button hidden="true" label="Ajouter" oncommand="AddTrad();"/>	
-										<button hidden="true" label="Supprimer" oncommand="SupTrad();"/>
+										<button hidden="true" label="Ajouter" oncommand="Sem_AddTrad();"/>	
+										<button hidden="true" label="Supprimer" oncommand="Sem_SupTrad();"/>
 										<button hidden="true" label="Modifier" oncommand="ModifTrad();"/>
 										<label id="trad-Sup-message" hidden="true" />			
 										<label id="trad-message" hidden="false" style="color:blue;font-size:150%" />
@@ -188,9 +187,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 												
 												<hbox>
 												    
-													<button label="Supprimer la traduction" oncommand="SupTrad();"/>
-													<button label="Voir les primitives" oncommand="Parser('|','Primitive')"/>	
-													<button label="Voir les événements" oncommand="Parser('|','Event');"/>
+													<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
+													<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
+													<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
 												</hbox>
 												<box id="tpSingleTrad" flex="1" context="clipmenu" />
 											</vbox >
@@ -213,7 +212,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
 												<label  style='color:blue;' value="3. Cliquer sur 'Ajouter'" />
 												<hbox>
-												    <button label="Ajouter la traduction" oncommand="AddTrad();"/>
+												    <button label="Ajouter la traduction" oncommand="Sem_AddTrad();"/>
 													
 												</hbox>
 												<tabbox flex="1" orient="horizontal" >
@@ -259,7 +258,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						         </tabpanel>
 						        <tabpanel>
 									<vbox flex="1" >
-						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="AddPostIemlDelicios();"/>
+						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicios();"/>
 										<iframe flex="1" src="http://del.icio.us/ieml"  />
 						        	<!-- 
 						          	-->
