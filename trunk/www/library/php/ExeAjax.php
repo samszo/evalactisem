@@ -34,48 +34,28 @@
          		$mbook="toto";
        
 		switch ($fonction) {
-                case 'AddDictio':
-                        $resultat = AddDictio($_GET['libflux'],$_GET['idflux'],$_GET['codeIeml']);
-                        break;
+               
                 case 'AddTrad':
                         $resultat = AddTrad(stripslashes($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
                         break;
                 case 'SupTrad':
                         $resultat = SupTrad(stripslashes ($_GET['codeIeml']),stripslashes ($_GET['codeflux']));
                         break;
-                case 'SetOnto':
-                        $resultat = SetOnto($_GET['type'],$_GET['col'],$_GET['id'],$_GET['value']);
-                        break;
+              
                 case 'Parse':
                         $resultat = Parse($code);
                         break;
                 case 'ParserIemlExp':
                         $resultat = ParserIemlExp($code,$_GET['type']);
                         break;
-                case 'GraphGet':
-                	    $resultat=GraphGet($mbook);
-                	    break;
-                case 'GetTreeTrad':
-        	        	//Pour le débugage
-                		if($_GET['debug'])
-        	        		$resultat=GetTreeTrad($_GET['flux'],$_GET['trad'],$_GET['descp'],$_GET['type'],$_GET['primary'],$_GET['bdd'],$_GET['couche']);
-                		else
-        	        		$resultat=GetTreeTrad($_POST['flux'],$_POST['trad'],$_POST['descp'],$_POST['type'],$_POST['primary'],$_POST['bdd'],$_POST['couche']);
-        	        	break;
-                
-                case 'AddPostIemlDelicios':
-                	$resultat=AddPostIemlDelicios();
+               
+                case 'AddPostIemlDelicious':
+                	$resultat=AddPostIemlDelicious();
                 	break;
                 case 'Delet_Compte_Delicious':
                		$resultat=Delet_Compte_Delicious();
                		break;
                		
-                case 'IemlCycle':
-                	if($_GET['debug'])
-                		$resultat=IemlCycle($_GET['key']);
-                	else
-	                	$resultat=IemlCycle($_POST['key']);
-                	break;
                 case 'TagCloud':
 	                	$tg = new TagCloud();
 	                	$tg->GetSvg();

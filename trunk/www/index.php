@@ -113,7 +113,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="vertical" hidden="true" >
 						<caption label="IEML"/>
 						
-			    			<button hidden="false" id="PostTo" label="Mettre à jour delicious" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicios();"/>
+			    			<button hidden="false" id="PostTo" label="Mettre à jour delicious" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious;"/>
 			     			
 					</groupbox>
 					
@@ -258,7 +258,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						         </tabpanel>
 						        <tabpanel>
 									<vbox flex="1" >
-						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicios();"/>
+						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
 										<iframe flex="1" src="http://del.icio.us/ieml"  />
 						        	<!-- 
 						          	-->
