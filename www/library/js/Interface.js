@@ -316,8 +316,8 @@ function SetIemlMaxLayer(arrIEML,maxNiv){
   } catch(ex2){ alert("interfaces:SetIemlMaxLayer:"+ex2+" ieml="+ieml); }
 }
 
-function BookMark_AddPostIemlDelicios(){
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIeml",'Ajax_Afficher','')
+function BookMark_AddPostIemlDelicious(){
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=AddPostIemlDelicious",'Ajax_Afficher','')
 	var meter=document.getElementById('Maj');
 	document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la mise a jour est en cours...');
 	meter.setAttribute("hidden","false");

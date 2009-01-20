@@ -48,12 +48,14 @@ class BookMark{
          $from = str_replace("-iduti-", $_SESSION['iduti'],$Q[0]->from);
          $from = str_replace("-poster-", 0,$from);
          $sql = $Q[0]->select.$from;
+         echo $sql;
          $result = $db->query($sql);
          $db->close();
         //boucle sur les tag traduit 
    		// pour chaque tag  il faut recupper l'url correspondante
     	$postMAJ = "";
-    	while($reponse=mysql_fetch_assoc($result)){     
+    	while($reponse=mysql_fetch_assoc($result)){
+    		print_r($reponse) ;    
     		$Posts=$oDelicious->GetAllPosts($reponse['onto_flux_code'],true);
     		if($this->trace)
 					echo "BookMark.php:MajPostIeml:Posts".print_r($Posts)."<br/>";
