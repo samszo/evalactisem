@@ -6,13 +6,17 @@ session_start();
 
 	if(isset($_SESSION['Delicious'])){
 	   $oDelicious=$_SESSION['Delicious'];
-   	}/*else{
+   	}else{
    		//pour le debuggage
-		$_SESSION['loginSess']="amelmaster";
-		$_SESSION['mdpSess']="lemabou1983";
-   		$oDelicious = new PhpDelicious("samszo","Lucky71",10);
+		//$_SESSION['loginSess']="amelmaster";
+		//$_SESSION['mdpSess']="lemabou1983";
+		//$_SESSION['loginSess']="plevy4";
+		//$_SESSION['mdpSess']="1plotin";
+		$_SESSION['loginSess']="samszo";
+		$_SESSION['mdpSess']="Lucky71";
+   		$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],10);
 		$_SESSION['Delicious']=$oDelicious;
-   }  */ 
+   }  /**/ 
 
 	// vérification du site en cours
 	if(isset($_GET['site'])){

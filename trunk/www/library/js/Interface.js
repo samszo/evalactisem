@@ -117,15 +117,14 @@ function SelectNoTrad(id,treecol){
   	var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
   	IdTreeItem=selection.getAttribute('id');
 
-  	TreeRow=document.getElementById("TreeRow_"+IdTreeItem);
+  	var TreeRow=document.getElementById("TreeRow_"+IdTreeItem);
 
   	//label du tag del.icio.us
   	console.log(TreeRow.childNodes.length);
   	console.log(TreeRow.childNodes[3]);
     txtcode_flux.value=TreeRow.childNodes[3].getAttribute('label');
-
-    txtcode_ieml.value = "";
-    txtlib_ieml.value = "";
+    txtlib_ieml.value = TreeRow.childNodes[7].getAttribute('label');
+    txtcode_ieml.value = TreeRow.childNodes[9].getAttribute('label');
    
     
 }

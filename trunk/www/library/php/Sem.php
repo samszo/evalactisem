@@ -528,8 +528,13 @@ Class Sem{
 	   			}else{
 	   				//les identifiants sont passés en paramètre
 	   			}
-	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
 	   			
+	   			if(!$res)
+	                return "ERREUR : la traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** n'a pas été ajoutée");
+	   			
+
+	   			//vérifie si la traduction existe
+	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
                 if(!$rs){
 	                // insertion dans la table de traductions des identifiants
 	                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',"-idflux-","-idIeml-", $res[0] ,$res[1] );
@@ -555,8 +560,16 @@ Class Sem{
                 	$Activite->AddActi("AddTrad",$iduti);
                 
                 }else{
-	                $message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe déjà");
                 	$idTrad = $rs['trad_id'];                
+                	//vérifie si la traduction est déjà attribué à l'auteur
+              		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifPartageTrad','-idTrad-','-idUti-',$idTrad,$_SESSION['iduti']));
+                	if($verif["nb"]==0){		                	
+	                	//insertion du partage de la trad pour l'utilisateur
+                		$this->RequeteInsert($objSite,'InsertPartageTrad',"-idTrad-","-idUti-", $idTrad, $_SESSION['iduti']);
+                		$message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** est ajoutée pour ".$_SESSION['loginSess']);
+                	}else{            	
+	                	$message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe déjà");
+	                }
                 }
                 
                 if($getId)

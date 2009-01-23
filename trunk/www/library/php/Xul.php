@@ -276,6 +276,7 @@ function GetTreeItemTradUti($idUti,$type){
 	return $ihm;
 }
 
+
 	function AddTreeItemTrad($id, $style, $cells){
 		
 		$item = '<treeitem id="'.$id.'" >'.EOL;  
@@ -289,7 +290,51 @@ function GetTreeItemTradUti($idUti,$type){
         return($item);
 		
 	}
-       // function pur la construction de dictionnaire IEML
+
+//Construction de l'arbre du réseau d'utilisateur delicious     
+function GetTreeDeliciousNetwork($login,$pwd){
+	
+	$type = "TreeDeliciousNetwork";
+	$oDlcs = new PhpDelicious($login,$pwd);
+	$network = simplexml_load_string($oDlcs->GetNetworkMembers($uti));
+		
+	//construction de l'entête du tree
+	$ihm .= '<tree                  
+		enableColumnDrag="true"
+        flex="1"        
+        id="'.$type.'" 
+        multiple="true"';
+    $ihm .= ' onselect="Select_Trad(\''.$type.'\',1,2,3);">'.EOL;
+    $ihm .= '<treecols >'.EOL;
+	$ihm .= '<treecol hidden="false" flex="1" label="login"  persist="width ordinal hidden"  />'.EOL;
+    $ihm .= '<splitter class="tree-splitter"/>'.EOL;
+	$ihm .= '<treecol label="Actif" type="checkbox" editable="true"/>'.EOL;
+    $ihm .= '</treecols>'.EOL;
+    $ihm .= '<treechildren >'.EOL;
+
+	foreach($idUtis as $idUti){
+		$style="";
+		$item = '<treeitem id="'.$id.'" >'.EOL;  
+        $item .= '<treerow id="TreeRow_'.$id.'" '.$style.' >'.EOL;
+       	$item .= '<treecell label="'.$NetUti->title.'"  />'.EOL ;      	
+       	$item .= '<treecell value="false"  />'.EOL ;      	
+       	$item .= '</treerow>'.EOL;
+        $item .= '</treeitem>'.EOL;
+		
+		$ihm .= $item;	
+	}
+    
+	//termine le tree
+	$ihm .= '</treechildren>'.EOL;
+    $ihm .= '</tree>'.EOL;
+
+    return $ihm;    
+	
+        
+}
+	
+	
+	// function pur la construction de dictionnaire IEML
        //<-----------------------------------------------------------------------------------
        function GetTreeIemlOnto($type){
                         
