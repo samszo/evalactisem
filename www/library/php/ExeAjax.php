@@ -69,6 +69,10 @@
                 case 'GetTreeNoTradUti':
                 	    $resultat=GetTreeNoTradUti();
                 	    break;
+                case 'GetTreeDeliciousNetwork':
+                	    $resultat=$objXul->GetTreeDeliciousNetwork();
+                	    break;
+                	    
                 	    	    
        }
         

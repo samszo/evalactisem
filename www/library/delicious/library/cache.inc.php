@@ -42,7 +42,7 @@
       protected static $aCache = array();
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
-         $this->sShortKey = $sKey;//$sPrefix.md5($sKey);
+         $this->sShortKey = $sPrefix.md5($sKey);
          $this->sFile = "$sCachePath$this->sShortKey.xml";
          $this->sFileLock = "$this->sFile.lock";
          $this->iCacheTime = $iCacheTime;
