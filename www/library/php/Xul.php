@@ -332,23 +332,21 @@ function GetTreeDeliciousNetwork($login,$pwd){
 	
         
 }
-	
-	
 	// function pur la construction de dictionnaire IEML
        //<-----------------------------------------------------------------------------------
        function GetTreeIemlOnto($type){
                         
         //adresse de la datasource
                 $label="Dictionnaire Ieml";
-                $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']";
-                        $ds = $this->site->XmlParam->GetElements($Xpath);
-
                 if($this->trace)
                		 echo "Xul:GetTree_ieml_onto:Cols".print_r($Cols)."<br/>";
-                $tree='<vbox flex="1" style="background-color:yellow;" >'.EOL;
+               	$tree.='<?xml version="1.0" ?>'.EOL;
+               	$tree.='<overlay id="TreeDectioIeml"
+         				xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" flex="1">'.EOL;
+                $tree='<vbox id="treeDicoIeml" flex="1" style="background-color:yellow;" >'.EOL;
                 $tree.='<label value="'.$label.'" style="font:arial;size:10;color:blue"  />'.EOL;
-                $tree.='<box id="'.$this->site->scope["box"].'" flex="1"  class="editableTree" >'.EOL;
-                 $tree.='<tree id="'.$type.'"
+                $tree.='<box  flex="1"  class="editableTree" >'.EOL;
+                $tree.='<tree id="'.$type.'"
                       flex="1"
                       style="width:600; height:400"
                       onselect="SelectDictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
@@ -362,7 +360,7 @@ function GetTreeDeliciousNetwork($login,$pwd){
                              $tree.= '<splitter class="tree-splitter"/>'.EOL;
                              $tree.= '<treecol id="treecol_'.$type.'"  label="Traduction"  persist="width ordinal hidden" />'.EOL;
                        $tree.= '</treecols>'.EOL;  
-                       $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio']";
+                       $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_ieml1']";
                        $Q = $this->site->XmlParam->GetElements($Xpath);
                        $sql = $Q[0]->select.$Q[0]->from;
                        $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
@@ -378,36 +376,34 @@ function GetTreeDeliciousNetwork($login,$pwd){
                                    while($reponse=mysql_fetch_array($req)){
                                      $tree.= '<treeitem container="true" open="false">'.EOL;
                                            $tree.= '<treerow>'.EOL;
-                                                 $tree.= '<treecell label="'.$reponse[0].'"/>' .EOL;
+                                                 $tree.= '<treecell label="'.$reponse[1].'"/>' .EOL;
                                             $tree.= '</treerow>'.EOL;
                                             $tree.= $this->GetTreeChildrenDictio($reponse[0],$reponse[1]);
                                       $tree.= '</treeitem>'.EOL;
-
-
-                                        }
+								   }
                                    $tree .= '</treechildren>'.EOL;
                             $tree.= '</treeitem>'.EOL;
                       $tree .= '</treechildren>'.EOL;
                  $tree.='</tree>'.EOL;
               $tree.='</box>'.EOL;
             $tree.='</vbox>'.EOL;
+            $tree.='</overlay>'.EOL;
             if($this->trace)
             echo "Xul:GetTree_ieml_onto:tree". $tree."<br/>";      
-            return $tree;
+            echo $tree;
        }
         
-   	   function GetTreeChildrenDictio($parent,$id){
-        $container="false";
-                
-        $Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio_children']";
+   	   function GetTreeChildrenDictio($id,$parent){
+        $container="false";   
+        		$Xpath = "/XmlParams/XmlParam[@nom='".$this->site->scope['ParamNom']."']/Querys/Query[@fonction='get_hierarchie_Dictio_children']";
                 $Q = $this->site->XmlParam->GetElements($Xpath);
-                $from = str_replace("-parent-", $id, $Q[0]->from);
-                $sql = $Q[0]->select.$from;
+                $where = str_replace("-niv-", $id, $Q[0]->where);
+                $sql = $Q[0]->select.$Q[0]->from.$where;
                 $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"], $dbOptions);
                 $db->connect();
                 $req = $db->query($sql);
                 $db->close();
-                 $tree .= '<treechildren>'.EOL;
+                $tree .= '<treechildren>'.EOL;
                 while($r = mysql_fetch_array($req))
                 {  
                         $tree.= '<treeitem >'.EOL;
@@ -424,6 +420,6 @@ function GetTreeDeliciousNetwork($login,$pwd){
              		echo "Xul:GetTreeChildren:tree". $tree."<br/>";  
                 return $tree;
    	   }  
-   	   //------------------------------------------------------------------>     
+   	          //------------------------------------------------------------------>       
  }
 ?>

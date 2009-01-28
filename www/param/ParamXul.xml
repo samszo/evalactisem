@@ -148,9 +148,9 @@
 				<where> </where>
 			</Query>
 			<Query fonction="get_hierarchie_ieml1">
-				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
-				<from> FROM ieml_onto De </from>
-				<where> WHERE De.ieml_niveau = 1</where>
+				<select>SELECT DISTINCT ieml_niveau, ieml_parent </select>
+				<from> FROM ieml_onto ORDER BY ieml_niveau</from>
+				<where> </where>
 			</Query>
 			<Query fonction="get_hierarchie_ieml">
 				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
@@ -159,15 +159,13 @@
 			</Query>
 			<Query fonction="get_hierarchie_Dictio_children">
 				<select>SELECT  ieml_lib, ieml_code</select>
-				<from> FROM `ieml_onto` i
-                       INNER JOIN ieml_foret f ON f.ieml_parent =-parent-
-                       AND f.ieml_id = i.ieml_id</from>
-				<where> </where>
+				<from> FROM `ieml_onto`</from>
+				<where> WHERE ieml_niveau=-niv- ORDER BY ieml_lib </where>
 			</Query>
 			<Query fonction="get_hierarchie_Dictio">
 				<select>SELECT i.ieml_lib,i.ieml_id</select>
 				<from>  FROM ieml_onto i
-					   INNER JOIN ieml_foret f ON f.ieml_parent =0 AND f.ieml_id = i.ieml_id </from>
+					    INNER JOIN ieml_foret f ON f.ieml_parent =0 AND f.ieml_id = i.ieml_id </from>
 				<where> </where>
 			</Query>
 		</Querys>

@@ -72,9 +72,11 @@
                 case 'GetTreeDeliciousNetwork':
                 	    $resultat=$objXul->GetTreeDeliciousNetwork();
                 	    break;
-                	    
-                	    	    
-       }
+                case 'GetTreeIemlOnto':
+                	    $resultat= GetTreeIemlOnto();
+                	    break;
+                
+ }
         
         echo $resultat;  
 
@@ -173,6 +175,12 @@
 	   		global $objSite;
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
  			return $sem->Crea_Cycle($json);                              
+       }
+      function GetTreeIemlOnto(){
+          global $objSite;       
+          $objXul = new Xul($objSite);
+          $tree=$objXul->GetTreeIemlOnto("ieml");
+          return $tree;
        }
 	  
 ?>
