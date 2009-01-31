@@ -141,9 +141,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						         </tabpanel>
 						        <tabpanel>
 						        	<vbox flex="1">
-										<label  style='color:blue;' value="1. Choisissez un tag" />
-										<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
-										<hbox>
+										<label hidden="true" style='color:blue;' value="1. Choisissez un tag" />
+										<label hidden="true" style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
+										<hbox hidden="true" >
 											<label  style='color:blue;' value="3. Cliquez ici" />
 											<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
 										</hbox>

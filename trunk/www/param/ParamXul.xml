@@ -420,7 +420,7 @@
 			<Query fonction="Ieml_Find_Code">
 				<select> SELECT ieml_id, ieml_code, ieml_lib </select>
 				<from> FROM ieml_onto </from>
-				<where> WHERE ieml_code = '-code-' </where>
+				<where> WHERE ieml_code = "-code-" </where>
 			</Query>
 			<Query fonction="Ieml_Find_Trad">
 				<select> SELECT ieml_id, ieml_code, ieml_lib </select>
