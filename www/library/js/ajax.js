@@ -2,6 +2,35 @@
 // AJAX Functions
 //--------------------------------------------
 
+function AppendSVG(url,doc, InSvg) {
+  try {
+	dump("AppendSVG IN "+url+"\n");
+
+	if(!InSvg){
+		//vide le conteneur
+		while(doc.hasChildNodes())
+			doc.removeChild(doc.firstChild);
+	}
+
+	p = new XMLHttpRequest();
+	p.onload = null;
+	p.open("GET", url, false);
+	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	p.send(null);
+
+	if (p.status != "200" ){
+	      alert("Réception erreur " + p.status);
+	}else{
+
+	    var response = p.responseText;
+		var parser=new DOMParser();
+		var resultDoc=parser.parseFromString(response,"text/xml");
+		doc.appendChild(resultDoc.documentElement);
+
+	}
+	dump("AppendSVG OUT \n");
+   } catch(ex2){alert("AppendSVG::"+ex2);}
+}
 
 function GetResult(url) {
   try {

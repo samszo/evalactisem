@@ -45,6 +45,44 @@ class Site{
 		
     }
 
+  function RequeteSelect($function,$var1,$var2,$val1,$val2){
+   	 
+   	   $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
+	   $Q = $this->XmlParam->GetElements($Xpath);
+	   $from=str_replace($var1, $val1, $Q[0]->from);
+	   $from=str_replace($var2, $val2, $from);
+	   $where=str_replace($var1, $val1, $Q[0]->where);
+	   $where=str_replace($var2, $val2,$where);
+	   $sql = $Q[0]->select.$from.$where;
+	   $db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
+	   $link=$db->connect();   
+	   $result = $db->query($sql);
+	   $db->close($link);
+	   
+	   return ($result);
+   	
+   }
+   function RequeteInsert($function,$arrVarVal){
+   
+   	 $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
+   	 $Q = $this->XmlParam->GetElements($Xpath);
+   	 $values=$Q[0]->values;
+   	 foreach($arrVarVal as $VarVal){
+     	$values=str_replace($VarVal[0], $VarVal[1],$values);	
+   	 }
+     $sql = $Q[0]->insert.$values;
+	 if($this->trace)
+     	fb($sql);
+	 $db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
+  	 $link=$db->connect();   
+	 $db->query($sql);
+	 $idTrad= mysql_insert_id();
+     $db->close($link);
+     		return $idTrad;
+   	
+   }
+    
+    
 	function utilisateur($uti_login){
 		
 	 	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='Verif_Exist_Utilisateur']";

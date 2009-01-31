@@ -1,5 +1,16 @@
 @import url("chrome://global/skin");
 
+treechildren::-moz-tree-checkbox {
+  /* cases à cocher non cochées dans des treecells. Ce style DOIT être avant treechildren::-moz-tree-checkbox(checked), autrement il n'aura aucun effet.  */
+  list-style-image: none;
+}
+
+treechildren::-moz-tree-checkbox(checked){
+  /* style pour les cases cochées. cbox-check.gif n'est pas disponible dans Firefox 1, 2 et 3 sous Mac OS X, vous devrez donc spécifier l'URL d'une image
+     dans votre extension ou ailleurs. */
+  list-style-image: url("chrome://global/skin/checkbox/cbox-check.gif");
+}
+
 treechildren::-moz-tree-row(utilisateur){background-color: green;}
 treechildren::-moz-tree-row(dictio){background-color: yellow;}
 treechildren::-moz-tree-line(HelpUti){visibility:true;}
