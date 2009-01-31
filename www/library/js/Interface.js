@@ -117,6 +117,7 @@ function Sem_SupTrad()
 }
 function SelectNoTrad(id,treecol){
 
+	document.getElementById("trad-message").value = "";
 	var tree = document.getElementById(id);
   	var txtcode_flux=document.getElementById("code-trad-flux");
 	var txtcode_ieml = document.getElementById("code-trad-ieml");
@@ -147,6 +148,7 @@ function SelectDictio(id,treecol1,treecol2){
 }
 function SelectTrad(id,treecolTag,treecolTrad,treecolIeml,type){
   try{
+	document.getElementById("trad-message").value = "";
 	  var tree = document.getElementById(id);
       var tag = GetTreeValSelect(id,treecolTag);
       var iemlCode = GetTreeValSelect(id,treecolIeml);

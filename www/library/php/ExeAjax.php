@@ -98,7 +98,7 @@
 	function GetTreeTradUtis(){
         global $objSite;
         $xul = new Xul($objSite);
-		return $xul->Get_Tree_Trad_Utis(array($objSite->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']));
+		return $xul->Get_Tree_Trad_Utis(array($_SESSION['iduti'],$objSite->infos["UTI_TRAD_AUTO"]));
 		//return $xul->GetTreeTradUtis($_SESSION['iduti']);
 	}
         
