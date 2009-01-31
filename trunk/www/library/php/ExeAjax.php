@@ -34,7 +34,9 @@
          		$mbook="toto";
        
 		switch ($fonction) {
-               
+			case 'VerifExpIEML':
+				$resultat = VerifExpIEML(stripslashes($_GET['codeIeml']),stripslashes ($_GET['libIeml']));
+				break;
                 case 'AddTrad':
                         $resultat = AddTrad(stripslashes($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
                         break;
@@ -70,7 +72,7 @@
                 	    $resultat=GetTreeNoTradUti();
                 	    break;
                 case 'GetTreeDeliciousNetwork':
-                	    $resultat=$objXul->GetTreeDeliciousNetwork();
+                	    $resultat=$objXul->GetTreeDeliciousNetwork($oDelicious);
                 	    break;
                 case 'GetTreeIemlOnto':
                 	    $resultat= GetTreeIemlOnto();
@@ -80,6 +82,13 @@
         
         echo $resultat;  
 
+	function VerifExpIEML($code,$lib){
+        global $objSite;
+        $sem = new Sem($objSite,$objSite->XmlParam,"");
+        return $sem->VerifExpIEML($code,$lib);
+		
+	}
+        
 	function GetTreeNoTradUti(){
         global $objSite;
         $xul = new Xul($objSite);

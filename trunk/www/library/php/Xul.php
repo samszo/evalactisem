@@ -1,6 +1,4 @@
 <?php
-set_time_limit(300);
-
 class Xul{
   public $id;
   public $XmlParam;
@@ -292,11 +290,12 @@ function GetTreeItemTradUti($idUti,$type){
 	}
 
 //Construction de l'arbre du réseau d'utilisateur delicious     
-function GetTreeDeliciousNetwork($login,$pwd){
+function GetTreeDeliciousNetwork($oDlcs){
 	
 	$type = "TreeDeliciousNetwork";
-	$oDlcs = new PhpDelicious($login,$pwd);
-	$network = simplexml_load_string($oDlcs->GetNetworkMembers($uti));
+	//$oDlcs = new PhpDelicious($login,$pwd);
+	$network = simplexml_load_string($oDlcs->GetNetworkMembers($oDlcs->sUsername));
+	$idUtis = $network->xpath("channel/item");
 		
 	//construction de l'entête du tree
 	$ihm .= '<tree                  
@@ -304,20 +303,23 @@ function GetTreeDeliciousNetwork($login,$pwd){
         flex="1"        
         id="'.$type.'" 
         multiple="true"';
-    $ihm .= ' onselect="Select_Trad(\''.$type.'\',1,2,3);">'.EOL;
+    $ihm .= ' onselect="SelectNetwork(\''.$type.'\',0);">'.EOL;
     $ihm .= '<treecols >'.EOL;
-	$ihm .= '<treecol hidden="false" flex="1" label="login"  persist="width ordinal hidden"  />'.EOL;
+	$ihm .= '<treecol hidden="false" flex="1" id="TreeCol_'.$type.'_1" label="login"  persist="width ordinal hidden"  />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
-	$ihm .= '<treecol label="Actif" type="checkbox" editable="true"/>'.EOL;
+    $ihm .= '<treecol hidden="false" flex="1" id="TreeCol_'.$type.'_2" label="depuis"  persist="width ordinal hidden"  />'.EOL;
+//    $ihm .= '<splitter class="tree-splitter"/>'.EOL;
+//    $ihm .= '<treecol label="actif" flex="1" id="TreeCol_'.$type.'_3" type="checkbox" editable="true"/>'.EOL;
     $ihm .= '</treecols>'.EOL;
     $ihm .= '<treechildren >'.EOL;
 
 	foreach($idUtis as $idUti){
 		$style="";
-		$item = '<treeitem id="'.$id.'" >'.EOL;  
-        $item .= '<treerow id="TreeRow_'.$id.'" '.$style.' >'.EOL;
-       	$item .= '<treecell label="'.$NetUti->title.'"  />'.EOL ;      	
-       	$item .= '<treecell value="false"  />'.EOL ;      	
+		$item = '<treeitem id="TreeItem_'.$idUti->guid.'" >'.EOL;  
+        $item .= '<treerow id="TreeRow_'.$idUti->guid.'" '.$style.' >'.EOL;
+       	$item .= '<treecell label="'.$idUti->title.'"  />'.EOL ;      	
+       	$item .= '<treecell label="'.$idUti->pubDate.'"  />'.EOL ;      	
+//       	$item .= '<treecell value="false"  />'.EOL ;      	
        	$item .= '</treerow>'.EOL;
         $item .= '</treeitem>'.EOL;
 		
@@ -350,8 +352,7 @@ function GetTreeDeliciousNetwork($login,$pwd){
                       flex="1"
                       style="width:600; height:400"
                       onselect="SelectDictio(\''.$type.'\',\'treecol_ieml\',\'treecol_descp\');"
-                      typesource="'.$type.'"  
-                      Treeid="'.$type.'">'.EOL;
+                      >'.EOL;
                       //le conteneur doit avoir comme id id pour editableTree
                        $tree.= '<treecols >'.EOL;
                              $tree.= '<treecol id="treecol_Tagdel"  primary="true" label="Tag Delicious"  persist="width ordinal hidden" />'.EOL;

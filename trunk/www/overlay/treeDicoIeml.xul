@@ -10,11 +10,11 @@
                       typesource="ieml"  
                       Treeid="ieml">
 <treecols >
-<treecol id="treecol_Tagdel"  primary="true" label="Tag Delicious"  persist="width ordinal hidden" />
+<treecol id="treecol_Tagdel"  primary="true" label="Couches" flex="1"  persist="width ordinal hidden" />
 <splitter class="tree-splitter"/>
-<treecol id="treecol_descp"  label="Description"  persist="width ordinal hidden" />
+<treecol id="treecol_descp"  label="Description" flex="1" persist="width ordinal hidden" />
 <splitter class="tree-splitter"/>
-<treecol id="treecol_ieml"  label="Traduction"  persist="width ordinal hidden" />
+<treecol id="treecol_ieml"  label="Code" flex="1" persist="width ordinal hidden" />
 </treecols>
 <treechildren>
 <treeitem container="true" open="false">

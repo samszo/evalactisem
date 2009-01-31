@@ -1,8 +1,8 @@
 <?php
 	require('param/ParamPage.php');
 
-	$oTC = new TagCloud();
-	$oTC->SauveBookmarkNetwork("luckysemiosis","Samszo0");
+	$oTC = new TagCloud($oDelicious);
+	//$oTC->SauveBookmarkNetwork("luckysemiosis","Samszo0");
   	
 	header("Content-type: image/svg+xml");
 	if($TC=="post")

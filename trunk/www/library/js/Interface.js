@@ -76,6 +76,13 @@ function Sem_AddTrad(){
 		alert("Veuillez sélectionner un tag del.icio.us");
 		return
 	}	
+
+	//vérifie la saisie
+	var verif = GetResult(urlAjax+"library/php/ExeAjax.php?f=VerifExpIEML&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value);
+	if(verif!="OK"){
+		message.value = verif;
+		return;
+	}
 	
 	message.value = GetResult(urlAjax+"library/php/ExeAjax.php?f=AddTrad&codeIeml="+codeIeml.value+"&codeFlux="+codeFlux.value);
 	

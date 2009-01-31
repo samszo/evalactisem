@@ -27,13 +27,15 @@ class TagCloud {
   public $nbPost;
   public $PostCarMax;
   public $PostLargMax;
+  private $oDlcs;
     
   function __tostring() {
     return "Cette classe permet de définir et manipuler un TagCloud.<br/>";
     }
 
-  function __construct() {
+  function __construct($oDlcs) {
     $this->trace = TRACE;
+    $this->oDlcs = $oDlcs;
     date_default_timezone_set('UTC');		
   }
 
@@ -74,7 +76,7 @@ class TagCloud {
 			$this->CalculPosts($Posts,$DateDeb,$DateFin,$NbDeb,$NbFin);
 						
 		  	//initialisation du svg
-			$svg = new SvgDocument("","","","","","SVGglobal","onload=\"\""); 	
+			$svg = new SvgDocument("600","600","","","","SVGglobal","onload=\"\""); 	
 		  	
 		  	//ajoute les liens avec les scripts
 		  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
@@ -513,8 +515,7 @@ class TagCloud {
 
 	function GetPosts($login) {
 
-		//récupère le boobkmark
-		$xml = simplexml_load_file(PathRoot."/tmp/bookmarks/".$login.".xml");
+    	$xml = simplexml_load_string($this->oDlcs->GetUserBookmark($login));
 		//recupére les tags
         $posts = $xml->xpath('/rss/channel/item');        
         return $posts;

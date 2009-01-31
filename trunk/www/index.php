@@ -1,7 +1,5 @@
 <?php
 
-//extract($_SESSION,EXTR_OVERWRITE);
-//extract($_POST,EXTR_OVERWRITE);
 require('param/ParamPage.php');
 
 
@@ -72,177 +70,128 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		
 	</script>
 
-		<popupset id="popupset">
-			<popup id="clipmenu" onpopupshowing="javascript:;">
-				<menuitem label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive');"/>
-				<menuitem label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
-			</popup>
-		</popupset>
-	<hbox >
-	   
+	<popupset id="popupset">
+		<popup id="clipmenu" onpopupshowing="javascript:;">
+			<menuitem label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive');"/>
+			<menuitem label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+		</popup>
+	</popupset>
+
+	<hbox id="InOut" >
 		<label value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
+
 	<vbox id='Maj' hidden='true' >
 	   <label id='label_Maj' value='Patienter' style='font-style:normal;color: green'/>
 	   <progressmeter id="progmeter" mode="undetermined"  />
    </vbox>
-	<label id="tradu" hidden="true" value=""/>
-	<hbox id="histogramme" flex="1">
-	   <vbox flex="1" >
+
+	<vbox id="main" flex="1">
 		 <groupbox orient="horizontal" flex="1" >
 			<caption <?php echo $lbl;?> />
-				<vbox>
-					<groupbox orient="vertical" hidden="true" >
-						<caption label="Flux del.icio.us"/>
-							<label id="selctreq" value="" hidden="true"/>
-							<label value="requête" />
-							<menulist id="requette" oncommand="">
-							   <menupopup >
-							     <menuitem  label="Afficher tous les Tags "     value="GetAllTags"          oncommand="grpBox.CreatGrpBox('box1');"/>
-							     <menuitem  label="Afficher les Posts recents"  value="GetRecentPosts"      oncommand="grpBox.CreatGrpBox('box1');"/> 
-							     <menuitem  label="Afficher le Posts"           value="GetPosts"            oncommand="grpBox.CreatGrpBox('box1');"/>
-							     <menuitem  label="Afficher tous les Posts"     value="GetAllPosts"         oncommand="grpBox.CreatGrpBox('box1');"/>
-							     <menuitem  label="Afficher tous les Bundles"   value="GetAllBundles"       oncommand="grpBox.CreatGrpBox('box1');"/>
-							   </menupopup>
-							</menulist>
-							<box id="box1" ></box>		    
-						    <button id="ShowFlux" label="Afficher les données"  onclick="RecupDeliciousFlux();"/>
+			<vbox id="infosTrad" flex="1" >
+				<label id="trad-message" hidden="false" style="color:blue;" />
+				<hbox flex="1" >
+					<groupbox orient="horizontal" >
+						<caption label="Tag delicious"/>
+					    <label id="id-trad-flux" hidden="true"/>
+						<label id="code-trad-flux" style="color:red;font-size:150%" />
+					    <label hidden="true" id="lib-trad-flux" style="color:red;font-size:150%" />
 					</groupbox>
+					<groupbox orient="horizontal" flex="1" >
+							<caption label="Expression IEML"/>
+						    <label id="id-trad-ieml" hidden="true"/>
+							<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%" flex="1" />
+							<label style="color:red;font-size:150%" value=" *" />
+							<textbox id="code-trad-ieml" multiline="true" style="color:red;font-size:150%;" flex="1" />
+							<label style="color:red;font-size:150%" value="** " />									
+					</groupbox>
+				</hbox>
+				<hbox>
+						<button hidden="false" label="Ajouter" oncommand="Sem_AddTrad();"/>	
+						<button hidden="false" label="Supprimer" oncommand="Sem_SupTrad();"/>
+						<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
+						<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+						<label id="trad-message" hidden="false" style="color:blue;font-size:150%" />
+				</hbox>
+			</vbox>
+		</groupbox>
+			<vbox flex="6" >
+				<hbox flex="6">
+					<vbox id="contDonnee" flex="1" hidden="true" >
+						<tabbox flex="1" >
+						    <tabs >
+						        <tab label="Tags traduits" />
+						        <tab label="Tags à traduire" />
+						        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
+						        <tab label="Bookmark IEML" />
+						    </tabs>
+						    <tabpanels flex="1"  >
+						        <tabpanel >
+									<vbox flex="1" >
 										
-					<groupbox orient="vertical" hidden="true" >
-						<caption label="IEML"/>
-						
-			    			<button hidden="false" id="PostTo" label="Mettre à jour delicious" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious;"/>
-			     			
-					</groupbox>
-					
-					<groupbox orient="vertical" hidden="true" >
-						<caption label="Graphique"/>
-						    <label value="Titre" hidden="true"/>
-							<textbox persist="value" hidden="true" id="titre" value=""/>
-							<label value="Type "/>
-							<menulist id="type"  >
-								<menupopup>
-									<menuitem label="Nombre de Tags" value="GetAllTags"/>
-									<menuitem label="Tags par Bundles" value="tagsFbundles"/>
-								</menupopup>
-							</menulist>
-						    <button id="RecupFlux" label="Afficher le graphique"  onclick="RecupDeliciousFlux();"/>
-					</groupbox>
-					
-					<groupbox orient="vertical" hidden="true">
-						<caption label="Administration" />
-						
-			    			<button id="AdminDelicious" label="Suppimer mon compte" tooltiptext="Voir l'histogramme" onclick="SupprimerCompteDelicious();"/>
+										<hbox hidden="true">												    
+											<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
+											<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
+											<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+										</hbox>
+										<box id="tpSingleTrad" flex="1" context="clipmenu" />
+									</vbox >
+						         </tabpanel>
+						        <tabpanel>
+						        	<vbox flex="1">
+										<label  style='color:blue;' value="1. Choisissez un tag" />
+										<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
+										<hbox>
+											<label  style='color:blue;' value="3. Cliquez ici" />
+											<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
+										</hbox>
+										<box id="tpNoTrad" flex="1" />
+									</vbox>
+						         </tabpanel>
+				        <tabpanel >
+							<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+				         </tabpanel>
+				        <tabpanel>
+							<vbox flex="1" >
+				    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
+								<iframe flex="1" src="http://del.icio.us/ieml"  />
+							</vbox >
+				         </tabpanel>
 
-					</groupbox>
-				</vbox>
 
-			        <splitter collapse="before" resizeafter="farthest" hidden="true">
-						<grippy/>
-					</splitter>
-				
-				<hbox flex="1">
-						
-						<vbox id='TableFlux' hidden="true"  flex="1"></vbox>
-					   
-						
-							
-						<vbox id="infosTrad" hidden="true" flex="1" >
-								<hbox >
-									<groupbox orient="horizontal" flex="1" >
-										<caption label="Tag delicious"/>
-									    <label id="id-trad-flux" hidden="true"/>
-										<label hidden="true" value="code :"/><label id="code-trad-flux" style="color:red;font-size:150%" />
-									    <label hidden="true" value="descriptif : "/><label hidden="true" id="lib-trad-flux" style="color:red;font-size:150%" />
-									</groupbox>
-									<groupbox orient="horizontal" width="300px" >
-										<caption label="Expression IEML"/>
-									    <label id="id-trad-ieml" hidden="true"/>
-										<label value="descriptif : " hidden="true"/><label id="lib-trad-ieml" style="color:red;font-size:150%" />
-										<label value="code :" hidden="true" />
-										<label style="color:red;font-size:150%" value=" *" />
-										<label id="code-trad-ieml" style="color:red;font-size:150%;width:100px" crop="center" />
-										<label style="color:red;font-size:150%" value="** " />									
-									</groupbox>
-								</hbox>
-								<hbox>
-										<button hidden="true" label="Ajouter" oncommand="Sem_AddTrad();"/>	
-										<button hidden="true" label="Supprimer" oncommand="Sem_SupTrad();"/>
-										<button hidden="true" label="Modifier" oncommand="ModifTrad();"/>
-										<label id="trad-Sup-message" hidden="true" />			
-										<label id="trad-message" hidden="false" style="color:blue;font-size:150%" />
-								</hbox>
-							<vbox id="contDonnee" flex="1" hidden="true" >
-								<tabbox flex="1" >
-								    <tabs >
-								        <tab label="Tags traduits" />
-								        <tab label="Tags à traduire" />
-								        <tab label="Dictionnaire et Cycles" />
-								    </tabs>
-								    <tabpanels flex="1"  >
-								        <tabpanel >
-											<vbox flex="1" >
-												
-												<hbox>
-												    
-													<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
-													<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
-													<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
-												</hbox>
-												<box id="tpSingleTrad" flex="1" context="clipmenu" />
-											</vbox >
-								         </tabpanel>
-								        <tabpanel>
-								        	<vbox flex="1">
-												<label  style='color:blue;' value="1. Choisissez un tag" />
-												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
-												<hbox>
-													<label  style='color:blue;' value="3. Cliquez ici" />
-													<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
-												</hbox>
-												<box id="tpNoTrad" flex="1" />
-											</vbox>
-								         </tabpanel>
-								          <tabpanel>
-											<vbox flex="1">
-												<label id="keyGrid" hidden="true" />
-												<label  style='color:blue;' value="1. Choisissez un tag dans l'onglets 'Tags traduire' " />
-												<label  style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
-												<label  style='color:blue;' value="3. Cliquer sur 'Ajouter'" />
-												<hbox>
-												    <button label="Ajouter la traduction" oncommand="Sem_AddTrad();"/>
-													
-												</hbox>
-												<tabbox flex="1" orient="horizontal" >
-													<tabs orient="vertical" >
-														<tab label="Dictionnaire" />
-														<tab label="Behavior" onclick="LoadCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
-														<tab label="axial orientation" onclick="LoadCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
-													</tabs>
-													<tabpanels flex="1"  >
-														<tabpanel >
-															<vbox id="treeDicoIeml" flex="1"  />
-														</tabpanel>
-														<tabpanel>
-															<iframe name="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" src="" flex="1"/>
-														</tabpanel>
-														<tabpanel>
-															<iframe  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1' src="" />
-														</tabpanel>
-													</tabpanels>
-												</tabbox>
-											</vbox>			
-										 </tabpanel>
-								    </tabpanels>
-								</tabbox>
-							</vbox>
-						</vbox>
+						    </tabpanels>
+						</tabbox>
+					</vbox>
 			        <splitter collapse="before" >
 						<grippy/>
 					</splitter>
 					<vbox flex="1">
+						<label id="keyGrid" hidden="true" />
+						<tabbox flex="1" orient="horizontal" >
+							<tabs orient="vertical" >
+								<tab label="Dictionnaire" />
+								<tab label="Behavior" onclick="LoadCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+								<tab label="axial orientation" onclick="LoadCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+							</tabs>
+							<tabpanels flex="1"  >
+								<tabpanel >
+									<vbox id="treeDicoIeml" flex="1"  />
+								</tabpanel>
+								<tabpanel>
+									<iframe name="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" src="" flex="1"/>
+								</tabpanel>
+								<tabpanel>
+									<iframe  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1' src="" />
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+					</vbox>			
+				</hbox>
+										<!--  
+					
+					<vbox flex="1" hidden="true">
 						<tabbox id="tbIframe" flex="1" >
 						    <tabs >
 						        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
@@ -252,16 +201,12 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    </tabs>
 						    <tabpanels flex="1"  >
 						        <tabpanel >
-						        	<!-- 
-						          	-->
 									<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
 						         </tabpanel>
 						        <tabpanel>
 									<vbox flex="1" >
 						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
 										<iframe flex="1" src="http://del.icio.us/ieml"  />
-						        	<!-- 
-						          	-->
 									</vbox >
 						         </tabpanel>
 						        <tabpanel>
@@ -277,11 +222,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						         </tabpanel>
 						    </tabpanels>
 						</tabbox>
+-->
 			</vbox>
-				</hbox>
-			</groupbox>
-		</vbox> 
- </hbox>
+ </vbox>
  <script type="text/javascript">
  	//récupération des flux
   GetFlux();
