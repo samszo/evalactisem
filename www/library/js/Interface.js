@@ -3,8 +3,6 @@ var E="*";
 var P=";";
 var S=":";
 
-
-
 function ShowTooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
@@ -473,5 +471,95 @@ function Load(key){
 	   window.parent.document.getElementById('label_Maj').setAttribute("hidden","true");
 	   document.getElementById(key+'_div').innerHTML = result;
    }
+   // fonction qui est lancée à chaque changement du champs de recherche
+	function lancer(e) {
+	    tgt = e.target;
+	    if(tgt.getAttribute("id")=='lib-trad-ieml'){
+	    	var _query = document.getElementById("lib-trad-ieml").value;
+	    	type="lib";
+	    }else
+	     if(tgt.getAttribute("id")=='code-trad-ieml'){
+	    	var _query = document.getElementById("code-trad-ieml").value;
+	    	type="code";
+	    }
+		var keycode;
+		
+		
+		if(window.event){							// déterminer le code de la touche IE / autres navigateurs
+			keycode = window.event.keyCode;
+		} else if(e) {
+			keycode = e.which;
+		}
+		
+		if(keycode == 38 && resultats > 0) {				// touche "haut"
+			
+			marquer('up');
+			
+		} else if(keycode == 40 && resultats > 0) {			// touche "bas"
+			
+			marquer('down');
+			
+		} else if(keycode == 13 && resultats > 0) {			// touche "return"
+			
+			marquer('afficher');
+			
+		} else if(_query != "") {							// ou _query.length > 2 ?
+			AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=recherche&query="+_query+"&type="+type,'afficher','');
+			
+		} else {
+			
+			box=document.getElementById('calque_'+type);
+			while(box.hasChildNodes()){
+				box.removeChild(box.lastChild);
+			}
+			box.setAttribute('hidden','true');
+		}
+	}
+   
+    function afficher(json) {
+		box=document.getElementById('calque_'+type);
+		box.setAttribute('hidden','false');
+		//suppression des noeuds 
+		while(box.hasChildNodes()){
+				box.removeChild(box.lastChild);
+		}
+		Items=eval("("+json+")");
+		for(i=0;i<Items.ieml_lib.length;i++){
+			if(Items.ieml_lib[i]!=''){
+			 	item=document.createElement('listitem');
+			 	item.setAttribute('id','Item_'+[i]);
+			 	if(type=='lib')
+			 		addListcell(item,Items.ieml_lib[i]);
+			 	else
+			 	    addListcell(item,Items.ieml_code[i]);
+			 	addListcell(item,Items.ieml_niv[i]);
+			 	box.appendChild(item);
+			}
+		}
+	}	
 
+	function addListcell(item,labelCell){
+		listcell=document.createElement('listcell');
+		listcell.setAttribute('label',labelCell);
+		listcell.setAttribute('flex',"1");
+		item.appendChild(listcell);
+	}
+	function getSelectItemRech(){
+		listbox=document.getElementById('calque_'+type);
+		selection=listbox.selectedIndex;
+		if(type=='lib'){
+			ieml_lib=listbox.getItemAtIndex(selection).firstChild.getAttribute('label');
+			document.getElementById("lib-trad-ieml").value=ieml_lib;
+			id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
+			document.getElementById("code-trad-ieml").value=Items.ieml_code[id];
+		}else{
+			ieml_code=listbox.getItemAtIndex(selection).firstChild.getAttribute('label');
+			document.getElementById("code-trad-ieml").value=ieml_code;
+			id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
+			document.getElementById("lib-trad-ieml").value=Items.ieml_lib[id];
+			
+		}
+		listbox.setAttribute('hidden','true');
+		
+	}	
 

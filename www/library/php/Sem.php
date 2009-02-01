@@ -756,5 +756,30 @@ function Crea_Cycle($json){
 	$html.="</table>";
 	echo $html;
 }
+function recherche($query,$type){
+		$objSite = $this->site;
+		if($type=='lib')
+			$fonction='ExeAjax_recherche_lib';
+		else
+		    $fonction='ExeAjax_recherche_code';
+		    
+       	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTree']/Querys/Query[@fonction='".$fonction."']";
+        $Q = $objSite->XmlParam->GetElements($Xpath);
+        $where = str_replace("-query-", $query, $Q[0]->where);               
+	    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+        $sql = $Q[0]->select.$Q[0]->from.$where;       
+        $db->connect();
+        $result = $db->query(utf8_decode($sql));
+        $db->close();
+	    if(!$result) { echo 'recherche.php: erreur SQL.\n'; echo $sql; exit; }
+		$results = array();
+		while($data = mysql_fetch_array($result)) {
+			$results['ieml_lib'][]=utf8_encode($data['ieml_lib']);
+			$results['ieml_niv'][]=$data['ieml_parent'];
+			$results['ieml_code'][]=$data['ieml_code'];
+	    }
+		$json = json_encode($results);
+		return $json;
+       }
 }
 ?>

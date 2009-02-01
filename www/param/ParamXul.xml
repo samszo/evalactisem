@@ -168,6 +168,18 @@
 					    INNER JOIN ieml_foret f ON f.ieml_parent =0 AND f.ieml_id = i.ieml_id </from>
 				<where> </where>
 			</Query>
+			<Query fonction="ExeAjax_recherche_lib">
+				<select>SELECT i.ieml_lib,i.ieml_parent,i.ieml_code</select>
+				<from>  FROM ieml_onto i
+				        INNER JOIN ieml_onto o ON i.ieml_id = o.ieml_id</from>
+				<where> WHERE i.ieml_lib LIKE '-query-%' AND o.ieml_lib!='(à venir)' ORDER BY i.ieml_lib ASC </where>
+			</Query>
+			<Query fonction="ExeAjax_recherche_code">
+				<select>SELECT i.ieml_lib,i.ieml_parent,i.ieml_code</select>
+				<from>  FROM ieml_onto i </from>
+				<where> WHERE i.ieml_code LIKE '-query-%'  ORDER BY i.ieml_code ASC </where>
+			</Query>
+			
 		</Querys>
 		<rdfDesc tag="id" urn="ieml" tree="true"/>
 		<rdf tag="id" parse="Integer" hidden="true"/>

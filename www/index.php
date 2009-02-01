@@ -66,7 +66,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var Flux; var f;
 		var urlExeAjax = "<?php echo ajaxPathWeb; ?>";
 		var urlAjax = "<?php echo PathWeb; ?>";
-		var urlSpreadsheet="http://spreadsheets.google.com/pub?key="
+		var urlSpreadsheet="http://spreadsheets.google.com/pub?key=" ;
+		var Items;
+		var type;
 		
 	</script>
 
@@ -102,9 +104,15 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="horizontal" flex="1" >
 							<caption label="Expression IEML"/>
 						    <label id="id-trad-ieml" hidden="true"/>
-							<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%" flex="1" />
+							<stack style='height:150px;' flex='1'>
+								<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%;height:50px;border-top:0px" flex="1" onkeyup="lancer(event);" autocomplete="off"  />
+								<listbox id="calque_lib" style='margin-top:50px;' hidden='true' onselect='getSelectItemRech();'></listbox>
+							</stack>
 							<label style="color:red;font-size:150%" value=" *" />
-							<textbox id="code-trad-ieml" multiline="true" style="color:red;font-size:150%;" flex="1" />
+							<stack  flex='1'>
+								<textbox id="code-trad-ieml" multiline="true" style="color:red;font-size:150%;" flex="1" onkeyup="lancer(event);" autocomplete="off" />
+								<listbox id="calque_code"  style='margin-top:50px;' hidden='true' onselect='getSelectItemRech();' ></listbox>
+							</stack>
 							<label style="color:red;font-size:150%" value="** " />									
 					</groupbox>
 				</hbox>
@@ -117,113 +125,114 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				</hbox>
 			</vbox>
 		</groupbox>
-			<vbox flex="6" >
-				<hbox flex="6">
-					<vbox id="contDonnee" flex="1" hidden="true" >
-						<tabbox flex="1" >
-						    <tabs >
-						        <tab label="Tags traduits" />
-						        <tab label="Tags à traduire" />
-						        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
-						        <tab label="Bookmark IEML" />
-						    </tabs>
-						    <tabpanels flex="1"  >
-						        <tabpanel >
-									<vbox flex="1" >
-										
-										<hbox hidden="true">												    
-											<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
-											<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
-											<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
-										</hbox>
-										<box id="tpSingleTrad" flex="1" context="clipmenu" />
-									</vbox >
-						         </tabpanel>
-						        <tabpanel>
-						        	<vbox flex="1">
-										<label hidden="true" style='color:blue;' value="1. Choisissez un tag" />
-										<label hidden="true" style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
-										<hbox hidden="true" >
-											<label  style='color:blue;' value="3. Cliquez ici" />
-											<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
-										</hbox>
-										<box id="tpNoTrad" flex="1" />
-									</vbox>
-						         </tabpanel>
-				        <tabpanel >
-							<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
-				         </tabpanel>
-				        <tabpanel>
-							<vbox flex="1" >
-				    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
-								<iframe flex="1" src="http://del.icio.us/ieml"  />
-							</vbox >
-				         </tabpanel>
-
-
-						    </tabpanels>
-						</tabbox>
-					</vbox>
-			        <splitter collapse="before" >
-						<grippy/>
-					</splitter>
-					<vbox flex="1">
-						<label id="keyGrid" hidden="true" />
-						<tabbox flex="1" orient="horizontal" >
-							<tabs orient="vertical" >
-								<tab label="Dictionnaire" />
-								<tab label="Behavior" onclick="LoadCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
-								<tab label="axial orientation" onclick="LoadCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
-							</tabs>
-							<tabpanels flex="1"  >
-								<tabpanel >
-									<vbox id="treeDicoIeml" flex="1"  />
-								</tabpanel>
-								<tabpanel>
-									<iframe name="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" src="" flex="1"/>
-								</tabpanel>
-								<tabpanel>
-									<iframe  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1' src="" />
-								</tabpanel>
-							</tabpanels>
-						</tabbox>
-					</vbox>			
-				</hbox>
-										<!--  
-					
-					<vbox flex="1" hidden="true">
-						<tabbox id="tbIframe" flex="1" >
-						    <tabs >
-						        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
-						        <tab label="Bookmark IEML" />
-						        <tab label="Boussole IEML" />
-						        <tab id="tabStatIeml" label="Statistiques IEML" />
-						    </tabs>
-						    <tabpanels flex="1"  >
-						        <tabpanel >
-									<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
-						         </tabpanel>
-						        <tabpanel>
-									<vbox flex="1" >
-						    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
-										<iframe flex="1" src="http://del.icio.us/ieml"  />
-									</vbox >
-						         </tabpanel>
-						        <tabpanel>
-									<vbox flex="1" >
-										<label  style='color:blue;' value="Vous pouvez utiliser la boussole IEML pour filtrer les expressions des cycles" />
-										<iframe id="ifBoussole" style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
-									</vbox>
-						         </tabpanel>
-						        <tabpanel>
-						        		<box id="bIemlStat" flex="1">
-											<iframe id="fIemlStat" flex="1"  src=""  />
-										</box>
-						         </tabpanel>
-						    </tabpanels>
-						</tabbox>
--->
-			</vbox>
+		
+		<vbox flex="6" >
+			<hbox flex="6">
+				<vbox id="contDonnee" flex="1" hidden="true" >
+					<tabbox flex="1" >
+					    <tabs >
+					        <tab label="Tags traduits" />
+					        <tab label="Tags à traduire" />
+					        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
+					        <tab label="Bookmark IEML" />
+					    </tabs>
+					    <tabpanels flex="1"  >
+					        <tabpanel >
+								<vbox flex="1" >
+									
+									<hbox hidden="true">												    
+										<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
+										<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
+										<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+									</hbox>
+									<box id="tpSingleTrad" flex="1" context="clipmenu" />
+								</vbox >
+					         </tabpanel>
+					        <tabpanel>
+					        	<vbox flex="1">
+									<label hidden="true" style='color:blue;' value="1. Choisissez un tag" />
+									<label hidden="true" style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
+									<hbox hidden="true" >
+										<label  style='color:blue;' value="3. Cliquez ici" />
+										<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
+									</hbox>
+									<box id="tpNoTrad" flex="1" />
+								</vbox>
+					         </tabpanel>
+			        <tabpanel >
+						<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+			         </tabpanel>
+			        <tabpanel>
+						<vbox flex="1" >
+			    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
+							<iframe flex="1" src="http://del.icio.us/ieml"  />
+						</vbox >
+			         </tabpanel>
+	
+	
+					    </tabpanels>
+					</tabbox>
+				</vbox>
+		        <splitter collapse="before" >
+					<grippy/>
+				</splitter>
+				<vbox flex="1">
+					<label id="keyGrid" hidden="true" />
+					<tabbox flex="1" orient="horizontal" >
+						<tabs orient="vertical" >
+							<tab label="Dictionnaire" />
+							<tab label="Behavior" onclick="LoadCycle('p8PAs8y8e1x3J43Fu2t0bDg');" syle="color:green"/>
+							<tab label="axial orientation" onclick="LoadCycle('p8PAs8y8e1x2YTS7Zgag7Nw');" />
+						</tabs>
+						<tabpanels flex="1"  >
+							<tabpanel >
+								<vbox id="treeDicoIeml" flex="1"  />
+							</tabpanel>
+							<tabpanel>
+								<iframe name="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" src="" flex="1"/>
+							</tabpanel>
+							<tabpanel>
+								<iframe  id="iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw" flex='1' src="" />
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</vbox>			
+			</hbox>
+									<!--  
+				
+				<vbox flex="1" hidden="true">
+					<tabbox id="tbIframe" flex="1" >
+					    <tabs >
+					        <tab label="Bookmark de <?php echo $_SESSION['loginSess']; ?>" />
+					        <tab label="Bookmark IEML" />
+					        <tab label="Boussole IEML" />
+					        <tab id="tabStatIeml" label="Statistiques IEML" />
+					    </tabs>
+					    <tabpanels flex="1"  >
+					        <tabpanel >
+								<iframe flex="1" src="http://del.icio.us/<?php echo $_SESSION['loginSess']; ?>"  />
+					         </tabpanel>
+					        <tabpanel>
+								<vbox flex="1" >
+					    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
+									<iframe flex="1" src="http://del.icio.us/ieml"  />
+								</vbox >
+					         </tabpanel>
+					        <tabpanel>
+								<vbox flex="1" >
+									<label  style='color:blue;' value="Vous pouvez utiliser la boussole IEML pour filtrer les expressions des cycles" />
+									<iframe id="ifBoussole" style="min-width: 150px;" flex="1"  src="library/svg/iemlBoussole.svg"  />
+								</vbox>
+					         </tabpanel>
+					        <tabpanel>
+					        		<box id="bIemlStat" flex="1">
+										<iframe id="fIemlStat" flex="1"  src=""  />
+									</box>
+					         </tabpanel>
+					    </tabpanels>
+					</tabbox>
+	-->
+		</vbox>
  </vbox>
  <script type="text/javascript">
  	//récupération des flux
