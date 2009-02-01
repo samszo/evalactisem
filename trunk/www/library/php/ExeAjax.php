@@ -77,8 +77,10 @@
                 case 'GetTreeIemlOnto':
                 	    $resultat= GetTreeIemlOnto();
                 	    break;
-                
- }
+                 case 'recherche':
+                	    $resultat= recherche($_GET['query'],$_GET['type']);
+                	    break;
+   }
         
         echo $resultat;  
 
@@ -190,6 +192,11 @@
           $objXul = new Xul($objSite);
           $tree=$objXul->GetTreeIemlOnto("ieml");
           return $tree;
+       }
+       function recherche($query,$type){
+       		global $objSite;
+ 			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+ 			return $sem->recherche($query,$type); 	       	
        }
 	  
 ?>
