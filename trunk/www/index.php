@@ -97,8 +97,11 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				<hbox flex="1" >
 					<groupbox orient="horizontal" >
 						<caption label="Tag delicious"/>
-					    <label id="id-trad-flux" hidden="true"/>
-						<label id="code-trad-flux" style="color:red;font-size:150%" />
+						<label id="id-trad-flux" hidden="true"/>
+					    <stack style='height:150px;' flex='1'>
+							<textbox id="code-trad-flux" style="color:red;font-size:150%" onkeyup="lancer(event);" autocomplete="off" />
+							<listbox id="calque_tag" style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-flux");'></listbox>
+					    </stack>
 					    <label hidden="true" id="lib-trad-flux" style="color:red;font-size:150%" />
 					</groupbox>
 					<groupbox orient="horizontal" flex="1" >
@@ -106,12 +109,12 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 						    <label id="id-trad-ieml" hidden="true"/>
 							<stack style='height:150px;' flex='1'>
 								<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%;height:50px;border-top:0px" flex="1" onkeyup="lancer(event);" autocomplete="off"  />
-								<listbox id="calque_lib" style='margin-top:50px;' hidden='true' onselect='getSelectItemRech();'></listbox>
+								<listbox id="calque_lib" style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("lib-trad-ieml","code-trad-ieml");'></listbox>
 							</stack>
 							<label style="color:red;font-size:150%" value=" *" />
 							<stack  flex='1'>
 								<textbox id="code-trad-ieml" multiline="true" style="color:red;font-size:150%;" flex="1" onkeyup="lancer(event);" autocomplete="off" />
-								<listbox id="calque_code"  style='margin-top:50px;' hidden='true' onselect='getSelectItemRech();' ></listbox>
+								<listbox id="calque_code"  style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-ieml","lib-trad-ieml");' ></listbox>
 							</stack>
 							<label style="color:red;font-size:150%" value="** " />									
 					</groupbox>

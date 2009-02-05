@@ -179,7 +179,12 @@
 				<from>  FROM ieml_onto i </from>
 				<where> WHERE i.ieml_code LIKE '-query-%'  ORDER BY i.ieml_code ASC </where>
 			</Query>
-			
+			<Query fonction="ExeAjax_recherche_tag">
+				<select>SELECT iof.onto_flux_id, iof.onto_flux_code, u.uti_id</select>
+				<from>  FROM ieml_onto_flux iof
+				        INNER JOIN ieml_uti_onto_flux u ON iof.onto_flux_id = u.onto_flux_id AND u.uti_id =-iduti- </from>
+				<where> WHERE iof.onto_flux_code LIKE '-query-%'  ORDER BY iof.onto_flux_code ASC </where>
+			</Query>
 		</Querys>
 		<rdfDesc tag="id" urn="ieml" tree="true"/>
 		<rdf tag="id" parse="Integer" hidden="true"/>
