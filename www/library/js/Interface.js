@@ -481,6 +481,10 @@ function Load(key){
 	     if(tgt.getAttribute("id")=='code-trad-ieml'){
 	    	var _query = document.getElementById("code-trad-ieml").value;
 	    	type="code";
+	    } else
+	     if(tgt.getAttribute("id")=='code-trad-flux'){
+	    	var _query = document.getElementById("code-trad-flux").value;
+	    	type="tag";
 	    }
 		var keycode;
 		
@@ -524,40 +528,40 @@ function Load(key){
 				box.removeChild(box.lastChild);
 		}
 		Items=eval("("+json+")");
-		for(i=0;i<Items.ieml_lib.length;i++){
-			if(Items.ieml_lib[i]!=''){
-			 	item=document.createElement('listitem');
-			 	item.setAttribute('id','Item_'+[i]);
-			 	if(type=='lib')
-			 		addListcell(item,Items.ieml_lib[i]);
-			 	else
-			 	    addListcell(item,Items.ieml_code[i]);
-			 	addListcell(item,Items.ieml_niv[i]);
-			 	box.appendChild(item);
-			}
+		for(i=0;i<Items.code.length;i++){
+			 item=document.createElement('listitem');
+			 item.setAttribute('id','Item_'+[i]);
+			 if(type=='tag')
+			 	addListcell(item,Items.code[i]);
+			 else{
+				 if(type=='lib')
+				 	addListcell(item,Items.lib[i]);
+				 else
+				  if(type=='code')
+				 	addListcell(item,Items.code[i]);
+				  addListcell(item,Items.niv[i]);
+				 }
+			 box.appendChild(item);
 		}
 	}	
 
 	function addListcell(item,labelCell){
 		listcell=document.createElement('listcell');
 		listcell.setAttribute('label',labelCell);
-		listcell.setAttribute('flex',"1");
+		listcell.setAttribute('style',"min-width:100px;");
 		item.appendChild(listcell);
 	}
-	function getSelectItemRech(){
+	function getSelectItemRech(select1,select2){
 		listbox=document.getElementById('calque_'+type);
 		selection=listbox.selectedIndex;
-		if(type=='lib'){
-			ieml_lib=listbox.getItemAtIndex(selection).firstChild.getAttribute('label');
-			document.getElementById("lib-trad-ieml").value=ieml_lib;
-			id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
-			document.getElementById("code-trad-ieml").value=Items.ieml_code[id];
-		}else{
-			ieml_code=listbox.getItemAtIndex(selection).firstChild.getAttribute('label');
-			document.getElementById("code-trad-ieml").value=ieml_code;
-			id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
-			document.getElementById("lib-trad-ieml").value=Items.ieml_lib[id];
-			
+		ieml_lib=listbox.getItemAtIndex(selection).firstChild.getAttribute('label');
+		document.getElementById(select1).value=ieml_lib;
+		if(document.getElementById(select2)){
+		    id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
+			if(type=='lib')
+				document.getElementById(select2).value=Items.code[id];
+			else
+				document.getElementById(select2).value=Items.lib[id];
 		}
 		listbox.setAttribute('hidden','true');
 		

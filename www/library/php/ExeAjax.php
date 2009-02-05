@@ -196,7 +196,7 @@
        function recherche($query,$type){
        		global $objSite;
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
- 			return $sem->recherche($query,$type); 	       	
+ 			return $sem->recherche($query,$type,$_SESSION['iduti']); 	       	
        }
 	  
 ?>
