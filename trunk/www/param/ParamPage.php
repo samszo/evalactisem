@@ -13,7 +13,7 @@ session_start();
 		//$_SESSION['loginSess']="plevy4";
 		//$_SESSION['mdpSess']="1plotin";
 		$_SESSION['loginSess']="samszo";
-		$_SESSION['mdpSess']="Lucky71";
+		$_SESSION['mdpSess']="Lucky71";			
 		$_SESSION['loginSess']="luckysemiosis";
 		$_SESSION['mdpSess']="Samszo0";
 		$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],100000000);
@@ -91,7 +91,7 @@ session_start();
 	if(isset($_GET['TC']))
 		$TC = $_GET['TC'];
 	else
-		$TC = "post";
+		$TC = "posts";
 		
 	$scope = array(
 			"site" => $site

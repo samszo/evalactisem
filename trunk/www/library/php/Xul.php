@@ -296,14 +296,14 @@ function GetTreeDeliciousNetwork($oDlcs){
 	//$oDlcs = new PhpDelicious($login,$pwd);
 	$network = simplexml_load_string($oDlcs->GetNetworkMembers($oDlcs->sUsername));
 	$idUtis = $network->xpath("channel/item");
-		
+	sort($idUtis);		
 	//construction de l'entête du tree
 	$ihm .= '<tree                  
 		enableColumnDrag="true"
         flex="1"        
         id="'.$type.'" 
         multiple="true"';
-    $ihm .= ' onselect="SelectNetwork(\''.$type.'\',0);">'.EOL;
+    $ihm .= ' onselect="SelectNetwork(\''.$type.'\',-1);">'.EOL;
     $ihm .= '<treecols >'.EOL;
 	$ihm .= '<treecol hidden="false" flex="1" id="TreeCol_'.$type.'_1" label="login"  persist="width ordinal hidden"  />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
@@ -313,6 +313,15 @@ function GetTreeDeliciousNetwork($oDlcs){
     $ihm .= '</treecols>'.EOL;
     $ihm .= '<treechildren >'.EOL;
 
+    //ajoute le bookmark du login
+	$item = '<treeitem id="TreeItem_" >'.EOL;  
+    $item .= '<treerow id="TreeRow_" '.$style.' >'.EOL;
+    $item .= '<treecell label="'.$oDlcs->sUsername.'"  />'.EOL ;      	
+    $item .= '<treecell label=""  />'.EOL ;      	
+	$item .= '</treerow>'.EOL;
+    $item .= '</treeitem>'.EOL;
+	$ihm .= $item;	
+    
 	foreach($idUtis as $idUti){
 		$style="";
 		$item = '<treeitem id="TreeItem_'.$idUti->guid.'" >'.EOL;  

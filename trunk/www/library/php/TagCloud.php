@@ -18,13 +18,15 @@ class TagCloud {
   public $arrTags;
   public $arrPosts;
   public $IntVals;
-  public $nbTag;
+  public $TagNb;
   public $TagNbMax;
-  public $TagNbMin=1;
+  public $TagNbMin;
+  public $TagDateMax;
+  public $TagDateDeb;
   public $TagRectHaut=30;
   public $TagCircleRay=30;
   public $TagNbTot;
-  public $nbPost;
+  public $PostNb;
   public $PostCarMax;
   public $PostLargMax;
   private $oDlcs;
@@ -61,7 +63,7 @@ class TagCloud {
 		$oDlcs->GetUserBookmark($uti);
 	}
   
-  
+	
  	 public function GetSvgPost($login,$ShowAll,$TempsVide,$DateDeb,$DateFin,$NbDeb,$NbFin)
 	{
 		
@@ -74,12 +76,18 @@ class TagCloud {
 
 			//calcul les posts
 			$this->CalculPosts($Posts,$DateDeb,$DateFin,$NbDeb,$NbFin);
-						
-		  	//initialisation du svg
-			$svg = new SvgDocument("600","600","","","","SVGglobal","onload=\"\""); 	
+
+			//calcul du javascript d'initialisation
+			//le onload ne marche pas quand on charge le svg dans du xul
+			//$js = "onload=\"InitOutilsParams(".$this->TagNbMin.",".$this->TagNbMax.",'".date_format($this->TagDateDeb, 'Y-m-d')."','".date_format($this->TagDateFin, 'Y-m-d')."');\"";
+			$js = " TagNbMin='".$this->TagNbMin."' TagNbMax='".$this->TagNbMax."' TagDateDeb='".date_format($this->TagDateDeb, 'Y-m-d')."' TagDateFin='".date_format($this->TagDateFin, 'Y-m-d')."' ";
+			
+			//initialisation du svg
+			$svg = new SvgDocument("600","600","","","","SVGglobal",$js); 	
 		  	
 		  	//ajoute les liens avec les scripts
 		  	$svg->addChild(new SvgScript(jsPathWeb."ajax.js"));
+		  	$svg->addChild(new SvgScript(jsPathWeb."tagcloud.js"));
 		  	
 			//vérifie s'il y a des posts
 		  	if($this->PostLargMax>0){
@@ -129,7 +137,7 @@ class TagCloud {
 	public function RedimSvg($ShowAll,$svg,$svgWidth){
 				
 		if($ShowAll){
-			$svg->mPreserveAspectRatio="xMidYMid meet";
+			$svg->mPreserveAspectRatio="xMinYMin meet";
 			//$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";
 			$svg->mViewBox = "0 0 ".($this->xTagD)." ".($this->yTC)."";
 		}else{
@@ -150,9 +158,12 @@ class TagCloud {
 
 			//calcul les tags
 			$this->CalculTags($tags,$NbDeb,$NbFin);
-						
+			
+			//calcul les interval du tagcloud
+			$js = " TagNbMin='".$this->TagNbMin."' TagNbMax='".$this->TagNbMax."' TagDateDeb='".date_format(new DateTime(), 'Y-m-d')."' TagDateFin='".date_format(new DateTime(), 'Y-m-d')."' ";
+			
 		  	//initialisation du svg
-			$svg = new SvgDocument("", "","","","","SVGglobal","onload=\"\""); 	
+			$svg = new SvgDocument("800","100","","","","SVGglobal",$js); 	
 		  	
 		  	//ajoute les liens avec les scripts
 		  	//$svg->addChild(new SvgScript(jsPathWeb."svgTagCloud.js"));
@@ -249,9 +260,11 @@ class TagCloud {
 					$style = "fill:#".$color.";";
 					array_push($this->arrTags, array("tag"=>$tag->title,"nb"=>$nb,"style"=>$style));
 			    	$this->TagNbTot += $nb;
-					if($this->TagNbMax < $nb){
+					//enregistre les intervalles d'occurence
+			    	if($this->TagNbMax < $nb)
 						$this->TagNbMax = $nb;
-					}
+					if($this->TagNbMin > $nb  || !$this->TagNbMin)
+						$this->TagNbMin=$nb;				
 					//calcul le nb de caractère maximum d'une ligne
 					$nbCar = $this->GetLargeurBoiteTexte($tag->title);	
 					if($this->PostCarMax < $nbCar){
@@ -266,7 +279,7 @@ class TagCloud {
 	function CalculPosts($Posts,$DateDeb,$DateFin,$NbDeb,$NbFin){
 		
 		//calcul les dates et les max
-		$this->nbPost=0;
+		$this->PostNb=0;
 		$this->arrPosts=array();
 		$this->arrTags=array();
 		$arrTags=array();
@@ -284,11 +297,15 @@ class TagCloud {
 			//vérifie les dates
 			if($this->VerifInDate($dPost,$dDeb,$dFin)){
 				//incrémente le nombre de post
-				$this->nbPost++;
+				$this->PostNb++;
 				//calcul l'interval de temps entre les posts
 	    		$dDiff  = $this->calc_tl($dPost->format('U'),$startTime);
 	    		//pour calculer le nouvel interval
-	    		$startTime = $dPost->format('U');				
+	    		$startTime = $dPost->format('U');
+	    		//enregitre la première date comme date minimum
+	    		if($this->PostNb==1)
+					$this->TagDateDeb = $dPost;
+	    		
 				array_push($this->arrPosts, array("post"=>$post,"date"=>$dPost,"diff"=>$dDiff,"tags"=>$post->category));
 				foreach($post->category as $cat){
 					//construction de la clef
@@ -311,7 +328,12 @@ class TagCloud {
 		foreach($arrTags as  $tag)
 		{
 			if($tag["nb"]>=$NbDeb && $tag["nb"]<=$NbFin){
-				array_push($this->arrTags, $tag);				
+				array_push($this->arrTags, $tag);
+				//enregistre les intervalles d'occurence
+				if($tag["nb"]>$this->TagNbMax)
+					$this->TagNbMax=$tag["nb"];				
+				if($tag["nb"]<$this->TagNbMin || !$this->TagNbMin)
+					$this->TagNbMin=$tag["nb"];				
 			}
 		}
 		//suprime les posts qui ne sont pas dans l'interval
@@ -339,6 +361,11 @@ class TagCloud {
 			if($TagIn){
 				//met à jour le tableau des posts
 				array_push($arrPosts, $post);				
+				//enregistre les intervalles de date
+				if($post["date"]>$this->TagDateFin)
+					$this->TagDateFin=$post["date"];				
+				if($post["date"]<$this->TagDateDeb)
+					$this->TagDateDeb=$post["date"];				
 			}
 			if($this->PostLargMax < $PostLargMax){
 				$this->PostLargMax = $PostLargMax;
@@ -506,7 +533,8 @@ class TagCloud {
 	function GetTags($login) {
 
 		//récupère le boobkmark
-		$xml = simplexml_load_file(PathRoot."/tmp/tags/".$login.".xml");
+		//$xml = simplexml_load_file(PathRoot."/tmp/tags/".$login.".xml");
+    	$xml = simplexml_load_string($this->oDlcs->GetUserTags($login));
 		//recupére les tags
         $tags = $xml->xpath('/rss/channel/item');        
         return $tags;

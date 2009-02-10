@@ -5,9 +5,9 @@
 	//$oTC->SauveBookmarkNetwork("luckysemiosis","Samszo0");
   	
 	header("Content-type: image/svg+xml");
-	if($TC=="post")
+	if($TC=="posts")
 		$oTC->GetSvgPost($login,$ShowAll,$TempsVide,$DateDeb,$DateFin,$NbDeb,$NbFin);
-	if($TC=="tag")
+	if($TC=="tags")
 		$oTC->GetSvgTag($login,$ShowAll,$NbDeb,$NbFin);
 	
     

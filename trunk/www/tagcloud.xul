@@ -14,8 +14,23 @@
 
 <hbox id="main" flex="1" >
 	<vbox id="outils" flex="1" >
+		<groupbox orient="horizontal" >
+			<caption label='Représentation' />
+			 <menulist id="choixTC" >
+			    <menupopup>
+			      <menuitem label="Posts" value="posts"/>
+			      <menuitem label="Tags" value="tags"/>
+			    </menupopup>
+			  </menulist>
+			 <menulist id="choixAjout" >
+			    <menupopup>
+			      <menuitem label="Remplace" value="-1"/>
+			      <menuitem label="Ajoute" value="0"/>
+			    </menupopup>
+			  </menulist>
+		</groupbox>
 		<groupbox orient="vertical" >
-			<caption label='Intensité des Tags' />
+			<caption label='Occurence des Tags' />
 			<hbox>
 				<label value="Min :" /><label id="lblTagIntMin" value="" />
 			</hbox>
@@ -23,10 +38,11 @@
 			    id="scrollTagIntMin"
 			    idLbl="lblTagIntMin"
 			    orient="horizontal"
-			    curpos="0"
+			    curpos="1"
 			    maxpos="100"
 			    increment="1"
-			    pageincrement="10"/>
+			    pageincrement="10"
+			    onmouseup="SelectNetwork('TreeDeliciousNetwork',1);"/>
 			<hbox>
 				<label value="Max :" /><label id="lblTagIntMax" value="" />
 			</hbox>
@@ -34,16 +50,17 @@
 			    id="scrollTagIntMax"
 			    idLbl="lblTagIntMax"
 			    orient="horizontal"
-			    curpos="0"
+			    curpos="1"
 			    maxpos="100"
 			    increment="1"
-			    pageincrement="10"/>
+			    pageincrement="10"
+			    onmouseup="SelectNetwork('TreeDeliciousNetwork',1);"/>
 		</groupbox>
 		
 		 <groupbox orient="vertical" >
 			<caption label='Interval de temps' />
 			<hbox>
-				<label value="Début :" /><datepicker id="dpTagDeb" type="popup" value="2007-03-26"/>
+				<label value="Début :" /><datepicker onchange="SelectNetwork('TreeDeliciousNetwork',1);" id="dpTagDeb" type="popup" value="2007-03-26"/>
 				<label value="Fin : " /><datepicker id="dpTagFin" type="popup" value="2007-03-26"/>
 			</hbox>
 		</groupbox>
@@ -54,18 +71,18 @@
 			</hbox>
 		</groupbox>
 	</vbox>
-	<vbox id="tagcloud" flex="1">
-
-
-
-
+	<vbox flex="1">
+		<groupbox orient="vertical" flex="1" >
+			<caption label='Représentation' />
+			<vbox id="tagcloud" flex="1" />
+		</groupbox>
 	</vbox>
 </hbox>
 
 	<script>
 		//création des listener
 		document.getElementById("scrollTagIntMin").addEventListener("DOMAttrModified",
-			function(event) {onScroll(event);}, false);
+			function(event) {onScroll(event);}, false);	
 		document.getElementById("scrollTagIntMax").addEventListener("DOMAttrModified",
 			function(event) {onScroll(event);}, false);
 		//récupération de l'arbre du réseau social
