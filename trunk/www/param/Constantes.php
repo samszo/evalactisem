@@ -1,9 +1,9 @@
 <?php
   //
   // Fichier contenant les definitions de constantes
-  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
+  //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/Evalactisem.V1");
   //pour le débubbage
-  define ("PathRoot","C:/wamp/www/evalactisem");
+  define ("PathRoot","C:/wamp/www/Evalactisem.V1");
 
   // *** chemin de toutes les bases et les spip en service ***
   define("TT_CLASS_BASE", PathRoot."/library/php/");
@@ -40,7 +40,7 @@
   define('LOGIN_IEML',"ieml");
   define('MDP_IEML','Paragraphe08');
   $Site = array(
-	"PATH_WEB" => "http://localhost/evalactisem/", 
+	"PATH_WEB" => "http://localhost/Evalactisem.V1/", 
 	"SQL_LOGIN" => "root", 
 	"SQL_PWD" => "", 
 	"SQL_HOST" => "localhost",
@@ -56,7 +56,7 @@
   	"gmKey" => gmKey
 	); 
 $SiteThyp = array(
-	"PATH_WEB" => "http://localhost/evalactisem/", 
+	"PATH_WEB" => "http://localhost/Evalactisem.V1/", 
 	"SQL_LOGIN" => "root", 
 	"SQL_PWD" => "thyp2006", 
 	"SQL_HOST" => "localhost",
