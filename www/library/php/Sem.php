@@ -381,11 +381,11 @@ Class Sem{
 	}
 	
 	function Parse($code=""){
-	
+	    set_time_limit(1000);
 		if($code=="")
 			$code=$this->Src;
 		$code = stripslashes ($code);
-	    $lien = 'http://starparser.ieml.org/cgi-bin/test2.cgi?iemlExpression='.$code;
+	    $lien = 'http://starparser.ieml.org/cgi-bin/star2xml.cgi?iemlExpression='.$code;
 		if($this->trace)
 			echo "Sem:Parse:$lien=".$lien."<br/>";
 			
@@ -786,5 +786,21 @@ function recherche($query,$type,$IdUti){
 		$json = json_encode($results);
 		return $json;
        }
+       function Evalactisem ($oDelicious,$login,$mdp){
+		// connexion a delicious
+		global $con;
+		if(TRACE)
+			echo "Sem:Evalactisem:login:".$login." mdp=".$mdp."<br/>";
+			$_SESSION['loginSess']=$login;
+			$_SESSION['mdpSess']=$mdp;
+			$_SESSION['Delicious']=$oDelicious;
+			if(TRACE)
+				echo "ParamPage:Debug:oDelicious=".$oDelicious->sUsername."<br/>";
+			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
+			$con=$oDelicious->LastError();
+			return $con;
+		
+	}
+       
 }
 ?>
