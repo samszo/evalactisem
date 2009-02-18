@@ -8,6 +8,12 @@
 <script type="text/javascript" > 
 		 urlAjax = "http://www.mundilogiweb.com/evalactisem/plugin/content/" ;	
 	</script>
+<commandset id="mainCommandSet">
+   <command id="cmd_yb_bookmark_this_page" oncommand=" "/>
+</commandset>
+<keyset id="mainKeyset">
+    <key id="addYBookmarkAsKb" command="cmd_yb_bookmark_this_page" />
+</keyset> 
 <vbox id='loginbox'>
         <label id='lbl' value='Veuillez saisir votre compte del.icio.us'/>
 		<vbox id='BlocTextePass'>	

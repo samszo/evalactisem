@@ -18,7 +18,12 @@
 		var type;
 		
 	</script>
-
+    <commandset id="mainCommandSet">
+  	 <command id="cmd_yb_bookmark_this_page" oncommand=" "/>
+	</commandset>
+	<keyset id="mainKeyset">
+	    <key id="addYBookmarkAsKb" command="cmd_yb_bookmark_this_page" />
+	</keyset> 
 	<popupset id="popupset">
 		<popup id="clipmenu" onpopupshowing="javascript:;">
 			<menuitem label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive');"/>
