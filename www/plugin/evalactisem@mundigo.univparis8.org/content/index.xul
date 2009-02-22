@@ -1,28 +1,24 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="http://www.mundilogiweb.com/evalactisem/plugin/skin/iemlCycle.css" type="text/css"?>
+<?xml-stylesheet href="chrome://evalactisem/skin/iemlCycle.css" type="text/css"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="CSS/tree.css" type="text/css"?>
 <?xul-overlay href="overlay/treeDicoIeml.xul"?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload=" ">
-    <script src="http://www.mundilogiweb.com/evalactisem/plugin/content/library/js/tree.js"/>
-	<script src="http://www.mundilogiweb.com/evalactisem/plugin/content/library/js/Interface.js"/>
-	<script src="http://www.mundilogiweb.com/evalactisem/plugin/content/library/js/ajax.js"/>
-	<script src="http://www.mundilogiweb.com/evalactisem/plugin/content/library/js/iemlBoussole.js"/>
- 	<script src="http://www.mundilogiweb.com/evalactisem/plugin/content/library/js/utf8.js"/>
+    <script src="http://mundilogiweb.com/evalactisem/plugin/content/library/js/tree.js"/>
+	<script src="http://mundilogiweb.com/evalactisem/plugin/content/library/js/Interface.js"/>
+	<script src="http://mundilogiweb.com/evalactisem/plugin/content/library/js/ajax.js"/>
 	<script type="text/javascript" > 
 	    var login=window.opener.document.getElementById('lab_login').getAttribute('value');
 		var Flux; var f;var k;
-		var urlAjax = "http://www.mundilogiweb.com/evalactisem/plugin/content/";
+		var urlAjax = "http://mundilogiweb.com/evalactisem/plugin/content/";
 		var urlSpreadsheet="http://spreadsheets.google.com/pub?key=" ;
 		var Items;
 		var type;
-		
 	</script>
     <commandset id="mainCommandSet">
-  	 <command id="cmd_yb_bookmark_this_page" oncommand=" "/>
+       <command id="cmd_login_focus" oncommand="document.commandDispatcher.advanceFocus();"/>
 	</commandset>
 	<keyset id="mainKeyset">
-	    <key id="addYBookmarkAsKb" command="cmd_yb_bookmark_this_page" />
+	    <key id="focusLogin" keycode="VK_TAB"  command="cmd_login_focus" />
 	</keyset> 
 	<popupset id="popupset">
 		<popup id="clipmenu" onpopupshowing="javascript:;">
@@ -72,10 +68,9 @@
 					</groupbox>
 				</hbox>
 				<hbox>
-						<button hidden="false" label="Ajouter" oncommand="Sem_AddTrad();"/>	
-						<button hidden="false" label="Supprimer" oncommand="Sem_SupTrad();"/>
-						<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
-						<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+						<button hidden="false" label="Ajouter" tooltiptext="Ajouter une Traduction" oncommand="Sem_AddTrad();"/>	
+						<button hidden="false" label="Supprimer" tooltiptext="Supprimer une Traduction" oncommand="Sem_SupTrad();"/>
+						<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>		
 						<label id="trad-message" hidden="false" style="color:blue;font-size:150%" />
 				</hbox>
 			</vbox>
@@ -88,13 +83,11 @@
 					    <tabs >
 					        <tab label="Tags traduits" />
 					        <tab label="Tags à traduire" />
-					        <tab id="Tab_nom" label=" " />
-					        <tab label="Bookmark IEML" />
+					        <tab id="Tab_nom" label=" "  hidden="true" />
 					    </tabs>
 					    <tabpanels flex="1"  >
 					        <tabpanel >
 								<vbox flex="1" >
-									
 									<hbox hidden="true">												    
 										<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
 										<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
@@ -114,17 +107,6 @@
 									<box id="tpNoTrad" flex="1" />
 								</vbox>
 					         </tabpanel>
-			        <tabpanel >
-						<iframe flex="1" src="http://del.icio.us/"  />
-			         </tabpanel>
-			        <tabpanel>
-						<vbox flex="1" >
-			    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
-							<iframe flex="1" src="http://del.icio.us/ieml"  />
-						</vbox >
-			         </tabpanel>
-	
-	
 					    </tabpanels>
 					</tabbox>
 				</vbox>
@@ -136,26 +118,16 @@
 					<tabbox flex="1" orient="horizontal" >
 						<tabs orient="vertical" >
 							<tab label="Dictionnaire" />
-							<tab label="Behavior" onclick="LoadCycle('p8PAs8y8e1x3J43Fu2t0bDg',1);" syle="color:green"/>
-							<tab label="axial orientation" onclick="LoadCycle('p8PAs8y8e1x2YTS7Zgag7Nw',2);" />
 						</tabs>
 						<tabpanels flex="1"  >
 							<tabpanel >
 								<vbox id="treeDicoIeml" flex="1"  />
 							</tabpanel>
-							<tabpanel>
-							    <label id='CycleLab_1' hidden='true' value='' />
-								<iframe  id="iemlCycle_p8PAs8y8e1x3J43Fu2t0bDg" src="" flex="1" />
-							</tabpanel>
-							<tabpanel>
-							    <label id='CycleLab_2' hidden='true' value='' />
-								<iframe id='iemlCycle_p8PAs8y8e1x2YTS7Zgag7Nw'  flex='1' src="" />
-							</tabpanel>
 						</tabpanels>
 					</tabbox>
 				</vbox>			
 			</hbox>
-									<!--  
+			<!--  
 				
 				<vbox flex="1" hidden="true">
 					<tabbox id="tbIframe" flex="1" >
@@ -192,7 +164,7 @@
 		</vbox>
  </vbox>
  <script type="text/javascript">
- 	//r�cup�ration des flux
+ 	//récupération des flux
   GetFlux();
 
  </script>
