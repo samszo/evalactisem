@@ -29,7 +29,7 @@
 
 	<hbox id="InOut" >
 		<label id="uti_login" value=""/>
-		<label value="logout" onclick="window.location.replace('exit.php') ; " />
+		<label value="logout" onclick="window.open('login.xul','',300,500) ;window.close(); " />
 	</hbox>
 
 	<vbox id='Maj' hidden='true' >
