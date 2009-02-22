@@ -19,7 +19,7 @@ var Evalactisem = {
       var left = parseInt( ( screen.availWidth / 2 ) - ( width / 2 ) ); 
       var top  = parseInt( ( screen.availHeight / 2 ) - ( height / 2 ) );
       var props = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top +
-         ",menubar=no,personalbar=no,toolbar=no,directories=yes,scrollbars=no,location=no,status=yes,resizable=1";
+         ",menubar=no,personalbar=no,toolbar=no,directories=yes,scrollbars=no,location=no,status=no,resizable=1";
       var newWindow = window.open( url, "", props );
       newWindow.focus();   
       return newWindow;   
