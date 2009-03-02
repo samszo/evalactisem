@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/">
+  <channel>
+    <title>Delicious/Bondolayka</title>
+    <link>http://delicious.com/Bondolayka</link>
+    <description>bookmarks posted by Bondolayka</description>
+    <atom:link rel="self" type="application/rss+xml" href="http://feeds.delicious.com/v2/rss//Bondolayka?count=32"/>
+    <item>
+      <title>Google Code</title>
+      <pubDate>Wed, 14 Jan 2009 01:07:00 +0000</pubDate>
+      <guid isPermaLink="false">http://delicious.com/url/f7d5e416c7bf89578b58dcf9f3716ea6#Bondolayka</guid>
+      <link>http://code.google.com/intl/fr/</link>
+      <dc:creator><![CDATA[Bondolayka]]></dc:creator>
+      <comments>http://delicious.com/url/f7d5e416c7bf89578b58dcf9f3716ea6</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f7d5e416c7bf89578b58dcf9f3716ea6</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/Bondolayka">Bondolayka's bookmarks</source>
+      <category domain="http://delicious.com/Bondolayka/">GoogleCode</category>
+    </item>
+    <item>
+      <title>kuler</title>
+      <pubDate>Fri, 02 Jan 2009 04:00:39 +0000</pubDate>
+      <guid isPermaLink="false">http://delicious.com/url/cc01ee55b546f0659465011f4ea2a1d2#Bondolayka</guid>
+      <link>http://kuler.adobe.com/?themes/search?term=tag%3Apassion</link>
+      <dc:creator><![CDATA[Bondolayka]]></dc:creator>
+      <comments>http://delicious.com/url/cc01ee55b546f0659465011f4ea2a1d2</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/cc01ee55b546f0659465011f4ea2a1d2</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/Bondolayka">Bondolayka's bookmarks</source>
+      <category domain="http://delicious.com/Bondolayka/">Couleur</category>
+    </item>
+    <item>
+      <title>Artezia - fonds ecran - wallpaper</title>
+      <pubDate>Wed, 22 Oct 2008 11:31:42 +0000</pubDate>
+      <guid isPermaLink="false">http://delicious.com/url/103f037a6671cfb1f620400824a1e8e5#Bondolayka</guid>
+      <link>http://www.artezia.net/art-graphisme/arteziaphotos/arteziaphotos1/abstrait2.htm</link>
+      <dc:creator><![CDATA[Bondolayka]]></dc:creator>
+      <comments>http://delicious.com/url/103f037a6671cfb1f620400824a1e8e5</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/103f037a6671cfb1f620400824a1e8e5</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/Bondolayka">Bondolayka's bookmarks</source>
+      <category domain="http://delicious.com/Bondolayka/">Graphisme</category>
+    </item>
+  </channel>
+</rss>
