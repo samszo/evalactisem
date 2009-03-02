@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by samszo (lsd) -->
+<XmlParams>
+	<StarIEML>
+		<go copy="!" opening="˜"/>
+		<slo union="|" difference="^" intersection="&amp;"/>
+		<Mark name="seme" layer="6" closing="_" gted="5"/>
+		<Mark name="phrase" layer="5" closing="," gted="4" gtor="6"/>
+		<Mark name="idea" layer="4" closing="'" gted="3" gtor="5"/>
+		<Mark name="relation" layer="3" closing="-" gted="2" gtor="4"/>
+		<Mark name="event" layer="2" closing="." gted="1" gtor="3"/>
+		<Mark name="primitive" layer="1" closing=":" gtor="2"/>
+	</StarIEML>
+	<XmlParam nom="GetOntoTree" datasource="http://localhost/evalactisem/library/CreaRdfTree.php"> 
+		<Querys>
+			<Query fonction="GetTreeNoTradUti">
+				<select> SELECT iof.onto_flux_id, iof.onto_flux_code, iuof.uti_id, it.trad_id  
+				</select>
+				<from> 
+					FROM ieml_onto_flux iof
+						INNER JOIN ieml_uti_onto_flux iuof ON iuof.onto_flux_id = iof.onto_flux_id
+							AND iuof.uti_id = -idUti-
+						LEFT JOIN ieml_trad it ON it.onto_flux_id = iof.onto_flux_id
+				</from>
+				<where> WHERE it.trad_id IS NULL ORDER BY iuof.uti_id, iof.onto_flux_code </where>
+			</Query>
+			<Query fonction="GetTreeTradAutoSupUti">
+				<select> SELECT iof.onto_flux_id, iof.onto_flux_code, itpA.uti_id, itp.uti_id, io.ieml_code, io.ieml_niveau, io.ieml_parent, io.ieml_lib  
+				</select>
+				<from> 
+					FROM ieml_onto_flux iof
+						INNER JOIN ieml_uti_onto_flux iuof ON iuof.onto_flux_id = iof.onto_flux_id
+							AND iuof.uti_id = -idUti-
+						INNER JOIN ieml_trad it ON it.onto_flux_id = iof.onto_flux_id
+						INNER JOIN ieml_onto io ON io.ieml_id = it.ieml_id
+						INNER JOIN ieml_trad_partage itpA ON itpA.trad_id = it.trad_id
+							AND itpA.uti_id = -idUtiAuto-
+						LEFT JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id
+							AND itp.uti_id = iuof.uti_id
+				</from>
+				<where> WHERE itp.uti_id IS NULL ORDER BY iof.onto_flux_code </where>
+			</Query>
+			<Query fonction="GetTreeTradUti">
+				<select> SELECT io.ieml_id, io.ieml_code, io.ieml_lib, io.ieml_niveau, io.ieml_parent
+, iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_uti_onto uo ON uo.ieml_id = it.ieml_id
+						AND uo.uti_id =-idUti-
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id
+					INNER JOIN ieml_onto io ON it.ieml_id = io.ieml_id
+					INNER JOIN ieml_uti iu ON iu.uti_id = uo.uti_id
+					INNER JOIN ieml_trad_partage itp ON itp.uti_id = iu.uti_id
+						AND itp.trad_id = it.trad_id
+					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+				</from>
+				<where> </where>
+			</Query>
+			<Query fonction="GetTreeTradUtiAuto">
+				<select> SELECT DISTINCT io.ieml_id, io.ieml_code, io.ieml_lib, io.ieml_niveau, io.ieml_parent
+, iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+					INNER JOIN ieml_onto io ON it.ieml_id=io.ieml_id
+					INNER JOIN ieml_uti_onto uo ON uo.ieml_id=io.ieml_id 
+					INNER JOIN ieml_uti iu ON iu.uti_id = uo.uti_id AND iu.uti_id = -idUtiAuto-
+					INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id AND itp.uti_id = -idUti-
+					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+				</from>
+				<where> </where>
+			</Query>
+			<Query fonction="GetTreeTradUtis">
+				<select> SELECT iu.uti_login, iu.uti_id  
+				</select>
+				<from> FROM ieml_uti iu </from>
+				<where> WHERE iu.uti_id IN (-idUtis-)
+					ORDER BY iu.uti_id 
+				</where>
+			</Query>
+			<Query fonction="GetTreeTradUtisTag">
+				<select> SELECT DINSTINCT iof.onto_flux_id, iof.onto_flux_code  
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+					INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id 
+					INNER JOIN ieml_uti iu ON iu.uti_id = itp.uti_id AND iu.uti_id = -idUti-
+					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+				</from>
+				<where> </where>
+			</Query>
+			<Query fonction="GetTreeTradUtisTagCouche">
+				<select> SELECT DISTINCT io.ieml_niveau, io.ieml_parent
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+					INNER JOIN ieml_onto io ON it.ieml_id=io.ieml_id
+					INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id 
+					INNER JOIN ieml_uti iu ON iu.uti_id = itp.uti_id AND iu.uti_id = -idUti-
+					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+				</from>
+				<where> WHERE it.onto_flux_id = -idFlux- </where>
+			</Query>
+			<Query fonction="GetTreeTradUtisTagCoucheIeml">
+				<select> SELECT DISTINCT io.ieml_id, io.ieml_code, io.ieml_lib
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+					INNER JOIN ieml_onto io ON it.ieml_id=io.ieml_id
+					INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id 
+					INNER JOIN ieml_uti iu ON iu.uti_id = itp.uti_id AND iu.uti_id = -idUti-
+					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+				</from>
+				<where> WHERE it.onto_flux_id = -idFlux- AND io.ieml_niveau = -niveau- </where>
+			</Query>
+			<Query fonction="GetTreeTradUtiTag">
+				<select> SELECT io.ieml_id, io.ieml_code, io.ieml_lib, io.ieml_niveau, io.ieml_parent
+, iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+					INNER JOIN ieml_onto io ON it.ieml_id=io.ieml_id
+					INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id 
+					INNER JOIN ieml_uti iu ON iu.uti_id = itp.uti_id AND iu.uti_id IN (-idUtis-)
+					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+				</from>
+				<where> </where>
+			</Query>
+			<Query fonction="GetTreeTradUtiAuto">
+				<select>SELECT io.ieml_id, io.ieml_code, io.ieml_lib, io.ieml_niveau, io.ieml_parent
+, iof.onto_flux_id, iof.onto_flux_code  
+				</select>
+				<from> FROM ieml_trad it
+					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+					INNER JOIN ieml_onto io ON it.ieml_id = io.ieml_id
+					INNER JOIN ieml_uti_onto iuoAuto ON iuoAuto.ieml_id = it.ieml_id AND iuoAuto.uti_id = 1
+					INNER JOIN ieml_uti_onto iuo ON iuo.ieml_id = it.ieml_id AND iuo.uti_id = -iduti-
+					LEFT JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id	AND itp.uti_id = iuo.uti_id
+				</from>
+				<where> WHERE trad_partage_id IS NULL
+					ORDER BY iof.onto_flux_code, io.ieml_niveau  
+				</where>
+			</Query>
+		
+			<Query fonction="ieml">
+				<select>SELECT ieml_id id, ieml_code code, ieml_lib lib, ieml_niveau niveau, ieml_parent type </select>
+				<from> FROM ieml_onto </from>
+				<where> </where>
+			</Query>
+			<Query fonction="get_hierarchie_ieml1">
+				<select>SELECT DISTINCT ieml_niveau, ieml_parent </select>
+				<from> FROM ieml_onto ORDER BY ieml_niveau</from>
+				<where> </where>
+			</Query>
+			<Query fonction="get_hierarchie_ieml">
+				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
+				<from> FROM ieml_onto De </from>
+				<where> WHERE De.ieml_parent LIKE '%-SoCode-'</where>
+			</Query>
+			<Query fonction="get_hierarchie_Dictio_children">
+				<select>SELECT  ieml_lib, ieml_code</select>
+				<from> FROM `ieml_onto`</from>
+				<where> WHERE ieml_niveau=-niv- ORDER BY ieml_lib </where>
+			</Query>
+			<Query fonction="get_hierarchie_Dictio">
+				<select>SELECT i.ieml_lib,i.ieml_id</select>
+				<from>  FROM ieml_onto i
+					    INNER JOIN ieml_foret f ON f.ieml_parent =0 AND f.ieml_id = i.ieml_id </from>
+				<where> </where>
+			</Query>
+			<Query fonction="ExeAjax_recherche_lib">
+				<select>SELECT i.ieml_lib,i.ieml_parent,i.ieml_code</select>
+				<from>  FROM ieml_onto i
+				        INNER JOIN ieml_onto o ON i.ieml_id = o.ieml_id</from>
+				<where> WHERE i.ieml_lib LIKE '-query-%' AND o.ieml_lib!='(à venir)' ORDER BY i.ieml_lib ASC </where>
+			</Query>
+			<Query fonction="ExeAjax_recherche_code">
+				<select>SELECT i.ieml_lib,i.ieml_parent,i.ieml_code</select>
+				<from>  FROM ieml_onto i </from>
+				<where> WHERE i.ieml_code LIKE '-query-%'  ORDER BY i.ieml_code ASC </where>
+			</Query>
+			<Query fonction="ExeAjax_recherche_tag">
+				<select>SELECT iof.onto_flux_id, iof.onto_flux_code, u.uti_id</select>
+				<from>  FROM ieml_onto_flux iof
+				        INNER JOIN ieml_uti_onto_flux u ON iof.onto_flux_id = u.onto_flux_id AND u.uti_id =-iduti- </from>
+				<where> WHERE iof.onto_flux_code LIKE '-query-%'  ORDER BY iof.onto_flux_code ASC </where>
+			</Query>
+		</Querys>
+		<rdfDesc tag="id" urn="ieml" tree="true"/>
+		<rdf tag="id" parse="Integer" hidden="true"/>
+		<rdf tag="lib " hidden="false"/>
+		<rdf tag="niveau" hidden="false"/>
+		<rdf tag="type" hidden="true"/>
+	</XmlParam>
+	<XmlParam nom="GetOntoTree1" datasource="http://localhost/evalactisem/library/CreaRdfTree.php">
+		<Querys>
+			<Query fonction="ieml">
+				<select>SELECT ieml_id id, ieml_code code, ieml_lib lib, ieml_niveau niveau, ieml_parent type </select>
+				<from> FROM ieml_onto </from>
+				<where> </where>
+			</Query>
+			<Query fonction="get_hierarchie_ieml1">
+				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
+				<from> FROM ieml_onto De </from>
+				<where> WHERE De.ieml_niveau = 1</where>
+			</Query>
+			<Query fonction="get_hierarchie_ieml">
+				<select>SELECT De.ieml_id DeId, De.ieml_code DeCode </select>
+				<from> FROM ieml_onto De </from>
+				<where> WHERE De.ieml_parent LIKE '%-SoCode-'</where>
+			</Query>
+		</Querys>
+		<rdfDesc tag="id" urn="ieml" tree="true" hidden="false"/>
+		<rdf tag="code" hidden="false"/>
+		<rdf tag="lib" hidden="false"/>
+	</XmlParam>
+	<XmlParam nom="GetOntoTrad" >
+		<Querys>
+			<Query fonction="Ieml_Onto">
+				<insert> INSERT INTO ieml_onto (ieml_id,ieml_code,ieml_lib,ieml_niveau,ieml_parent)</insert>
+				<values> VALUES (' ',-Iemlcode-' , '-Iemllib-',-Imelniveau-, '-Iemlparent-' )</values>
+			</Query>
+			<Query fonction="ieml-flux">
+				<select>SELECT t.ieml_id,t.onto_flux_id,i.ieml_code,i.ieml_lib </select>
+				<from> FROM ieml_trad t
+					   INNER JOIN ieml_onto_flux f ON f.onto_flux_id = t.onto_flux_id
+					   INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id 
+				        
+				</from>
+				<where></where>
+			</Query>
+			<Query fonction="GetTradAutoSup">
+				<select> SELECT of.onto_flux_code, of.onto_flux_id </select>
+				<from> FROM ieml_trad t
+					INNER JOIN ieml_onto_flux of ON of.onto_flux_id = t.onto_flux_id
+					LEFT JOIN ieml_uti_onto uo ON uo.ieml_id = t.ieml_id
+					LEFT JOIN ieml_trad_partage tp ON tp.trad_id = t.trad_id
+				</from>
+				<where> WHERE uo.uti_id = -idUti- AND tp.trad_id IS NULL </where>
+			</Query>	
+			 <Query fonction="ExeAjax_recup_id_flux">
+				<select>SELECT f.onto_flux_id   </select>
+				<from> 	FROM ieml_onto_flux f </from>
+				<where> WHERE f.onto_flux_code='-codeFlux-'  </where>
+			</Query>
+		    <Query fonction="ExeAjax_recup_id">
+				<select>SELECT f.onto_flux_id,o.ieml_id   </select>
+				<from> 	FROM ieml_onto_flux f, ieml_onto o </from>
+				<where> WHERE f.onto_flux_code='-codeFlux-' and o.ieml_code="-Iemlcode-" </where>
+			</Query>
+			<Query fonction="Get_Id_Flux">
+				<select>SELECT onto_flux_id</select>
+				<from> FROM ieml_onto_flux   </from>
+				<where> WHERE onto_flux_code = "-codeflux-"</where>
+			</Query>
+			<Query fonction="ExeAjax_Trad_VerifExist_P">
+				<select>SELECT ieml_id </select>
+				<from> FROM ieml_onto De  </from>
+				<where> WHERE ieml_lib = "-libieml-" </where>
+			</Query>
+		    <Query fonction="ExeAjax-AddTrad-VerifExist">
+				<select>SELECT trad_id </select>
+				<from> FROM ieml_trad De  </from>
+				<where> WHERE onto_flux_id = -idflux- AND ieml_id = -idIeml- </where>
+			</Query>
+			<Query fonction="ExeAjax-AddTrad-Insert">
+				<insert>INSERT INTO ieml_trad (onto_flux_id, ieml_id,trad_date)</insert>
+				<values> VALUES(-idflux-, -idIeml-, now())  </values>
+			</Query>
+			<Query fonction="AddTrad_Insert_onto_flux">
+				<insert>INSERT INTO ieml_onto (ieml_id, ieml_code, ieml_lib,ieml_niveau,ieml_parent,ieml_date)</insert>
+				<values> VALUES(" ", "-codeIeml-","-libIeml-",-nivIeml-,"-parentIeml-", now())  </values>
+			</Query>
+			<Query fonction="ExeAjax-SupTrad">
+				<select>SELECT f.onto_flux_id,i.ieml_id </select>
+				<from> FROM ieml_onto_flux f  
+				       INNER JOIN ieml_onto i ON f.onto_flux_code="-codeFlux-" AND i.ieml_code="-codeIeml-" 
+				 </from>
+				<where> </where>
+			</Query>
+			<Query fonction="ExeAjax-SupTrad-Delete_ieml_Trad">
+			<delete>DELETE </delete>
+				<from> FROM ieml_trad </from>
+				<where> WHERE ieml_id =-idIeml- AND onto_flux_id =-idflux-   </where>
+			</Query>
+		    <Query fonction="ExeAjax-SupTrad-Delete_ieml_onto">
+			<delete>DELETE </delete>
+				<from> FROM ieml_onto </from>
+				<where> WHERE ieml_id =-idIeml-    </where>
+			</Query>
+			<Query fonction="ExeAjax-SupTrad-Delete_ieml_uti_onto">
+			<delete>DELETE </delete>
+				<from> FROM ieml_uti_onto </from>
+				<where> WHERE ieml_id =-idIeml-    </where>
+			</Query>
+		    <Query fonction="ExeAjax-AddTrad">
+				<select>SELECT onto_flux_code  </select>
+				<from> FROM ieml_onto_flux De  </from>
+				<where>  </where>
+			</Query>
+			<Query fonction="ieml_uti_onto">
+				<insert> INSERT INTO ieml_uti_onto (uti_id,ieml_id)</insert>
+				<values> VALUES ('-iduti-' , '-idieml-')</values>
+			</Query>
+			<Query fonction="update_posted_tag"> 
+				<update> update ieml_trad SET trad_post=1</update>
+				<where> where ieml_id=-IdIeml- AND onto_flux_id=-IdFlux-</where>
+			</Query>
+			<Query fonction="VerifIemlUtiOnto">
+				<select> SELECT uti_id,ieml_id </select>
+				<from> FROM ieml_uti_onto </from>
+				<where> where ieml_id=-IdIeml- AND uti_id=-IdUti-</where>
+			</Query>
+			<Query fonction="Tree_dynamique">
+				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_lib</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id
+                </from>
+			</Query>
+			<Query fonction="InsertPartageTrad">
+				<insert> INSERT INTO ieml_trad_partage (uti_id,trad_id)</insert>
+				<values> VALUES ( '-idUti-','-idTrad-')</values>
+			</Query>
+			<Query fonction="GetTradUtiSignle">
+				<select> SELECT COUNT(*) nb,f.onto_flux_code, i.ieml_code,i.ieml_lib,ieml_parent</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id
+					   INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+					   INNER JOIN ieml_uti_onto u ON u.uti_id =-iduti- AND u.ieml_id = i.ieml_id
+					   GROUP BY f.onto_flux_code HAVING nb = 1
+
+                </from>
+			</Query>
+			<Query fonction="GetTradUtiMulti">
+				<select> SELECT COUNT(*) nb,f.onto_flux_code,ieml_parent</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id
+					   INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+					   INNER JOIN ieml_uti_onto u ON u.uti_id =-iduti- AND u.ieml_id = i.ieml_id
+					   GROUP BY f.onto_flux_code HAVING nb > 1
+
+                </from>
+			</Query>
+			<Query fonction="GetTradBdd">
+				<select> SELECT i.ieml_code</select>
+				<from> FROM ieml_onto i
+					   INNER JOIN ieml_trad t ON i.ieml_id = t.ieml_id
+					   INNER JOIN ieml_uti_onto u ON u.uti_id =-iduti- AND u.ieml_id = i.ieml_id   
+                </from>
+			</Query>
+			<Query fonction="GetTradTag">
+				<select> SELECT f.onto_flux_code, i.ieml_code,i.ieml_id,f.onto_flux_id</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id AND t.trad_post = -poster-
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id
+                </from>
+			</Query>
+			<Query fonction="GetIemlTag">
+				<select> SELECT f.ieml_code</select>
+				<from> FROM ieml_onto f
+					   INNER JOIN ieml_trad t ON t.ieml_id = f.ieml_id AND t.trad_post = -poster-
+                       INNER JOIN ieml_onto_flux i ON i.onto_flux_id = t.onto_flux_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id = f.ieml_id
+                </from>
+			</Query>
+			<Query fonction="GetTrad">
+				<select> SELECT COUNT(*) nb,onto_flux_code, i.ieml_code,i.ieml_lib,ieml_parent</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id 
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id AND f.onto_flux_code='-tag-'
+                       GROUP BY i.ieml_parent HAVING nb > 1
+                </from>
+			</Query>
+			<Query fonction="GetCoucheSignl">
+				<select> SELECT COUNT(*) nb,onto_flux_code, i.ieml_code,i.ieml_lib,ieml_parent</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id 
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id AND f.onto_flux_code='-tag-'
+                       GROUP BY i.ieml_parent HAVING nb = 1
+                </from>
+			</Query>
+			
+			<Query fonction="GetTradInst">
+				<select> SELECT onto_flux_code, i.ieml_code,i.ieml_lib,ieml_parent</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id 
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id AND f.onto_flux_code='-tag-'
+                       
+                </from>
+			</Query>
+			<Query fonction="GetCouche">
+				<select> SELECT onto_flux_code, i.ieml_code,i.ieml_lib,ieml_parent</select>
+				<from> FROM ieml_onto_flux f
+					   INNER JOIN ieml_trad t ON t.onto_flux_id = f.onto_flux_id 
+                       INNER JOIN ieml_onto i ON i.ieml_id = t.ieml_id
+                       INNER JOIN ieml_uti_onto u ON u.uti_id=-iduti- AND u.ieml_id=i.ieml_id AND f.onto_flux_code='-tag-' AND i.ieml_parent='-couche-'
+                       
+                </from>
+			</Query>
+		</Querys>
+		
+		<rdfDesc urn="ieml"/>
+		<rdf tag="id_ieml"/>
+		<rdf tag="onto_flux_id"/>
+		<rdf tag="ieml_code"/>
+		<rdf tag="ieml_desc"/>
+	</XmlParam>
+	
+	
+	<XmlParam nom="GetOntoFlux" datasource="http://localhost/evalactisem/library/CreaRdfTable.php">
+		<Querys>
+			<Query fonction="Ieml_Onto_Flux">
+				<insert> INSERT INTO ieml_onto_flux (onto_flux_id,onto_flux_code)</insert>
+				<values> VALUES (' ', '-codeFlux-')</values>
+			</Query>
+			
+			<Query fonction="Ieml_Onto_Flux1">
+				<update> UPDATE ieml_onto_flux SET onto_flux_parents='-parentsFlux-'</update>
+				<where> WHERE onto_flux_code='-enfant-'</where>
+			</Query>
+			<Query fonction="Ieml_Onto_existe">
+				<select> SELECT onto_flux_id</select>
+				<from> FROM ieml_onto_flux</from>
+				<where>WHERE onto_flux_code='-tag-' </where>
+			</Query>
+			<Query fonction="Ieml_Find_Lib">
+				<select> SELECT ieml_id, ieml_code, ieml_lib </select>
+				<from> FROM ieml_onto </from>
+				<where> WHERE ieml_lib = '-lib-' </where>
+			</Query>
+			<Query fonction="Ieml_Find_Code">
+				<select> SELECT ieml_id, ieml_code, ieml_lib </select>
+				<from> FROM ieml_onto </from>
+				<where> WHERE ieml_code = "-code-" </where>
+			</Query>
+			<Query fonction="Ieml_Find_Trad">
+				<select> SELECT ieml_id, ieml_code, ieml_lib </select>
+				<from> FROM ieml_onto </from>
+				<where> WHERE ieml_lib LIKE '%-tag-%' </where>
+			</Query>
+		   <Query fonction="Ieml_Uti_Onto_Flux_existe">
+				<select> SELECT uti_id,onto_flux_id </select>
+				<from> FROM ieml_uti_onto_flux </from>
+				<where> WHERE onto_flux_id=-idflux- AND uti_id=-iduti-</where>
+			</Query>
+		    <Query fonction="repres_graph_flux">
+				<select> SELECT i.onto_flux_code,i.onto_flux_id, i.onto_flux_parents </select>
+				<from> FROM ieml_onto_flux i
+				       INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND i.onto_flux_id=u.onto_flux_id
+				</from>
+				<where> WHERE i.onto_flux_niveau=0</where>
+			</Query>
+		    <Query fonction="repres_graph_flux1">
+				<select> SELECT onto_flux_code </select>
+				<from>  FROM ieml_onto_flux</from>
+				<where> WHERE onto_flux_id =-parent-</where>
+			</Query>
+		    		
+		    <Query fonction="VerifTradUtiFlux">
+				<select> SELECT COUNT(1) nb </select>
+				<from> FROM ieml_trad t
+					INNER JOIN ieml_uti_onto uo ON uo.ieml_id = t.ieml_id
+						AND uo.uti_id =-idUti-
+				</from>
+				<where> WHERE t.onto_flux_id =-idFlux- </where>
+			</Query>			
+		    <Query fonction="VerifPartageTrad">
+				<select> SELECT COUNT(1) nb </select>
+				<from> FROM ieml_trad_partage </from>
+				<where> WHERE trad_id=-idTrad- AND uti_id=-idUti- </where>
+			</Query>			
+		    <Query fonction="VerifPartageTrad">
+				<select> SELECT COUNT(1) nb </select>
+				<from> FROM ieml_trad_partage </from>
+				<where> WHERE trad_id=-idTrad- AND uti_id=-idUti- </where>
+			</Query>			
+		    <Query fonction="SupPartageTrad">
+				<delete> DELETE  </delete>
+				<from> FROM  ieml_trad_partage </from>
+				<where> WHERE  trad_id=-idTrad- AND uti_id=-idUti- </where>
+			</Query>			
+		    <Query fonction="InsertPartageTrad">
+				<insert> INSERT INTO ieml_trad_partage (uti_id,trad_id)</insert>
+				<values> VALUES ( '-idUti-','-idTrad-')</values>
+			</Query>
+		    <Query fonction="flux_utilisateur">
+				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
+				<values> VALUES ( '-iduti-','-idflux-')</values>
+			</Query>
+			<Query fonction="Enrg_Utilisateur">
+				<insert> INSERT INTO ieml_uti (uti_id,uti_login,maj)</insert>
+				<values> VALUES ('' , '-login-',now())</values>
+			</Query>
+		    <Query fonction="Verif_Exist_Utilisateur">
+				<select> SELECT  uti_id</select>
+				<from> FROM ieml_uti </from>
+				<where>	WHERE uti_login='-login-'</where>
+			</Query>
+			<Query fonction="ieml_uti_onto_flux">
+				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>
+				<values> VALUES ('-idFlux-' , '-idparentsFlux- ')</values>
+			</Query>
+		   <Query fonction="Delete_Ieml_uti_Onto_Flux">
+				<delete> DELETE  </delete>
+				<from> FROM  `ieml_uti_onto_flux` </from>
+				<where> WHERE  uti_id=-iduti-</where>
+			</Query>
+			 <Query fonction="Delete_Ieml_uti_Onto">
+				<delete> DELETE  </delete>
+				<from> FROM  `ieml_uti_onto`</from>
+				<where> WHERE  uti_id=-iduti-</where>
+			</Query>
+			<Query fonction="Delete_Ieml_uti">
+				<delete> DELETE  </delete>
+				<from> FROM  `ieml_uti`</from>
+				<where> WHERE  uti_id=-iduti-</where>
+			</Query>
+		</Querys>
+	
+	</XmlParam>
+	<XmlParam nom="GetOntoTree">
+	<Querys>
+		<Query fonction="GetTreeChildren_ieml" >
+			<Parents>
+				<parent tag="elements"/>
+				<parent tag="relations"/>
+				<parent tag="ideas"/>
+				<parent tag="events"/>
+				<parent tag="cycles"/>
+			</Parents>
+			<Cols>
+				<col tag="id" parse="Integer" hidden="true"/>
+				<col tag="lib" hidden="false"/>
+				<col tag="code" hidden="false"/>
+				<col tag="niveau" hidden="false"/>
+				<col tag="type" hidden="true"/>
+			</Cols>
+			<select>SELECT oe.ieml_id id,  oe.ieml_lib lib,oe.ieml_code code, oe.ieml_niveau niveau, oe.ieml_parent type </select>
+			
+				<from niv="0"> FROM ieml_onto oe
+                               INNER JOIN ieml_foret op ON oe.ieml_id = op.ieml_id
+                               AND op.ieml_parent =-parent-
+				
+				</from>
+				
+				<where></where>
+			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','lib-param0-'],[0,1])"/>
+		</Query>	    
+	  
+	   <!-- tree du Flux delicious -->
+		
+		<Query fonction="GetTreeChildren_flux" >
+			<Cols>
+				<col tag="id" parse="Integer" hidden="true"/>
+				<col tag="lib" hidden="false"/>
+				<col tag="code" hidden="false"/>
+				<col tag="niveau" hidden="true"/>
+				<col tag="type" hidden="true"/>
+			</Cols>
+			<select>SELECT oe.onto_flux_id id, oe.onto_flux_code code, oe.onto_flux_desc lib, oe.onto_flux_niveau niveau, oe.onto_flux_parents type </select>
+			
+				<from niv="0"> FROM ieml_onto_flux oe
+                               INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND oe.onto_flux_parents =-parent- AND oe.onto_flux_id = u.onto_flux_id
+				</from>
+				
+				<where></where>
+			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','desc-param0-'],[0,1])"/>
+		</Query>	
+	   	<Query fonction="GetTreeChildren_flux1" >
+			<Cols>
+				<col tag="id" parse="Integer" hidden="true"/>
+				<col tag="lib" hidden="false"/>
+				<col tag="code" hidden="false"/>
+				<col tag="niveau" hidden="true"/>
+				<col tag="parent" hidden="true"/>
+			</Cols>
+			<select>SELECT oe.onto_flux_id id, oe.onto_flux_code code, oe.onto_flux_desc lib, oe.onto_flux_niveau niveau, oe.onto_flux_parents parent </select>
+			
+				<from niv="0"> FROM ieml_onto_flux oe
+                               INNER JOIN ieml_uti_onto_flux u ON u.uti_id='-iduti-' AND oe.onto_flux_id =u.onto_flux_id
+				</from>
+				
+				<where></where>
+			<js evt="onselect" function="GetTreeSelect('tree-param0-',['id-param0-','desc-param0-'],[0,1])"/>
+		</Query>	
+	   	
+	   	<Query>	
+	   		<select>SELECT i.onto_flux_id, i.onto_flux_code, i.onto_flux_desc, i.onto_flux_niveau,i.onto_flux_parents </select>
+			<from > FROM ieml_onto_flux i
+                    INNER JOIN ieml_foret_flux f ON f.onto_flux_parents = -1 AND i.onto_flux_id = f.onto_flux_id
+		   </from>
+		  <where></where>
+		  </Query>	
+	    
+	
+	</Querys>
+	
+	
+	
+	</XmlParam>
+	<XmlParam nom="Activite" >
+		<Querys>
+			<Query fonction="Select_Acti_id">
+				<select> SELECT acti_id   </select>
+				<from> FROM ieml_acti</from>
+				<where>WHERE acti_code='-codeActi-'</where>
+			</Query>
+		</Querys>
+		<Querys>
+			<Query fonction="AddActi">
+				<insert> INSERT INTO ieml_acti_uti   </insert>
+				<values> VALUES ('','-idActi-','-iduti-',now())</values>
+			</Query>
+		</Querys>
+	
+	</XmlParam>
+	<XmlParam nom="ParamQuery" >
+		<Querys>
+			<Query fonction="GetTags">
+			</Query>
+		    <Query fonction="GetPosts">
+		      <params>
+			       <param nom="tag"/>
+			       <param nom="url"/>
+			       <param nom="date"/>
+		      </params>
+			</Query>
+		    <Query fonction="GetRecentPosts">
+		    	<params>
+		    	<param nom="tag"/>
+		    	<param nom="count"/>
+		    	</params>
+		    </Query>
+		    <Query fonction="GetAllPosts">
+		    	<params>
+		    		<param nom="tag"/>
+		    	</params>
+		    </Query>
+		</Querys>
+	</XmlParam>	
+	<XmlParam nom="MenuUrl">
+		<menu nom="Outils" niv="1" SousMenu="false"  >
+			<urlDesc nom="Processus" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Processus" dst="http://localhost/evalactisem/processus.php"/>
+		</menu>
+		<menu nom="Tradution" niv="2" SousMenu="true">
+				<urlDesc nom="Ieml-10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-10eF;" dst="http://localhost/evalactisem/traduction.xul"/>
+				<urlDesc nom="Ieml-APIDelicious" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Ieml-APIDelicious" dst="http://localhost/evalactisem/traduction.xul"/>
+		</menu>
+		<menu nom="Aide" niv="0" SousMenu="false">
+			<urlDesc  nom="aide 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide 10eF" dst="http://www.dixiemefamille.com/public/page/animation.php"/>
+			<urlDesc  nom="aide IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=aide IEML" dst="http://www.ieml.org/french/elements.html"/>
+		</menu>
+		<menu nom="Ontologie" niv="0" SousMenu="false" >
+			<urlDesc  nom="Consulter 10eF" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter 10eF" dst="../ieml/onto.php?ParamNom=GetOntoTree1"/>
+			<urlDesc  nom="Consulter IEML" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Consulter IEML" dst="../ieml/onto.php?ParamNom=GetOntoTree"/>
+		</menu>
+		<menu nom="Cartographie" niv="0" SousMenu="false">
+			<urlDesc  nom="Afficher la carte" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Afficher la carte" dst="http://dixiemefamille.com/ieml/10eFCarto.php"/>
+			<urlDesc  nom="Modifier les localisations" src="http://localhost/evalactisem/overlay/iframe.php?ParamNom=MenuUrl&amp;UrlNom=Modifier les localisations" dst="http://dixiemefamille.com/ieml/geocoding.php"/>
+		</menu>
+	
+		</XmlParam>
+</XmlParams>
