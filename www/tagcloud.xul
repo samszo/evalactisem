@@ -10,6 +10,8 @@
 	<script>
 	var urlExeAjax = "http://localhost/evalactisem/library/php/ExeAjax.php";
 	var urlTagCloud = "http://localhost/evalactisem/tagcloud.php";
+	//var urlExeAjax = "http://www.mundilogiweb.com/evalactisem/library/php/ExeAjax.php";
+	//var urlTagCloud = "http://www.mundilogiweb.com/evalactisem/tagcloud.php";
 	</script>
 
 <hbox id="main" flex="1" >

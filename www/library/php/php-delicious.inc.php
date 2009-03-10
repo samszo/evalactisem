@@ -38,6 +38,8 @@
    //require('xmlparser.inc.php');
    require('cache.inc.php');
    
+   define('PHP_DELICIOUS_MAX_RETURN', 32);
+   
    // Project Homepage
    define('PHP_DELICIOUS_PROJECT_HOMEPAGE', 'http://www.ejeliot.com/projects/php-delicious/');
    
@@ -570,7 +572,7 @@
             $oCache = new Cache("posts/".$sUsername."_".$tag, $this->iCacheTime);
             
             if (!$oCache->Check()) {
-               if ($sRss = $this->HttpRequest(PHP_DELICIOUS_RSS_URL."/$sUsername/$tag?count=100")) {
+               if ($sRss = $this->HttpRequest(PHP_DELICIOUS_RSS_URL."/$sUsername/$tag?count=".PHP_DELICIOUS_MAX_RETURN)) {
                   $oCache->Set($sRss,true);
                } else {
                   $oCache->Set(false,true);
@@ -584,7 +586,7 @@
             $oCache = new Cache("bookmarks/".$sUsername, $this->iCacheTime);
             
             if (!$oCache->Check()) {
-               if ($sRss = $this->HttpRequest(PHP_DELICIOUS_RSS_URL."/$sUsername?count=100")) {
+               if ($sRss = $this->HttpRequest(PHP_DELICIOUS_RSS_URL."/$sUsername?count=".PHP_DELICIOUS_MAX_RETURN)) {
                   $oCache->Set($sRss,true);
                } else {
                   $oCache->Set(false,true);

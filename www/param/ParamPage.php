@@ -4,14 +4,28 @@ session_start();
 
 	require_once ("Constantes.php");
 
-
+	if(!isset($_SESSION['loginSess'])){
+   		//pour le debuggage
+		/*
+		$_SESSION['loginSess']="amelmaster";
+		$_SESSION['mdpSess']="lemabou1983";
+		$_SESSION['loginSess']="plevy4";
+		$_SESSION['mdpSess']="1plotin";
+		$_SESSION['loginSess']="samszo";
+		$_SESSION['mdpSess']="Lucky71";
+		*/			
+		$_SESSION['loginSess']="luckysemiosis";
+		$_SESSION['mdpSess']="Samszo0";
+   }
+	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],10);
+	$_SESSION['Delicious']= $oDelicious;
+	
 
 	// vérification du site en cours
 	if(isset($_GET['site'])){
 		$site = $_GET['site'];
 	}else{
-		if(!session_is_registered("Site"))
-			$site = DEFSITE;
+		$site = DEFSITE;
 	}
 	
 	if(isset($_GET['type']))
