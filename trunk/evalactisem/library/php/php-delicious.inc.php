@@ -311,9 +311,8 @@
          return false;
       }
       
-      public function GetAllTags() {
+ public function GetAllTags() {
          $oCache = new Cache($this->sUsername.'tags/get', $this->iCacheTime);
-         
          if (!$oCache->Check()) {
             if ($aResult = $this->DeliciousRequest('tags/get')) {
                $aTags = array();           
@@ -330,7 +329,22 @@
          }
          return $oCache->Get();
       }
-      
+    public function isUpdatePost() {
+           $oCache = new Cache($this->sUsername.'posts/update', $this->iCacheTime);
+         if (!$oCache->Check()) {
+         	if ($aResult = $this->DeliciousRequest('posts/update')) {
+         	   $TimeCache=$this->GetFormatDate($oCache->Get());
+               $oCache->Set($aResult['attributes']['TIME']);
+         	} else {    
+               $oCache->Set(false);
+               $TimeCache=$this->GetFormatDate($oCache->Get());
+            }
+         }
+        $TimeDelIcioiUs=$this->GetFormatDate($aResult['attributes']['TIME']);
+       
+        return $this->compArr($TimeDelIcioiUs,$TimeCache);
+        
+      }
       public function RenameTag($sOld, $sNew) {
          $this->Delay(); 
          
@@ -558,7 +572,6 @@
 
       public function GetUserTags($sUsername) {
             $oCache = new Cache("tags/$sUsername", $this->iCacheTime);
-            
             if (!$oCache->Check()) {
                if ($sRss = $this->HttpRequest(PHP_DELICIOUS_RSS_URL."tags/$sUsername")) {
                   $oCache->Set($sRss,true);
@@ -594,6 +607,30 @@
             
             return $oCache->Get(true);
       }
-      
+     public function GetFormatDate($String) {
+           $date=explode('T',$String);
+           $ArrDate=explode('-',$date[0]);
+           $ArrHourMin=explode(':',$date[1]);
+           array_push($ArrDate,$ArrHourMin[0],$ArrHourMin[1]);
+           return $ArrDate;
+      }
+    public function compArr($Arr1,$Arr2){
+    	for($i=0; $i<=2;$i++){
+    		if($Arr1[$i]>$Arr2[$i])
+    			$sup=true; 
+    		else{
+    		    $sup=false;
+    		}
+    	}
+    	for($i=3; $i<=4;$i++){
+    		if($Arr1[$i]>$Arr2[$i])
+    			$sup=true; 
+        	else{
+        		$sup=false;
+        	}
+    		
+    	}
+    	return $sup;
+    }
    }
 ?>

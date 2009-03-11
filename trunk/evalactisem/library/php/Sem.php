@@ -98,26 +98,16 @@ Class Sem{
 		
 	}
 	
-	function AddTradAuto($idflux,$tag){
-		
-		//cherche les traduction automatique
-		$Xpath="/XmlParams/XmlParam/Querys/Query[@fonction='Ieml_Find_Trad']";
-	    $Q=$this->site->XmlParam->GetElements($Xpath);        
-	    $where=str_replace("-tag-",utf8_decode(addslashes($tag)),$Q[0]->where);
-	   	$sql=$Q[0]->select.$Q[0]->from." ".$where;
-	   	$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
-	   	$db->connect();
-	   	$req = $db->query($sql);
-	   	$db->close();
-   		while($r = mysql_fetch_assoc($req)){
-   			//exclusion des lib incorectes
-   			if($r['ieml_lib']!="(à venir)"){
-		   		//ajoute les traductions
-		   		$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idflux,$r['ieml_id']));		    
-   			}
-	   	}				
-	}
 	
+	 function AddTradAuto($idFlux,$tag,$lang='fr'){
+		foreach($this->LiveMetalRequest($lang,$tag,'tag') as $entry){
+			//recuppere ieml_lib, level et perent
+			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'ieml');
+			$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'ieml');
+			$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$iemlLibEntry->entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
+			$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$idIeml));
+		}
+	 }
 	 
 	
 	public function GetUsl($Couches,$Trads){
@@ -532,8 +522,6 @@ Class Sem{
    function Add_Trad($codeflux,$codeIeml,$iduti=-1,$getId=false,$res=-1){
    				$objSite = $this->site;
    				$Activite= new Acti();
-   				if($this->trace)
-	   				fb($iduti);
    				if($iduti==-1)
 	   				$iduti=$_SESSION['iduti'];
    				
@@ -542,6 +530,7 @@ Class Sem{
 					$req=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $codeIeml,"");
 					$rs=mysql_fetch_array($req);
 					if(!$rs){
+						//Ajoute le code_ieml
 		   				return "ERREUR : le code IEML *".utf8_encode($codeIeml."** n'est pas dans le dictionnaire");	   								
 					}
 	   				//recuperation des identifiants ieml_id et ieml_onto_flux
@@ -557,7 +546,7 @@ Class Sem{
 	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
                 if(!$rs){
 	                // insertion dans la table de traductions des identifiants
-	                 $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',array(array("-idflux-", $res[0]),array("-idIeml-",$res[1])));
+	                 echo $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',array(array("-idflux-", $res[0]),array("-idIeml-",$res[1])));
 
                 	//vérifie si le code ieml est déjà attribué à l'auteur
               		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifIemlUtiOnto','-IdIeml-','-IdUti-',$res[1],$iduti));
@@ -580,7 +569,7 @@ Class Sem{
                 	$Activite->AddActi("AddTrad",$iduti);
                 
                 }else{
-                	$idTrad = $rs['trad_id'];                
+                	echo $idTrad = $rs['trad_id'];                
                 	//vérifie si la traduction est déjà attribué à l'auteur
               		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifPartageTrad','-idTrad-','-idUti-',$idTrad,$_SESSION['iduti']));
                 	if($verif["nb"]==0){		                	
@@ -624,8 +613,6 @@ Class Sem{
      	$values=str_replace($VarVal[0], $VarVal[1],$values);	
    	 }
      $sql = $Q[0]->insert.$values;
-	 if($this->trace)
-     	fb($sql);
      $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	 $link=$db->connect();   
 	 $db->query($sql);
@@ -644,6 +631,7 @@ Class Sem{
                 $from=str_replace("-codeFlux-",addslashes(utf8_decode($codeflux)), $Q[0]->from);
                 $from=str_replace("-codeIeml-", $codeIeml, $from);
                 $sql = $Q[0]->select.$from.$Q[0]->where;
+                echo $sql;
                 if($this->trace)
                 	echo "Sem:Sup_Trad:sql1=".$sql."<br/>";
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
@@ -800,6 +788,62 @@ function recherche($query,$type,$IdUti){
 			$con=$oDelicious->LastError();
 			return $con;
 		
+	}
+	function GetUtiOntoFlux($idUti){
+		$objSite = $this->site;
+     	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTree']/Querys/Query[@fonction='GetUtiOntoFlux']";
+     	$Q = $objSite->XmlParam->GetElements($Xpath);
+     	$where = str_replace("-idUti-",$idUti , $Q[0]->where);               
+	    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+        $sql = $Q[0]->select.$Q[0]->from.$where;      
+        $db->connect();
+        $req = $db->query($sql);
+        return mysql_num_rows($req);
+	}
+	function LiveMetalRequest($lang,$param,$type){
+		if($type=='ieml')
+			$lien="http://evalactisem.ieml.org/entries/".$param."/".$lang;
+		else
+			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/".$lang;
+			$oCurl = curl_init($lien);
+		// set options
+	    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		
+		// request URL
+		$sResult = curl_exec($oCurl);
+		
+		// close session
+		curl_close($oCurl);
+        
+		if($this->trace)
+			echo "Sem.php:LiveMetalRequest:sResult".$sResult."<br/>";
+		$sResult = str_replace('<?xml version="1.0" encoding="utf-8"?>'," ",$sResult);
+		$sResult = str_replace('<!DOCTYPE wikimetal SYSTEM "http://evalactisem.ieml.org/livemetal.dtd">'," ",$sResult);
+		$xml = simplexml_load_string($sResult);
+		$Xpath = "//entry";
+		$entry=$xml->xpath($Xpath);
+		if($type=='ieml')
+		  return $xml;
+		else
+		  return $entry;
+		
+	}
+	function AddIemlOnto($iemlCode,$iemlLib,$iemlNiv,$iemlParent){
+		$objSite = $this->site;
+     	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='InsertIemlOnto']";
+     	$Q = $objSite->XmlParam->GetElements($Xpath);
+     	$values=str_replace('-iemlCode-',addslashes($iemlCode),$Q[0]->values);
+     	$values=str_replace('-iemlLib-',$iemlLib,$values);
+     	$values=str_replace('-iemlNiv-',$iemlNiv,$values);
+     	$values=str_replace('-iemlParent-',$iemlParent,$values);
+     	$sql = $Q[0]->insert.$values;
+     	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	 	$db->connect();   
+	 	$db->query($sql);
+	 	$id= mysql_insert_id();
+	 	$db->close();
+     		return $id;
 	}
        
 }
