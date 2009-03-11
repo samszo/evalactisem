@@ -54,31 +54,33 @@ class SauvFlux{
      function aGetAllTags($objSite,$oDelicious,$iduti){
      	set_time_limit(5000);
      	$objSem = new Sem($objSite,$objSite->infos["XML_Param"],"");
-		if ($aPosts = $oDelicious->GetAllTags()) {
-	  	  foreach ($aPosts as $aPost) { 
-	  	  	//$arrTradTag=$this->GetTradBdd($objSite,$iduti);
-	  	  	$tag.=$aPost['tag'].";";
-	  	  	
-	  	  	//vérifie que le tag du flux existe
-		    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
-			if(!$reponse){
-				//ajoute un nouveau tag de flux
-			   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
-		  	}else{
-			   	$idflux= $reponse['onto_flux_id'];					 		
-			}
-			//ajoute les traductions automatiques
-		   	$reponse = $objSem->AddTradAuto($idflux,$aPost['tag']);			   
-			
-			//enregistre le flux pour l'utilisateur
-			$this->flux_uti($objSite,$iduti,$idflux);
-						
-	  	  } 
-		   
-	     }else {
-		   echo $oDelicious->LastErrorString();
-		}	
-	   return $tag;
+     	//verfie s'il y a des nouvelles tags 
+     	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($iduti)==0){
+	     	if ($aPosts = $oDelicious->GetAllTags()) {
+		  	print_r($aPosts);  
+	     	foreach ($aPosts as $aPost) { 
+		  	  	$tag.=$aPost['tag'].";";
+		  	  	//vérifie que le tag du flux existe
+			    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
+				if(!$reponse){
+					//ajoute un nouveau tag de flux
+				   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
+			  	}else{
+				   	$idflux= $reponse['onto_flux_id'];					 		
+				}
+				//ajoute les tarductions dans la table ieml_onto
+				//ajoute les traductions automatiques
+			   	$reponse = $objSem->AddTradAuto($idflux,$aPost['tag']);			   
+				//enregistre le flux pour l'utilisateur
+				$this->flux_uti($objSite,$iduti,$idflux);
+							
+		  	  } 
+			   
+		     }else {
+			   echo $oDelicious->LastErrorString();
+			}	
+		   return $tag;
+		}
 	}
 	
     function aGetPosts($aPosts){
