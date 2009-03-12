@@ -56,8 +56,7 @@ class SauvFlux{
      	$objSem = new Sem($objSite,$objSite->infos["XML_Param"],"");
      	//verfie s'il y a des nouvelles tags 
      	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($iduti)==0){
-	     	if ($aPosts = $oDelicious->GetAllTags()) {
-		  	print_r($aPosts);  
+	     	if ($aPosts = $oDelicious->GetAllTags()) { 
 	     	foreach ($aPosts as $aPost) { 
 		  	  	$tag.=$aPost['tag'].";";
 		  	  	//vérifie que le tag du flux existe
@@ -68,7 +67,7 @@ class SauvFlux{
 			  	}else{
 				   	$idflux= $reponse['onto_flux_id'];					 		
 				}
-				//ajoute les tarductions dans la table ieml_onto
+
 				//ajoute les traductions automatiques
 			   	$reponse = $objSem->AddTradAuto($idflux,$aPost['tag']);			   
 				//enregistre le flux pour l'utilisateur
@@ -205,10 +204,11 @@ class SauvFlux{
 	    $db->close();	    
 	  	return $reponse;
 	}
+	
 	function Xpath($fonction){
 	 $Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='".$fonction."']";
 	 return $Xpath; 
-}
+	}
 	
 	
 }

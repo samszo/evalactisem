@@ -100,11 +100,16 @@ Class Sem{
 	
 	
 	 function AddTradAuto($idFlux,$tag,$lang='fr'){
-		foreach($this->LiveMetalRequest($lang,$tag,'tag') as $entry){
+		foreach($this->LiveMetalRequest($lang,$tag,'getExpression') as $entry){
 			//recuppere ieml_lib, level et perent
-			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'ieml');
-			$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'ieml');
-			$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$iemlLibEntry->entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
+			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
+			$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
+			//verfie si le mot Ieml existe dans ieml_onto
+			$rs=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $iemlEntry->entry->expression.'',"");
+			if(!$rs)
+				$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$iemlLibEntry->entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
+			else
+				$idIeml=$rs['ieml_id'];
 			$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$idIeml));
 		}
 	 }
@@ -530,8 +535,10 @@ Class Sem{
 					$req=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $codeIeml,"");
 					$rs=mysql_fetch_array($req);
 					if(!$rs){
-						//Ajoute le code_ieml
-		   				return "ERREUR : le code IEML *".utf8_encode($codeIeml."** n'est pas dans le dictionnaire");	   								
+						/*
+						$EntryExp=LiveMetalRequest('ieml',$codeIeml,'getEntry');
+		                $EntryIeml=LiveMetalRequest('ieml',$EntryExp,'getEntry');
+		   				$this->AddIemlOnto();	*/   								
 					}
 	   				//recuperation des identifiants ieml_id et ieml_onto_flux
 		        	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml) ));
@@ -746,33 +753,28 @@ function Crea_Cycle($json){
 }
 function recherche($query,$type,$IdUti){
 		$objSite = $this->site;
-     	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTree']/Querys/Query[@fonction='ExeAjax_recherche_".$type."']";
-     	$Q = $objSite->XmlParam->GetElements($Xpath);
-        if($type=='tag')
+     	if($type=='tag'){
+     		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTree']/Querys/Query[@fonction='ExeAjax_recherche_".$type."']";
+     	    $Q = $objSite->XmlParam->GetElements($Xpath);
         	$from=str_replace("-iduti-",$IdUti, $Q[0]->from);
-        else
-        	$from=$Q[0]->from;
-        $where = str_replace("-query-",$query , $Q[0]->where);               
-	    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-        $sql = $Q[0]->select.$from.$where;      
-        $db->connect();
-        $result = $db->query(utf8_decode($sql));
-        $db->close();
-	    //if(!$result) { echo 'recherche.php: erreur SQL.\n'; echo $sql; exit; }
-		$results = array();
-		while($data = mysql_fetch_array($result)) {
-			if($type=='tag'){
+        	$where = str_replace("-query-",$query , $Q[0]->where);               
+	    	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+        	$sql = $Q[0]->select.$from.$where;      
+        	$db->connect();
+        	$result = $db->query(utf8_decode($sql));
+      	    $db->close();
+			$results = array();
+			while($data = mysql_fetch_array($result)) {
 				$results['code'][]=utf8_encode($data['onto_flux_code']);
-			}else{
-				if($data['ieml_lib']!=''){
-					$results['lib'][]=utf8_encode($data['ieml_lib']);
-					$results['niv'][]=$data['ieml_parent'];
-					$results['code'][]=$data['ieml_code'];
-				}
 			}
-	    }
-		$json = json_encode($results);
-		return $json;
+     	}else
+     		if($type=='code')
+     			$results=$this->rechLiveMetal('ieml',$query);
+     		else
+     			$results=$this->rechLiveMetal('fr',$query);
+     	
+     	$json = json_encode($results);
+     	return $json;
        }
        function Evalactisem ($oDelicious,$login,$mdp){
 		// connexion a delicious
@@ -801,7 +803,7 @@ function recherche($query,$type,$IdUti){
         return mysql_num_rows($req);
 	}
 	function LiveMetalRequest($lang,$param,$type){
-		if($type=='ieml')
+		if($type=='getEntry')
 			$lien="http://evalactisem.ieml.org/entries/".$param."/".$lang;
 		else
 			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/".$lang;
@@ -823,7 +825,7 @@ function recherche($query,$type,$IdUti){
 		$xml = simplexml_load_string($sResult);
 		$Xpath = "//entry";
 		$entry=$xml->xpath($Xpath);
-		if($type=='ieml')
+		if($type=='getEntry')
 		  return $xml;
 		else
 		  return $entry;
@@ -834,7 +836,7 @@ function recherche($query,$type,$IdUti){
      	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='InsertIemlOnto']";
      	$Q = $objSite->XmlParam->GetElements($Xpath);
      	$values=str_replace('-iemlCode-',addslashes($iemlCode),$Q[0]->values);
-     	$values=str_replace('-iemlLib-',$iemlLib,$values);
+     	$values=str_replace('-iemlLib-',utf8_decode($iemlLib),$values);
      	$values=str_replace('-iemlNiv-',$iemlNiv,$values);
      	$values=str_replace('-iemlParent-',$iemlParent,$values);
      	$sql = $Q[0]->insert.$values;
@@ -845,6 +847,17 @@ function recherche($query,$type,$IdUti){
 	 	$db->close();
      		return $id;
 	}
-       
+   function rechLiveMetal($lang,$query){
+   		$Entrys=$this->LiveMetalRequest('fr',$query,'LN');
+   		$results = array();
+     	foreach($Entrys as $entry){
+     		$EntrysIeml=$this->LiveMetalRequest('ieml',$entry->id.'','getEntry');
+     		$results['lib'][]=$entry->expression.'';
+			$results['niv'][]=$EntrysIeml->entry->parent.'';
+			$results['code'][]=$EntrysIeml->entry->expression.'';
+     	}
+     	return $results;
+   }
+ 
 }
 ?>
