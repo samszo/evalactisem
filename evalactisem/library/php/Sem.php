@@ -105,11 +105,11 @@ Class Sem{
 			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
 			$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
 			//verfie si le mot Ieml existe dans ieml_onto
-			$rs=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $iemlEntry->entry->expression.'',"");
-			if(!$rs)
+			//$rs=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $iemlEntry->entry->expression.'',"");
+			//if(!$rs)
 				$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$iemlLibEntry->entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
-			else
-				$idIeml=$rs['ieml_id'];
+			//else
+				//$idIeml=$rs['ieml_id'];
 			$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$idIeml));
 		}
 	 }
