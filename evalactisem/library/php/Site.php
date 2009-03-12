@@ -18,8 +18,10 @@ class Site{
     $this->id = $id;
     $this->infos = $this->sites[$this->id];
 	$this->scope = $scope;
-	if($this->scope["FicXml"]!=-1)
+	if(isset($this->scope["FicXml"]))
 		$this->XmlParam = new XmlParam($this->scope["FicXml"]);
+	else
+		$this->XmlParam = new XmlParam($this->infos["FicXml"]);
 	
 	if($this->infos["SITE_PARENT"]!=-1){
 		$Parent = array_keys($this->infos["SITE_PARENT"]);
