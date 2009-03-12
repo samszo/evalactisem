@@ -2,7 +2,17 @@
 session_start();
 	require_once ("Constantes.php");
 	
-	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],10);
+	if(isset($_SESSION['loginSess'])){
+		$login = $_SESSION['loginSess'];
+		$mdp = $_SESSION['mdpSess'];
+	}else{
+		$login = "luckysemiosis";
+		$mdp = "Samszo0";
+		$_SESSION['loginSess']=$login;
+		$_SESSION['mdpSess']=$mdp;
+	}
+	
+	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],CACHETIME);
 	$_SESSION['Delicious']= $oDelicious;
 	
 
@@ -17,12 +27,7 @@ session_start();
 		$type = $_GET['type'];
 	else
 		$type = 'ieml';
-		
-	if(isset($_GET['FicXml']))
-		$FicXml = $_GET['FicXml'];
-	else
-		$FicXml = XML_CreaRdf;
-	
+			
 	if(isset($_GET['ParamNom']))
 		$ParamNom = $_GET['ParamNom'];
 	else
@@ -76,7 +81,6 @@ session_start();
 	$scope = array(
 			"site" => $site
 			,"type" => $type
-			,"FicXml" => $FicXml
 			,"ParamNom" => $ParamNom
 			,"box" => $box
 			,"UrlNom" => $UrlNom

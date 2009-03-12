@@ -106,6 +106,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="horizontal" flex="1" >
 							<caption label="Expression IEML"/>
 						    <label id="id-trad-ieml" hidden="true"/>
+						    
 							<stack style='height:150px;' flex='1'>
 								<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%;height:50px;border-top:0px" flex="1" onkeyup="lancer(event);" autocomplete="off"  />
 								<listbox id="calque_lib" flex='1' style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("lib-trad-ieml","code-trad-ieml");'></listbox>

@@ -751,7 +751,7 @@ function Crea_Cycle($json){
 	$html.="</table>";
 	echo $html;
 }
-function recherche($query,$type,$IdUti){
+function recherche($query,$type,$IdUti,$lang){
 		$objSite = $this->site;
      	if($type=='tag'){
      		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTree']/Querys/Query[@fonction='ExeAjax_recherche_".$type."']";
@@ -765,13 +765,10 @@ function recherche($query,$type,$IdUti){
       	    $db->close();
 			$results = array();
 			while($data = mysql_fetch_array($result)) {
-				$results['code'][]=utf8_encode($data['onto_flux_code']);
+				$results['lib'][]=utf8_encode($data['onto_flux_code']);
 			}
      	}else
-     		if($type=='code')
-     			$results=$this->rechLiveMetal('ieml',$query);
-     		else
-     			$results=$this->rechLiveMetal('fr',$query);
+   			$results=$this->rechLiveMetal($lang,$query);
      	
      	$json = json_encode($results);
      	return $json;
@@ -807,22 +804,13 @@ function recherche($query,$type,$IdUti){
 			$lien="http://evalactisem.ieml.org/entries/".$param."/".$lang;
 		else
 			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/".$lang;
-			$oCurl = curl_init($lien);
-		// set options
-	    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
 		
-		// request URL
-		$sResult = curl_exec($oCurl);
-		
-		// close session
-		curl_close($oCurl);
+		$xml = simplexml_load_file($lien);	
+			
         
 		if($this->trace)
-			echo "Sem.php:LiveMetalRequest:sResult".$sResult."<br/>";
-		$sResult = str_replace('<?xml version="1.0" encoding="utf-8"?>'," ",$sResult);
-		$sResult = str_replace('<!DOCTYPE wikimetal SYSTEM "http://evalactisem.ieml.org/livemetal.dtd">'," ",$sResult);
-		$xml = simplexml_load_string($sResult);
+			echo "Sem.php:LiveMetalRequest:sResult".$xml."<br/>";
+
 		$Xpath = "//entry";
 		$entry=$xml->xpath($Xpath);
 		if($type=='getEntry')
@@ -848,13 +836,13 @@ function recherche($query,$type,$IdUti){
      		return $id;
 	}
    function rechLiveMetal($lang,$query){
-   		$Entrys=$this->LiveMetalRequest('fr',$query,'LN');
+   		$Entrys=$this->LiveMetalRequest($lang,$query,'LN');
    		$results = array();
      	foreach($Entrys as $entry){
-     		$EntrysIeml=$this->LiveMetalRequest('ieml',$entry->id.'','getEntry');
+     		//$EntrysIeml=$this->LiveMetalRequest('ieml',$entry->id.'','getEntry');
      		$results['lib'][]=$entry->expression.'';
-			$results['niv'][]=$EntrysIeml->entry->parent.'';
-			$results['code'][]=$EntrysIeml->entry->expression.'';
+			//$results['niv'][]=$EntrysIeml->entry->parent.'';
+			//$results['code'][]=$EntrysIeml->entry->expression.'';
      	}
      	return $results;
    }

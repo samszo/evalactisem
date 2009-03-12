@@ -477,10 +477,12 @@ function Load(key){
 	    tgt = e.target;
 	    if(tgt.getAttribute("id")=='lib-trad-ieml'){
 	    	var _query = document.getElementById("lib-trad-ieml").value;
+	    	lang="fr";
 	    	type="lib";
 	    }else
 	     if(tgt.getAttribute("id")=='code-trad-ieml'){
 	    	var _query = document.getElementById("code-trad-ieml").value;
+	    	lang="ieml";
 	    	type="code";
 	    } else
 	     if(tgt.getAttribute("id")=='code-trad-flux'){
@@ -509,7 +511,7 @@ function Load(key){
 			marquer('afficher');
 			
 		} else if(_query != "") {							// ou _query.length > 2 ?
-			AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=recherche&query="+_query+"&type="+type,'afficher','');
+			AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=recherche&query="+_query+"&type="+type+"&lang="+lang,'afficher','');
 		
 		} else {
 			
@@ -530,19 +532,11 @@ function Load(key){
 		}
 		//alert(json);
 		Items=eval("("+json+")");
-		for(i=0;i<Items.code.length;i++){
+		for(i=0;i<Items.lib.length;i++){
 			 item=document.createElement('listitem');
 			 item.setAttribute('id','Item_'+[i]);
-			 if(type=='tag')
-			 	addListcell(item,Items.code[i]);
-			 else{
-				 if(type=='lib')
-				 	addListcell(item,Items.lib[i]);
-				 else
-				  if(type=='code')
-				 	addListcell(item,Items.code[i]);
-				  addListcell(item,Items.niv[i]);
-				 }
+		 	 addListcell(item,Items.lib[i]);
+
 			 box.appendChild(item);
 		}
 	}	

@@ -77,7 +77,7 @@
                 	    $resultat= GetTreeIemlOnto();
                 	    break;
                 case 'recherche':
-                	    $resultat= recherche($_GET['query'],$_GET['type']);
+                	    $resultat= recherche($_GET['query'],$_GET['type'],$_GET['lang']);
                 	    break;
                 case 'Evalactisem':
                 	    $resultat= Evalactisem($_GET['login'],$_GET['mdp']);
@@ -197,10 +197,10 @@
           $tree=$objXul->GetTreeIemlOnto("ieml");
           return $tree;
        }
-       function recherche($query,$type){
+       function recherche($query,$type,$lang){
        		global $objSite;
  			$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
- 			return $sem->recherche($query,$type,$_SESSION['iduti']); 	       	
+ 			return $sem->recherche($query,$type,$_SESSION['iduti'],$lang); 	       	
        }
         function Evalactisem($login,$mdp){
        		global $objSite;

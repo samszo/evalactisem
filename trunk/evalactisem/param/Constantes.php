@@ -11,13 +11,12 @@
 	define("SVG_CLASS_BASE", PathRoot."/library/svg/");
   // Include the class files.
   require_once(TT_CLASS_BASE."AllClass.php");
-  define ("PointV", ';');
-  define ("Diaz", '#');
-  define ("Virgule", ',');
-  define ("Etoil", '*');
-  define ("TRACE", false);
-  define ("DEFSITE", "local");
+
+	define ("TRACE", false);
+	define ("DEFSITE", "local");
   //define ("DEFSITE", "mundi");
+
+  define ("CACHETIME", 1);
   
   $dbOptions = array (
 		'ERROR_DISPLAY' => true
@@ -31,7 +30,6 @@
   
   define ("gmKey", "ABQIAAAATs5RWdW8iTPuaiLrkvnqjRTRqFFvaBKBgdVodt96I8idUV-28RTOELCsfx_7hD62HnKwk7Lm8Cg_lQ");
 
-  define ("XML_CreaRdf",PathRoot."/param/ParamXul.xml");
   define('EOL', "\r\n");
   define("XmlFlux",$_SESSION['loginSess']."_Flux");
   define('XmlGraphIeml' ,$_SESSION['loginSess']."_GraphIeml");
@@ -53,7 +51,8 @@
 	"DEF_ZOOM" => 4,
   	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"UTI_TRAD_AUTO" => 1,
-  	"gmKey" => gmKey
+  	"gmKey" => gmKey,
+  	"FicXml"=>PathRoot."/param/ParamXul.xml" 
 	); 
 $SiteThyp = array(
 	"PATH_WEB" => "http://localhost/evalactisem/", 
@@ -69,8 +68,9 @@ $SiteThyp = array(
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"UTI_TRAD_AUTO" => 4,
-	"gmKey" => gmKey
-	); 
+	"gmKey" => gmKey,
+  	"FicXml"=>PathRoot."/param/ParamXul.xml" 
+); 
 $SiteMundi = array(
 	"PATH_WEB" => "http://www.mundilogiweb.com/evalactisem/", 
 	"SQL_LOGIN" => "mundilogieml", 
@@ -85,8 +85,9 @@ $SiteMundi = array(
 	"DEF_ZOOM" => 4,
 	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"UTI_TRAD_AUTO" => 1,
-	"gmKey" => gmKey
-	); 
+	"gmKey" => gmKey,
+  	"FicXml"=>PathRoot."/param/ParamXul.xml" 
+); 
 	
 	
   $SITES = array(
