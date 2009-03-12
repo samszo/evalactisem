@@ -45,29 +45,30 @@
 , iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  
 				</select>
 				<from> FROM ieml_trad it
-					INNER JOIN ieml_uti_onto uo ON uo.ieml_id = it.ieml_id
-						AND uo.uti_id =-idUti-
+					INNER JOIN ieml_uti_onto uo ON uo.ieml_id = it.ieml_id AND uo.uti_id =-idUti-
 					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id
 					INNER JOIN ieml_onto io ON it.ieml_id = io.ieml_id
 					INNER JOIN ieml_uti iu ON iu.uti_id = uo.uti_id
-					INNER JOIN ieml_trad_partage itp ON itp.uti_id = iu.uti_id
-						AND itp.trad_id = it.trad_id
+					INNER JOIN ieml_trad_partage itp ON itp.uti_id = iu.uti_id AND itp.trad_id = it.trad_id
 					ORDER BY iu.uti_id, iof.onto_flux_code, io.ieml_niveau
 				</from>
 				<where> </where>
 			</Query>
-			<Query fonction="GetTreeTradUtiAuto">
-				<select> SELECT DISTINCT it.ieml_id, iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  
-				</select>
-				<from> FROM ieml_trad it
-					INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
-					INNER JOIN ieml_uti_onto uo ON uo.ieml_id=it.ieml_id 
-					INNER JOIN ieml_uti iu ON iu.uti_id = uo.uti_id AND iu.uti_id = -idUtiAuto-
-					INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id AND itp.uti_id = -idUti-
-					ORDER BY iu.uti_id, iof.onto_flux_code
-				</from>
-				<where> </where>
-			</Query>
+			 <Query fonction="GetTreeTradUtiAuto">
+                  <select> SELECT DISTINCT io.ieml_id, io.ieml_code, io.ieml_lib, io.ieml_niveau, io.ieml_parent
+, iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  
+                   </select>
+                   <from> FROM ieml_trad it
+                       INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id  
+                       INNER JOIN ieml_onto io ON it.ieml_id=io.ieml_id
+                       INNER JOIN ieml_uti_onto uo ON uo.ieml_id=io.ieml_id 
+                       INNER JOIN ieml_uti iu ON iu.uti_id = uo.uti_id AND iu.uti_id = -idUtiAuto-
+                       INNER JOIN ieml_trad_partage itp ON itp.trad_id = it.trad_id AND itp.uti_id = -idUti-
+                       ORDER BY  iu.uti_id, iof.onto_flux_code, io.ieml_niveau
+                   </from>
+                   <where> </where>
+           </Query>
+
 			<Query fonction="GetTreeTradUtis">
 				<select> SELECT iu.uti_login, iu.uti_id  
 				</select>
