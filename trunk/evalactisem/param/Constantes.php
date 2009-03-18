@@ -16,7 +16,9 @@
 	define ("DEFSITE", "local");
   //define ("DEFSITE", "mundi");
 
-  define ("CACHETIME", 1);
+  define ("CACHETIME", 100000000);
+  define("LIFETIME",10000);
+  define("CACHEPATH",PathRoot."/tmp/parser/");
   
   $dbOptions = array (
 		'ERROR_DISPLAY' => true

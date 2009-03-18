@@ -12,23 +12,36 @@
 	var urlTagCloud = "tagcloud.php";
 	</script>
 
-<hbox id="main" flex="1" >
+<hbox id="main" flex="1" style="overflow:auto" >
 	<vbox id="outils" flex="1" >
-		<groupbox orient="horizontal" >
-			<caption label='Représentation' />
-			 <menulist id="choixTC" >
-			    <menupopup>
-			      <menuitem label="Posts" value="posts"/>
-			      <menuitem label="Tags" value="tags"/>
-			    </menupopup>
-			  </menulist>
-			 <menulist id="choixAjout" >
-			    <menupopup>
-			      <menuitem label="Remplace" value="-1"/>
-			      <menuitem label="Ajoute" value="0"/>
-			    </menupopup>
-			  </menulist>
-		</groupbox>
+		<hbox >
+			<groupbox orient="horizontal" >
+				<caption label='Choix du type représentation' />
+				 <menulist id="choixTC" >
+				    <menupopup>
+				      <menuitem label="Posts" value="posts"/>
+				      <menuitem label="Tags" value="tags"/>
+				    </menupopup>
+				  </menulist>
+				 <menulist id="choixAjout" >
+				    <menupopup>
+				      <menuitem label="Remplace" value="-1"/>
+				      <menuitem label="Ajoute" value="0"/>
+				    </menupopup>
+				  </menulist>
+			</groupbox>
+			<groupbox orient="horizontal" >
+				<caption label='Choix de la langue' />
+				 <menulist id="choixLangue" >
+				    <menupopup>
+				      <menuitem label="tag" value="tag"/>
+				      <menuitem label="ieml" value="ieml"/>
+				      <menuitem label="fr" value="français"/>
+				      <menuitem label="ar" value="arabe"/>
+				    </menupopup>
+				  </menulist>
+			</groupbox>
+		</hbox>	
 		<groupbox orient="vertical" >
 			<caption label='Occurence des Tags' />
 			<hbox>

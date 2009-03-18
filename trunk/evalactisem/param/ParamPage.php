@@ -14,8 +14,7 @@ session_start();
 	
 	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],CACHETIME);
 	$_SESSION['Delicious']= $oDelicious;
-	
-
+		
 	// vérification du site en cours
 	if(isset($_GET['site'])){
 		$site = $_GET['site'];
@@ -92,4 +91,13 @@ session_start();
 	$_SESSION['iduti']=$objSite->utilisateur($_SESSION['loginSess']);
 
 
+//function pour le cache
+	function cParse($code){
+		global $objSite;
+		$s = new Sem($objSite,$objSite->XmlParam,"");
+		return $s->parse($code);
+	}
+	
+	
+	
 ?>
