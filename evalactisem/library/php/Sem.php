@@ -72,6 +72,12 @@ Class Sem{
 				,"relation"=>"-"
 				,"event"=>"."
 				,"primitive"=>":"
+				,"L5"=>"_"
+				,"L4"=>","
+				,"L3"=>"'"
+				,"L2"=>"-"
+				,"L1"=>"."
+				,"L0"=>":"
 				)
 			, "niveau"=> array(
 				"seme"=>6
@@ -122,22 +128,29 @@ Class Sem{
 		}
 		
 		$this->Sequences =array();
-		//récupère le premier role
-		$Xpath = "//genOp[@layer='L2' and @role='role1']/genOp";
-		$this->GetSequence($xml,$Xpath);		
-		//récupère le deuxième role
-		$Xpath = "//genOp[@layer='L2' and @role='role2']/genOp";
-		$this->GetSequence($xml,$Xpath);		
-		//récupère le troisième role
-		$Xpath = "//genOp[@layer='L2' and @role='role3']/genOp";
-		$this->GetSequence($xml,$Xpath);		
+
+		//récupère les couches
+		$this->GetCouches($xml,$xml->xpath("//category/genOp"));
 		
 		//initialisation du svg
 		$js = "";
-		$exa = new Exagramme(); 	
-		//$exa->GetExa(array(true,false,true,false,true,false));
-		$exa->GetSequence($this->Sequences);
+		$exa = new Exagramme($this->StarParam); 	
+		$exa->ShowSequence($this->Sequences);
 
+	}
+
+	function GetCouches($xml,$couches){
+		
+		foreach($couches as $c){
+			if($c["role"]){
+				//récupère le role
+				$this->GetSequence($c,$c["layer"],$c["role"]);		
+			}
+			if($c->children()){
+				$this->GetCouches($xml,$c->children());
+			}
+		}
+		
 	}
 	
 	
@@ -361,15 +374,31 @@ Class Sem{
 	}
 	
 	
-	function GetSequence($xml, $Xpath){
+	function GetSequence($roles, $layer, $role){
+
+		if(!$roles)
+			return;
 		
-		foreach($xml->xpath($Xpath) as $genOp){
-			$tag = $genOp->children()->getName();
-			//décompose l'événement
-			$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-			//traduit l'événement en exa
-			$this->Sequences[]=	$this->GetExaEvent($event);	
+		if($layer="L1"){
+			$tag = $roles->children()->getName();
+			if($tag && $tag!="genOp"){
+				//décompose l'événement
+				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+				//traduit l'événement en exa
+				$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$tag.$this->StarParam["closing"]["event"],"exa"=>$this->GetExaEvent($event));	
+			}
+		}else{
+			foreach($roles as $genOp){
+				$tag = $genOp->children()->getName();
+				if($tag){
+					//décompose l'événement
+					$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+					//traduit l'événement en exa
+					$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$tag.$this->StarParam["closing"]["event"],"exa"=>$this->GetExaEvent($event));	
+				}
+			}
 		}
+
 	}
 	
 	function GetExaEvent($event){
@@ -379,7 +408,7 @@ Class Sem{
 			$arrPrimis = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
 			//récupère la position des primitives
 			foreach($arrPrimis as $primi){
-				if($primi!=".")
+				if($primi!=$this->StarParam["closing"]["event"])
 					$posis[] = $this->ExaParam[$primi];			
 			}
 			//tri les positions
