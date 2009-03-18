@@ -50,6 +50,10 @@
 		url += "&TC="+TC;
 		var ajout = document.getElementById("choixAjout").value;
 		if(ajout==-1)ajout=false;
+		//récupère la langue
+		var langue = document.getElementById("choixLangue").value;
+		url += "&langue="+langue;
+
 		if(GetParam!=-1){
 			  //calcul les arguments
 			  var NbDeb = document.getElementById("scrollTagIntMin").getAttribute("curpos");

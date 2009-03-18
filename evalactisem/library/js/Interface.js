@@ -1,7 +1,3 @@
-   
-var E="*";
-var P=";";
-var S=":";
 
 function ShowTooltip(evt)
 {
