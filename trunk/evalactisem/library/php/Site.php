@@ -7,7 +7,8 @@ class Site{
   public $XmlParam;
   public $trace;
   private $sites;
-
+  public $cache;
+  
   function __tostring() {
     return "Cette classe permet de définir et manipuler un site.<br/>";
     }
@@ -43,6 +44,9 @@ class Site{
 		$this->menu = $this->MenuSite($this->id,0,$Liens);
 	}
 
+	// création de l'objet de cache
+	$this->cache = new Cache_Lite_Function(array('cacheDir' => CACHEPATH,'lifeTime' => LIFETIME));
+	
 	//echo "FIN new Site <br/>";
 		
     }

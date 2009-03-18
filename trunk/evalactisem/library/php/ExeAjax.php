@@ -32,9 +32,12 @@
          		$mbook="toto";
        
 		switch ($fonction) {
-			case 'VerifExpIEML':
-				$resultat = VerifExpIEML(stripslashes($_GET['codeIeml']),stripslashes ($_GET['libIeml']));
-				break;
+				case 'GetExaIEML':
+					$resultat = GetExaIEML($_GET['codeIeml']);
+					break;
+				case 'VerifExpIEML':
+					$resultat = VerifExpIEML(stripslashes($_GET['codeIeml']),stripslashes ($_GET['libIeml']));
+					break;
                 case 'AddTrad':
                         $resultat = AddTrad(stripslashes($_GET['codeFlux']),stripslashes ($_GET['codeIeml']));
                         break;
@@ -89,6 +92,14 @@
         
         echo $resultat;  
 
+	function GetExaIEML($code){
+        global $objSite;
+		$cache = new Cache_Lite_Function(array('cacheDir' => CACHEPATH,'lifeTime' => LIFETIME));
+        $sem = new Sem($objSite,$objSite->XmlParam,"","","",$cache);
+        $sem->GetExagramme($code);
+		
+	}
+        
 	function VerifExpIEML($code,$lib){
         global $objSite;
         $sem = new Sem($objSite,$objSite->XmlParam,"");

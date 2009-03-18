@@ -15,5 +15,9 @@ require_once (TT_CLASS_BASE."BookMark.php");
 require_once (TT_CLASS_BASE."Acti.php");
 require_once (TT_CLASS_BASE."SaveFlux.php");
 require_once (TT_CLASS_BASE."TagCloud.php");
+require_once (TT_CLASS_BASE."Exagramme.php");
 require_once (SVG_CLASS_BASE."Svg.php");
+require_once(TT_CLASS_BASE.'CacheLite/Lite.php');
+require_once(TT_CLASS_BASE.'CacheLite/Lite/Function.php');
+
 ?>

@@ -291,7 +291,7 @@ function GetTreeItemTradUti($idUti,$type){
 
 //Construction de l'arbre du réseau d'utilisateur delicious     
 function GetTreeDeliciousNetwork($oDlcs,$login='',$type='TreeDeliciousNetwork'){
-	//$oDlcs = new PhpDelicious($login,$pwd);
+
 	if($login=='')
 		$login=$oDlcs->sUsername;
 	$network = simplexml_load_string($oDlcs->GetNetworkMembers($login));
