@@ -27,9 +27,11 @@ Class Sem{
     public $xmlPrimis;
     public  $Events;
     public $xmlEvent;
+    public $Sequences;
+    public $cache;
     
     
-	function __construct($Site, $FicXml, $So, $De="", $Tr="") {
+	function __construct($Site, $FicXml, $So, $De="", $Tr="", $cache="") {
 		
 		$this->trace = TRACE;
         /*
@@ -44,6 +46,12 @@ Class Sem{
 		$this->site = $Site;	
 		$this->Src = $So;
 
+		if($cache!="")
+			$this->cache = $cache;
+		else
+			$this->cache = false;
+		
+		
 		$StarParam = $this->site->XmlParam->GetElements("/XmlParams/StarIEML");
 
 		$this->StarParam = array(
@@ -65,9 +73,25 @@ Class Sem{
 				,"event"=>"."
 				,"primitive"=>":"
 				)
+			, "niveau"=> array(
+				"seme"=>6
+				,"phrase"=>5
+				,"idea"=>4
+				,"relation"=>3
+				,"event"=>2
+				,"primitive"=>1
+				)
 			);
 		//print_r($this->StarParam);
-		
+		$this->ExaParam = array(
+			"U"=>1
+			, "A"=>2
+			, "S"=>3
+			, "B"=>4
+			, "T"=>5
+			, "E"=>6
+			);
+			
 		//charge les paramètres des layers
 		if (file_exists("../../param/events.xml")) {
 		    $this->xmlEvent = simplexml_load_file("../../param/events.xml");
@@ -83,6 +107,40 @@ Class Sem{
 				
 	}
 
+	public function GetExagramme($code){
+		
+		//parse le code
+		/*
+		if($this->cache)
+			$xml = $this->cache->call('cParse',$code);
+		else
+*/
+			$xml = $this->parse($code);
+		
+		if(strstr($xml,"ERROR:")){
+			return $xml;
+		}
+		
+		$this->Sequences =array();
+		//récupère le premier role
+		$Xpath = "//genOp[@layer='L2' and @role='role1']/genOp";
+		$this->GetSequence($xml,$Xpath);		
+		//récupère le deuxième role
+		$Xpath = "//genOp[@layer='L2' and @role='role2']/genOp";
+		$this->GetSequence($xml,$Xpath);		
+		//récupère le troisième role
+		$Xpath = "//genOp[@layer='L2' and @role='role3']/genOp";
+		$this->GetSequence($xml,$Xpath);		
+		
+		//initialisation du svg
+		$js = "";
+		$exa = new Exagramme(); 	
+		//$exa->GetExa(array(true,false,true,false,true,false));
+		$exa->GetSequence($this->Sequences);
+
+	}
+	
+	
 	function VerifExpIEML($code,$lib){
 		
 		//vérifie le parse du code ERROR:
@@ -302,6 +360,54 @@ Class Sem{
 		
 	}
 	
+	
+	function GetSequence($xml, $Xpath){
+		
+		foreach($xml->xpath($Xpath) as $genOp){
+			$tag = $genOp->children()->getName();
+			//décompose l'événement
+			$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+			//traduit l'événement en exa
+			$this->Sequences[]=	$this->GetExaEvent($event);	
+		}
+	}
+	
+	function GetExaEvent($event){
+		$i=1;
+		if(count($event)>0){
+			//récupère le tableau des primitives
+			$arrPrimis = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
+			//récupère la position des primitives
+			foreach($arrPrimis as $primi){
+				if($primi!=".")
+					$posis[] = $this->ExaParam[$primi];			
+			}
+			//tri les positions
+			sort($posis);
+			//construit les données de l'exagramme
+			$arrExa = array();
+			foreach($posis as $posi){
+				if($posi==$i){
+					$arrExa[]=true;		
+					$i++;
+				}else{
+					for($j=$i; $j<$posi; $j++) {
+						$arrExa[]=false;						
+					}
+					$arrExa[]=true;						
+					$i=$j+1;
+				}
+			}
+			for($j=$i; $j<=6; $j++) {
+				$arrExa[]=false;						
+			}
+		}else{
+			//cas empty
+			$arrExa = array(false,false,false,false,false,true);
+		}
+		
+		return $arrExa;
+	}
 	
 	function GetOccurrence($xml){
 		
@@ -683,25 +789,14 @@ Class Sem{
    
 function GetIemlLevel($IemlExp,$getlevel){
 	$l=substr($IemlExp,strlen($IemlExp)-1);
-	switch ($l){
-		case '.' :  
-			$level="event";break;
-			$niv=2;
-		case '-' :  
-			$level="relations";
-			$niv=3;
-			break;
-		case '\'': 
-			$level="ideas";
-			$niv=4;
-			break;
-		case '[a-z]':
-			$level="elements";
-			$niv=3;
-			break;
+	foreach($this->StarParam["closing"] as $level=>$close){
+		if($l==$close){
+			$niv = $this->StarParam["closing"][$level];
+			$lvl = $level;
+		}
 	}
 	if($getlevel)
-		return $level;
+		return $lvl;
 	else
 		return $niv;
 }  
@@ -773,7 +868,8 @@ function recherche($query,$type,$IdUti,$lang){
      	$json = json_encode($results);
      	return $json;
        }
-       function Evalactisem ($oDelicious,$login,$mdp){
+	
+	function Evalactisem ($oDelicious,$login,$mdp){
 		// connexion a delicious
 		global $con;
 		if(TRACE)

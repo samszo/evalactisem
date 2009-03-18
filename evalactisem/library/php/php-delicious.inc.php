@@ -62,8 +62,8 @@
    define('PHP_DELICIOUS_ERR_UNKNOWN', 5);
    
    // folder to store cache files
-   define('PHP_DELICIOUS_CACHE_PATH', '../tmp/');
-   define('CACHE_PATH', '../tmp/');
+   define('PHP_DELICIOUS_CACHE_PATH', PathRoot.'/tmp/');
+   define('CACHE_PATH', PathRoot.'/tmp/');
    
    
    class PhpDelicious {
