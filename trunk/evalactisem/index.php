@@ -46,9 +46,9 @@ if($con==1){
 	$lbl = "label='Traduction del.icio.us -> IEML ' style='color:blue;font-size:150%'"; 
 }
 
-header ("Content-type: application/vnd.mozilla.xul+xml; charset=iso-8859-15");
+header ("Content-type: application/vnd.mozilla.xul+xml; charset=utf-8");
 header ("title: Saisi des diagnosics d'accessibilité");
-echo '<' . '?xml version="1.0" encoding="ISO-8859-1" ?' . '>';
+echo '<' . '?xml version="1.0" encoding="utf-8" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="CSS/tree.css" type="text/css"?' . '>' . "\n");
 echo ('<' . '?xml-stylesheet href="CSS/iemlCycle.css" type="text/css"?' . '>' . "\n");
@@ -68,6 +68,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var urlSpreadsheet="http://spreadsheets.google.com/pub?key=" ;
 		var Items;
 		var type;
+		var lang='fr';
 	</script>
 
 	<popupset id="popupset">

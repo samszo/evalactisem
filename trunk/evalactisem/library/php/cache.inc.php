@@ -42,6 +42,7 @@
       protected static $aCache = array();
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
+      	echo 'cache='.$sCachePath;
       	if(ereg("bookmarks/",$sKey)){
          	$sCachePath="library/tmp/";
          } 

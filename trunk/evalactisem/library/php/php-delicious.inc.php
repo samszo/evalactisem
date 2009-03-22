@@ -63,7 +63,7 @@
    
    // folder to store cache files
    define('PHP_DELICIOUS_CACHE_PATH', PathRoot.'/tmp/');
-   define('CACHE_PATH', PathRoot.'/tmp/');
+   define('CACHE_PATH', PathRoot.'/library/tmp/');
    
    
    class PhpDelicious {
@@ -330,7 +330,7 @@
          return $oCache->Get();
       }
     public function isUpdatePost() {
-           $oCache = new Cache($this->sUsername.'posts/update', $this->iCacheTime);
+           $oCache = new Cache($this->sUsername.'update', $this->iCacheTime);
          if (!$oCache->Check()) {
          	if ($aResult = $this->DeliciousRequest('posts/update')) {
          	   $TimeCache=$this->GetFormatDate($oCache->Get());
