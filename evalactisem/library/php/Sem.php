@@ -877,19 +877,19 @@ function Crea_Cycle($json){
 }
 function recherche($query,$type,$IdUti,$lang){
 		$objSite = $this->site;
-     	if($type=='tag'){
+		if($type=='tag'){
      		$Xpath = "/XmlParams/XmlParam[@nom='GetOntoTree']/Querys/Query[@fonction='ExeAjax_recherche_".$type."']";
      	    $Q = $objSite->XmlParam->GetElements($Xpath);
         	$from=str_replace("-iduti-",$IdUti, $Q[0]->from);
         	$where = str_replace("-query-",$query , $Q[0]->where);               
 	    	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-        	$sql = $Q[0]->select.$from.$where;      
+        	$sql = $Q[0]->select.$from.$where; 
         	$db->connect();
-        	$result = $db->query(utf8_decode($sql));
+        	$result = $db->query($sql);
       	    $db->close();
 			$results = array();
 			while($data = mysql_fetch_array($result)) {
-				$results['lib'][]=utf8_encode($data['onto_flux_code']);
+				$results['lib'][]=$data['onto_flux_code'];
 			}
      	}else
    			$results=$this->rechLiveMetal($lang,$query);
@@ -928,15 +928,15 @@ function recherche($query,$type,$IdUti,$lang){
 		if($type=='getEntry')
 			$lien="http://evalactisem.ieml.org/entries/".$param."/".$lang;
 		else
-			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/".$lang;
-		
+		 if($type=='LikeRech')
+		 	$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all/start";
+		 else
+			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all";
 		$xml = simplexml_load_file($lien);	
-			
-        
 		if($this->trace)
 			echo "Sem.php:LiveMetalRequest:sResult".$xml."<br/>";
 
-		$Xpath = "//entry";
+		$Xpath = "//entry[@lang='".$lang."']";
 		$entry=$xml->xpath($Xpath);
 		if($type=='getEntry')
 		  return $xml;
@@ -961,14 +961,11 @@ function recherche($query,$type,$IdUti,$lang){
      		return $id;
 	}
    function rechLiveMetal($lang,$query){
-   		$Entrys=$this->LiveMetalRequest($lang,$query,'LN');
+   		$Entrys=$this->LiveMetalRequest($lang,$query,'LikeRech');
    		$results = array();
      	foreach($Entrys as $entry){
-     		//$EntrysIeml=$this->LiveMetalRequest('ieml',$entry->id.'','getEntry');
      		$results['lib'][]=$entry->expression.'';
-			//$results['niv'][]=$EntrysIeml->entry->parent.'';
-			//$results['code'][]=$EntrysIeml->entry->expression.'';
-     	}
+		}
      	return $results;
    }
  

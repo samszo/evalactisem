@@ -526,7 +526,7 @@ function Load(key){
 		while(box.hasChildNodes()){
 				box.removeChild(box.lastChild);
 		}
-		//alert(json);
+		alert(json);
 		Items=eval("("+json+")");
 		for(i=0;i<Items.lib.length;i++){
 			 item=document.createElement('listitem');

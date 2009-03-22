@@ -161,9 +161,10 @@ class SauvFlux{
 	function InsertFlux($objSite,$codeFlux){
 		$Xpath=$this->Xpath('Ieml_Onto_Flux');
 		$Q=$objSite->XmlParam->GetElements($Xpath);
-		$value = str_replace("-codeFlux-",utf8_decode(addslashes($codeFlux)),$Q[0]->values);
+		$value = str_replace("-codeFlux-",addslashes($codeFlux),$Q[0]->values);
 			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-        $db->connect();
+        $link=$db->connect();
+        $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
 		$sql = $Q[0]->insert.$value;
 	    $req = $db->query($sql);
 	    $idflux= mysql_insert_id();
@@ -177,7 +178,7 @@ class SauvFlux{
 	function VerifFluxExiste($objSite,$tag){
 	   $Xpath=$this->Xpath('Ieml_Onto_existe');
        $Q=$objSite->XmlParam->GetElements($Xpath);        
-       $where=str_replace("-tag-",addslashes(utf8_decode($tag)),$Q[0]->where);
+       $where=str_replace("-tag-",addslashes($tag),$Q[0]->where);
 	   $sql=$Q[0]->select.$Q[0]->from." ".$where;
 	   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	   $db->connect();
