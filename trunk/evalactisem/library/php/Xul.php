@@ -86,7 +86,7 @@ class Xul{
 	$ihmSup .= '</treerow>'.EOL;
 	$ihmSup .= '<treechildren>'.EOL;
 	while($r = mysql_fetch_assoc($rs)){
-        $ihmSup .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_code"],"",array("",utf8_encode($r["onto_flux_code"]),$r["ieml_parent"],utf8_encode($r["ieml_lib"]),$r["ieml_code"]));
+        $ihmSup .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_code"],"",array("",$r["onto_flux_code"],$r["ieml_parent"],$r["ieml_lib"],$r["ieml_code"]));
 	}
 	//termine le treedes non trouv�
 	$ihmSup .= '</treechildren>'.EOL;
@@ -208,7 +208,7 @@ function GetTreeItemTradUti($idUti,$type){
        		$ihmTag = '<treeitem id="onto_flux_id_'.$r["onto_flux_id"].'" container="true" open="true">'.EOL;
 			$ihmTag .= '<treerow>'.EOL;
 			$ihmTag .= '<treecell label=" "/>'.EOL ;
-			$ihmTag .= '<treecell label="'.utf8_encode($r["onto_flux_code"]).'"/>'.EOL ;
+			$ihmTag .= '<treecell label="'.$r["onto_flux_code"].'"/>'.EOL ;
 	        $ihmTag .= '<treecell label=""/>'.EOL ;
 	        $oFluxCode=$r["onto_flux_code"];       
        	}
@@ -234,7 +234,7 @@ function GetTreeItemTradUti($idUti,$type){
        	}
         
        	//on cr�e les traductions
-        $ihmIeml .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_id"],"",array("","",utf8_encode($r["ieml_lib"]),$r["ieml_code"]));
+        $ihmIeml .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_id"],"",array("","",$r["ieml_lib"],$r["ieml_code"]));
 		//on cr�e l'usl
 		$uslT .= $r["ieml_code"].$sem->StarParam["union"];
        	
