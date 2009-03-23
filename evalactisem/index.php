@@ -47,7 +47,7 @@ if($con==1){
 }
 
 header ("Content-type: application/vnd.mozilla.xul+xml; charset=utf-8");
-header ("title: Saisi des diagnosics d'accessibilité");
+header ("title: Saisi des diagnosics d'accessibilitï¿½");
 echo '<' . '?xml version="1.0" encoding="utf-8" ?' . '>';
 echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "\n";
 echo ('<' . '?xml-stylesheet href="CSS/tree.css" type="text/css"?' . '>' . "\n");
@@ -74,7 +74,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	<popupset id="popupset">
 		<popup id="clipmenu" onpopupshowing="javascript:;">
 			<menuitem label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive');"/>
-			<menuitem label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+			<menuitem label="Voir les ï¿½vï¿½nements" oncommand="ParserIemlExp('|','Event');"/>
 		</popup>
 	</popupset>
 
@@ -82,7 +82,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		<label id='uti_login' value="Utilisateur connecter : <?php echo $_SESSION['loginSess']; ?>"/>
 		<label value="logout" onclick="window.location.replace('exit.php') ; " />
 	</hbox>
-
 	<vbox id='Maj' hidden='true' >
 	   <label id='label_Maj' value='Patienter' style='font-style:normal;color: green'/>
 	   <progressmeter id="progmeter" mode="undetermined"  />
@@ -92,6 +91,10 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		 <groupbox orient="horizontal" flex="1" >
 			<caption <?php echo $lbl;?> />
 			<vbox id="infosTrad" flex="1" >
+			    <hbox style='margin-left:800px;margin-top:0px;'>
+				<button label="Explorer le Nuage de Tag" tooltiptext="Explorer les tags" onclick="window.open('http://localhost/evalactisem/tagcloud.xul','Tag Cloud',1500,1500);"/>
+				<button label="Mettre Ã  jour le bookmark IEML" tooltiptext="Met Ã  jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
+			</hbox>
 				<label id="trad-message" hidden="false" style="color:blue;" />
 				<hbox flex="1" >
 					<groupbox orient="horizontal" >
@@ -122,9 +125,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				</hbox>
 				<hbox>
 						<button hidden="false" label="Ajouter" tooltiptext="Ajouter une Traduction" oncommand="Sem_AddTrad();"/>	
-						<button hidden="false" label="Supprimer" tooltiptext="Supprimer une Traduction" oncommand="Sem_SupTrad();"/>
-						<button label="Explorer le Nuage de Tag" tooltiptext="Explorer les tags" onclick="window.open('http://localhost/evalactisem/tagcloud.xul','Tag Cloud',1500,1500);"/>
-						<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>		
+						<button hidden="false" label="Supprimer" tooltiptext="Supprimer une Traduction" oncommand="Sem_SupTrad();"/>		
 						<label id="trad-message" hidden="false" style="color:blue;font-size:150%" />
 
 				</hbox>
@@ -137,7 +138,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<tabbox flex="1" >
 					    <tabs >
 					        <tab label="Tags traduits" />
-					        <tab label="Tags à traduire" />
+					        <tab label="Tags Ã  traduire" />
 					    </tabs>
 					    <tabpanels flex="1"  >
 					        <tabpanel >
@@ -146,7 +147,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 									<hbox hidden="true">												    
 										<button label="Supprimer la traduction" oncommand="Sem_SupTrad();"/>
 										<button label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive')"/>	
-										<button label="Voir les événements" oncommand="ParserIemlExp('|','Event');"/>
+										<button label="Voir les Ã©vÃ©nements" oncommand="ParserIemlExp('|','Event');"/>
 									</hbox>
 									<box id="tpSingleTrad" flex="1" />
 								</vbox >
@@ -198,7 +199,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					         </tabpanel>
 					        <tabpanel>
 								<vbox flex="1" >
-					    			<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
+					    			<button label="Mettre ï¿½ jour le bookmark IEML" tooltiptext="Met ï¿½ jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
 									<iframe flex="1" src="http://del.icio.us/ieml"  />
 								</vbox >
 					         </tabpanel>
@@ -219,7 +220,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		</vbox>
  </vbox>
  <script type="text/javascript">
- 	//récupération des flux
+ 	//rï¿½cupï¿½ration des flux
   GetFlux();
 
  </script>
