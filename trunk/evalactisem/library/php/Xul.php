@@ -6,7 +6,7 @@ class Xul{
   private $site;
  
     function __tostring() {
-    return "Cette classe permet de définir et manipuler des grilles.<br/>";
+    return "Cette classe permet de dï¿½finir et manipuler des grilles.<br/>";
     }
 
 
@@ -32,7 +32,7 @@ class Xul{
 	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
 	$type = "No_Trad";
 	
-	//construction de l'entête du tree
+	//construction de l'entï¿½te du tree
 	$ihm .= '<tree                  
 		enableColumnDrag="true"
         typesource="GetTreeNoTradUti"
@@ -47,39 +47,39 @@ class Xul{
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
     $ihm .= '<treecol id="treecol_descp" flex="2" label="Couche IEML"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
-    $ihm .= '<treecol id="treecol_ieml" flex="2" label="'.utf8_encode('Libellé IEML').'"  persist="width ordinal hidden" />'.EOL;
+    $ihm .= '<treecol id="treecol_ieml" flex="2" label="'.utf8_encode('Libellï¿½ IEML').'"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
     $ihm .= '<treecol id="treecol_'.$type.'" flex="1"  label="IEML"  persist="width ordinal hidden" />'.EOL;
 	$ihm .= '</treecols>'.EOL;
 	$ihm .= '<treechildren >'.EOL;
     
     
-	//récupère les tags non traduits
+	//rï¿½cupï¿½re les tags non traduits
 	$rs = $sem->RequeteSelect($this->site,'GetTreeNoTradUti','-idUti-','',$idUti,'');
 	$i=0;
 	//construction des tag non traduit de l'utilisateur 
     $ihmNo = '<treeitem id="NoTradUti_'.$idUti.'" container="true" open="true">'.EOL;
 	$ihmNo .= '<treerow>'.EOL;
-	$ihmNo .= '<treecell   label="'.utf8_encode("Non trouvé(s)").'"/>'.EOL ;
+	$ihmNo .= '<treecell   label="'.utf8_encode("Non trouvï¿½(s)").'"/>'.EOL ;
 	$ihmNo .= '<treecell   label=""/>'.EOL ;
 	$ihmNo .= '<treecell   label=""/>'.EOL ;
 	$ihmNo .= '<treecell   label=""/>'.EOL ;
 	$ihmNo .= '</treerow>'.EOL;
 	$ihmNo .= '<treechildren>'.EOL;
 	while($r = mysql_fetch_assoc($rs)){
-        $ihmNo .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$idUti,"",array("",utf8_encode($r["onto_flux_code"]),"",""));
+        $ihmNo .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$idUti,"",array("",$r["onto_flux_code"],"",""));
 	}
-	//termine le treedes non trouvé
+	//termine le treedes non trouvï¿½
 	$ihmNo .= '</treechildren>'.EOL;
     $ihmNo .= '</treeitem>'.EOL;
 
-	//récupère les tags non traduits
+	//rï¿½cupï¿½re les tags non traduits
 	$rs = $sem->RequeteSelect($this->site,'GetTreeTradAutoSupUti','-idUti-','-idUtiAuto-',$idUti,$this->site->infos["UTI_TRAD_AUTO"]);
 	$i=0;
 	//construction des tag non traduit de l'utilisateur 
     $ihmSup = '<treeitem id="NoTrad_Auto_'.$idUti.'" container="true" open="true">'.EOL;
 	$ihmSup .= '<treerow>'.EOL;
-	$ihmSup .= '<treecell label="'.utf8_encode("Trad. Automatique supprimé(s)").'"/>'.EOL ;
+	$ihmSup .= '<treecell label="'.utf8_encode("Trad. Automatique supprimï¿½(s)").'"/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
@@ -88,7 +88,7 @@ class Xul{
 	while($r = mysql_fetch_assoc($rs)){
         $ihmSup .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_code"],"",array("",utf8_encode($r["onto_flux_code"]),$r["ieml_parent"],utf8_encode($r["ieml_lib"]),$r["ieml_code"]));
 	}
-	//termine le treedes non trouvé
+	//termine le treedes non trouvï¿½
 	$ihmSup .= '</treechildren>'.EOL;
     $ihmSup .= '</treeitem>'.EOL;
     
@@ -107,7 +107,7 @@ function Get_Tree_Trad_Utis($idUtis){
 	
 	$type = "Signl_Trad";
 	
-	//construction de l'entête du tree
+	//construction de l'entï¿½te du tree
 	$ihm .= '<tree                  
 		enableColumnDrag="true"
         typesource="GetTreeTradUtis"
@@ -120,7 +120,7 @@ function Get_Tree_Trad_Utis($idUtis){
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
 	$ihm .= '<treecol id="treecol_Tagdel" flex="2"  primary="true" label="Tag delicious"  persist="width ordinal hidden"  />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
-    $ihm .= '<treecol id="treecol_descp" flex="2" label="'.utf8_encode('Libellé IEML').'"  persist="width ordinal hidden" />'.EOL;
+    $ihm .= '<treecol id="treecol_descp" flex="2" label="'.utf8_encode('Libellï¿½ IEML').'"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
     $ihm .= '<treecol id="treecol_'.$type.'" flex="1"  label="IEML"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '</treecols>'.EOL;
@@ -143,9 +143,9 @@ function GetTreeItemTradUti($idUti,$type){
 
 	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
 	
-	//récupère les traductions 
+	//rï¿½cupï¿½re les traductions 
 	if($idUti==$this->site->infos["UTI_TRAD_AUTO"]){
-		//des traduction automatiques partagées par l'utilisateur 
+		//des traduction automatiques partagï¿½es par l'utilisateur 
 		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUtiAuto','-idUti-','-idUtiAuto-',$_SESSION['iduti'],$idUti);
 	}else{
 		//de l'utilisateur 
@@ -154,7 +154,7 @@ function GetTreeItemTradUti($idUti,$type){
 	$i=0;
    	while($r = mysql_fetch_assoc($rs)){
        		
-   		//pour gérer le changement de branche parente
+   		//pour gï¿½rer le changement de branche parente
        	if($r["uti_id"]!=$oIdUti){
        		$oFluxCode = -1;
        	}
@@ -162,14 +162,14 @@ function GetTreeItemTradUti($idUti,$type){
    			$oIemlNiv = -1;
    		}
    		
-       	//on crée les couches
+       	//on crï¿½e les couches
        	if($r["ieml_niveau"]!=$oIemlNiv){
        		if($i>0){
-	       		//on ferme le précédent tag
+	       		//on ferme le prï¿½cï¿½dent tag
 				$ihmNiv .= $ihmIeml;
 	       		$ihmNiv .= '</treechildren>'.EOL;
 				$ihmNiv .= '</treeitem>'.EOL;
-				//on créé l'usl
+				//on crï¿½ï¿½ l'usl
 				$usl .= $sem->StarParam["usl"];
 				$usl .= "(";
 				$usl .= $uslT;
@@ -190,10 +190,10 @@ function GetTreeItemTradUti($idUti,$type){
 	        $oIemlNiv=$r["ieml_niveau"];       
        	}
 
-       	//on vérifie si on change de tag
+       	//on vï¿½rifie si on change de tag
        	if($r["onto_flux_code"]!=$oFluxCode){
        		if($i>0){
-	       		//on ferme le précédent tag
+	       		//on ferme le prï¿½cï¿½dent tag
 	            $ihmTag .= '<treecell label="'.$usl.'"/>'.EOL ;
 	            $ihmTag .= '</treerow>'.EOL;
 	       		$ihmTag .= '<treechildren>'.EOL;
@@ -213,10 +213,10 @@ function GetTreeItemTradUti($idUti,$type){
 	        $oFluxCode=$r["onto_flux_code"];       
        	}
        	
-		//vérifie si on change d'utilisateur
+		//vï¿½rifie si on change d'utilisateur
        	if($r["uti_id"]!=$oIdUti){
        		if($i>0){
-	       		//on ferme le précédent utilisateur
+	       		//on ferme le prï¿½cï¿½dent utilisateur
 				$ihm .= $ihmTags;
 	       		$ihm .= '</treechildren>'.EOL;
 				$ihm .= '</treeitem>'.EOL;
@@ -233,23 +233,23 @@ function GetTreeItemTradUti($idUti,$type){
 			$oIdUti=$r["uti_id"];
        	}
         
-       	//on crée les traductions
+       	//on crï¿½e les traductions
         $ihmIeml .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$r["ieml_id"],"",array("","",utf8_encode($r["ieml_lib"]),$r["ieml_code"]));
-		//on crée l'usl
+		//on crï¿½e l'usl
 		$uslT .= $r["ieml_code"].$sem->StarParam["union"];
        	
         $i++;
    	}
     
-   	//vérifie s'il existe des traductions
+   	//vï¿½rifie s'il existe des traductions
    	if($i==0)
    		return "";
    		
-   	//on ferme le précédent tag
+   	//on ferme le prï¿½cï¿½dent tag
 	$ihmNiv .= $ihmIeml;
     $ihmNiv .= '</treechildren>'.EOL;
 	$ihmNiv .= '</treeitem>'.EOL;
-	//on créé l'usl
+	//on crï¿½ï¿½ l'usl
 	$usl .= $sem->StarParam["usl"];
 	$usl .= "(";
 	$usl .= $uslT;
@@ -257,7 +257,7 @@ function GetTreeItemTradUti($idUti,$type){
 	$usl .= ")";
 	$ihmNivs .= $ihmNiv;
 	
-    //on ferme le précédent tag
+    //on ferme le prï¿½cï¿½dent tag
     $ihmTag .= '<treecell label="'.$usl.'"/>'.EOL ;
     $ihmTag .= '</treerow>'.EOL;
 	$ihmTag .= '<treechildren>'.EOL;
@@ -289,7 +289,7 @@ function GetTreeItemTradUti($idUti,$type){
 		
 	}
 
-//Construction de l'arbre du réseau d'utilisateur delicious     
+//Construction de l'arbre du rï¿½seau d'utilisateur delicious     
 function GetTreeDeliciousNetwork($oDlcs,$login='',$type='TreeDeliciousNetwork'){
 
 	if($login=='')
@@ -297,7 +297,7 @@ function GetTreeDeliciousNetwork($oDlcs,$login='',$type='TreeDeliciousNetwork'){
 	$network = simplexml_load_string($oDlcs->GetNetworkMembers($login));
 	$idUtis = $network->xpath("channel/item");
 	sort($idUtis);		
-	//construction de l'entête du tree
+	//construction de l'entï¿½te du tree
 	$ihm .= '<tree                  
 		enableColumnDrag="true"
         flex="1"        

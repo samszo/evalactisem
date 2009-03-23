@@ -38,7 +38,7 @@ Class Sem{
 		if($FicXml=="")
 			$FicXml==$Site->scope["FicXml"];
 		if($this->trace){
-			echo "On charge les paramètres : ".$FicXml."<br/>\n";
+			echo "On charge les paramï¿½tres : ".$FicXml."<br/>\n";
 			$this->XmlParam = new XmlParam($FicXml);
 		    
 		}*/
@@ -98,7 +98,7 @@ Class Sem{
 			, "E"=>6
 			);
 			
-		//charge les paramètres des layers
+		//charge les paramï¿½tres des layers
 		if (file_exists("../../param/events.xml")) {
 		    $this->xmlEvent = simplexml_load_file("../../param/events.xml");
 		} else {
@@ -129,7 +129,7 @@ Class Sem{
 		
 		$this->Sequences =array();
 
-		//récupère les couches
+		//rï¿½cupï¿½re les couches
 		$this->GetCouches($xml,$xml->xpath("//category/genOp"));
 		
 		//initialisation du svg
@@ -143,7 +143,7 @@ Class Sem{
 		
 		foreach($couches as $c){
 			if($c["role"]){
-				//récupère le role
+				//rï¿½cupï¿½re le role
 				$this->GetSequence($c,$c["layer"],$c["role"]);		
 			}
 			if($c->children()){
@@ -156,7 +156,7 @@ Class Sem{
 	
 	function VerifExpIEML($code,$lib){
 		
-		//vérifie le parse du code ERROR:
+		//vï¿½rifie le parse du code ERROR:
 		$xml = $this->Parse($code);
 		if(strstr($xml,"ERROR:")){
 			return $xml;
@@ -193,7 +193,7 @@ Class Sem{
 		foreach($Couches as $c){
 			if($c!=""){
 				$usl .= $this->StarParam["usl"];
-				//création de l'expression d'union
+				//crï¿½ation de l'expression d'union
 				$arrTrad = split(",",$Trads[$i]);
 				$usl .= "(";
 				foreach($arrTrad as $t){
@@ -227,7 +227,7 @@ Class Sem{
 				//$xmlEvent = simplexml_load_file("../param/events.xml");
 				$this->GetOccurrence($xml);
 				
-				//construction des données de l'event
+				//construction des donnï¿½es de l'event
 				$arrDon = $this->GetDonneeEvents();
 		
 				$lien= PathWeb.'library/php/stats.php?large=300';
@@ -244,7 +244,7 @@ Class Sem{
 				$arrResult = array();
 				$arrResult["GraphEvent"]=$lien;
 		
-				//construction des données de primitive
+				//construction des donnï¿½es de primitive
 				$arrDon = $this->GetDonneePrimis();
 				$lien= PathWeb.'library/php/stats.php?large=300';
 				$lien.='&haut=300';
@@ -274,7 +274,7 @@ Class Sem{
 				$arrResult = array();
 				$arrResult["GraphEvent"]=$lien;
 		
-				//construction des données de primitive
+				//construction des donnï¿½es de primitive
 				
 				$lien= PathWeb.'library/php/stats.php?large=400';
 				$lien.='&haut=300';
@@ -311,7 +311,7 @@ Class Sem{
 					echo "Sem.php:GetOccuEvents:tag=".$tag."<br/>";
 				
 				
-				//récupére les paramètres du tag
+				//rï¿½cupï¿½re les paramï¿½tres du tag
 				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
 				//calcul le tableau des primitives de l'event
 				$prims = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
@@ -382,18 +382,18 @@ Class Sem{
 		if($layer="L1"){
 			$tag = $roles->children()->getName();
 			if($tag && $tag!="genOp"){
-				//décompose l'événement
+				//dï¿½compose l'ï¿½vï¿½nement
 				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-				//traduit l'événement en exa
+				//traduit l'ï¿½vï¿½nement en exa
 				$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$tag.$this->StarParam["closing"]["event"],"exa"=>$this->GetExaEvent($event));	
 			}
 		}else{
 			foreach($roles as $genOp){
 				$tag = $genOp->children()->getName();
 				if($tag){
-					//décompose l'événement
+					//dï¿½compose l'ï¿½vï¿½nement
 					$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-					//traduit l'événement en exa
+					//traduit l'ï¿½vï¿½nement en exa
 					$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$tag.$this->StarParam["closing"]["event"],"exa"=>$this->GetExaEvent($event));	
 				}
 			}
@@ -404,16 +404,16 @@ Class Sem{
 	function GetExaEvent($event){
 		$i=1;
 		if(count($event)>0){
-			//récupère le tableau des primitives
+			//rï¿½cupï¿½re le tableau des primitives
 			$arrPrimis = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
-			//récupère la position des primitives
+			//rï¿½cupï¿½re la position des primitives
 			foreach($arrPrimis as $primi){
 				if($primi!=$this->StarParam["closing"]["event"])
 					$posis[] = $this->ExaParam[$primi];			
 			}
 			//tri les positions
 			sort($posis);
-			//construit les données de l'exagramme
+			//construit les donnï¿½es de l'exagramme
 			$arrExa = array();
 			foreach($posis as $posi){
 				if($posi==$i){
@@ -456,7 +456,7 @@ Class Sem{
 
 	function GetDonneeEvents(){
 		
-		//construction des données de event
+		//construction des donnï¿½es de event
 		$donnees = "";
 		$noms = "";
 		$titre = "Events";
@@ -477,7 +477,7 @@ Class Sem{
 	
 	function GetDonneePrimis(){
 		
-		//construction des données de event
+		//construction des donnï¿½es de event
 		$donnees = "";
 		$noms = "";
 		$titre = "Primitives";
@@ -533,7 +533,7 @@ Class Sem{
 			echo "Sem.php:Parse:sResult".$sResult."<br/>";
 		
 		
-		//nettoie le résultat du parser
+		//nettoie le rï¿½sultat du parser
 		$sResult = str_replace("<XMP>","",$sResult);
 	    $sResult = str_replace("</XMP>","",$sResult);
 	    if(eregi('<(.*)>(.*)<(.*)>',$sResult)){
@@ -565,7 +565,7 @@ Class Sem{
      
    function VerifPartageTrad($idTrad,$idUti){
    			
-   			//vérifie le partage
+   			//vï¿½rifie le partage
 	        $Xpath="/XmlParams/XmlParam/Querys/Query[@fonction='VerifPartageTrad']";
 		    $Q=$this->site->XmlParam->GetElements($Xpath);
 	        $where=str_replace("-idTrad-",addslashes($idTrad),$Q[0]->where);
@@ -584,7 +584,7 @@ Class Sem{
    
    function VerifPartageTradAuto($idTradAuto,$idUti){
    			
-   			//vérifie le partage
+   			//vï¿½rifie le partage
 	        $Xpath="/XmlParams/XmlParam/Querys/Query[@fonction='VerifPartageTradAuto']";
 		    $Q=$this->site->XmlParam->GetElements($Xpath);
 	        $where=str_replace("-idTrad-",addslashes($idTrad),$Q[0]->where);
@@ -602,7 +602,7 @@ Class Sem{
    }
    
 	function GetAutoTradSup($idUti){
-		//récupère les traductions automatiques supprimées par l'utilisateur
+		//rï¿½cupï¿½re les traductions automatiques supprimï¿½es par l'utilisateur
 		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='GetTradAutoSup']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
 		$where = str_replace("-idUti-", $idUti, $Q[0]->where);
@@ -620,7 +620,7 @@ Class Sem{
 	}
    
 	function VerifTradUtiFlux($idUti,$idFlux){
-		//récupère les traductions automatiques supprimées par l'utilisateur
+		//rï¿½cupï¿½re les traductions automatiques supprimï¿½es par l'utilisateur
 		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='VerifTradUtiFlux']";
 		$Q = $this->site->XmlParam->GetElements($Xpath);
 		$from = str_replace("-idUti-", $idUti, $Q[0]->from);
@@ -643,7 +643,7 @@ Class Sem{
 	
    function SupPartageTrad($idTrad,$idUti){
    			
-   			//vérifie le partage
+   			//vï¿½rifie le partage
 	        $Xpath="/XmlParams/XmlParam/Querys/Query[@fonction='SupPartageTrad']";
 		    $Q=$this->site->XmlParam->GetElements($Xpath);
 	        $where=str_replace("-idTrad-",addslashes($idTrad),$Q[0]->where);
@@ -652,7 +652,7 @@ Class Sem{
 		    $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 			$db->connect();
 			$db->query($sql);
-            $message = mysql_affected_rows().utf8_encode(" traduction supprimée");
+            $message = mysql_affected_rows().utf8_encode(" traduction supprimï¿½e");
 			$db->close();
 
 			return $message;
@@ -666,7 +666,7 @@ Class Sem{
 	   				$iduti=$_SESSION['iduti'];
    				
 	   			if($res==-1){	
-					//vérifie si le code existe
+					//vï¿½rifie si le code existe
 					$req=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $codeIeml,"");
 					$rs=mysql_fetch_array($req);
 					if(!$rs){
@@ -678,11 +678,11 @@ Class Sem{
 	   				//recuperation des identifiants ieml_id et ieml_onto_flux
 		        	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml) ));
 	   			}else{
-	   				//les identifiants sont passés en paramètre
+	   				//les identifiants sont passï¿½s en paramï¿½tre
 	   			}
 	   			
 	   			if(!$res){
-	   				return "ERREUR : la traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** n'a pas été ajoutée");	   				
+	   				return "ERREUR : la traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** n'a pas ï¿½tï¿½ ajoutï¿½e");	   				
 	   			}
 	   			
 	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
@@ -690,7 +690,7 @@ Class Sem{
 	                // insertion dans la table de traductions des identifiants
 	                 echo $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',array(array("-idflux-", $res[0]),array("-idIeml-",$res[1])));
 
-                	//vérifie si le code ieml est déjà attribué à l'auteur
+                	//vï¿½rifie si le code ieml est dï¿½jï¿½ attribuï¿½ ï¿½ l'auteur
               		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifIemlUtiOnto','-IdIeml-','-IdUti-',$res[1],$iduti));
                 	if(!$verif){		                	
 	                	//insertion de la traduction dans la table des utilisateurs
@@ -700,26 +700,26 @@ Class Sem{
 	                //insertion du partage de la trad pour l'utilisateur
                 	$this->RequeteInsert($objSite,'InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $iduti)));
                 	
-                	//si l'utilisateur est "automatique" on ajoute un partage à l'utilisateur connecté
+                	//si l'utilisateur est "automatique" on ajoute un partage ï¿½ l'utilisateur connectï¿½
                 	//pour pouvoir supprimer cette traduction par la suite 
                 	if($iduti==$this->site->infos["UTI_TRAD_AUTO"]){
                 		$this->RequeteInsert($objSite,'InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $_SESSION['iduti'])));
                 	}
 	                
-	                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** ajoutée");
+	                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** ajoutï¿½e");
 	                
                 	$Activite->AddActi("AddTrad",$iduti);
                 
                 }else{
                 	echo $idTrad = $rs['trad_id'];                
-                	//vérifie si la traduction est déjà attribué à l'auteur
+                	//vï¿½rifie si la traduction est dï¿½jï¿½ attribuï¿½ ï¿½ l'auteur
               		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifPartageTrad','-idTrad-','-idUti-',$idTrad,$_SESSION['iduti']));
                 	if($verif["nb"]==0){		                	
 	                	//insertion du partage de la trad pour l'utilisateur
                 		$this->RequeteInsert($objSite,'InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $_SESSION['iduti'])));
-                		$message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** est ajoutée pour ".$_SESSION['loginSess']);
+                		$message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** est ajoutï¿½e pour ".$_SESSION['loginSess']);
                 	}else{            	
-	                	$message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe déjà");
+	                	$message = "La traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** existe dï¿½jï¿½");
 	                }
                 }
                 
@@ -740,6 +740,7 @@ Class Sem{
 	   $sql = $Q[0]->select.$from.$where;
 	   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	   $link=$db->connect();   
+	   $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
 	   $result = $db->query($sql);
 	   $db->close($link);
 	   
@@ -783,7 +784,7 @@ Class Sem{
                 $res=mysql_fetch_array($result);
                 
                 if($res){
-                //requête pour Supprimer une traduction
+                //requï¿½te pour Supprimer une traduction
 	                $Xpath = "/XmlParams/XmlParam[@nom='GetOntoTrad']/Querys/Query[@fonction='ExeAjax-SupTrad-Delete_ieml_Trad']";
 	                $Q = $objSite->XmlParam->GetElements($Xpath);
 	                $where = str_replace("-idflux-", $res[0], $Q[0]->where);
@@ -806,9 +807,9 @@ Class Sem{
 	                $db->query($sql);
                		$db->close();
 	                		
-	                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** supprimée");
+	                $message = "Traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** supprimï¿½e");
                 }else{
-	                $message = utf8_encode("Problème lors de la suppression");
+	                $message = utf8_encode("Problï¿½me lors de la suppression");
                 }
                 
                 $Activite->AddActi("DelTrad",$iduti);
@@ -838,17 +839,17 @@ function Crea_Cycle($json){
 		for($i =0; $i < (sizeof($row)/2)-1; $i++){
 			$html.="<td>";
 			if($row['code'.$i]!= "vide"){
-				//récupère le parse de l'expression
+				//rï¿½cupï¿½re le parse de l'expression
            		$xml = $this->Parse(trim($row['code'.$i]));
 				$class = "NoSelect";						
            		if(is_object($xml)){							
 					if($this->trace)
 						echo "Sem.php:GetCycle:xml".print_r($xml)."<br/>";
 						$this->GetOccurrence($xml);
-						//récupère les primitives
+						//rï¿½cupï¿½re les primitives
 						$arrDon = $this->GetDonneePrimis();
 						$Primis = " primitives='".$arrDon["codes"]."' ";						
-						//récupère les events
+						//rï¿½cupï¿½re les events
 						$arrDon = $this->GetDonneeEvents();
 						$Events = " events='".$arrDon["codes"]."' ";						
 						$title .= $Primis.$Events;						

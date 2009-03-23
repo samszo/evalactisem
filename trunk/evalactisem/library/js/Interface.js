@@ -550,7 +550,7 @@ function Load(key){
 		if(document.getElementById(select2)){
 		    id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
 			if(type=='lib')
-				document.getElementById(select2).value=Items.code[id];
+				document.getElementById(select2).value=Items.lib[id];
 			else
 				document.getElementById(select2).value=Items.lib[id];
 		}
