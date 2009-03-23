@@ -758,6 +758,7 @@ Class Sem{
      $sql = $Q[0]->insert.$values;
      $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	 $link=$db->connect();   
+	 $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
 	 $db->query($sql);
 	 $idTrad= mysql_insert_id();
      $db->close($link);
@@ -778,7 +779,8 @@ Class Sem{
                 if($this->trace)
                 	echo "Sem:Sup_Trad:sql1=".$sql."<br/>";
                 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-                $db->connect();
+                $link=$db->connect();
+                $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
                 $result = $db->query($sql);
                	$db->close();
                 $res=mysql_fetch_array($result);
@@ -793,7 +795,8 @@ Class Sem{
 	                if($this->trace)
 	                	echo "Sem:Sup_Trad:sql2=".$sql."<br/>";
                 	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-	                $db->query($sql);
+                    $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
+                	$db->query($sql);
                		$db->close();
 	                
 	                //suppression de la traduction de la tableExeAjax-SupTrad-Delete_ieml_uti_onto;
@@ -885,7 +888,8 @@ function recherche($query,$type,$IdUti,$lang){
         	$where = str_replace("-query-",$query , $Q[0]->where);               
 	    	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
         	$sql = $Q[0]->select.$from.$where; 
-        	$db->connect();
+        	$link=$db->connect();
+        	$db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
         	$result = $db->query($sql);
       	    $db->close();
 			$results = array();
@@ -926,23 +930,28 @@ function recherche($query,$type,$IdUti,$lang){
         return mysql_num_rows($req);
 	}
 	function LiveMetalRequest($lang,$param,$type){
-		if($type=='getEntry')
+		if($type=='getEntry' || $type=='getEntryRech')
 			$lien="http://evalactisem.ieml.org/entries/".$param."/".$lang;
 		else
 		 if($type=='LikeRech')
 		 	$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all/start";
 		 else
 			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all";
+		
 		$xml = simplexml_load_file($lien);	
+		
 		if($this->trace)
 			echo "Sem.php:LiveMetalRequest:sResult".$xml."<br/>";
 
 		$Xpath = "//entry[@lang='".$lang."']";
 		$entry=$xml->xpath($Xpath);
 		if($type=='getEntry')
-		  return $xml;
+			return $xml;
 		else
-		  return $entry;
+		 	if($type=='getEntryRech')
+		 	 return $xml->entry->expression.' ';
+		else  
+		 	return $entry;
 		
 	}
 	function AddIemlOnto($iemlCode,$iemlLib,$iemlNiv,$iemlParent){
@@ -955,7 +964,8 @@ function recherche($query,$type,$IdUti,$lang){
      	$values=str_replace('-iemlParent-',$iemlParent,$values);
      	$sql = $Q[0]->insert.$values;
      	$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-	 	$db->connect();   
+	 	$link=$db->connect();   
+	 	$db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
 	 	$db->query($sql);
 	 	$id= mysql_insert_id();
 	 	$db->close();
@@ -966,8 +976,20 @@ function recherche($query,$type,$IdUti,$lang){
    		$results = array();
      	foreach($Entrys as $entry){
      		$results['lib'][]=$entry->expression.'';
+     		$results['id'][]=$entry->id.'';
 		}
      	return $results;
+   }
+   function getLangLiveMetal(){
+   	    $lien="http://evalactisem.ieml.org/languages";
+		$xml = simplexml_load_file($lien);	
+		$Xpath = "//language";
+		$Entrys=$xml->xpath($Xpath);
+		$ArrLang=array();
+		foreach($Entrys as $entry){
+			$ArrLang[]=$entry->code.'';
+		}
+		return json_encode($ArrLang);
    }
  
 }

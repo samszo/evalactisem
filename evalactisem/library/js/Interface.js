@@ -28,7 +28,7 @@ function GetFlux(){
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
 	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=GetFlux",'Xul_Ajax_ShowTreeTrad','');
-
+    
 }
   
 function Xul_Ajax_ShowTreeTrad(){
@@ -49,7 +49,7 @@ function Xul_Ajax_ShowTreeTrad(){
 		meter.setAttribute("value","100");
 		meter.setAttribute("hidden","true");
 		document.getElementById('label_Maj').setAttribute("hidden","true");
-		
+		Sem_getLangLiveMetal();
   } catch(ex2){ alert("interface:ShowTreeTrad:"+ex2); }
 }
 
@@ -124,7 +124,7 @@ function SelectNoTrad(id,treecol){
   	console.log(TreeRow.childNodes[3]);
     txtcode_flux.value=TreeRow.childNodes[3].getAttribute('label');
     txtlib_ieml.value = TreeRow.childNodes[7].getAttribute('label');
-    txtcode_ieml.value = TreeRow.childNodes[9].getAttribute('label');
+    //txtcode_ieml.value = TreeRow.childNodes[9].getAttribute('label');
    
     
 }
@@ -473,7 +473,6 @@ function Load(key){
 	    tgt = e.target;
 	    if(tgt.getAttribute("id")=='lib-trad-ieml'){
 	    	var _query = document.getElementById("lib-trad-ieml").value;
-	    	lang="fr";
 	    	type="lib";
 	    }else
 	     if(tgt.getAttribute("id")=='code-trad-ieml'){
@@ -526,37 +525,43 @@ function Load(key){
 		while(box.hasChildNodes()){
 				box.removeChild(box.lastChild);
 		}
-		alert(json);
 		Items=eval("("+json+")");
+		
 		for(i=0;i<Items.lib.length;i++){
 			 item=document.createElement('listitem');
-			 item.setAttribute('id','Item_'+[i]);
-		 	 addListcell(item,Items.lib[i]);
+		 	 addListcell(item,Items.lib[i],Items.id[i]);
 
 			 box.appendChild(item);
 		}
 	}	
-	function addListcell(item,labelCell){
+	function addListcell(item,labelCell,idCell){
 		listcell=document.createElement('listcell');
 		listcell.setAttribute('label',labelCell);
+		listcell.setAttribute('id',idCell);
 		listcell.setAttribute('style',"min-width:100px;");
 		item.appendChild(listcell);
 	}
-	function getSelectItemRech(select1,select2){
+	function getSelectItemRech(select1,select2,typeSelect){
 		listbox=document.getElementById('calque_'+type);
 		selection=listbox.selectedIndex;
 		ieml_lib=listbox.getItemAtIndex(selection).firstChild.getAttribute('label');
+		console.log(ieml_lib);
+		idSelect=listbox.getItemAtIndex(selection).firstChild.getAttribute('id');
 		document.getElementById(select1).value=ieml_lib;
 		if(document.getElementById(select2)){
-		    id=listbox.getItemAtIndex(selection).getAttribute('id').replace('Item_','');
-			if(type=='lib')
-				document.getElementById(select2).value=Items.lib[id];
-			else
-				document.getElementById(select2).value=Items.lib[id];
+			selectCalque=select2;
+		    if(typeSelect=='lib')
+		    	AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=getSelectItemRech&id="+idSelect+'&lang=ieml','getSelectItemRech','');
+		    else
+		        AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=getSelectItemRech&id="+idSelect+'&lang='+lang,'getSelectItemRech','');
 		}
 		listbox.setAttribute('hidden','true');
 		
 	}	
+	function Ajax_getSelectItemRech(result){
+		console.log(selectCalque);
+		document.getElementById(selectCalque).value=result;
+	}
     function Sem_Evalactisem(){
    
     	login=document.getElementById('login_uti').value;
@@ -588,7 +593,30 @@ function Load(key){
     	Evalactisem.openWindow("chrome://evalactisem/content/login.xul","Evalactisem",300,500 );
     	window.opener.close();
     }
-	
-    
+	function Sem_getLangLiveMetal(){
+		AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=getLangLiveMetal",'Ajax_getLangLiveMetal','');
+	}
+	function Ajax_getLangLiveMetal(result){
+		box=document.getElementById('Lang');
+		while(box.hasChildNodes()){
+				box.removeChild(box.lastChild);
+		}
+		arrLang=eval('('+result+')');
+		radioGroup=document.createElement('radiogroup');
+		radioGroup.setAttribute('id','radioLangs');
+		radioGroup.setAttribute('orient','horizontal');
+		//radioGroup.setAttribute('oncommand','selectRadio(this.value);');
+		for(i=0;i<arrLang.length;i++){
+			radio=document.createElement('radio');
+			radio.setAttribute('id','radio_'+arrLang[i]);
+			radio.setAttribute('label',arrLang[i]);
+			radio.setAttribute('oncommand','selectRadio(this.label);');
+			radioGroup.appendChild(radio);
+		}
+		box.appendChild(radioGroup);
+	}
+    function selectRadio(value){
+    	lang=value;
+    }
     		
   

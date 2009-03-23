@@ -1,7 +1,7 @@
 <?php
         $ajax = true;
         require_once ("../../param/ParamPage.php");
-        //charge le fichier de paramètrage
+        //charge le fichier de paramï¿½trage
         $objSite->XmlParam = new XmlParam(PathRoot."/param/ParamXul.xml");
 
         $resultat = "";
@@ -88,6 +88,13 @@
                 case 'GetFlux':
                 	    $resultat= GetFlux();
                 	    break;
+                 case 'getLangLiveMetal':
+                	    $resultat= getLangLiveMetal();
+                	    break;
+                 case 'getSelectItemRech':
+                	    $resultat= getSelectItemRech($_GET['id'],$_GET['lang']);
+                	    break;
+                	    
    }
         
         echo $resultat;  
@@ -134,10 +141,10 @@
         
                 global $objSite;
                 $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
-			    //vérifie le partage de traduction
+			    //vï¿½rifie le partage de traduction
 		    	$idTrad = $sem->Add_Trad($codeflux,$codeIeml,$_SESSION['iduti'],true);
 		    	if($idTrad){
-		    		//vérifie s'il existe une traduction automatique
+		    		//vï¿½rifie s'il existe une traduction automatique
 					if($sem->VerifPartageTrad($idTrad,$objSite->infos["UTI_TRAD_AUTO"])){
 	                	$message = $sem->SupPartageTrad($idTrad,$_SESSION['iduti']);
 					}else{
@@ -145,7 +152,7 @@
 						$message = $sem->Sup_Trad($codeIeml,$codeflux);						
 					}
 		    	}else{
-		    		$message = utf8_encode("Problème lors de la vérification du partage");
+		    		$message = utf8_encode("Problï¿½me lors de la vï¿½rification du partage");
 		    	}
                 
                 return $message;
@@ -226,6 +233,16 @@
    			$oSaveFlux= new SauvFlux(); 
    			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$_SESSION['iduti']);
    			$Activite->AddActi('RAT',$_SESSION['iduti']);
+       	}
+       	function getLangLiveMetal(){
+       		global $objSite;
+       		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+ 			return $sem->getLangLiveMetal();
+       	}
+       		function getSelectItemRech($id,$lang){
+       		global $objSite;
+       		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+ 			return $sem->LiveMetalRequest($lang,$id,'getEntryRech');
        	}
 	  
 ?>

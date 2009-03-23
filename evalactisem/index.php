@@ -68,7 +68,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var urlSpreadsheet="http://spreadsheets.google.com/pub?key=" ;
 		var Items;
 		var type;
-		var lang='fr';
+		var lang='en';
+		var selectCalque;
 	</script>
 
 	<popupset id="popupset">
@@ -91,12 +92,21 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		 <groupbox orient="horizontal" flex="1" >
 			<caption <?php echo $lbl;?> />
 			<vbox id="infosTrad" flex="1" >
-			    <hbox style='margin-left:800px;margin-top:0px;'>
-				<button label="Explorer le Nuage de Tag" tooltiptext="Explorer les tags" onclick="window.open('http://localhost/evalactisem/tagcloud.xul','Tag Cloud',1500,1500);"/>
-				<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();"/>
-			</hbox>
 				<label id="trad-message" hidden="false" style="color:blue;" />
 				<hbox flex="1" >
+					<groupbox orient="vertical" >
+						<caption label="Action"/>
+						<label value="Type de flux à recupérer" />
+						<menulist id='menuAction'>
+						    <menupopup>
+						      <menuitem label="Veuillez choisir" value="choix" />
+						      <menuitem label="del.icio.us" value="del" oncommand="GetFlux();"/>
+						    </menupopup>
+						</menulist>
+						
+						<button label="Explorer le Nuage de Tag" tooltiptext="Explorer les tags" onclick="window.open('http://localhost/evalactisem/tagcloud.xul','Tag Cloud',1500,1500);" style='margin-top:10px;'/>
+						<button label="Mettre à jour le bookmark IEML" tooltiptext="Met à jour le bookmark collaboratif IEML" onclick="BookMark_AddPostIemlDelicious();" style='margin-top:10px;'/>
+					</groupbox>
 					<groupbox orient="horizontal" >
 						<caption label="Tag delicious"/>
 					    <label id="id-trad-flux" hidden="true"/>
@@ -104,21 +114,22 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 							<textbox id="code-trad-flux" style="color:red;font-size:150%" onkeyup="lancer(event);" autocomplete="off" />
 							<listbox id="calque_tag" style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-flux");'></listbox>
 					    </stack>
-
 					    <label hidden="true" id="lib-trad-flux" style="color:red;font-size:150%" />
 					</groupbox>
 					<groupbox orient="horizontal" flex="1" >
 							<caption label="Expression IEML"/>
+							<vbox>
+							<box id='Lang'></box>
 						    <label id="id-trad-ieml" hidden="true"/>
-						    
 							<stack style='height:150px;' flex='1'>
 								<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%;height:50px;border-top:0px" flex="1" onkeyup="lancer(event);" autocomplete="off"  />
-								<listbox id="calque_lib" flex='1' style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("lib-trad-ieml","code-trad-ieml");'></listbox>
+								<listbox id="calque_lib" flex='1' style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("lib-trad-ieml","code-trad-ieml","lib");'></listbox>
 							</stack>
+							</vbox>
 							<label style="color:red;font-size:150%" value=" *" />
 							<stack  flex='1'>
 								<textbox id="code-trad-ieml" multiline="true" style="color:red;font-size:150%;" flex="1" onkeyup="lancer(event);" autocomplete="off" />
-								<listbox id="calque_code"  style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-ieml","lib-trad-ieml");' ></listbox>
+								<listbox id="calque_code"  style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-ieml","lib-trad-ieml","code");' ></listbox>
 							</stack>
 							<label style="color:red;font-size:150%" value="** " />									
 					</groupbox>
@@ -221,8 +232,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  </vbox>
  <script type="text/javascript">
  	//r�cup�ration des flux
+  
   GetFlux();
-
+  
  </script>
  
  
