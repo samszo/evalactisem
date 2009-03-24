@@ -47,7 +47,6 @@
          	$sCachePath="library/tmp/";
          } 
       	 $this->sShortKey = $sPrefix.md5($sKey);
-      	 $this->sShortKey = $sPrefix.$sKey;
       	 $this->sFile = "$sCachePath$this->sShortKey.xml";
          $this->sFileLock = "$this->sFile.lock";
          $this->iCacheTime = $iCacheTime;

@@ -70,6 +70,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var type;
 		var lang='en';
 		var selectCalque;
+		var arrSelect= new Array();
+		var m=0;
 	</script>
 
 	<popupset id="popupset">
@@ -96,7 +98,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				<hbox flex="1" >
 					<groupbox orient="vertical" >
 						<caption label="Action"/>
-						<label value="Type de flux à recupérer" />
+						<box id='LangFlux'></box>
+						<label value="Type de flux à recupérer"  style='margin-top:10px;' />
 						<menulist id='menuAction'>
 						    <menupopup>
 						      <menuitem label="Veuillez choisir" value="choix" />
@@ -110,7 +113,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="horizontal" >
 						<caption label="Tag delicious"/>
 					    <label id="id-trad-flux" hidden="true"/>
-						<stack style='height:150px;' flex='1'>
+						<stack style='height:150px;margin-top:20px;"' flex='1'>
 							<textbox id="code-trad-flux" style="color:red;font-size:150%" onkeyup="lancer(event);" autocomplete="off" />
 							<listbox id="calque_tag" style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-flux");'></listbox>
 					    </stack>
@@ -119,19 +122,20 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					<groupbox orient="horizontal" flex="1" >
 							<caption label="Expression IEML"/>
 							<vbox>
-							<box id='Lang'></box>
-						    <label id="id-trad-ieml" hidden="true"/>
-							<stack style='height:150px;' flex='1'>
-								<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%;height:50px;border-top:0px" flex="1" onkeyup="lancer(event);" autocomplete="off"  />
-								<listbox id="calque_lib" flex='1' style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("lib-trad-ieml","code-trad-ieml","lib");'></listbox>
-							</stack>
+								<box id='Lang'></box>
+							    <label id="id-trad-ieml" hidden="true"/>
+								<stack style='height:150px;' flex='1'>
+									<textbox id="lib-trad-ieml" multiline="true" style="color:red;font-size:150%;height:50px;border-top:0px" flex="1" onkeyup="lancer(event);" autocomplete="off"  />
+									<listbox id="calque_lib" flex='1' style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("lib-trad-ieml","code-trad-ieml","lib");'></listbox>
+								</stack>
 							</vbox>
-							<label style="color:red;font-size:150%" value=" *" />
-							<stack  flex='1'>
+							<label style="color:red;font-size:150%;margin-top:20px;" value=" *" />
+							<stack  flex='1' style="margin-top:20px;">
 								<textbox id="code-trad-ieml" multiline="true" style="color:red;font-size:150%;" flex="1" onkeyup="lancer(event);" autocomplete="off" />
 								<listbox id="calque_code"  style='margin-top:50px;' hidden='true' onselect='getSelectItemRech("code-trad-ieml","lib-trad-ieml","code");' ></listbox>
 							</stack>
-							<label style="color:red;font-size:150%" value="** " />									
+							<label style="color:red;font-size:150%;margin-top:20px;" value="** " />	
+														
 					</groupbox>
 				</hbox>
 				<hbox>
@@ -232,8 +236,8 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
  </vbox>
  <script type="text/javascript">
  	//r�cup�ration des flux
-  
-  GetFlux();
+  Sem_getLangLiveMetal(); 
+  //GetFlux();
   
  </script>
  

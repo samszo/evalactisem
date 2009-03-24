@@ -47,7 +47,7 @@ class Xul{
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
     $ihm .= '<treecol id="treecol_descp" flex="2" label="Couche IEML"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
-    $ihm .= '<treecol id="treecol_ieml" flex="2" label="'.utf8_encode('Libell� IEML').'"  persist="width ordinal hidden" />'.EOL;
+    $ihm .= '<treecol id="treecol_ieml" flex="2" label="'.'Libellé IEML'.'"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
     $ihm .= '<treecol id="treecol_'.$type.'" flex="1"  label="IEML"  persist="width ordinal hidden" />'.EOL;
 	$ihm .= '</treecols>'.EOL;
@@ -60,7 +60,7 @@ class Xul{
 	//construction des tag non traduit de l'utilisateur 
     $ihmNo = '<treeitem id="NoTradUti_'.$idUti.'" container="true" open="true">'.EOL;
 	$ihmNo .= '<treerow>'.EOL;
-	$ihmNo .= '<treecell   label="'.utf8_encode("Non trouv�(s)").'"/>'.EOL ;
+	$ihmNo .= '<treecell   label="'."Non trouvé(s)".'"/>'.EOL ;
 	$ihmNo .= '<treecell   label=""/>'.EOL ;
 	$ihmNo .= '<treecell   label=""/>'.EOL ;
 	$ihmNo .= '<treecell   label=""/>'.EOL ;
@@ -79,7 +79,7 @@ class Xul{
 	//construction des tag non traduit de l'utilisateur 
     $ihmSup = '<treeitem id="NoTrad_Auto_'.$idUti.'" container="true" open="true">'.EOL;
 	$ihmSup .= '<treerow>'.EOL;
-	$ihmSup .= '<treecell label="'.utf8_encode("Trad. Automatique supprim�(s)").'"/>'.EOL ;
+	$ihmSup .= '<treecell label="'.utf8_encode("Trad. Automatique supprimé(s)").'"/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
 	$ihmSup .= '<treecell label=""/>'.EOL ;
@@ -120,7 +120,7 @@ function Get_Tree_Trad_Utis($idUtis){
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
 	$ihm .= '<treecol id="treecol_Tagdel" flex="2"  primary="true" label="Tag delicious"  persist="width ordinal hidden"  />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
-    $ihm .= '<treecol id="treecol_descp" flex="2" label="'.utf8_encode('Libell� IEML').'"  persist="width ordinal hidden" />'.EOL;
+    $ihm .= '<treecol id="treecol_descp" flex="2" label="Libellé IEML"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '<splitter class="tree-splitter"/>'.EOL;
     $ihm .= '<treecol id="treecol_'.$type.'" flex="1"  label="IEML"  persist="width ordinal hidden" />'.EOL;
     $ihm .= '</treecols>'.EOL;
