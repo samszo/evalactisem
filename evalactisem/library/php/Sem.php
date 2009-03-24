@@ -176,18 +176,14 @@ Class Sem{
 	 	$Langs=explode(',',$arrLang);
 		    foreach($Langs as $lang){
 		    	$Xpath = "//entry[@lang='".$lang."']";
-				echo $Xpath; 
 		    	foreach($Entrys->xpath($Xpath) as $entry){
 					print_r($entry);
 					$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
-					$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
-			    	//recuppere ieml_lib, level et perent
-					$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
-					$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
+					//$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
 					//verfie si le mot Ieml existe dans ieml_onto
 					//$rs=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $iemlEntry->entry->expression.'',"");
 					//if(!$rs)
-				 		$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$iemlLibEntry->entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
+				 		$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
 	
 				 	//else
 					//$idIeml=$rs['ieml_id'];
@@ -972,7 +968,6 @@ function recherche($query,$type,$IdUti,$lang){
 		 else
 			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all";
 		$xml = simplexml_load_file($lien);	
-		print_r($xml);
 		return $xml;
 	}
 	function AddIemlOnto($iemlCode,$iemlLib,$iemlNiv,$iemlParent){
