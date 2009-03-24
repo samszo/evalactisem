@@ -51,22 +51,22 @@ class SauvFlux{
 	  return $name;
 	}
 	
-     function aGetAllTags($objSite,$oDelicious,$iduti){
-     	set_time_limit(5000);
+     function aGetAllTags($objSite,$oDelicious,$iduti,$arrLang){
+     	set_time_limit(9000);
      	$objSem = new Sem($objSite,$objSite->infos["FicXml"],"");
      	//verfie s'il y a des nouvelles tags 
      	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($iduti)==0){
 	     	if ($aPosts = $oDelicious->GetAllTags()) { 
 	     	foreach ($aPosts as $aPost) { 
 		  	  	$tag.=$aPost['tag'].";";
-		  	  	//vérifie que le tag du flux existe
+		  	  	//vÃ©rifie que le tag du flux existe
 			    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
 				if(!$reponse){
 					//ajoute un nouveau tag de flux
 				   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
 					//ajoute les traductions automatiques
-				   	$reponse = $objSem->AddTradAuto($idflux,$aPost['tag']);			   
-					//enregistre le flux pour l'utilisateur
+                    $reponse = $objSem->AddTradAuto($idflux,$aPost['tag'],$arrLang);			   		
+				   	//enregistre le flux pour l'utilisateur
 					$this->flux_uti($objSite,$iduti,$idflux);
 				}			
 		  	  } 

@@ -27,7 +27,7 @@ function GetFlux(){
     document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=GetFlux",'Xul_Ajax_ShowTreeTrad','');
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=GetFlux&arrLang="+arrSelect,'Xul_Ajax_ShowTreeTrad','');
     
 }
   
@@ -49,7 +49,7 @@ function Xul_Ajax_ShowTreeTrad(){
 		meter.setAttribute("value","100");
 		meter.setAttribute("hidden","true");
 		document.getElementById('label_Maj').setAttribute("hidden","true");
-		Sem_getLangLiveMetal();
+		
   } catch(ex2){ alert("interface:ShowTreeTrad:"+ex2); }
 }
 
@@ -551,9 +551,9 @@ function Load(key){
 		if(document.getElementById(select2)){
 			selectCalque=select2;
 		    if(typeSelect=='lib')
-		    	AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=getSelectItemRech&id="+idSelect+'&lang=ieml','getSelectItemRech','');
+		    	AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=getSelectItemRech&id="+idSelect+'&lang=ieml','Ajax_getSelectItemRech','');
 		    else
-		        AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=getSelectItemRech&id="+idSelect+'&lang='+lang,'getSelectItemRech','');
+		        AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=getSelectItemRech&id="+idSelect+'&lang='+lang,'Ajax_getSelectItemRech','');
 		}
 		listbox.setAttribute('hidden','true');
 		
@@ -597,9 +597,13 @@ function Load(key){
 		AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=getLangLiveMetal",'Ajax_getLangLiveMetal','');
 	}
 	function Ajax_getLangLiveMetal(result){
-		box=document.getElementById('Lang');
-		while(box.hasChildNodes()){
-				box.removeChild(box.lastChild);
+		boxRech=document.getElementById('Lang');
+		boxFlux=document.getElementById('LangFlux');
+		while(boxRech.hasChildNodes()){
+				boxRech.removeChild(boxRech.lastChild);
+		}
+		while(boxFlux.hasChildNodes()){
+				boxFlux.removeChild(boxFlux.lastChild);
 		}
 		arrLang=eval('('+result+')');
 		radioGroup=document.createElement('radiogroup');
@@ -612,11 +616,20 @@ function Load(key){
 			radio.setAttribute('label',arrLang[i]);
 			radio.setAttribute('oncommand','selectRadio(this.label);');
 			radioGroup.appendChild(radio);
+			checkbox=document.createElement('checkbox');
+			checkbox.setAttribute('id','checkbox_'+arrLang[i]);
+			checkbox.setAttribute('label',arrLang[i]);
+			checkbox.setAttribute('oncommand','selectChekBox(this.label);');
+			boxFlux.appendChild(checkbox);
 		}
-		box.appendChild(radioGroup);
+		boxRech.appendChild(radioGroup);
 	}
     function selectRadio(value){
     	lang=value;
+    }
+    function selectChekBox(select){
+    	arrSelect[m]=select ;
+    	m++;
     }
     		
   

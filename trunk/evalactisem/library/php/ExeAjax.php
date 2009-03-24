@@ -86,7 +86,7 @@
                 	    $resultat= Evalactisem($_GET['login'],$_GET['mdp']);
                 	    break;
                 case 'GetFlux':
-                	    $resultat= GetFlux();
+                	    $resultat= GetFlux($_GET['arrLang']);
                 	    break;
                  case 'getLangLiveMetal':
                 	    $resultat= getLangLiveMetal();
@@ -226,12 +226,12 @@
  			$oDelicious = new PhpDelicious($login, $mdp);
  			return $sem->Evalactisem($oDelicious,$login,$mdp); 	       	
        }
-       function GetFlux(){
+       function GetFlux($arrLang){
        	global $objSite;
        	global $oDelicious;
  			$Activite= new Acti();
    			$oSaveFlux= new SauvFlux(); 
-   			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$_SESSION['iduti']);
+   			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$_SESSION['iduti'],$arrLang);
    			$Activite->AddActi('RAT',$_SESSION['iduti']);
        	}
        	function getLangLiveMetal(){
