@@ -90,11 +90,11 @@ Class Sem{
 			);
 		//print_r($this->StarParam);
 		$this->ExaParam = array(
-			"U"=>1
-			, "A"=>2
-			, "S"=>3
-			, "B"=>4
-			, "T"=>5
+			"T"=>1
+			, "S"=>2
+			, "B"=>3
+			, "A"=>4
+			, "U"=>5
 			, "E"=>6
 			);
 			
@@ -133,7 +133,6 @@ Class Sem{
 		$this->GetCouches($xml,$xml->xpath("//category/genOp"));
 		
 		//initialisation du svg
-		$js = "";
 		$exa = new Exagramme($this->StarParam); 	
 		$exa->ShowSequence($this->Sequences);
 
@@ -170,27 +169,20 @@ Class Sem{
 	}
 	
 	
-	 function AddTradAuto($idFlux,$tag,$arrLang){ 
-	 	$Entrys=$this->LiveMetalRequestAll($arrLang,$tag,'getExpression');
-	 	echo $tag;
-	 	$Langs=explode(',',$arrLang);
-		    foreach($Langs as $lang){
-		    	$Xpath = "//entry[@lang='".$lang."']";
-		    	foreach($Entrys->xpath($Xpath) as $entry){
-					print_r($entry);
-					$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
-					//$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
-					//verfie si le mot Ieml existe dans ieml_onto
-					//$rs=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $iemlEntry->entry->expression.'',"");
-					//if(!$rs)
-				 		$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
-	
-				 	//else
-					//$idIeml=$rs['ieml_id'];
-					$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$idIeml));
-				  }
-				}	  
-	 	}
+	 function AddTradAuto($idFlux,$tag,$lang='fr'){
+		foreach($this->LiveMetalRequest($lang,$tag,'getExpression') as $entry){
+			//recuppere ieml_lib, level et perent
+			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
+			$iemlLibEntry=$this->LiveMetalRequest($lang,$entry->id,'getEntry');
+			//verfie si le mot Ieml existe dans ieml_onto
+			//$rs=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $iemlEntry->entry->expression.'',"");
+			//if(!$rs)
+				$idIeml=$this->AddIemlOnto($iemlEntry->entry->expression.'',$iemlLibEntry->entry->expression.'',$iemlEntry->entry->level.'',$iemlEntry->entry->parent.'');
+			//else
+				//$idIeml=$rs['ieml_id'];
+			$this->Add_Trad("","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$idIeml));
+		}
+	 }
 	 
 	
 	public function GetUsl($Couches,$Trads){
@@ -380,40 +372,84 @@ Class Sem{
 		
 	}
 	
+	function GetEventPrimis($tag){
+		//décompose l'évenement
+		$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
+		if(count($event)>0){
+			//récupère le tableau des primitives
+			$arrPrimis = split($this->StarParam["closing"]["L0"],$event[0]["integral"]);
+			return $arrPrimis;
+		}		
+	}
 	
 	function GetSequence($roles, $layer, $role){
 
 		if(!$roles)
 			return;
 		
-		if($layer="L1"){
+		if($layer=="L1"){
 			$tag = $roles->children()->getName();
 			if($tag && $tag!="genOp"){
-				//décompose l'événement
-				$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-				//traduit l'événement en exa
-				$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$tag.$this->StarParam["closing"]["event"],"exa"=>$this->GetExaEvent($event));	
+				//calcul les séquences
+				$this->GetExaPrimi($this->GetEventPrimis($tag), $layer, $role);				
+
+
 			}
 		}else{
 			foreach($roles as $genOp){
 				$tag = $genOp->children()->getName();
 				if($tag){
-					//décompose l'événement
-					$event = $this->xmlEvent->xpath("//event[@compact='".$tag.".']");
-					//traduit l'événement en exa
-					$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$tag.$this->StarParam["closing"]["event"],"exa"=>$this->GetExaEvent($event));	
+					$this->GetExaPrimi($this->GetEventPrimis($tag), $layer, $role);
+
+
+
 				}
 			}
 		}
 
 	}
 	
+
+	function GetExaPrimi($arrPrimis, $layer, $role){
+		if(count($arrPrimis)>0){
+			//r�cup�re la position des primitives
+			$j=0;
+			foreach($arrPrimis as $primi){
+				$arrExa = array();
+				if(isset($this->ExaParam[$primi])){
+					$posi = $this->ExaParam[$primi];
+					for($i=1; $i<=6; $i++) {
+						if($posi==$i){
+							$arrExa[]=true;		
+						}else{
+							$arrExa[]=false;						
+						}
+					}
+					//traduit en exagramme
+					$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>$primi.$this->StarParam["closing"]["L0"],"exa"=>$arrExa);	
+				}
+				$j++;
+			}
+			//complète la séquence par des vides
+			for($i=$j; $i<=3; $i++) {
+				$arrExa = array(false,false,false,false,false,true);
+				//traduit en exagramme
+				$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>"E".$this->StarParam["closing"]["L0"],"exa"=>$arrExa);					
+			}
+		}else{
+			//cas empty
+			$arrExa = array(false,false,false,false,false,true);
+			//traduit en exagramme
+			$this->Sequences[]=	array("layer"=>$layer,"role"=>$role,"tag"=>"E".$this->StarParam["closing"]["L0"],"exa"=>$arrExa);	
+		}
+	}
+	
 	function GetExaEvent($event){
 		$i=1;
 		if(count($event)>0){
-			//récupére le tableau des primitives
+			//r�cup�re le tableau des primitives
 			$arrPrimis = split($this->StarParam["closing"]["primitive"],$event[0]["integral"]);
-			//récupére la position des primitives
+			//r�cup�re la position des primitives
 			foreach($arrPrimis as $primi){
 				if($primi!=$this->StarParam["closing"]["event"])
 					$posis[] = $this->ExaParam[$primi];			
@@ -484,7 +520,7 @@ Class Sem{
 	
 	function GetDonneePrimis(){
 		
-		//construction des données de event
+		//construction des donn�es de event
 		$donnees = "";
 		$noms = "";
 		$titre = "Primitives";
@@ -650,7 +686,7 @@ Class Sem{
 	
    function SupPartageTrad($idTrad,$idUti){
    			
-   			//vérifie le partage
+   			//v�rifie le partage
 	        $Xpath="/XmlParams/XmlParam/Querys/Query[@fonction='SupPartageTrad']";
 		    $Q=$this->site->XmlParam->GetElements($Xpath);
 	        $where=str_replace("-idTrad-",addslashes($idTrad),$Q[0]->where);
@@ -673,7 +709,7 @@ Class Sem{
 	   				$iduti=$_SESSION['iduti'];
    				
 	   			if($res==-1){	
-					//vérifie si le code existe
+					//v�rifie si le code existe
 					$req=$this->site->RequeteSelect('Ieml_Find_Code',"-code-","", $codeIeml,"");
 					$rs=mysql_fetch_array($req);
 					if(!$rs){
@@ -683,13 +719,13 @@ Class Sem{
 		   				$this->AddIemlOnto();	*/   								
 					}
 	   				//recuperation des identifiants ieml_id et ieml_onto_flux
-		        	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',$codeflux,Trim($codeIeml) ));
+		        	$res=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','-Iemlcode-',utf8_decode($codeflux),Trim($codeIeml) ));
 	   			}else{
-	   				//les identifiants sont passés en paramètre
+	   				//les identifiants sont pass�s en param�tre
 	   			}
 	   			
 	   			if(!$res){
-	   				return "ERREUR : la traduction de '".$codeflux."' en *".$codeIeml."** n'a pas été ajoutèe";	   				
+	   				return "ERREUR : la traduction de '".$codeflux."' en *".utf8_encode($codeIeml."** n'a pas �t� ajout�e");	   				
 	   			}
 	   			
 	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] ,$res[1] ));
@@ -697,7 +733,7 @@ Class Sem{
 	                // insertion dans la table de traductions des identifiants
 	                 echo $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',array(array("-idflux-", $res[0]),array("-idIeml-",$res[1])));
 
-                	//vérifie si le code ieml est d�j� attribu� � l'auteur
+                	//v�rifie si le code ieml est d�j� attribu� � l'auteur
               		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifIemlUtiOnto','-IdIeml-','-IdUti-',$res[1],$iduti));
                 	if(!$verif){		                	
 	                	//insertion de la traduction dans la table des utilisateurs
@@ -719,7 +755,7 @@ Class Sem{
                 
                 }else{
                 	echo $idTrad = $rs['trad_id'];                
-                	//vérifie si la traduction est d�j� attribu� � l'auteur
+                	//v�rifie si la traduction est d�j� attribu� � l'auteur
               		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifPartageTrad','-idTrad-','-idUti-',$idTrad,$_SESSION['iduti']));
                 	if($verif["nb"]==0){		                	
 	                	//insertion du partage de la trad pour l'utilisateur
@@ -902,7 +938,6 @@ function recherche($query,$type,$IdUti,$lang){
 			$results = array();
 			while($data = mysql_fetch_array($result)) {
 				$results['lib'][]=$data['onto_flux_code'];
-				$results['id'][]=$data['onto_flux_id'];
 			}
      	}else
    			$results=$this->rechLiveMetal($lang,$query);
@@ -962,20 +997,12 @@ function recherche($query,$type,$IdUti,$lang){
 		 	return $entry;
 		
 	}
-	function LiveMetalRequestAll($arrLang,$param,$type){
-		if($type=='getEntryAll')
-			$lien="http://evalactisem.ieml.org/entries/".$param."/all";
-		 else
-			$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all";
-		$xml = simplexml_load_file($lien);	
-		return $xml;
-	}
 	function AddIemlOnto($iemlCode,$iemlLib,$iemlNiv,$iemlParent){
 		$objSite = $this->site;
      	$Xpath = "/XmlParams/XmlParam[@nom='GetOntoFlux']/Querys/Query[@fonction='InsertIemlOnto']";
      	$Q = $objSite->XmlParam->GetElements($Xpath);
      	$values=str_replace('-iemlCode-',addslashes($iemlCode),$Q[0]->values);
-     	$values=str_replace('-iemlLib-',$iemlLib,$values);
+     	$values=str_replace('-iemlLib-',utf8_decode($iemlLib),$values);
      	$values=str_replace('-iemlNiv-',$iemlNiv,$values);
      	$values=str_replace('-iemlParent-',$iemlParent,$values);
      	$sql = $Q[0]->insert.$values;
