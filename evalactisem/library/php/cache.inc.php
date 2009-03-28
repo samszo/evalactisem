@@ -42,11 +42,12 @@
       protected static $aCache = array();
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
-      	echo 'cache='.$sCachePath;
-      	if(ereg("bookmarks/",$sKey)){
-         	$sCachePath="library/tmp/";
-         } 
-      	 $this->sShortKey = $sPrefix.md5($sKey);
+      	//echo 'cache='.$sCachePath;
+      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)){
+      		$this->sShortKey = $sPrefix.$sKey;
+      	}else{ 
+      		$this->sShortKey = $sPrefix.md5($sKey);
+      	}
       	 $this->sFile = "$sCachePath$this->sShortKey.xml";
          $this->sFileLock = "$this->sFile.lock";
          $this->iCacheTime = $iCacheTime;

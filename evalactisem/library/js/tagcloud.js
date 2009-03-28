@@ -44,7 +44,7 @@
 	function SelectNetwork(id,GetParam){
 	  try{
 	      var login = GetTreeValSelect(id,0);
-		  var url = urlTagCloud+"?login="+login+"&ShowAll=1";
+		  var url = urlTagCloud+"?login="+login;
 		//récupère le type de représentation
 		var TC = document.getElementById("choixTC").value;
 		url += "&TC="+TC;
@@ -53,6 +53,9 @@
 		//récupère la langue
 		var langue = document.getElementById("choixLangue").value;
 		url += "&langue="+langue;
+		//récupère la taille
+		var taille = document.getElementById("choixTaille").value;
+		url += "&ShowAll="+taille;
 
 		if(GetParam!=-1){
 			  //calcul les arguments

@@ -63,7 +63,7 @@
    
    // folder to store cache files
    define('PHP_DELICIOUS_CACHE_PATH', PathRoot.'/tmp/');
-   define('CACHE_PATH', PathRoot.'/library/tmp/');
+   define('CACHE_PATH', PathRoot.'/tmp/');
    
    
    class PhpDelicious {

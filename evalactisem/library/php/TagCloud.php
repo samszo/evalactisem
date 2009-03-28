@@ -122,7 +122,7 @@ class TagCloud {
 				$svg->addChild($lignePost);
 				
 				//redimensionne le svg
-				$svg = $this->RedimSvg($ShowAll,$svg,$this->width);
+				$svg = $this->RedimSvg($ShowAll,$svg,$this->width,"tag");
 		  	}else{
 		  		$svg->addChild(new SvgText(30,30,"AUCUN POST","fill:black;font-size:30;"));
 		  	}
@@ -132,12 +132,17 @@ class TagCloud {
 
 	}
 	
-	public function RedimSvg($ShowAll,$svg,$svgWidth){
+	public function RedimSvg($ShowAll,$svg,$svgWidth,$type="post"){
 				
-		if($ShowAll){
-			$svg->mPreserveAspectRatio="xMinYMin meet";
-			//$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";
-			$svg->mViewBox = "0 0 ".($this->xTagD)." ".($this->yTC)."";
+		if($ShowAll!=-1){
+			if($type=="post"){
+				$svg->mPreserveAspectRatio="xMinYMin meet";
+				$svg->mViewBox = "0 0 ".($this->xTagD)." ".($this->yTC)."";
+			}else{
+				$svg->mPreserveAspectRatio="xMinYMin meet";
+				//$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";				
+				$svg->mViewBox = "0 0 100 ";				
+			}
 		}else{
 			$svg->mHeight=$this->yTC;
 			$svg->mWidth=$svgWidth;
@@ -446,8 +451,10 @@ class TagCloud {
 		
 		//calcul le rayon
 		$r = $this->TagCircleRay*$tag["nb"];
-  		//met à jour le placement
-		$this->xTC += $r;
+  		//met à jour le placement horizontal
+		//$this->xTC += $r;
+  		//met à jour le placement vertical
+		$this->yTC += $r;
 		//et la taille de la police
 		$fontsize = ($tag["nb"]*$this->font_size*2);
 		
@@ -458,9 +465,9 @@ class TagCloud {
 		
 		//ajoute le cercle
 		$script = "onclick=\"alert('".$lib." (".$tag["nb"].") ')\"";
-		$script = " onmouseover=\"GrossiMaigriTag(evt)\"";
-		$script .= " onmouseleave=\"MaigriTag(evt)\"";
-		$script .= " grossi='non'";
+		//$script = " onmouseover=\"GrossiMaigriTag(evt)\"";
+		//$script .= " onmouseleave=\"MaigriTag(evt)\"";
+		//$script .= " grossi='non'";
 		$g->addChild(new SvgCircle($this->xTC,$this->yTC,$r,$style,"",$script));
 		
 	  	//ajoute le texte
@@ -468,9 +475,11 @@ class TagCloud {
   		//$g->addChild(new SvgText($xT,$this->yTC,$lib,$s,"scale:2;"));
   		$g->addChild(new SvgText($xT,$this->yTC,$lib,$s));
   		
-  		//met à jour le placement
-		$this->xTC += $r;
-			 
+  		//met à jour le placement horizontal
+		//$this->xTC += $r;
+  		//met à jour le placement vertical
+		$this->yTC += $r;
+		
 		return $g;
 		
 	}
