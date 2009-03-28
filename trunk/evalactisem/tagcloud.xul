@@ -16,7 +16,7 @@
 	<vbox id="outils" flex="1" >
 		<hbox >
 			<groupbox orient="horizontal" >
-				<caption label='Choix du type représentation' />
+				<caption label='Choix de la représentation' />
 				 <menulist id="choixTC" >
 				    <menupopup>
 				      <menuitem label="Posts" value="posts"/>
@@ -27,6 +27,12 @@
 				    <menupopup>
 				      <menuitem label="Remplace" value="-1"/>
 				      <menuitem label="Ajoute" value="0"/>
+				    </menupopup>
+				  </menulist>
+				 <menulist id="choixTaille" >
+				    <menupopup>
+				      <menuitem label="Taille réelle" value="-1"/>
+				      <menuitem label="Taille compressée" value="1"/>
 				    </menupopup>
 				  </menulist>
 			</groupbox>
@@ -84,10 +90,13 @@
 			</hbox>
 		</groupbox>
 	</vbox>
+   	<splitter collapse="before" >
+		<grippy/>
+	</splitter>
 	<vbox flex="1">
 		<groupbox orient="vertical" flex="1" >
 			<caption label='Représentation' />
-			<vbox id="tagcloud" flex="1" />
+			<vbox id="tagcloud" flex="1"  style="overflow:auto" />
 		</groupbox>
 	</vbox>
 </hbox>
