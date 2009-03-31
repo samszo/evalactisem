@@ -1,1 +1,0 @@
-a:2:{s:11:"last-update";s:0:"";s:5:"items";a:1:{i:0;a:7:{s:3:"url";s:39:"http://performance.survol.fr/avec/json/";s:4:"desc";s:16:"json description";s:5:"notes";N;s:4:"hash";s:32:"285a3307e92452a7bb9d18b934c4177c";s:4:"tags";a:1:{i:0;s:4:"json";}s:7:"updated";s:19:"2008-05-22 20:19:28";s:5:"count";s:1:"2";}}}
