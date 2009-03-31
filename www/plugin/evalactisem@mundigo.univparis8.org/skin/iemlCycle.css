@@ -1,0 +1,94 @@
+/* ======================================================== */
+/* ===================== Global Styles ==================== */
+/* ======================================================== */
+
+
+.help { 
+    color:blue;
+    font-weight:bold;
+    font-size:150%; 
+} 
+
+.NoSelect{
+	 text-decoration:none;
+	 display:block;
+	 width:75px;
+	 height:55px;
+   	 border:1px outset #dbecff;
+	 font-family:Arial;
+     font-size:7pt;
+     font-weight: bold;
+     line-height:15pt;
+     text-align:center;
+     color:#000;
+}
+
+.Select{
+	 text-decoration:none;
+	 display:block;
+	 width:75px;
+	 height:55px;
+   	 border:1px outset #dbecff;
+	 background-color:yellow;
+	 font-family:Arial;
+     font-size:7pt;
+     font-weight: bold;
+     line-height:15pt;
+     text-align:center;
+     color:red;
+}
+
+.Error{
+	 display:block;
+	 width:75px;
+	 height:55px;
+   	 border:1px outset #dbecff;
+	 font-family:Arial;
+     font-size:7pt;
+     font-weight: bold;
+     line-height:15pt;
+     text-align:center;
+     color:red;
+}
+
+.NoSelect:hover{ 
+    border-style: inset;
+}
+#loginbox{
+	padding-top:70px;
+	whidth:300px;
+	height:500px;
+    text-align:center;
+	background-color:#103933;
+	
+}
+#BlocTextePass textbox{
+	 
+	 margin-bottom:20px;
+}
+#BlocTextePass{
+	padding-left:30px;
+	padding-right:30px;;
+	
+}
+#BlocTextePass label{
+	text-align:center;
+	font-family:Arial;
+    font-size:10pt;
+    font-weight: bold;
+    color:#FFF;
+}
+#lbl{
+	margin-bottom:30px;
+	font-size:11pt;
+	font-family:Arial;
+	font-weight: bold;
+    color:#FFF;
+	}
+#bt_connex{
+		margin-top:20px;
+	}
+#bt_connex label{
+		margin-top:20px;
+		color:#000;
+	}
