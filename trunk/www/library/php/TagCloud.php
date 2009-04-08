@@ -122,7 +122,7 @@ class TagCloud {
 				$svg->addChild($lignePost);
 				
 				//redimensionne le svg
-				$svg = $this->RedimSvg($ShowAll,$svg,$this->width,"tag");
+				$svg = $this->RedimSvg($ShowAll,$svg,$this->width);
 		  	}else{
 		  		$svg->addChild(new SvgText(30,30,"AUCUN POST","fill:black;font-size:30;"));
 		  	}
@@ -141,7 +141,7 @@ class TagCloud {
 			}else{
 				$svg->mPreserveAspectRatio="xMinYMin meet";
 				//$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";				
-				$svg->mViewBox = "0 0 100 ";				
+				$svg->mViewBox = "0 0 ".($this->xTC)." ".($this->yTC)."";				
 			}
 		}else{
 			$svg->mHeight=$this->yTC;
@@ -177,8 +177,8 @@ class TagCloud {
 				//défini la taille de la bulle minimum
 				$this->TagCircleRay = $this->PostCarMax/2;
 				//défini la place de la première bulle
-			  	$this->yTC = $this->TagCircleRay*$this->TagNbMax;
-			  	$this->xTC = 20;
+			  	$this->yTC = 20; //une marge 20
+			  	$this->xTC = $this->TagCircleRay*$this->TagNbMax/2; //le bord du cercle le plus gros est à 0
 				
 				//construction des lignes de tag
 			  	$ligneTag = $this->GetLigneTags();
@@ -186,14 +186,9 @@ class TagCloud {
 			  	//ajoute les groupes graphiques
 				$svg->addChild($ligneTag);
 				
-				
 				//redimensionne le svg
-			  	$this->yTC += $this->TagCircleRay*$this->TagNbMax;
-			  	//défini la taille du graphique
 				$svgWidth = $this->xTC;
-			  	$this->xTagG = 10;
-			  	$this->xTagD = $this->xTC;
-			  	$svg = $this->RedimSvg($ShowAll,$svg,$svgWidth);
+			  	$svg = $this->RedimSvg($ShowAll,$svg,$svgWidth,"tag");
 		  	}else{
 		  		$svg->addChild(new SvgText(30,30,"AUCUN TAG","fill:black;font-size:30;"));
 		  	}
@@ -275,8 +270,8 @@ class TagCloud {
 					}				
 				}
 			}
-			$this->IntVals[0] = ($this->TagNbMax-$Min)/3;
-			$this->IntVals[1] = ($this->TagNbMax-$Min)/1.5;		
+			$this->IntVals[0] = ($this->TagNbMax-$this->TagNbMin)/3;
+			$this->IntVals[1] = ($this->TagNbMax-$this->TagNbMin)/1.5;		
 	}
 	
 	function CalculPosts($Posts,$DateDeb,$DateFin,$NbDeb,$NbFin){
@@ -444,13 +439,18 @@ class TagCloud {
 		return $g;
 	}
 	
-	function AddTagCircle($j, $tag) {
+	function AddTagCircle($j, $tag, $interval=true) {
 
 
 		$g = new SvgGroup("","","TagCircle_".$j,"");
 		
 		//calcul le rayon
-		$r = $this->TagCircleRay*$tag["nb"];
+		if($interval){
+			$interval = $this->GetClass($tag["nb"],"",$this->TagNbMax,$this->TagNbMin,$this->IntVals);
+			$r = $this->TagCircleRay*$interval;
+		}else{
+			$r = $this->TagCircleRay*$tag["nb"];
+		}
   		//met à jour le placement horizontal
 		//$this->xTC += $r;
   		//met à jour le placement vertical
@@ -557,24 +557,39 @@ class TagCloud {
 		
 	}
 	
-	function GetClass($nb,$groupe,$Max,$Min,$IntVals) {
+	function GetClass($nb,$groupe,$Max,$Min,$IntVals,$num=false) {
 
 		$class = "";
 		
 		if ($nb <= $Min) {
-		   $class = "smallestTag".$groupe;
+			if($num)
+				$class = 0.5;
+			else
+			   $class = "smallestTag".$groupe;
 		} elseif ($nb > $Min and $nb <= $IntVals[0]) {
-		   $class = "smallTag".$groupe;
+			if($num)
+				$class = 1;
+			else
+				$class = "smallTag".$groupe;
 		} elseif ($nb > $IntVals[0] and $nb <= $IntVals[1]) {
-		   $class = "mediumTag".$groupe;
+			if($num)
+				$class = 3/2;
+			else
+				$class = "mediumTag".$groupe;
 		} elseif ($nb > $IntVals[1] and $nb < $Max) {
-		   $class = "largeTag".$groupe;
+			if($num)
+				$class = 4/2;
+			else
+				$class = "largeTag".$groupe;
 		} elseif ($nb >= $Max) {
-		   $class = "largestTag".$groupe;
+			if($num)
+				$class = 5/2;
+			else
+				$class = "largestTag".$groupe;
 		}
 
 		//non prise en compte de la pondération
-		$class = "smallTag".$groupe;
+		//$class = "smallTag".$groupe;
 		
 		return $class;
 	}

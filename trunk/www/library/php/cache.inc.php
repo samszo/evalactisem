@@ -43,7 +43,7 @@
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
       	//echo 'cache='.$sCachePath;
-      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)){
+      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)||ereg("network/",$sKey)){
       		$this->sShortKey = $sPrefix.$sKey;
       	}else{ 
       		$this->sShortKey = $sPrefix.md5($sKey);
