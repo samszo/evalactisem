@@ -24,6 +24,9 @@ function HideTooltip(evt)
 
 function GetFlux(getFlux){
     m=0;
+    if(arrSelect=="")
+    	arrSelect='["fr"]';
+    console.log(eval('('+arrSelect+')'));
     document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
@@ -621,14 +624,16 @@ function Load(key){
     	lang=value;
     }
     function selectChekBox(select){
-        if(document.getElementById(select).getAttribute("checked")){
-    		arrSelect[m]=select ;
-    		m++;
-    	}else{
-    		checked=arrSelect.join();
-    		checked=checked.replace(select+' ,','').replace(select+',','');
-    		arrSelect=checked.split(',');
-    		m--;
-    	}
+        arrSelect='[';
+        if(document.getElementById('fr').getAttribute("checked"))
+    		arrSelect+='"fr"';
+    	if(document.getElementById('ar').getAttribute("checked"))
+    		arrSelect+=',"ar"';
+    	if(document.getElementById('ar').getAttribute("checked"))
+    		arrSelect+=',"en"';
+    	console.log(eval('('+arrSelect+')'));
+    	return arrSelect+']';
+    	
+    	
     }
   

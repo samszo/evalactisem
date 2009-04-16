@@ -45,6 +45,7 @@
       	if(ereg("bookmarks/",$sKey)){
          	$sCachePath="library/tmp/";
          } 
+
       	 $this->sShortKey = $sPrefix.md5($sKey);
       	 $this->sFile = "$sCachePath$this->sShortKey.xml";
          $this->sFileLock = "$this->sFile.lock";
@@ -62,7 +63,12 @@
       public function Exists() {
          return (array_key_exists($this->sShortKey, self::$aCache)) || (file_exists($this->sFile) || file_exists($this->sFileLock));
       }
-      
+      public function exist(){
+      	if(file_exists($this->sFile))
+      	 return 'true';
+      	else
+      	 return 'false';
+      }
       public function Set($vContents,$isXml=false) {
          if (!file_exists($this->sFileLock)) {
             if (file_exists($this->sFile)) {

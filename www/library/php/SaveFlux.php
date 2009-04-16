@@ -60,8 +60,9 @@ class SauvFlux{
      		if($objSem->GetUtiOntoFlux($iduti)==0 || $getFlux=="true" ){
      			$oCache->Set($Lang);
      			$arrLang=$Lang;
+     		}else{
+     			$arrLang=$Lang;
      		}
-     			
 	     	if ($aPosts = $oDelicious->GetAllTags()) { 
 	     	foreach ($aPosts as $aPost) { 
 		  	  	//vérifie que le tag du flux existe
