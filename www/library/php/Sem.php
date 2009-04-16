@@ -731,10 +731,8 @@ Class Sem{
 		        	$res[0]=$idF['onto_flux_id'];
 	   			    $res[1]=$EntryExp->entry->id;
 	   			    $sem = new Sem($this->site,$this->site->scope["FicXml"],"");
-					echo $_SESSION['loginSess'];
 	   			    $oCacheXml = new Cache($_SESSION['loginSess']."liveMetal", $iCacheTime=10);
 					$xml= simplexml_load_string($oCacheXml->Get(true));
-					print_r($xml);
 					$Xpath = "//entry[@id='".$EntryExp->entry->id."']";
    					$entry=$xml->xpath($Xpath);
    					if(!$entry[0]['id']){
