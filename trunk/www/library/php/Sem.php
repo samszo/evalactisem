@@ -171,7 +171,7 @@ Class Sem{
 	 function AddTradAuto($idFlux,$tag,$libIeml,$arrLang,$insAddTrad=-1){ 
 	 	set_time_limit(9000);
 	 	$Entrys=$this->LiveMetalRequestAll($arrLang,$tag,'getExpression');
-	 	$Langs=explode(',',$arrLang);
+	 	$Langs=json_decode($arrLang);
 		    foreach($Langs as $lang){
 		    	$Xpath = "//entry[@lang='".$lang."']";
 		    	foreach($Entrys->xpath($Xpath) as $entry){
@@ -723,7 +723,6 @@ Class Sem{
    				$Activite= new Acti();
    				if($iduti==-1)
 	   				$iduti=$_SESSION['iduti'];
-   				
 	   			if($res==-1){	
 					$EntryExp=$this->LiveMetalRequest('ieml',trim($codeIeml),'getId');
 	   				//recuperation des identifiants ieml_id et ieml_onto_flux
@@ -732,8 +731,10 @@ Class Sem{
 		        	$res[0]=$idF['onto_flux_id'];
 	   			    $res[1]=$EntryExp->entry->id;
 	   			    $sem = new Sem($this->site,$this->site->scope["FicXml"],"");
-					$oCacheXml = new Cache($_SESSION['loginSess']."liveMetal", $iCacheTime=10);
+					echo $_SESSION['loginSess'];
+	   			    $oCacheXml = new Cache($_SESSION['loginSess']."liveMetal", $iCacheTime=10);
 					$xml= simplexml_load_string($oCacheXml->Get(true));
+					print_r($xml);
 					$Xpath = "//entry[@id='".$EntryExp->entry->id."']";
    					$entry=$xml->xpath($Xpath);
    					if(!$entry[0]['id']){

@@ -70,7 +70,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var type;
 		var lang='fr';
 		var selectCalque;
-		var arrSelect= new Array();
+		var arrSelect='';
 		var m=0;
 	</script>
 

@@ -123,12 +123,12 @@
 	function GetTreeTradUtis(){
         global $objSite;
         $oCache = new Cache($_SESSION['loginSess']."Lang", $iCacheTime=10);
-        if($oCache->Get())
+        if($oCache->exist()=='true')
      		$arrLang= $oCache->Get();
      	else
-     		$arrLang= "fr";
+     		$arrLang= '["fr"]';
         $xul = new Xul($objSite);
-        $Langs=explode(",",$arrLang);
+        $Langs=json_decode($arrLang);
 		return $xul->Get_Tree_Trad_Utis(array($_SESSION['iduti'],$objSite->infos["UTI_TRAD_AUTO"]),$Langs);
 		//return $xul->GetTreeTradUtis($_SESSION['iduti']);
 	}
