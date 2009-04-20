@@ -86,7 +86,7 @@ class Xul{
 	$ihmSup .= '</treerow>'.EOL;
 	$ihmSup .= '<treechildren>'.EOL;
 	while($r = mysql_fetch_assoc($rs)){
-		$oCacheXml = new Cache($_SESSION['loginSess']."liveMetal", $iCacheTime=10);
+		$oCacheXml = new Cache($this->sUsername."liveMetal", $iCacheTime=10);
 		$xml=simplexml_load_string($oCacheXml->Get(true));
 		$Xpath = "//entry[@id='".$r['ieml_id']."']";
 		$Entrys=$xml->xpath($Xpath);
@@ -108,7 +108,7 @@ class Xul{
 }
         
 //Construction de la table des Traduction de le  utilisateur     
-function Get_Tree_Trad_Utis($idUtis,$arrLang){
+function Get_Tree_Trad_Utis($idUtis){
 	
 	$type = "Signl_Trad";
 	
@@ -132,7 +132,7 @@ function Get_Tree_Trad_Utis($idUtis,$arrLang){
     $ihm .= '<treechildren >'.EOL;
 
 	foreach($idUtis as $idUti){
-		$ihm .= $this->GetTreeItemTradUti($idUti,$type,$arrLang);	
+		$ihm .= $this->GetTreeItemTradUti($idUti,$type);	
 	}
     
 	//termine le tree
@@ -144,10 +144,10 @@ function Get_Tree_Trad_Utis($idUtis,$arrLang){
         
 }
 
-function GetTreeItemTradUti($idUti,$type,$arrLang=""){
+function GetTreeItemTradUti($idUti,$type){
 
 	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
-	$oCacheXml = new Cache($_SESSION['loginSess']."liveMetal", $iCacheTime=10);
+	$oCacheXml = new Cache($this->sUsername."liveMetal", $iCacheTime=10);
 	$xml= simplexml_load_string($oCacheXml->Get(true));
 	//récupére les traductions 
 	if($idUti==$this->site->infos["UTI_TRAD_AUTO"]){
@@ -167,10 +167,8 @@ function GetTreeItemTradUti($idUti,$type,$arrLang=""){
    		if($r["onto_flux_code"]!=$oFluxCode){
    			$oIemlNiv = -1;
    		}
-        foreach($arrLang as $lang){
-   		$Xpath = "//entry[@id='".$r['ieml_id']."'][@lang='".$lang."']";
+   		$Xpath = "//entry[@id='".$r['ieml_id']."']";
    		$entry=$xml->xpath($Xpath);
-
    		//on crée les couches
        	if($entry[0]->iemlLevel.''!=$oIemlNiv){
        		if($i>0){
@@ -245,10 +243,9 @@ function GetTreeItemTradUti($idUti,$type,$arrLang=""){
        	//on cr�e les traductions
         $ihmIeml .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$entry[0]['id'],"",array("","",$entry[0]->iemlLib.'',$entry[0]->iemlCode.''));
 		//on cr�e l'usl
-        $uslT .= $entry[0]->iemlCode.$sem->StarParam["union"];
+		$uslT .= $entry[0]->iemlCode.$sem->StarParam["union"];
+       	
         $i++;
-        }
-		
    	}
     
    	//v�rifie s'il existe des traductions
