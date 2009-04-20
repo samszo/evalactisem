@@ -42,11 +42,11 @@
       protected static $aCache = array();
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
-      	if(ereg("bookmarks/",$sKey)){
-         	$sCachePath="library/tmp/";
-         } 
-
-      	 $this->sShortKey = $sPrefix.md5($sKey);
+      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)||ereg("network/",$sKey)){
+      		$this->sShortKey = $sPrefix.$sKey;
+      	}else{ 
+      		$this->sShortKey = $sPrefix.md5($sKey);
+      	}
       	 $this->sFile = "$sCachePath$this->sShortKey.xml";
          $this->sFileLock = "$this->sFile.lock";
          $this->iCacheTime = $iCacheTime;
@@ -63,12 +63,7 @@
       public function Exists() {
          return (array_key_exists($this->sShortKey, self::$aCache)) || (file_exists($this->sFile) || file_exists($this->sFileLock));
       }
-      public function exist(){
-      	if(file_exists($this->sFile))
-      	 return 'true';
-      	else
-      	 return 'false';
-      }
+      
       public function Set($vContents,$isXml=false) {
          if (!file_exists($this->sFileLock)) {
             if (file_exists($this->sFile)) {

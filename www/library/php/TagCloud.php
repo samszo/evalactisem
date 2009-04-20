@@ -178,7 +178,7 @@ class TagCloud {
 				$this->TagCircleRay = $this->PostCarMax/2;
 				//défini la place de la première bulle
 			  	$this->yTC = 20; //une marge 20
-			  	$this->xTC = $this->TagCircleRay*$this->TagNbMax/2; //le bord du cercle le plus gros est à 0
+			  	$this->xTC = $this->TagCircleRay*$this->GetClass($this->TagNbMax,"",100,2,$this->IntVals,true); //le bord du cercle le plus gros est à 0
 				
 				//construction des lignes de tag
 			  	$ligneTag = $this->GetLigneTags();
@@ -446,17 +446,18 @@ class TagCloud {
 		
 		//calcul le rayon
 		if($interval){
-			$interval = $this->GetClass($tag["nb"],"",$this->TagNbMax,$this->TagNbMin,$this->IntVals);
+			$nb = $this->GetClass($tag["nb"],"",$this->TagNbMax,$this->TagNbMin,$this->IntVals,true);
 			$r = $this->TagCircleRay*$interval;
 		}else{
 			$r = $this->TagCircleRay*$tag["nb"];
+			$nb = $tag["nb"];
 		}
   		//met à jour le placement horizontal
 		//$this->xTC += $r;
   		//met à jour le placement vertical
 		$this->yTC += $r;
 		//et la taille de la police
-		$fontsize = ($tag["nb"]*$this->font_size*2);
+		$fontsize = ($nb*$this->font_size*2);
 		
 		//calcul le style du texte et son placement
 		$xT = $this->xTC-($r)+$fontsize;
@@ -464,7 +465,7 @@ class TagCloud {
 		$lib = $this->SVG_entities($tag["tag"]);
 		
 		//ajoute le cercle
-		$script = "onclick=\"alert('".$lib." (".$tag["nb"].") ')\"";
+		$script = "onclick=\"alert('".$lib." (".$nb.") ')\"";
 		//$script = " onmouseover=\"GrossiMaigriTag(evt)\"";
 		//$script .= " onmouseleave=\"MaigriTag(evt)\"";
 		//$script .= " grossi='non'";
