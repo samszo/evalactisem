@@ -123,7 +123,7 @@
 	function GetTreeTradUtis(){
         global $objSite;
         $oCache = new Cache($_SESSION['loginSess']."Lang", $iCacheTime=10);
-        if($oCache->exist()=='true')
+        if($oCache->Exists()=='true')
      		$arrLang= $oCache->Get();
      	else
      		$arrLang= '["fr"]';
