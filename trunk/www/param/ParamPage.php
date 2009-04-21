@@ -6,8 +6,12 @@ session_start();
 		$login = $_SESSION['loginSess'];
 		$mdp = $_SESSION['mdpSess'];
 	}else{
+		/*
 		$login = "luckysemiosis";
 		$mdp = "Samszo0";
+		*/
+		$login = "samszo";
+		$mdp = "Lucky71";
 		$_SESSION['loginSess']=$login;
 		$_SESSION['mdpSess']=$mdp;
 	}
@@ -15,7 +19,13 @@ session_start();
 	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],CACHETIME);
 	$_SESSION['Delicious']= $oDelicious;
 		
-	// vérification du site en cours
+
+	if(!isset($_SESSION['lang'])){
+		$_SESSION['lang']='fr';
+	}
+	
+	
+	// vï¿½rification du site en cours
 	if(isset($_GET['site'])){
 		$site = $_GET['site'];
 	}else{
@@ -87,9 +97,11 @@ session_start();
 	
 	$objSite = new Site($SITES, $site, $scope, false);
 	$objXul= new Xul($objSite);
+	$objUti = new Uti($objSite,$_SESSION['loginSess']);
+	$objUtiTradAuto = new Uti($objSite,false,$objSite->infos["UTI_TRAD_AUTO"]);
 	
-	$_SESSION['iduti']=$objSite->utilisateur($_SESSION['loginSess']);
-
+	$_SESSION['iduti']=$objUti->id;
+	
 
 //function pour le cache
 	function cParse($code){

@@ -2,7 +2,7 @@
   //
   // Fichier contenant les definitions de constantes
   //define ("PathRoot",$_SERVER["DOCUMENT_ROOT"]."/evalactisem");
-  //pour le débubbage
+  //pour le dï¿½bubbage
   define ("PathRoot","C:/wamp/www/evalactisem");
 
   // *** chemin de toutes les bases et les spip en service ***
@@ -17,8 +17,9 @@
   //define ("DEFSITE", "mundi");
 
   define ("CACHETIME", 100000000);
-  define("LIFETIME",10000);
-  define("CACHEPATH",PathRoot."/tmp/parser/");
+
+  // folder to store cache files
+   define('CACHE_PATH', PathRoot.'/tmp/');   
   
   $dbOptions = array (
 		'ERROR_DISPLAY' => true
@@ -54,47 +55,33 @@
   	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"UTI_TRAD_AUTO" => 1,
   	"gmKey" => gmKey,
-  	"FicXml"=>PathRoot."/param/ParamXul.xml" 
+  	"FicXml"=>PathRoot."/param/ParamXul.xml", 
+  	"LiveMetalDico"=>PathRoot."/param/LiveMetalDico.xml", 
+  	"PATH_LiveMetal"=>"http://evalactisem.ieml.org" 
+  	); 
+	$SiteMundi = array(
+		"PATH_WEB" => "http://www.mundilogiweb.com/evalactisem/", 
+		"SQL_LOGIN" => "mundilogieml", 
+		"SQL_PWD" => "uLkm3WuW", 
+		"SQL_HOST" => "mysql5-12",
+		"SQL_DB" => "mundilogieml",
+		"NOM" => "EvalActiSem",//je sais pas
+		"SITE_PARENT" => -1,//je sais pas
+		"SITE_ENFANT" => -1,
+		"DEF_LAT" => 45,
+		"DEF_LNG" => 1,
+		"DEF_ZOOM" => 4,
+		"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
+		"UTI_TRAD_AUTO" => 1,
+		"gmKey" => gmKey,
+	  	"FicXml"=>PathRoot."/param/ParamXul.xml", 
+	  	"LiveMetalDico"=>PathRoot."/param/LiveMetalDico.xml", 
+	  	"PATH_LiveMetal"=>"http://evalactisem.ieml.org" 
 	); 
-$SiteThyp = array(
-	"PATH_WEB" => "http://localhost/evalactisem/", 
-	"SQL_LOGIN" => "root", 
-	"SQL_PWD" => "thyp2006", 
-	"SQL_HOST" => "localhost",
-	"SQL_DB" => "evalactisem",
-	"NOM" => "EvalActiSem",//je sais pas
-	"SITE_PARENT" => -1,//je sais pas
-	"SITE_ENFANT" => -1,
-	"DEF_LAT" => 45,
-	"DEF_LNG" => 1,
-	"DEF_ZOOM" => 4,
-	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
-	"UTI_TRAD_AUTO" => 4,
-	"gmKey" => gmKey,
-  	"FicXml"=>PathRoot."/param/ParamXul.xml" 
-); 
-$SiteMundi = array(
-	"PATH_WEB" => "http://www.mundilogiweb.com/evalactisem/", 
-	"SQL_LOGIN" => "mundilogieml", 
-	"SQL_PWD" => "uLkm3WuW", 
-	"SQL_HOST" => "mysql5-12",
-	"SQL_DB" => "mundilogieml",
-	"NOM" => "EvalActiSem",//je sais pas
-	"SITE_PARENT" => -1,//je sais pas
-	"SITE_ENFANT" => -1,
-	"DEF_LAT" => 45,
-	"DEF_LNG" => 1,
-	"DEF_ZOOM" => 4,
-	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
-	"UTI_TRAD_AUTO" => 1,
-	"gmKey" => gmKey,
-  	"FicXml"=>PathRoot."/param/ParamXul.xml" 
-); 
 	
 	
   $SITES = array(
 	"local" => $Site,
-	"thyp" => $SiteThyp,
   	"mundi" => $SiteMundi
   );
 

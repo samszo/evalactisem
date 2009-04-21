@@ -18,7 +18,7 @@ class SauvFlux{
 		$this->parentsFlux_Band=$parent_Band;
 		$this->descFlux=$desc;
 		$this->niveauFlux=$niv;
-
+		
 		
 	}
     
@@ -51,43 +51,36 @@ class SauvFlux{
 	  return $name;
 	}
 	
-     function aGetAllTags($objSite,$oDelicious,$iduti,$Lang,$getFlux){
+     function aGetAllTags($objSite,$oDelicious,$oUti,$arrLang,$getFlux){
      	set_time_limit(9000);
      	$objSem = new Sem($objSite,$objSite->infos["FicXml"],"");
-     	$oCache = new Cache($_SESSION['loginSess']."Lang", $iCacheTime=10);
      	//verfie s'il y a des nouvelles tags 
-     	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($iduti)==0 || $getFlux=="true" ){
-     		if($objSem->GetUtiOntoFlux($iduti)==0 || $getFlux=="true" ){
-     			$oCache->Set($Lang);
-     			$arrLang=$Lang;
-     		}else{
-     			$arrLang=$Lang;
-     		}
-	     	if ($aPosts = $oDelicious->GetAllTags()) { 
-	     	foreach ($aPosts as $aPost) { 
-		  	  	//vérifie que le tag du flux existe
-			    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
-				if(!$reponse){
-					//ajoute un nouveau tag de flux
-				   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
-					$this->flux_uti($objSite,$iduti,$idflux);
-				}else
-					$idflux=$reponse['onto_flux_id'];
-				
-				//ajoute les traductions automatiques
-                if($getFlux=="true")
-					$xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$arrLang,1);			   		
-				else	
-				    $xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$arrLang,-1);	
-		  	  } 
+     	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($oUti->id)==0 || $getFlux=="true" ){
+			$xml='';
+     		if ($aPosts = $oDelicious->GetAllTags()) { 
+		     	foreach ($aPosts as $aPost) { 
+			  	  	//vérifie que le tag du flux existe	     		
+				    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
+					if(!$reponse){
+						//ajoute un nouveau tag de flux
+					   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
+						$this->flux_uti($objSite,$oUti->id,$idflux);
+					}else
+						$idflux=$reponse['onto_flux_id'];
+					
+					//ajoute les traductions automatiques
+	                if($getFlux=="true")
+						$xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$arrLang,1);			   		
+					else	
+					    $xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$arrLang,-1);	
+			  	  } 
 			   
-		     }else {
+		    }else {
 			   echo $oDelicious->LastErrorString();
 			}	
 			$xml='<Ieml>'.$xml.'</Ieml>';
-			$oCacheXml = new Cache($_SESSION['loginSess']."liveMetal", $iCacheTime=10);
+			$oCacheXml = new Cache("LiveMetal/".$oUti->login, $iCacheTime=10);
 			$oCacheXml->Set($xml,true);
-			return $tag;
 		}
 	}
 	
@@ -155,7 +148,7 @@ class SauvFlux{
 		$r = $db->query($sql);
 		$db->close();
 		
-		if(@mysql_num_rows($r)==0){				   	 
+		if(mysql_num_rows($r)==0){				   	 
 			$db1 = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 			$Xpath=$this->Xpath('flux_utilisateur');
 			$Q=$objSite->XmlParam->GetElements($Xpath);
@@ -177,7 +170,7 @@ class SauvFlux{
 		$value = str_replace("-codeFlux-",addslashes($codeFlux),$Q[0]->values);
 			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
         $link=$db->connect();
-        $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
+        //$db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
 		$sql = $Q[0]->insert.$value;
 	    $req = $db->query($sql);
 	    $idflux= mysql_insert_id();
@@ -210,7 +203,7 @@ class SauvFlux{
 	    $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 	    $db->connect();
 	    $req = $db->query($sql);
-	    $reponse=@mysql_fetch_assoc($req);
+	    $reponse=mysql_fetch_assoc($req);
 	    $db->close();	    
 	  	return $reponse;
 	}

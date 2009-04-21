@@ -42,14 +42,17 @@
       protected static $aCache = array();
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
-      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)||ereg("network/",$sKey)){
+      	//echo 'cache='.$sCachePath;
+      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)||ereg("network/",$sKey)||ereg("LiveMetal/",$sKey)||ereg("lang/",$sKey)){
       		$this->sShortKey = $sPrefix.$sKey;
       	}else{ 
-      		$this->sShortKey = $sPrefix.md5($sKey);
+      		//$this->sShortKey = $sPrefix.md5($sKey);
+      		$this->sShortKey = $sPrefix.$sKey;
       	}
       	 $this->sFile = "$sCachePath$this->sShortKey.xml";
          $this->sFileLock = "$this->sFile.lock";
          $this->iCacheTime = $iCacheTime;
+         //echo ereg("bookmarks/",$sKey);
          
       }
       

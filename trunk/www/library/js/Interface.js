@@ -1,4 +1,16 @@
 
+
+function SetSession(id, val) {
+	try {
+		var url = urlExeAjax+"?f=SetSession&id="+id+"&val="+val;
+		//met ï¿½ jour les valeurs de session
+		GetResult(url);
+
+  	} catch(ex2){alert("interface:SetSession:"+ex2);}
+}
+
+
+
 function ShowTooltip(evt)
 {
         var matrix = evt.target.ownerDocument.getElementById("root").getScreenCTM()
@@ -24,21 +36,20 @@ function HideTooltip(evt)
 
 function GetFlux(getFlux){
     m=0;
-    if(arrSelect=="")
-    	arrSelect='["fr"]';
-    console.log(eval('('+arrSelect+')'));
-    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la récupération du flux est en cours...');
+    document.getElementById('label_Maj').setAttribute('value','Veuillez patienter la rÃ©cupÃ©ration du flux est en cours...');
     var meter=document.getElementById('Maj');
 	meter.setAttribute("hidden","false");
-	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=GetFlux&arrLang="+arrSelect+"&getFlux="+getFlux,'Xul_Ajax_ShowTreeTrad','');
+	AjaxRequest(urlAjax+"library/php/ExeAjax.php?f=GetFlux&lang="+lang+"&getFlux="+getFlux,'Xul_Ajax_ShowTreeTrad','');
     
 }
   
 function Xul_Ajax_ShowTreeTrad(result){
 
   try {
+		document.documentElement.style.cursor = "wait";
+	
 		//pour les traduction faites
-		var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeTradUtis&arrLang="+arrSelect;
+		var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeTradUtis&lang="+lang;
 		AppendResult(url,document.getElementById('tpSingleTrad'),false);
 
 		//pour les non traduition
@@ -55,6 +66,8 @@ function Xul_Ajax_ShowTreeTrad(result){
 		document.getElementById('label_Maj').setAttribute("hidden","true");
 		
   } catch(ex2){ alert("interface:ShowTreeTrad:"+ex2); }
+	document.documentElement.style.cursor = "auto";
+
 }
 
 function Sem_AddTrad(){
@@ -65,15 +78,15 @@ function Sem_AddTrad(){
     var message=document.getElementById("trad-message");
     
 	if(codeIeml.value==""){
-		alert("Veuillez sélectionner une expression IEML");
+		alert("Veuillez sï¿½lectionner une expression IEML");
 		return
 	}	
 	if(codeFlux.value==""){
-		alert("Veuillez sélectionner un tag del.icio.us");
+		alert("Veuillez sï¿½lectionner un tag del.icio.us");
 		return
 	}	
 
-	//vérifie la saisie
+	//vï¿½rifie la saisie
 	var verif = GetResult(urlAjax+"library/php/ExeAjax.php?f=VerifExpIEML&codeIeml="+codeIeml.value+"&libIeml="+libIeml.value);
 	if(verif!="OK"){
 		message.value = verif;
@@ -90,18 +103,18 @@ function Sem_AddTrad(){
 
 function Sem_SupTrad()
 {
-	//récupération des valeurs
+	//rï¿½cupï¿½ration des valeurs
 	
 	var libIeml=document.getElementById("lib-trad-ieml");
     var codeIeml=document.getElementById("code-trad-ieml");
     var codeFlux=document.getElementById("code-trad-flux");
    
 	if(codeIeml.value=="" || libIeml.value=="" ){
-		alert("Veuillez sélectionner une expression IEML");
+		alert("Veuillez sï¿½lectionner une expression IEML");
 		return
 	}	
 	if(codeFlux.value==""){
-		alert("Veuillez sélectionner un tag del.icio.us");
+		alert("Veuillez sï¿½lectionner un tag del.icio.us");
 		return
 	}	
 
@@ -192,10 +205,10 @@ function SelectTrad(id,treecolTag,treecolTrad,treecolIeml,type){
 function ParserIemlExp(op,type){
   try {
     var tree = document.getElementById("Signl_Trad");
-    //prise en compte de la sélection multiple
+    //prise en compte de la sï¿½lection multiple
     Iemlcode=GetIemlTreeExp("Signl_Trad", 3, op);
     if(Iemlcode==")"){
-    	alert("Veuillez sélectionner un ou plusieurs Tags traduits");
+    	alert("Veuillez sï¿½lectionner un ou plusieurs Tags traduits");
     	return;
 	}    
 	var url = urlAjax+"library/php/ExeAjax.php?f=ParserIemlExp&code="+Iemlcode+"&type="+type;
@@ -231,7 +244,7 @@ function GetIemlTreeExp(idTree, col, op){
 	else
 		tree = document.getElementById(idTree);
 	
-	//pour gérer la multisélection
+	//pour gï¿½rer la multisï¿½lection
 	var numRanges = tree.view.selection.getRangeCount();
 	i=0;
 	maxNiv=0;	
@@ -252,19 +265,19 @@ function GetIemlTreeExp(idTree, col, op){
 			}
 		}
 	}
-	//met à jour chaque expression suivant le niveau le plus haut
-	//nécessaire pour que l'expression soit valide pour le parser
+	//met ï¿½ jour chaque expression suivant le niveau le plus haut
+	//nï¿½cessaire pour que l'expression soit valide pour le parser
 	if(trace)
 		console.log('interface:GetIemlTreeExp:'+maxNiv);   
 	
 	for (var i = 0; i < arrIEML.length; i++){
 		if(arrIEML[i][1]<maxNiv){
-			//met à jour le layer de l'expression
+			//met ï¿½ jour le layer de l'expression
 			arrIEML[i][0]= SetIemlMaxLayer(arrIEML[i],maxNiv); 	
 		}
 		IemlToParse += arrIEML[i][0]+op;
 	}
-	//supprime le dernier opérateur
+	//supprime le dernier opï¿½rateur
 	IemlToParse = IemlToParse.substring(0, IemlToParse.length-1);
 	//finalise l'expression
 	IemlToParse += "";
@@ -277,7 +290,7 @@ function GetIemlTreeExp(idTree, col, op){
 
 function GetIemlLayer(ieml){
   try {
-	//récupère le dernier caractère
+	//rï¿½cupï¿½re le dernier caractï¿½re
 	var c = ieml.substr(ieml.length-1,1);
 	var niv;
 	if(c==":")
@@ -342,7 +355,7 @@ function Ajax_Afficher(result,prarm){
 	var meter=document.getElementById('progmeter');
 	meter.setAttribute("value","100");
 	if(result==''){
-		alert("il n'y pas de Posts recents à mettre a jour");
+		alert("il n'y pas de Posts recents ï¿½ mettre a jour");
 		document.getElementById('Maj').setAttribute("hidden","true");
 	}else{
 		message='Les Posts suivants ont ete mis a jour: ';
@@ -393,7 +406,7 @@ function Load(key){
 	google.setOnLoadCallback(Initialize);
 }
  function LoadCycle(key,N){
-	//vérifie que l'onglet n'est pas déjà rempli
+	//vï¿½rifie que l'onglet n'est pas dï¿½jï¿½ rempli
 		document.getElementById('keyGrid').value=key;
 		document.getElementById('CycleLab_'+N).setAttribute('value',key);
 		if(window.parent.frames['iemlCycle_'+key].document.getElementById(key+"CycleRows"))
@@ -472,7 +485,7 @@ function Load(key){
 	   window.parent.document.getElementById('label_Maj').setAttribute("hidden","true");
 	   document.getElementById(key+'_div').innerHTML = result;
    }
-   // fonction qui est lancée à chaque changement du champs de recherche
+   // fonction qui est lancï¿½e ï¿½ chaque changement du champs de recherche
 	function lancer(e) {
 	    tgt = e.target;
 	    if(tgt.getAttribute("id")=='lib-trad-ieml'){
@@ -490,7 +503,7 @@ function Load(key){
 		var keycode;
 		
 		
-		if(window.event){							// déterminer le code de la touche IE / autres navigateurs
+		if(window.event){							// dï¿½terminer le code de la touche IE / autres navigateurs
 			keycode = window.event.keyCode;
 		} else if(e) {
 			keycode = e.which;
@@ -574,7 +587,7 @@ function Load(key){
     	mdp=document.getElementById('mdp_uti').value;
     	lbLogin=document.getElementById('lab_login').setAttribute("value",login);
     	if(login=='' || mdp==''){
-    		alert('IL faut saisir le login et le mot de passe del.icio.us');
+    		alert('Il faut saisir le login et le mot de passe del.icio.us');
     		return;
     	}
     	AjaxRequest( urlAjax+"library/php/ExeAjax.php?f=Evalactisem&login="+login+"&mdp="+mdp,'Ajax_Evalactisem','');
@@ -631,8 +644,9 @@ function Load(key){
     		arrSelect+=',"ar"';
     	if(document.getElementById('ar').getAttribute("checked"))
     		arrSelect+=',"en"';
+    	arrSelect+=']';
     	console.log(eval('('+arrSelect+')'));
-    	return arrSelect+']';
+    	return arrSelect;
     	
     	
     }

@@ -1,6 +1,6 @@
 <?php class database {
     /*******************************************************************
-    * Définition des Propriétés
+    * DÃ©finition des PropriÃ©tÃ©s
     *******************************************************************/
     protected $config = array ();
     private $errorLog = array ();
@@ -14,14 +14,14 @@
 
     /*******************************************************************
     * Constructeur
-    * On peut ou non passer le nom de la base de données;
-      si on le passe, la connexion à la base se fait d'elle même
-    * Sinon, il faudra passer par la méthode select_base ()
+    * On peut ou non passer le nom de la base de donnÃ©es;
+      si on le passe, la connexion Ã  la base se fait d'elle mÃªme
+    * Sinon, il faudra passer par la mÃ©thode select_base ()
     * @Param string $host => serveur de bdd
     * @Param string $user => login
     * @Param string $pwd => password
-    * @Param string $db => base de donnée
-    * @Param array $options => options (voir la propriété $config)
+    * @Param string $db => base de donnÃ©e
+    * @Param array $options => options (voir la propriÃ©tÃ© $config)
     *******************************************************************/
     public function __construct ($host, $user, $pwd, $db = '',
         $options = array ()) {
@@ -43,9 +43,9 @@
     }
 
     /*******************************************************************
-    * Méthode de connexion
-    * méthode publique
-    * Se fait automatiquement, ou peut être explicitement appelée
+    * MÃ©thode de connexion
+    * mÃ©thode publique
+    * Se fait automatiquement, ou peut Ãªtre explicitement appelÃ©e
     *******************************************************************/
     public function connect () {
         if (false ===  $this -> private_connect ()) {
@@ -57,12 +57,12 @@
     }
 
     /*******************************************************************
-    * Méthode de log des erreurs
-    * méthode privée
-    * @Param string $func => méthode appelant l'erreur
+    * MÃ©thode de log des erreurs
+    * mÃ©thode privÃ©e
+    * @Param string $func => mÃ©thode appelant l'erreur
     * @Param string $err => message d'erreur interne au moteur de la bdd
-    * @Param string $qry => requête ayant provquée l'erreur,
-      ou message interne à la classe
+    * @Param string $qry => requÃªte ayant provquÃ©e l'erreur,
+      ou message interne Ã  la classe
     *******************************************************************/
     private function error ($func, $err,  $qry) {
         $this -> errorLog[] = $func.' : '.$err.' => '.$qry;
@@ -73,28 +73,28 @@
     }
 
     /*******************************************************************
-    * Méthode de sélection d'une base de données
-    * méthode publique
+    * MÃ©thode de sÃ©lection d'une base de donnÃ©es
+    * mÃ©thode publique
     * @Param string $name => nom de la base.
     *******************************************************************/
     public function select_base($name=null) {
         if (false === is_scalar ($name)) {
             $this -> error (get_class ($this).' :: select_base()',
             $this -> private_errno().' : '.$this -> private_error(),
-            'Nom incorrect passé à la méthode : '.$name);
+            'Nom incorrect passÃ© Ã  la mÃ©thode : '.$name);
         } else {
             $this -> config['BD'] = $name;
              if (false === $this -> private_select_base()) {
                  $this -> error (get_class ($this).' :: select_base()',
                  $this -> private_errno().' : '.$this -> private_error(),
-                 'La méthode n\'a pu se connecter à la base : '.$name);
+                 'La mÃ©thode n\'a pu se connecter Ã  la base : '.$name);
              }
         }
     }
 
     /*******************************************************************
-    * Méthode de fermeture de la connexion
-    * méthode publique
+    * MÃ©thode de fermeture de la connexion
+    * mÃ©thode publique
     *******************************************************************/
     public function close() {
         $this -> __destruct ();
@@ -102,7 +102,7 @@
 
     /*******************************************************************
     * Destructeur
-    * méthode publique
+    * mÃ©thode publique
     *******************************************************************/
     public function __destruct () {
         if (isset($this-> link) ) {
@@ -112,9 +112,9 @@
     }
 
     /*******************************************************************
-    * Méthode de "requêtage"
-    * méthode publique
-    * @Param string $qry => requête
+    * MÃ©thode de "requÃªtage"
+    * mÃ©thode publique
+    * @Param string $qry => requÃªte
     *******************************************************************/
     public function query ($qry) {
         $this -> sql = $qry;
@@ -128,11 +128,11 @@
     }
 
     /*******************************************************************
-    * Méthode pour compter le nombre de lignes renvoyées
-    * méthode publique
-    * @Param mixed $qry => ressource d'une requête ou identifiant
+    * MÃ©thode pour compter le nombre de lignes renvoyÃ©es
+    * mÃ©thode publique
+    * @Param mixed $qry => ressource d'une requÃªte ou identifiant
       de ressource pour mssql
-    * On peut la passer explicitement, ou prendre la propriété
+    * On peut la passer explicitement, ou prendre la propriÃ©tÃ©
     *******************************************************************/
     public function num_rows ($qry = null) {
         if ((get_class ($this) === 'mysql'
@@ -170,12 +170,12 @@
     }
 
     /*******************************************************************
-    * Méthode pour parcourir les lignes renvoyée par ujne requête
+    * MÃ©thode pour parcourir les lignes renvoyÃ©e par ujne requÃªte
       sous forme de tableau associatif
-    * méthode publique
-    * @Param mixed $qry => ressource d'une requête ou identifiant
+    * mÃ©thode publique
+    * @Param mixed $qry => ressource d'une requÃªte ou identifiant
       de ressource pour mssql
-    * On peut la passer explicitement, ou prendre la propriété
+    * On peut la passer explicitement, ou prendre la propriÃ©tÃ©
     *******************************************************************/
     public function fetch_assoc ($qry = null) {
         if ((get_class ($this) === 'mysql'
@@ -197,12 +197,12 @@
     }
 
     /*******************************************************************
-    * Méthode pour parcourir les lignes renvoyée par ujne requête
-      sous forme de tableau associatif et numérique
-    * méthode publique
-    * @Param mixed $qry => ressource d'une requête ou identifiant
+    * MÃ©thode pour parcourir les lignes renvoyÃ©e par ujne requÃªte
+      sous forme de tableau associatif et numÃ©rique
+    * mÃ©thode publique
+    * @Param mixed $qry => ressource d'une requÃªte ou identifiant
       de ressource pour mssql
-    * On peut la passer explicitement, ou prendre la propriété
+    * On peut la passer explicitement, ou prendre la propriÃ©tÃ©
     *******************************************************************/
     public function fetch_array ($qry = null) {
         if ((get_class ($this) === 'mysql'
@@ -224,12 +224,12 @@
     }
 
     /*******************************************************************
-    * Méthode pour parcourir les lignes renvoyée par ujne requête
-      sous forme de tableau numérique
-    * méthode publique
-    * @Param mixed $qry => ressource d'une requête ou identifiant
+    * MÃ©thode pour parcourir les lignes renvoyÃ©e par ujne requÃªte
+      sous forme de tableau numÃ©rique
+    * mÃ©thode publique
+    * @Param mixed $qry => ressource d'une requÃªte ou identifiant
       de ressource pour mssql
-    * On peut la passer explicitement, ou prendre la propriété
+    * On peut la passer explicitement, ou prendre la propriÃ©tÃ©
     *******************************************************************/
     public function fetch_row ($qry = null) {
         if ((get_class ($this) === 'mysql'
@@ -251,8 +251,8 @@
     }
 
     /*******************************************************************
-    * Méthode renvoyant le dernier ID inséré
-    * méthode publique
+    * MÃ©thode renvoyant le dernier ID insÃ©rÃ©
+    * mÃ©thode publique
     *******************************************************************/
     public function insert_id () {
         if (isset ($this -> link)) {
@@ -266,8 +266,8 @@
         if (false === $id) {
             $this -> error (get_class ($this).' :: insert_id ()',
             $this -> private_errno ().' : '.$this -> private_error (),
-            'Echec de récupération
-             du dernier id inséré');
+            'Echec de rÃ©cupÃ©ration
+             du dernier id insÃ©rÃ©');
             return false;
         } else {
             return $id;
@@ -275,12 +275,12 @@
     }
 
     /*******************************************************************
-    * Méthode pour récupérer la valeur d'une ou plusieurs propriété(s)
+    * MÃ©thode pour rÃ©cupÃ©rer la valeur d'une ou plusieurs propriÃ©tÃ©(s)
       de la classe
-    * méthode publique
-    * On peut passer n'importe quel nombre de paramètres,
-      sous la forme de chaînes ayant pour valeur le nom d'une
-    * propriété EXISTANTE de la classe
+    * mÃ©thode publique
+    * On peut passer n'importe quel nombre de paramÃ¨tres,
+      sous la forme de chaÃ®nes ayant pour valeur le nom d'une
+    * propriÃ©tÃ© EXISTANTE de la classe
     *******************************************************************/
     public function get () {
         $aArgs = func_get_args();
@@ -297,10 +297,10 @@
     }
 
     /*******************************************************************
-    * Méthode de "requêtage" renvoyant en plus les performances
-      de la requête (bench)
-    * méthode publique
-    * @Param string $qry => requête
+    * MÃ©thode de "requÃªtage" renvoyant en plus les performances
+      de la requÃªte (bench)
+    * mÃ©thode publique
+    * @Param string $qry => requÃªte
     *******************************************************************/
     public function queryPerf ($qry) {
         $this -> sql = $qry;

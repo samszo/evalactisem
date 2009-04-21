@@ -27,7 +27,7 @@ class Xul{
    }
         
    //Construction de la table des Tags qui n'ont pas de traduction dans le dictionnaire
-   function Get_Tree_NoTrad_Uti($idUti){
+   function Get_Tree_NoTrad_Uti($idUti,$lang){
 	
 	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
 	$type = "No_Trad";
@@ -108,12 +108,12 @@ class Xul{
 }
         
 //Construction de la table des Traduction de le  utilisateur     
-function Get_Tree_Trad_Utis($idUtis){
+function Get_Tree_Trad_Utis($idUtis, $lang){
 	
 	$type = "Signl_Trad";
 	
 	//construction de l'entete du tree
-	$ihm .= '<tree                  
+	$ihm = '<tree                  
 		enableColumnDrag="true"
         typesource="GetTreeTradUtis"
         flex="1"        
@@ -131,8 +131,8 @@ function Get_Tree_Trad_Utis($idUtis){
     $ihm .= '</treecols>'.EOL;
     $ihm .= '<treechildren >'.EOL;
 
-	foreach($idUtis as $idUti){
-		$ihm .= $this->GetTreeItemTradUti($idUti,$type);	
+	foreach($idUtis as $oUti){
+		$ihm .= $this->GetTreeItemTradUti($oUti,$type,$lang);	
 	}
     
 	//termine le tree
@@ -144,57 +144,47 @@ function Get_Tree_Trad_Utis($idUtis){
         
 }
 
-function GetTreeItemTradUti($idUti,$type){
+function GetTreeItemTradUti($oUti,$type,$lang){
 
-	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
-	$oCacheXml = new Cache($this->sUsername."liveMetal", $iCacheTime=10);
-	$xml= simplexml_load_string($oCacheXml->Get(true));
+	$sem = new Sem($this->site,$this->site->infos["FicXml"],"");
+	//charge le dictionaire
+	$xml= simplexml_load_file($this->site->infos["LiveMetalDico"]);
 	//récupére les traductions 
-	if($idUti==$this->site->infos["UTI_TRAD_AUTO"]){
+	if($oUti->id==$this->site->infos["UTI_TRAD_AUTO"]){
 		//des traduction automatiques partagées par l'utilisateur 
-		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUtiAuto','-idUti-','-idUtiAuto-',$_SESSION['iduti'],$idUti);
+		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUtiAuto','-idUti-','-idUtiAuto-',$_SESSION['iduti'],$oUti->id);
 	}else{
 		//de l'utilisateur 
-		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUti','-idUti-','--',$idUti,"");
+		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUti','-idUti-','--',$oUti->id,"");
 	}
 	$i=0;
-   	while($r = mysql_fetch_assoc($rs)){
+	$oIdUti = -1;
+	$ihmTags = "";
+	$ihmNivs = "";
+	$ihmIeml = "";
+	$ihm="";
+	$Nivs = array("L0"=>"","L1"=>"","L2"=>"","L3"=>"","L4"=>"","L5"=>"");
+	$usl="";
+	while($r = mysql_fetch_assoc($rs)){
        	
    		//pour gérer le changement de branche parente
        	if($r["uti_id"]!=$oIdUti){
        		$oFluxCode = -1;
        	}
-   		if($r["onto_flux_code"]!=$oFluxCode){
-   			$oIemlNiv = -1;
-   		}
-   		$Xpath = "//entry[@id='".$r['ieml_id']."']";
+   		//cherche le code dans le dictionnaire
+       	$Xpath = "/wikimetal/entry[id=".$r['ieml_id']."]";
    		$entry=$xml->xpath($Xpath);
+   		$iemlNiv = $sem->GetIemlLevel($entry[0]->expression);
    		//on crée les couches
-       	if($entry[0]->iemlLevel.''!=$oIemlNiv){
-       		if($i>0){
-	       		//on ferme le précédent tag
-				$ihmNiv .= $ihmIeml;
-	       		$ihmNiv .= '</treechildren>'.EOL;
-				$ihmNiv .= '</treeitem>'.EOL;
-				//on cr�� l'usl
-				$usl .= $sem->StarParam["usl"];
-				$usl .= "(";
-				$usl .= $uslT;
-				$usl = substr($usl,0,-1);
-				$usl .= ")";
-				$ihmNivs .= $ihmNiv;
-       		}
-       		//on ouvre le nouveau
-       		$ihmNiv = '<treeitem id="onto_flux_id_'.$r["onto_flux_id"].'_'.$entry[0]->iemlLevel.'" container="true" open="true">'.EOL;
-			$ihmNiv .= '<treerow>'.EOL;
-			$ihmNiv .= '<treecell label=" "/>'.EOL ;
-			$ihmNiv .= '<treecell label="'.$entry[0]->iemlParent.'"/>'.EOL ;
-	        $ihmNiv .= '<treecell label=""/>'.EOL ;
-            $ihmNiv .= '</treerow>'.EOL;
-       		$ihmNiv .= '<treechildren>'.EOL;
-	        $ihmIeml = "";
-       		$uslT = "";
-	        $oIemlNiv=$entry[0]->iemlLevel.'';       
+       	if($Nivs[$iemlNiv]==""){
+       		//on crée un nouveau niveau
+       		$Nivs[$iemlNiv] = '<treeitem id="onto_flux_id_'.$r["onto_flux_id"].'_'.$iemlNiv.'" container="true" open="true">'.EOL;
+			$Nivs[$iemlNiv] .= '<treerow>'.EOL;
+			$Nivs[$iemlNiv] .= '<treecell label=" "/>'.EOL ;
+			$Nivs[$iemlNiv] .= '<treecell label="'.$iemlNiv.'"/>'.EOL ;
+	        $Nivs[$iemlNiv] .= '<treecell label=""/>'.EOL ;
+            $Nivs[$iemlNiv] .= '</treerow>'.EOL;
+       		$Nivs[$iemlNiv] .= '<treechildren>'.EOL;
        	}
 
        	//on v�rifie si on change de tag
@@ -204,6 +194,30 @@ function GetTreeItemTradUti($idUti,$type){
 	            $ihmTag .= '<treecell label="'.$usl.'"/>'.EOL ;
 	            $ihmTag .= '</treerow>'.EOL;
 	       		$ihmTag .= '<treechildren>'.EOL;
+	       		//on ferme les niveaux 
+				$ihmNivs = "";
+	       		foreach($Nivs as $niv=>$ihmNiv){
+		       		//uniquement ceux qui sont remplies
+					if($ihmNiv!=""){
+			       		//on ferme le précédent tag
+						$Nivs[$niv] .= '</treechildren>'.EOL;
+						$Nivs[$niv] .= '</treeitem>'.EOL;
+						$ihmNivs .= $Nivs[$niv];
+		       		}
+				}
+	       		$Nivs = array("L0"=>"","L1"=>"","L2"=>"","L3"=>"","L4"=>"","L5"=>"");
+		   		//on crée la couche en court pour l'expression IELM qui suit
+		       	if($Nivs[$iemlNiv]==""){
+		       		//on crée un nouveau niveau
+		       		$Nivs[$iemlNiv] = '<treeitem id="onto_flux_id_'.$r["onto_flux_id"].'_'.$iemlNiv.'" container="true" open="true">'.EOL;
+					$Nivs[$iemlNiv] .= '<treerow>'.EOL;
+					$Nivs[$iemlNiv] .= '<treecell label=" "/>'.EOL ;
+					$Nivs[$iemlNiv] .= '<treecell label="'.$iemlNiv.'"/>'.EOL ;
+			        $Nivs[$iemlNiv] .= '<treecell label=""/>'.EOL ;
+		            $Nivs[$iemlNiv] .= '</treerow>'.EOL;
+		       		$Nivs[$iemlNiv] .= '<treechildren>'.EOL;
+		       	}
+	       		
        			$ihmTag .= $ihmNivs;
 	       		$ihmTag .= '</treechildren>'.EOL;
 				$ihmTag .= '</treeitem>'.EOL;
@@ -211,8 +225,8 @@ function GetTreeItemTradUti($idUti,$type){
        		}
        		//on ouvre le nouveau
 			$usl = "";
-			$ihmNivs = ""; 
-       		$ihmTag = '<treeitem id="onto_flux_id_'.$r["onto_flux_id"].'" container="true" open="true">'.EOL;
+			$ihmIeml = "";
+			$ihmTag = '<treeitem id="onto_flux_id_'.$r["onto_flux_id"].'" container="true" open="true">'.EOL;
 			$ihmTag .= '<treerow>'.EOL;
 			$ihmTag .= '<treecell label=" "/>'.EOL ;
 			$ihmTag .= '<treecell label="'.$r["onto_flux_code"].'"/>'.EOL ;
@@ -240,10 +254,13 @@ function GetTreeItemTradUti($idUti,$type){
 			$oIdUti=$r["uti_id"];
        	}
         
-       	//on cr�e les traductions
-        $ihmIeml .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$entry[0]['id'],"",array("","",$entry[0]->iemlLib.'',$entry[0]->iemlCode.''));
+       	//on récupère la description de l'item
+       	$iemlE = $sem->LiveMetalRequest($lang,$r['ieml_id'],'getEntry');
+       	
+       	//on crée la branche de traduction
+        $Nivs[$iemlNiv] .= $this->AddTreeItemTrad($type.'_'.$r["onto_flux_id"].'_'.$entry[0]['id'],"",array("","",$iemlE->entry->expression.'',$entry[0]->expression.''));
 		//on cr�e l'usl
-		$uslT .= $entry[0]->iemlCode.$sem->StarParam["union"];
+		$usl .= $sem->StarParam["usl"]."(".$entry[0]->expression.")";
        	
         $i++;
    	}
@@ -252,22 +269,21 @@ function GetTreeItemTradUti($idUti,$type){
    	if($i==0)
    		return "";
    		
-   	//on ferme le pr�c�dent tag
-	$ihmNiv .= $ihmIeml;
-    $ihmNiv .= '</treechildren>'.EOL;
-	$ihmNiv .= '</treeitem>'.EOL;
-	//on cr�� l'usl
-	$usl .= $sem->StarParam["usl"];
-	$usl .= "(";
-	$usl .= $uslT;
-	$usl = substr($usl,0,-1);
-	$usl .= ")";
-	$ihmNivs .= $ihmNiv;
-	
-    //on ferme le pr�c�dent tag
-    $ihmTag .= '<treecell label="'.$usl.'"/>'.EOL ;
+    //on ferme les niveaux 
+	$ihmTag .= '<treecell label="'.$usl.'"/>'.EOL ;
     $ihmTag .= '</treerow>'.EOL;
-	$ihmTag .= '<treechildren>'.EOL;
+    $ihmTag .= '<treechildren>'.EOL;
+    //on ferme les niveaux 
+	$ihmNivs="";
+    foreach($Nivs as $niv=>$ihmNiv){
+       	//uniquement ceux qui sont remplies
+		if($ihmNiv!=""){
+       		//on ferme le précédent tag
+			$Nivs[$niv] .= '</treechildren>'.EOL;
+			$Nivs[$niv] .= '</treeitem>'.EOL;
+			$ihmNivs .= $Nivs[$niv];
+       	}
+	}
 	$ihmTag .= $ihmNivs;
     $ihmTag .= '</treechildren>'.EOL;
 	$ihmTag .= '</treeitem>'.EOL;

@@ -60,12 +60,7 @@
    define('PHP_DELICIOUS_ERR_THROTTLED', 3);
    define('PHP_DELICIOUS_ERR_XML_PARSE', 4);
    define('PHP_DELICIOUS_ERR_UNKNOWN', 5);
-   
-   // folder to store cache files
-   define('PHP_DELICIOUS_CACHE_PATH', PathRoot.'/tmp/');
-   define('CACHE_PATH', PathRoot.'/tmp/');
-   
-   
+      
    class PhpDelicious {
         var $sUsername; // your del.icio.us username
         var $sPassword; // your del.icio.us password
@@ -212,7 +207,7 @@
       
       // generic function to get post listings
         function GetList($sCmd, $sTag = '', $sDate = '', $sUrl = '', $iCount = -1) {
-         $oCache = new Cache($this->sUsername.$sCmd.$sTag.$sDate.$sUrl.$iCount, $this->iCacheTime);
+         $oCache = new Cache($this->sUsername."_".$sCmd."_".$sTag."_".$sDate."_".$sUrl."_".$iCount, $this->iCacheTime);
          
          if (!$oCache->Check()) {
             if ($sCmd == 'posts/all' && $oCache->Exists()) {
@@ -312,7 +307,7 @@
       }
       
  public function GetAllTags() {
-         $oCache = new Cache($this->sUsername.'tags/get', $this->iCacheTime);
+         $oCache = new Cache('tags/'.$this->sUsername, $this->iCacheTime);
          if (!$oCache->Check()) {
             if ($aResult = $this->DeliciousRequest('tags/get')) {
                $aTags = array();           
@@ -330,17 +325,14 @@
          return $oCache->Get();
       }
     public function isUpdatePost() {
-           $oCache = new Cache($this->sUsername.'update', $this->iCacheTime);
+         $oCache = new Cache($this->sUsername.'_update', $this->iCacheTime);
          if (!$oCache->Check()) {
-         	if ($aResult = $this->DeliciousRequest('posts/update')) {
-         	   $TimeCache=$this->GetFormatDate($oCache->Get());
-               $oCache->Set($aResult['attributes']['TIME']);
-         	} else {    
-               $oCache->Set(false);
-               $TimeCache=$this->GetFormatDate($oCache->Get());
-            }
+         	$aResult = $this->DeliciousRequest('posts/update');
+            $oCache->Set($aResult['attributes']['TIME']);
          }
-        $TimeDelIcioiUs=$this->GetFormatDate($aResult['attributes']['TIME']);
+         $TimeCache=$this->GetFormatDate($oCache->Get());
+         $aResult = $this->DeliciousRequest('posts/update');
+         $TimeDelIcioiUs=$this->GetFormatDate($aResult['attributes']['TIME']);
        
         return $this->compArr($TimeDelIcioiUs,$TimeCache);
         
@@ -381,7 +373,7 @@
          $sTag = '' // filter by tag
       ) {
          // set up cache object
-         $oCache = new Cache($this->sUsername."posts/dates$sTag", $this->iCacheTime);
+         $oCache = new Cache("posts/".$this->sUsername."_dates_".$sTag, $this->iCacheTime);
          
          // check for cached data
          if (!$oCache->Check()) {
@@ -445,7 +437,7 @@
       }
       
       public function GetAllBundles() {
-         $oCache = new Cache($this->sUsername.'tags/bundles/all', $this->iCacheTime);
+         $oCache = new Cache('tags/'.$this->sUsername.'_bundles_all', $this->iCacheTime);
          
          if (!$oCache->Check()) {
             if ($aResult = $this->DeliciousRequest('tags/bundles/all')) {

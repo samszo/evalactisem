@@ -70,7 +70,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var type;
 		var lang='fr';
 		var selectCalque;
-		var arrSelect='';
 		var m=0;
 	</script>
 
@@ -88,11 +87,12 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	        <menuitem label="Twitter"/>
 	      </menupopup>
 	    </menu>
-	    <menu id="lang_flux" label="Langues Flux" >
+	    <menu id="lang_flux" label="Langues" >
 	      <menupopup id="Lang_flux-popup" >
-	        <menuitem id='ar' label="Ar" type='checkbox' oncommand="selectChekBox(this.id)" />
-	        <menuitem id='en' label="En" type='checkbox' oncommand="selectChekBox(this.id)"/>
-	        <menuitem id='fr' label="Fr" type='checkbox' oncommand="selectChekBox(this.id)"/>
+	        <menuitem id='ar' label="Ar" type='radio' oncommand="lang=this.id;Xul_Ajax_ShowTreeTrad('');" />
+	        <menuitem id='en' label="En" type='radio' oncommand="lang=this.id;Xul_Ajax_ShowTreeTrad('');"/>
+	        <menuitem id='fr' label="Fr" type='radio' oncommand="lang=this.id;Xul_Ajax_ShowTreeTrad('');"/>
+	        <menuitem id='zh' label="Zh" type='radio' oncommand="lang=this.id;Xul_Ajax_ShowTreeTrad('');"/>
 	      </menupopup>
 	    </menu>
 	     <menu id="bookmark_ieml" label="Bookmark IEML">
