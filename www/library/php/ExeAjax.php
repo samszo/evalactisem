@@ -67,10 +67,10 @@
                 	    $resultat=CreaCycle($_GET['json']);
                 	    break;  
                 case 'GetTreeTradUtis':
-                	    $resultat=GetTreeTradUtis();
+                	    $resultat=GetTreeTradUtis($_GET['lang']);
                 	    break;  
                 case 'GetTreeNoTradUti':
-                	    $resultat=GetTreeNoTradUti();
+                	    $resultat=GetTreeNoTradUti($_GET['lang']);
                 	    break;
                 case 'GetTreeDeliciousNetwork':
   
@@ -86,7 +86,7 @@
                 	    $resultat= Evalactisem($_GET['login'],$_GET['mdp']);
                 	    break;
                 case 'GetFlux':
-                	    $resultat= GetFlux($_GET['arrLang'],$_GET['getFlux']);
+                	    $resultat= GetFlux($_GET['arrLang'],stripslashes($_GET['getFlux']));
                 	    break;
                  case 'getLangLiveMetal':
                 	    $resultat= getLangLiveMetal();
@@ -94,14 +94,22 @@
                  case 'getSelectItemRech':
                 	    $resultat= getSelectItemRech($_GET['id'],$_GET['lang']);
                 	    break;
-                	    
+                 case 'SetSession':
+                	    SetSession($_GET['lib'],$_GET['val']);
+                	    break;
    }
         
         echo $resultat;  
 
+	function SetSession($lib,$val){
+		$_SESSION[$lib] = $val;
+		return "_SESSION[".$lib."]=".$_SESSION[$lib];
+	}
+        
+        
 	function GetExaIEML($code){
         global $objSite;
-		$cache = new Cache_Lite_Function(array('cacheDir' => CACHEPATH,'lifeTime' => LIFETIME));
+		$cache = new Cache_Lite_Function(array('cacheDir' => CACHEPATH,'lifeTime' => CACHETIME));
         $sem = new Sem($objSite,$objSite->XmlParam,"","","",$cache);
         $sem->GetExagramme($code);
 		
@@ -114,23 +122,18 @@
 		
 	}
         
-	function GetTreeNoTradUti(){
+	function GetTreeNoTradUti($lang){
         global $objSite;
         $xul = new Xul($objSite);
-		return $xul->Get_Tree_NoTrad_Uti($_SESSION['iduti']);
+		return $xul->Get_Tree_NoTrad_Uti($_SESSION['iduti'],$lang);
 	}
 
-	function GetTreeTradUtis(){
+	function GetTreeTradUtis($lang){
         global $objSite;
-        $oCache = new Cache($_SESSION['loginSess']."Lang", $iCacheTime=10);
-        if($oCache->Exists()=='true')
-     		$arrLang= $oCache->Get();
-     	else
-     		$arrLang= '["fr"]';
+        global $objUti;
+        global $objUtiTradAuto;
         $xul = new Xul($objSite);
-        $Langs=json_decode($arrLang);
-		return $xul->Get_Tree_Trad_Utis(array($_SESSION['iduti'],$objSite->infos["UTI_TRAD_AUTO"]),$Langs);
-		//return $xul->GetTreeTradUtis($_SESSION['iduti']);
+		return $xul->Get_Tree_Trad_Utis(array($objUti,$objUtiTradAuto),$lang);
 	}
         
        
@@ -138,7 +141,7 @@
         function AddTrad($codeflux,$codeIeml,$libIeml,$lang){
 
                 global $objSite;
-                $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
+                $sem = New Sem($objSite, $objSite->infos["FicXml"], "");
                 return $sem->Add_Trad($codeflux,$codeIeml,$libIeml,-1,false,-1,$lang);
                              
  		}
@@ -235,17 +238,20 @@
        function GetFlux($arrLang,$getFlux){
        	global $objSite;
        	global $oDelicious;
- 			$Activite= new Acti();
+       	global $objUti;
+       		$Activite= new Acti();
    			$oSaveFlux= new SauvFlux(); 
-   			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$_SESSION['iduti'],$arrLang,$getFlux);
-   			$Activite->AddActi('RAT',$_SESSION['iduti']);
+   			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$objUti,array("fr"),$getFlux);
+   			$Activite->AddActi('RAT',$objUti->id);
        	}
+       	
        	function getLangLiveMetal(){
        		global $objSite;
        		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
  			return $sem->getLangLiveMetal();
        	}
-       		function getSelectItemRech($id,$lang){
+       	
+       	function getSelectItemRech($id,$lang){
        		global $objSite;
        		$sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
  			return $sem->LiveMetalRequest($lang,$id,'getEntryRech');

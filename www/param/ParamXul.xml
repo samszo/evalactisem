@@ -53,13 +53,12 @@
 			<Query fonction="GetTreeTradUti">
 				<select> SELECT uo.ieml_id, iof.onto_flux_id, iof.onto_flux_code, iu.uti_login, iu.uti_id  </select>
 				<from> 	FROM ieml_trad it
-						INNER JOIN ieml_uti_onto uo ON uo.ieml_id = it.ieml_id AND uo.uti_id =-idUti-
+						INNER JOIN ieml_uti_onto uo ON uo.ieml_id = it.ieml_id 
 						INNER JOIN ieml_onto_flux iof ON it.onto_flux_id = iof.onto_flux_id
 						INNER JOIN ieml_uti iu ON iu.uti_id = uo.uti_id
 						INNER JOIN ieml_trad_partage itp ON itp.uti_id = iu.uti_id AND itp.trad_id = it.trad_id
-						ORDER BY iu.uti_id, iof.onto_flux_code
 				</from>
-				<where> </where>
+				<where> WHERE uo.uti_id =-idUti- ORDER BY iu.uti_id, iof.onto_flux_code</where>
 			</Query>
 			 <Query fonction="GetTreeTradUtiAuto1">
                   <select> SELECT DISTINCT io.ieml_id, io.ieml_code, io.ieml_lib, io.ieml_niveau, io.ieml_parent
@@ -515,6 +514,11 @@
 				<select> SELECT  uti_id</select>
 				<from> FROM ieml_uti </from>
 				<where>	WHERE uti_login='-login-'</where>
+			</Query>
+		    <Query fonction="Get_Login_Utilisateur">
+				<select> SELECT uti_login</select>
+				<from> FROM ieml_uti </from>
+				<where>	WHERE uti_id='-id-'</where>
 			</Query>
 			<Query fonction="ieml_uti_onto_flux">
 				<insert> INSERT INTO ieml_uti_onto_flux (uti_id,onto_flux_id)</insert>

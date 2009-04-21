@@ -1,42 +1,37 @@
 <?php
-/*
-/////////////////////
-Nom du fichier : XmlParam.php
-
-Version : 1.0
-Auteur : samszo
-Date de modification : 21/11/2007
-
-////////////////////
-*/
-
-
 Class XmlParam{
 	public $FicXml;
-	private $xml;
-	private $trace;
+	public $trace;
+	public $xml;
 
-	function __construct($FicXml) {
-	    $this->trace = TRACE;
-		$this->FicXml = $FicXml;
-		//echo "On charge les paramètres : ".$FicXml."<br/>\n";
-		if ($xml = simplexml_load_file($FicXml))
-			$this->xml = $xml;
+	function __construct($FicXml = -1, $src=-1, $dom=-1) {
+		$this->trace = TRACE;
 		
+		if ($FicXml !=-1) {
+		    $this->FicXml = $FicXml;
+			
+			if ($xml = simplexml_load_file($FicXml))
+				$this->xml = $xml;
+		}
+    	if($dom!=-1)
+    		$this->xml = simplexml_import_dom($dom);	
+		if ($src !=-1) {
+    		if ($xml = simplexml_load_string($src))
+    			$this->xml = $xml;
+		}
 	}
 	
 	public function GetElements($Xpath){
-		//echo 'On cherche le xpath '.$Xpath.'<br/>';
 		if($this->trace)
-			echo "XmlParam:GetElements:Xpath=".$Xpath."<br/>";
-		return $this->xml->xpath($Xpath);
+			echo 'XmlParam GetElements On cherche le xpath '.$Xpath.'<br/>';
+
+		if ($this->xml)
+			return $this->xml->xpath($Xpath);
+		else return -1;
+		
+		
 	}
 	
-	public function XML_entities($str)
-	{
-	    return preg_replace(array("'&'", "'\"'", "'<'"), array('&#38;', '&#34;','&lt;'), $str);
-	}
-
 	public function GetCount($Xpath){
 		
 		if($this->trace)
@@ -44,6 +39,11 @@ Class XmlParam{
 		return count($this->xml->xpath($Xpath));
 	}
 	
-	
+	public function XML_entities($str)
+	{
+		//$str = str_replace("'","''",$str);
+	    return preg_replace(array("'&'", "'\"'", "'<'", "'>'"), array('&#38;', '&#34;','&lt;','&gt;'), $str);
+	}
+
 }
 ?>
