@@ -51,13 +51,9 @@
 	"NOM" => "EvalActiSem",//je sais pas
 	"SITE_PARENT" => -1,//je sais pas
 	"SITE_ENFANT" => -1,
-	"DEF_LAT" => 45,
-	"DEF_LNG" => 1,
-	"DEF_ZOOM" => 4,
-  	"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 	"UTI_TRAD_AUTO" => 1,
   	"gmKey" => gmKey,
-  	"FicXml"=>PathRoot."/param/ParamXul.xml", 
+  	"XML_Param"=>PathRoot."/param/ParamXul.xml", 
   	"LiveMetalDico"=>PathRoot."/param/LiveMetalDico.xml", 
   	"PATH_LiveMetal"=>"http://evalactisem.ieml.org" 
   	); 
@@ -70,13 +66,9 @@
 		"NOM" => "EvalActiSem",//je sais pas
 		"SITE_PARENT" => -1,//je sais pas
 		"SITE_ENFANT" => -1,
-		"DEF_LAT" => 45,
-		"DEF_LNG" => 1,
-		"DEF_ZOOM" => 4,
-		"DEF_CARTE_TYPE" => "G_HYBRID_MAP",
 		"UTI_TRAD_AUTO" => 1,
 		"gmKey" => gmKey,
-	  	"FicXml"=>PathRoot."/param/ParamXul.xml", 
+	  	"XML_Param"=>PathRoot."/param/ParamXul.xml", 
 	  	"LiveMetalDico"=>PathRoot."/param/LiveMetalDico.xml", 
 	  	"PATH_LiveMetal"=>"http://evalactisem.ieml.org" 
 	); 

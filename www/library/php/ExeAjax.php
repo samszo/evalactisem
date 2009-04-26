@@ -86,7 +86,7 @@
                 	    $resultat= Evalactisem($_GET['login'],$_GET['mdp']);
                 	    break;
                 case 'GetFlux':
-                	    $resultat= GetFlux($_GET['arrLang'],stripslashes($_GET['getFlux']));
+                	    $resultat= GetFlux($_GET['lang'],stripslashes($_GET['getFlux']));
                 	    break;
                  case 'getLangLiveMetal':
                 	    $resultat= getLangLiveMetal();
@@ -140,7 +140,7 @@
         function AddTrad($codeflux,$codeIeml,$libIeml,$lang){
 
                 global $objSite;
-                $sem = New Sem($objSite, $objSite->infos["FicXml"], "");
+                $sem = New Sem($objSite, $objSite->infos["XML_Param"], "");
                 return $sem->Add_Trad($codeflux,$codeIeml,$libIeml,-1,false,-1,$lang);
                              
  		}
@@ -234,13 +234,13 @@
  			$oDelicious = new PhpDelicious($login, $mdp);
  			return $sem->Evalactisem($oDelicious,$login,$mdp); 	       	
        }
-       function GetFlux($arrLang,$getFlux){
+       function GetFlux($lang,$getFlux){
        	global $objSite;
        	global $oDelicious;
        	global $objUti;
        		$Activite= new Acti();
    			$oSaveFlux= new SauvFlux(); 
-   			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$objUti,array("fr"),$getFlux);
+   			$oSaveFlux->aGetAllTags($objSite,$oDelicious,$objUti,$lang,$getFlux);
    			$Activite->AddActi('RAT',$objUti->id);
        	}
        	

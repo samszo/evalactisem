@@ -43,8 +43,11 @@
 	
 	function SelectNetwork(id,GetParam){
 	  try{
-	      var login = GetTreeValSelect(id,0);
-		  var url = urlTagCloud+"?login="+login+"&ShowAll=1";
+	    var login = GetTreeValSelect(id,0);
+		var url = urlTagCloud+"?login="+login;
+		//récupère le choix d'affichage
+		var ShowAll = document.getElementById("ShowAll").value;
+		url += "&ShowAll="+ShowAll;
 		//récupère le type de représentation
 		var TC = document.getElementById("choixTC").value;
 		url += "&TC="+TC;
@@ -52,7 +55,10 @@
 		if(ajout==-1)ajout=false;
 		//récupère la langue
 		var langue = document.getElementById("choixLangue").value;
-		url += "&langue="+langue;
+		url += "&lang="+langue;
+		//récupère le temps vide
+		var TempsVide = document.getElementById("TempsVide").checked;
+		url += "&TempsVide="+TempsVide;
 
 		if(GetParam!=-1){
 			  //calcul les arguments
@@ -69,12 +75,13 @@
 			  if(DateFin)
 				  url += "&DateFin="+DateFin;
 		}
+		
 		//charge le svg  
 		AppendSVG(url,document.getElementById("tagcloud"),ajout);
 		
-		  //met à jour les paramètres des outils
-		  var svg = document.getElementById("SVGglobal");
-		  InitOutilsParams(svg.getAttribute("TagNbMin"),svg.getAttribute("TagNbMax"),svg.getAttribute("TagDateDeb"),svg.getAttribute("TagDateFin"));
+		//met à jour les paramètres des outils
+	  	var svg = document.getElementById("SVGglobal");
+	  	InitOutilsParams(svg.getAttribute("TagNbMin"),svg.getAttribute("TagNbMax"),svg.getAttribute("TagDateDeb"),svg.getAttribute("TagDateFin"));
 		  
 		  
 	  }catch(e){

@@ -21,6 +21,7 @@
 				    <menupopup>
 				      <menuitem label="Posts" value="posts"/>
 				      <menuitem label="Tags" value="tags"/>
+				      <menuitem label="Roots" value="roots"/>
 				    </menupopup>
 				  </menulist>
 				 <menulist id="choixAjout" >
@@ -29,10 +30,10 @@
 				      <menuitem label="Ajoute" value="0"/>
 				    </menupopup>
 				  </menulist>
-				 <menulist id="choixTaille" >
+				 <menulist id="ShowAll" >
 				    <menupopup>
-				      <menuitem label="Taille réelle" value="-1"/>
-				      <menuitem label="Taille compressée" value="1"/>
+				      <menuitem label="Taille réelle" value="false"/>
+				      <menuitem label="Taille compressée" value="true"/>
 				    </menupopup>
 				  </menulist>
 			</groupbox>
@@ -42,8 +43,6 @@
 				    <menupopup>
 				      <menuitem label="tag" value="tag"/>
 				      <menuitem label="ieml" value="ieml"/>
-				      <menuitem label="fr" value="français"/>
-				      <menuitem label="ar" value="arabe"/>
 				    </menupopup>
 				  </menulist>
 			</groupbox>
@@ -79,9 +78,10 @@
 		 <groupbox orient="vertical" >
 			<caption label='Interval de temps' />
 			<hbox>
-				<label value="Début :" /><datepicker onchange="SelectNetwork('TreeDeliciousNetwork',1);" id="dpTagDeb" type="popup" value="2007-03-26"/>
+				<label value="Début :" /><datepicker onchange="" id="dpTagDeb" type="popup" value="2007-03-26"/>
 				<label value="Fin : " /><datepicker id="dpTagFin" type="popup" value="2007-03-26"/>
 			</hbox>
+			<checkbox id="TempsVide" label="Afficher les silences" checked="true"/>
 		</groupbox>
 		
 		<groupbox orient="vertical" flex="1" >
@@ -96,7 +96,7 @@
 	<vbox flex="1">
 		<groupbox orient="vertical" flex="1" >
 			<caption label='Représentation' />
-			<vbox id="tagcloud" flex="1"  style="overflow:auto" />
+			<hbox id="tagcloud" flex="1"  style="overflow:auto" />
 		</groupbox>
 	</vbox>
 </hbox>

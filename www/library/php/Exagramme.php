@@ -1,9 +1,9 @@
 <?php
 class Exagramme {
   private $trace;
-  public $marge=100;
+  public $marge=50;
   public $x_exa = 100;
-  public $y_exa = 200;
+  public $y_exa = 230;
   public $x_entre_exa=128;
   public $y_entre_trait=10;
   public $y_entre_texte=100;
@@ -14,7 +14,8 @@ class Exagramme {
   public $styleTexte="font-size:64px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans";
   public $sem; 
   public $svg; 
-  public $arrPrevTrait; 
+  public $arrPrevTrait;
+  public $showAll=true; 
   
   function __tostring() {
     return "Cette classe permet de d�finir et manipuler un Exagramme.<br/>";
@@ -85,12 +86,22 @@ class Exagramme {
 			//initialisation du svg
 			$this->svg = new SvgDocument("100%","100%","","","","SVGglobal",$js); 	
 			//ajoute le titre de la séquence
-			$this->svg->addChild(new SvgText($this->x_exa+$this->x_entre_exa, $this->y_exa+$this->y_entre_texte, $this->StarParse["expression"],$this->styleTexte));			
+			$this->svg->addChild(new SvgText($this->x_exa, $this->marge, $this->sem->StarParse["expression"],$this->styleTexte));			
 			//récupère les enfants de la séquence
 			$arrGenOp=$this->sem->StarParse;
 		}
 		$i=0;
 		foreach($arrGenOp as $couche=>$GenOp){
+			
+			//vérifie si on traite un complex
+			if(eregi('complex(.*)',$couche)){
+				//calcul la translation
+				$this->x_exa = 200;
+				if($i>0){
+					$this->y_exa += $this->y_entre_texte + (6*($this->y_entre_trait+$this->heigth_trait));
+				}
+			}
+			
 			//vérifie si on traite le niveau 0
 			if($couche=="genOpAtL0"){
 				//vérifie si on n'est pas en bout de séquence
@@ -155,7 +166,21 @@ class Exagramme {
 		
 		if($niv==0){
 			//redimensionne
-			$this->svg->mWidth = $this->x_exa+$this->width_trait+$this->x_entre_exa+$this->x_entre_exa;
+			$Width = $this->x_exa+$this->width_trait+$this->x_entre_exa+$this->x_entre_exa;
+			$Height = $this->y_exa+$this->y_entre_texte + (6*($this->y_entre_trait+$this->heigth_trait));
+			
+			if($this->showAll){
+				//affiche taille réelle
+				$this->svg->mWidth = $Width;
+				$this->svg->mHeight = $Height;
+			}else{
+				//affiche tout
+				$this->svg->mPreserveAspectRatio="xMinYMin meet";
+				$this->svg->mViewBox = "0 0 ".$Width." ".$Height."";
+				$this->svg->mWidth = 1000;
+				$this->svg->mHeight = $Height;
+			}
+					
 			//retourne le svg global
 			$this->svg->printElement();
 		}

@@ -307,7 +307,7 @@
       }
       
  public function GetAllTags() {
-         $oCache = new Cache('tags/'.$this->sUsername, $this->iCacheTime);
+         $oCache = new Cache('tags/arr_'.$this->sUsername, $this->iCacheTime);
          if (!$oCache->Check()) {
             if ($aResult = $this->DeliciousRequest('tags/get')) {
                $aTags = array();           

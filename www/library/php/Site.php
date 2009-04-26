@@ -19,10 +19,8 @@ class Site{
     $this->id = $id;
     $this->infos = $this->sites[$this->id];
 	$this->scope = $scope;
-	if(isset($this->scope["FicXml"]))
-		$this->XmlParam = new XmlParam($this->scope["FicXml"]);
-	else
-		$this->XmlParam = new XmlParam($this->infos["FicXml"]);
+
+	$this->XmlParam = new XmlParam($this->infos["XML_Param"]);
 	
 	if($this->infos["SITE_PARENT"]!=-1){
 		$Parent = array_keys($this->infos["SITE_PARENT"]);
@@ -51,14 +49,18 @@ class Site{
 		
     }
 
-  function RequeteSelect($function,$var1,$var2,$val1,$val2){
+ 	function RequeteSelect($function,$arrVarVal){
    	 
-   	   $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
-	   $Q = $this->XmlParam->GetElements($Xpath);
-	   $from=str_replace($var1, $val1, $Q[0]->from);
-	   $from=str_replace($var2, $val2, $from);
-	   $where=str_replace($var1, $val1, $Q[0]->where);
-	   $where=str_replace($var2, $val2,$where);
+   		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
+		$Q = $this->XmlParam->GetElements($Xpath);
+	   	$select=$Q[0]->select;
+		$from=$Q[0]->from;
+	   	$where=$Q[0]->where;
+	   	foreach($arrVarVal as $VarVal){
+	    	$select=str_replace($VarVal[0], $VarVal[1],$select);	
+	   		$from=str_replace($VarVal[0], $VarVal[1],$from);	
+	    	$where=str_replace($VarVal[0], $VarVal[1],$where);	
+	   	}
 	   $sql = $Q[0]->select.$from.$where;
 	   $db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
 	   $link=$db->connect();   
@@ -77,18 +79,15 @@ class Site{
      	$values=str_replace($VarVal[0], $VarVal[1],$values);	
    	 }
      $sql = $Q[0]->insert.$values;
-	 if($this->trace)
-     	fb($sql);
-	 $db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
-  	 $link=$db->connect();   
+     $db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
+	 $link=$db->connect();   
 	 $db->query($sql);
 	 $idTrad= mysql_insert_id();
      $db->close($link);
-     
-     return $idTrad;
+     		return $idTrad;
    	
    }
-    
+        
     
     
 	public function EstParent($id)

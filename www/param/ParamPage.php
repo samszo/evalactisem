@@ -12,6 +12,8 @@ session_start();
 		*/
 		$login = "samszo";
 		$mdp = "Lucky71";
+		$login = "evalactisem";
+		$mdp = "d.t.-09";
 		$_SESSION['loginSess']=$login;
 		$_SESSION['mdpSess']=$mdp;
 	}
@@ -20,10 +22,12 @@ session_start();
 	$_SESSION['Delicious']= $oDelicious;
 		
 
-	if(!isset($_SESSION['lang'])){
+	if(isset($_GET['lang'])){
+		$_SESSION['lang']=$_GET['lang'];
+		$lang = $_GET['lang'];
+	}else{
 		$_SESSION['lang']='fr';
 	}
-	
 	
 	// v�rification du site en cours
 	if(isset($_GET['site'])){
@@ -53,12 +57,18 @@ session_start();
 		$UrlNom = "Traduction";
 	
 	if(isset($_GET['TempsVide']))
-		$TempsVide = $_GET['TempsVide'];
+		if($_GET['TempsVide']=="true")
+			$TempsVide = true;
+		else
+			$TempsVide = false;
 	else
-		$TempsVide = false;
+		$TempsVide = true;
 	
 	if(isset($_GET['ShowAll']))
-		$ShowAll = $_GET['ShowAll'];
+		if($_GET['ShowAll']=="true")
+			$ShowAll = true;
+		else
+			$ShowAll = false;
 	else
 		$ShowAll = false;
 	
