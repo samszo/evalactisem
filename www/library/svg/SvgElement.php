@@ -30,8 +30,10 @@ class SvgElement
         // Loop and call
         if (is_array($this->mElements)) {
             foreach ($this->mElements as $child) {
-            
-                $child->printElement();
+            	//vérification lié à un problème de construction 
+            	if($child){
+	                $child->printElement();
+            	}
             }
         }
     }

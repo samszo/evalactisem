@@ -36,8 +36,10 @@
   define('EOL', "\r\n");
   define("XmlFlux",$_SESSION['loginSess']."_Flux");
   define('XmlGraphIeml' ,$_SESSION['loginSess']."_GraphIeml");
-  define('Flux_PATH', '../tmpFlux/');
   define('PATH_FILE_FLUX','../tmpFlux/');
+  define('PATH_STAR_PARSER','http://starparser.ieml.org/cgi-bin/star2xml.cgi?iemlExpression=');
+  
+  
   define('LOGIN_IEML',"ieml");
   define('MDP_IEML','Paragraphe08');
   $Site = array(

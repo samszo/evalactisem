@@ -16,9 +16,9 @@ $file='';
 function Lire_XmlFile($file){
 
 //echo "Fichier:".$entree."::".$file;
-    if(file_exists(Flux_PATH.$file)){
-		if (simplexml_load_file(Flux_PATH.$file))
-    		$xml = simplexml_load_file(Flux_PATH.$file);
+    if(file_exists(PATH_FILE_FLUX.$file)){
+		if (simplexml_load_file(PATH_FILE_FLUX.$file))
+    		$xml = simplexml_load_file(PATH_FILE_FLUX.$file);
     	else
     		$xml = false;                           
     }

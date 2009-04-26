@@ -11,7 +11,7 @@ class SvgText extends SvgElement
     var $mY;
     var $mText;
     
-    function SvgText($x=0, $y=0, $text= "", $style="", $transform="")
+    function SvgText($x=0, $y=0, $text= "", $style="", $transform="", $js="", $id="")
     {
         // Call the parent class constructor.
         $this->SvgElement();
@@ -21,6 +21,8 @@ class SvgText extends SvgElement
         $this->mText = $text;
         $this->mStyle = $style;
         $this->mTransform = $transform;
+        $this->mJs = $js;
+        $this->mId = $id;
         
     }
     
@@ -29,6 +31,8 @@ class SvgText extends SvgElement
         print("<text x=\"$this->mX\" y=\"$this->mY\" ");
         $this->printStyle();
         $this->printTransform();
+        $this->printJs();
+		$this->printId();
         print(">\n");
         print($this->mText."\n");
         parent::printElement();

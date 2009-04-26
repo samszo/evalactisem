@@ -14,7 +14,7 @@ class BookMark{
 	
 	
 	function __tostring() {
-    	$s = "Cette classe permet de définir des BookMarks.<br/>";
+    	$s = "Cette classe permet de dï¿½finir des BookMarks.<br/>";
     	$s .= $this->id."<br/>";
     	$s .= $this->bookmark."<br/>";
     	return $s;
@@ -39,7 +39,7 @@ class BookMark{
 		function Add_Post_Ieml_Delicious( $objSite,$oDelicious){
      	 
         $oIeml = new PhpDelicious(LOGIN_IEML, MDP_IEML);
-         // Recupération des tarductions des tags
+         // Recupï¿½ration des tarductions des tags
          
 	 	 $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 		 $db->connect();         	
@@ -78,7 +78,7 @@ class BookMark{
 						$postMAJ.= $Post['url']." ";
 	            }
 	        	
-	            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction posté)
+	            //Mise a jour de la table onto_trad( Mettre 1 trad_post pour les traduction postï¿½)
 	            
 	            $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
 			 	$db->connect();  
@@ -131,9 +131,9 @@ class BookMark{
          $db->close();
          //Suppression des Fichiers de l'utilisateur Flux_login,Primitives_login,Events_login
          
-   		$this->Suppression_Fichier(Flux_PATH.md5(XmlFlux).".xml");
-   		$this->Suppression_Fichier(Flux_PATH.md5('Events_'.XmlGraphIeml).".xml");
-   		$this->Suppression_Fichier(Flux_PATH.md5('Primitives_'.XmlGraphIeml).".xml");
+   		$this->Suppression_Fichier(PATH_FILE_FLUX.md5(XmlFlux).".xml");
+   		$this->Suppression_Fichier(PATH_FILE_FLUX.md5('Events_'.XmlGraphIeml).".xml");
+   		$this->Suppression_Fichier(PATH_FILE_FLUX.md5('Primitives_'.XmlGraphIeml).".xml");
    		
    		//Purrage du cache delicoius
    		$oDelicious->DeleteCache($login."posts/all".''.''.-1);

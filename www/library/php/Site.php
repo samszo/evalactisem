@@ -10,7 +10,7 @@ class Site{
   public $cache;
   
   function __tostring() {
-    return "Cette classe permet de d�finir et manipuler un site.<br/>";
+    return "Cette classe permet de d�finir et manipuler un site.<br/>";
     }
 
   function __construct($sites, $id, $scope, $complet=true) {
@@ -44,7 +44,7 @@ class Site{
 		$this->menu = $this->MenuSite($this->id,0,$Liens);
 	}
 
-	// cr�ation de l'objet de cache
+	// cr�ation de l'objet de cache
 	$this->cache = new Cache_Lite_Function(array('cacheDir' => CACHE_PATH,'lifeTime' => CACHETIME));
 	
 	//echo "FIN new Site <br/>";
@@ -196,17 +196,17 @@ class Site{
 		$valon = "";
 		$valselect = "";
 		$menu =""; 
-		//cr�ation d'un bloc  pour calculer le nombre de topic
+		//cr�ation d'un bloc  pour calculer le nombre de topic
 		$g = new Bloc($this,"vide",$this->scope);
 		
 		//echo $this->id." SiteEnfant=".$this->sites[$id_site]["SITE_ENFANT"].'<br>';
-		//echo "cr�ation du menu du site et des enfants<br/>";
+		//echo "cr�ation du menu du site et des enfants<br/>";
 		if($this->sites[$id_site]["SITE_ENFANT"]!=-1){		
 			foreach($this->sites[$id_site]["SITE_ENFANT"] as $siteenfant=>$rptitre)
 			{
 				//echo $rptitre.' : '.$siteenfant.'<br>';
 				$EstParent = $this->EstParent($siteenfant);
-				//echo "v�rifie la s�lection d'un site enfant : ".$this->id." - ".$siteenfant." - EstParent=".$EstParent."<br/>";
+				//echo "v�rifie la s�lection d'un site enfant : ".$this->id." - ".$siteenfant." - EstParent=".$EstParent."<br/>";
 				if($siteenfant==$this->id || $EstParent){
 					$valon = "<div class='MenuToposOn'></div>";
 					$valselect = "<div class='MenuToposLabel'>".$this->sites[$siteenfant]["NOM"]."</div>";
@@ -217,7 +217,7 @@ class Site{
 						$menuenfant = $this->MenuSite($siteenfant,$niv-1,$Liens);
 					}
 				}else{
-					//cr�ation du lien
+					//cr�ation du lien
 					$lien =  $this->GetLien($Liens["page"]
 						, array("site","VoirEn","Rub")
 						, array($siteenfant,$Liens["VoirEn"],$this->sites[$siteenfant]["RUB_TopicTopos"])
@@ -255,10 +255,10 @@ class Site{
 			*/
 			$jsFunctions = "onclick=\"fcthtmlExpand(".$niv.",'site')\"";
 			
-			//cr�ation de l'ent�te
+			//cr�ation de l'ent�te
 			$menu .= "<script language='JavaScript'>maxHtmlExpand++;</script>";			
 			$menu .= "<div class='MenuTopos' >";
-			//v�rifie si un �l�ment est s�lectionn�
+			//v�rifie si un �l�ment est s�lectionn�
 			if($valon!=""){
 				$menu .= $valon;			
 				$menu .= "<div class='MenuToposTitre'>".$rptitre."</div>";
@@ -317,7 +317,7 @@ class Site{
 		if($this->scope!=-1){		
 			foreach($this->scope as $param=>$val)
 			{
-				//prise en compte du tableau des valeurs de param�tre � modifier
+				//prise en compte du tableau des valeurs de param�tre � modifier
 				if(is_array($type_select)){
 					$i = 0;
 					$change = false;
@@ -353,7 +353,7 @@ class Site{
 				}
 			}
 		}
-		//enl�ve la derni�re virgule
+		//enl�ve la derni�re virgule
 		$url = substr($url, 0, -1);
 		
 		return $url;
@@ -394,7 +394,7 @@ class Site{
 			$site = $this;
 		
 		$SitesEnfants = $site->infos["SITE_ENFANT"];
-		//echo "v�rifie le calcul des sites enfants ".$SitesEnfants."<br/>";
+		//echo "v�rifie le calcul des sites enfants ".$SitesEnfants."<br/>";
 		$NbT = 0;
 		if(is_array($SitesEnfants)){
 			//boucle sur les enfants
@@ -406,7 +406,7 @@ class Site{
 				$R = $this->GetSiteResult($siteEnf);
 				if($R){
 					$Result[$i] = $R;
-					//enregistre le r�sultat
+					//enregistre le r�sultat
 					$site->NbsTopics[$SiteEnfant]=$Result[$i]["rstRub"]["nb"];
 					//additionne le nombre de topic du site enfant
 					//$NbT += $site->NbsTopics[$SiteEnfant];
@@ -416,7 +416,7 @@ class Site{
 
 			}	
 		}
-		// enregistre le r�sultat
+		// enregistre le r�sultat
 		//ajoute le nb de TOPIC du scope
 		//$NbT += $site->NbsTopics[$site->id];
 		$R = $this->GetSiteResult($site);
@@ -471,6 +471,47 @@ class Site{
 		return $sResult;
 		
 	}
+	
+
+	
+  function stripAccents($string)
+  {
+    return strtr($string,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ',
+		 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+  }
+
+  function strtokey($str)
+  {
+    for ($iii = 0; $iii < strlen($str); $iii++)
+      if (ord($str[$iii]) == 146 || ord($str[$iii]) == 156)
+	$str[$iii] = '-';
+    $key = str_replace("_", "-", $str);
+    $key = str_replace("'", "-", $key);
+
+
+    $key = str_replace("`", "-", $key);
+    $key = str_replace(".", "-", $key);
+    $key = str_replace(" ", "-", $key);
+    $key = str_replace(",", "-", $key);
+    $key = str_replace("{}", "_", $key);
+    $key = str_replace("(", "_", $key);
+    $key = str_replace(")", "_", $key);
+    $key = str_replace("--", "-", $key);
+    $key = str_replace("- -", "-", $key);
+    $key = str_replace("<i>", "", $key);
+    $key = str_replace("</i>", "", $key);
+    $key = str_replace(":", "", $key);
+    $key = str_replace("«", "", $key);
+    $key = str_replace("»", "", $key);
+    $key = str_replace("/", "", $key);
+    $key = str_replace("“", "", $key);
+    $key = str_replace("”", "", $key);
+    $key = str_replace("\\", "", $key);
+    
+    $key = strtolower($key);
+    return $this->stripAccents($key);
+  }
+	
 	
 	
   }

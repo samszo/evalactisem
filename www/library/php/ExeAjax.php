@@ -109,8 +109,7 @@
         
 	function GetExaIEML($code){
         global $objSite;
-		$cache = new Cache_Lite_Function(array('cacheDir' => CACHEPATH,'lifeTime' => CACHETIME));
-        $sem = new Sem($objSite,$objSite->XmlParam,"","","",$cache);
+        $sem = new Sem($objSite);
         $sem->GetExagramme($code);
 		
 	}
