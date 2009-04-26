@@ -43,7 +43,13 @@
       
       public function __construct($sKey, $iCacheTime, $sPrefix='', $sCachePath = CACHE_PATH) {
       	//echo 'cache='.$sCachePath;
-      	if(ereg("bookmarks/",$sKey)||ereg("tags/",$sKey)||ereg("network/",$sKey)||ereg("LiveMetal/",$sKey)||ereg("lang/",$sKey)){
+      	if(ereg("bookmarks/",$sKey)
+      		||ereg("tags/",$sKey)
+      		||ereg("network/",$sKey)
+      		||ereg("LiveMetal/",$sKey)
+      		||ereg("lang/",$sKey)
+      		||ereg("StarParser/",$sKey)
+      		){
       		$this->sShortKey = $sPrefix.$sKey;
       	}else{ 
       		//$this->sShortKey = $sPrefix.md5($sKey);

@@ -19,6 +19,7 @@ Class Sem{
 	public $Desc;
 	public $Tra;
 	public $StarParam;
+	public $StarParse;
 	public $XmlParam;
 	private $site;
 	private $trace;
@@ -31,18 +32,14 @@ Class Sem{
     public $cache;
     
     
-	function __construct($Site, $FicXml, $So, $De="", $Tr="", $cache="") {
+	function __construct($Site, $FicXml="", $So="", $De="", $Tr="", $cache="") {
 		
 		$this->trace = TRACE;
-        /*
-		if($FicXml=="")
-			$FicXml==$Site->scope["FicXml"];
-		if($this->trace){
-			echo "On charge les param�tres : ".$FicXml."<br/>\n";
-			$this->XmlParam = new XmlParam($FicXml);
-		    
-		}*/
-        //$this->parse = $FicXml;
+		if($FicXml==""){
+			$this->XmlParam = $Site->XmlParam;		    
+		}
+
+		//$this->parse = $FicXml;
 		$this->site = $Site;	
 		$this->Src = $So;
 
@@ -116,42 +113,43 @@ Class Sem{
 	public function GetExagramme($code){
 		
 		//parse le code
-		/*
-		if($this->cache)
-			$xml = $this->cache->call('cParse',$code);
-		else
-*/
-			$xml = $this->parse($code);
+		$oCacheXml = new Cache("StarParser/".$this->site->strtokey($code),CACHETIME);
+		if(!$oCacheXml->Check()){
+			$xml = $this->parse($code,false);
+			$oCacheXml->Set($xml,true);			
+		}else{
+			$xml = $oCacheXml->Get(true);
+		}
 		
 		if(strstr($xml,"ERROR:")){
 			return $xml;
 		}
+    	$this->StarParse= simplexml_load_string($xml);
 		
+    	/*	
+		//calcule un tableau des couches à partir de l'ancienne version du parser
 		$this->Sequences =array();
-
-		//r�cup�re les couches
-		$this->GetCouches($xml,$xml->xpath("//category/genOp"));
-		
-		//initialisation du svg
-		$exa = new Exagramme($this->StarParam); 	
+		$this->GetCouches($this->StarParse->children());
 		$exa->ShowSequence($this->Sequences);
+ 		*/
+    			
+		//initialisation du svg
+		$exa = new Exagramme($this); 	
+		$exa->GetSequence();
 
 	}
 
-	function GetCouches($xml,$couches){
+	
+	
+	function GetCouches($couches){
 		
 		foreach($couches as $c){
-			if($c["role"]){
-				//récupére le role
-				$this->GetSequence($c,$c["layer"],$c["role"]);		
-			}
-			if($c->children()){
-				$this->GetCouches($xml,$c->children());
-			}
+			$primis = $c->xpath("//genOpAtL0");
+			$this->GetSequence($primis);		
 		}
 		
 	}
-	
+		
 	
 	function VerifExpIEML($code,$lib){
 		
@@ -400,29 +398,24 @@ Class Sem{
 		}		
 	}
 	
-	function GetSequence($roles, $layer, $role){
+	function GetSequence($roles){
 
 		if(!$roles)
 			return;
 		
-		if($layer=="L1"){
-			$tag = $roles->children()->getName();
-			if($tag && $tag!="genOp"){
-				//calcul les séquences
-				$this->GetExaPrimi($this->GetEventPrimis($tag), $layer, $role);				
-
-
+		$i=0;
+		$j=0;
+		$arrL0=array();
+		foreach($roles as $primis){
+			//crée le tableau des primitives	
+			if($i==3){
+				$this->GetExaPrimi($arrL0, $primis, $j);				
+				$arrL0=array();
+				$i=0;
+				$j++;
 			}
-		}else{
-			foreach($roles as $genOp){
-				$tag = $genOp->children()->getName();
-				if($tag){
-					$this->GetExaPrimi($this->GetEventPrimis($tag), $layer, $role);
-
-
-
-				}
-			}
+			$arrL0[$i]=$primis["symbol"]."";
+			$i++;
 		}
 
 	}
@@ -562,21 +555,21 @@ Class Sem{
 	//	Creation de fichier xml pour les traduction 
 	function CreatFileXml($xmlTrad,$file_name){
        $file=md5($file_name).".xml";
-		if(file_exists(Flux_PATH.$file)){
-				unlink(Flux_PATH.$file);
+		if(file_exists(PATH_FILE_FLUX.$file)){
+				unlink(PATH_FILE_FLUX.$file);
 		}
-    	$fichier = fopen(Flux_PATH.$file,"w");
+    	$fichier = fopen(PATH_FILE_FLUX.$file,"w");
 	    fwrite($fichier,$xmlTrad);
 	    fclose($fichier);
     	
 	}
 	
-	function Parse($code=""){
+	function Parse($code="",$GetObjet=true){
 	    set_time_limit(1000);
 		if($code=="")
 			$code=$this->Src;
 		$code = stripslashes ($code);
-	    $lien = 'http://starparser.ieml.org/cgi-bin/star2xml.cgi?iemlExpression='.$code;
+	    $lien = PATH_STAR_PARSER.$code;
 		if($this->trace)
 			echo "Sem:Parse:$lien=".$lien."<br/>";
 			
@@ -598,8 +591,9 @@ Class Sem{
 		$sResult = str_replace("<XMP>","",$sResult);
 	    $sResult = str_replace("</XMP>","",$sResult);
 	    if(eregi('<(.*)>(.*)<(.*)>',$sResult)){
-	    	$sResult = str_replace('<?xml version="1.0" encoding="UTF-8"?>'," ",$sResult);
-			$xml = simplexml_load_string($sResult);
+	    	$xml = str_replace('<?xml version="1.0" encoding="UTF-8"?>'," ",$sResult);
+			if($GetObjet)
+	    		$xml = simplexml_load_string($xml);
 			  return $xml;
 	    }else{
 	    	return  $sResult;
