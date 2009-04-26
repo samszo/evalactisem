@@ -51,9 +51,9 @@ class SauvFlux{
 	  return $name;
 	}
 	
-     function aGetAllTags($objSite,$oDelicious,$oUti,$arrLang,$getFlux){
+     function aGetAllTags($objSite,$oDelicious,$oUti,$lang,$getFlux){
      	set_time_limit(9000);
-     	$objSem = new Sem($objSite,$objSite->infos["FicXml"],"");
+     	$objSem = new Sem($objSite,$objSite->infos["XML_Param"],"");
      	//verfie s'il y a des nouvelles tags 
      	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($oUti->id)==0 || $getFlux=="true" ){
 			$xml='';
@@ -65,14 +65,17 @@ class SauvFlux{
 						//ajoute un nouveau tag de flux
 					   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
 						$this->flux_uti($objSite,$oUti->id,$idflux);
-					}else
+					}else{
 						$idflux=$reponse['onto_flux_id'];
+						//vérifie si l'utilisateur possède le flux
+						$this->flux_uti($objSite,$oUti->id,$idflux);
+					}
 					
 					//ajoute les traductions automatiques
 	                if($getFlux=="true")
-						$xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$arrLang,1);			   		
+						$xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$lang,1);			   		
 					else	
-					    $xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$arrLang,-1);	
+					    $xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$lang,-1);	
 			  	  } 
 			   
 		    }else {

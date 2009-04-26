@@ -29,11 +29,11 @@ class Xul{
    //Construction de la table des Tags qui n'ont pas de traduction dans le dictionnaire
    function Get_Tree_NoTrad_Uti($idUti,$lang){
 	
-	$sem = new Sem($this->site,$this->site->scope["FicXml"],"");
+	$sem = new Sem($this->site,$this->site->infos["XML_Param"],"");
 	$type = "No_Trad";
 	
 	//construction de l'ent�te du tree
-	$ihm .= '<tree                  
+	$ihm = '<tree                  
 		enableColumnDrag="true"
         typesource="GetTreeNoTradUti"
         flex="1"        
@@ -55,7 +55,7 @@ class Xul{
     
     
 	//récupére les tags non traduits
-	$rs = $sem->RequeteSelect($this->site,'GetTreeNoTradUti','-idUti-','',$idUti,'');
+	$rs = $this->site->RequeteSelect('GetTreeNoTradUti',array(array('-idUti-',$idUti)));
 	$i=0;
 	//construction des tag non traduit de l'utilisateur 
     $ihmNo = '<treeitem id="NoTradUti_'.$idUti.'" container="true" open="true">'.EOL;
@@ -74,7 +74,7 @@ class Xul{
     $ihmNo .= '</treeitem>'.EOL;
 
 	//récupére les tags non traduits
-	$rs = $sem->RequeteSelect($this->site,'GetTradAutoSup','-idUti-','-idUtiAuto-',$idUti,$this->site->infos["UTI_TRAD_AUTO"]);
+	$rs = $this->site->RequeteSelect('GetTradAutoSup',array(array('-idUti-',$idUti),array('-idUtiAuto-',$this->site->infos["UTI_TRAD_AUTO"])));
 	$i=0;
 	//construction des tag non traduit de l'utilisateur 
     $ihmSup = '<treeitem id="NoTrad_Auto_'.$idUti.'" container="true" open="true">'.EOL;
@@ -146,16 +146,16 @@ function Get_Tree_Trad_Utis($idUtis, $lang){
 
 function GetTreeItemTradUti($oUti,$type,$lang){
 
-	$sem = new Sem($this->site,$this->site->infos["FicXml"],"");
+	$sem = new Sem($this->site,$this->site->infos["XML_Param"],"");
 	//charge le dictionaire
 	$xml= simplexml_load_file($this->site->infos["LiveMetalDico"]);
 	//récupére les traductions 
 	if($oUti->id==$this->site->infos["UTI_TRAD_AUTO"]){
 		//des traduction automatiques partagées par l'utilisateur 
-		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUtiAuto','-idUti-','-idUtiAuto-',$_SESSION['iduti'],$oUti->id);
+		$rs = $this->site->RequeteSelect('GetTreeTradUtiAuto',array(array('-idUti-',$_SESSION['iduti']),array('-idUtiAuto-',$oUti->id)));
 	}else{
 		//de l'utilisateur 
-		$rs = $sem->RequeteSelect($this->site,'GetTreeTradUti','-idUti-','--',$oUti->id,"");
+		$rs = $this->site->RequeteSelect('GetTreeTradUti',array(array('-idUti-',$oUti->id)));
 	}
 	$i=0;
 	$oIdUti = -1;

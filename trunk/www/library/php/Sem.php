@@ -96,13 +96,13 @@ Class Sem{
 			);
 			
 		//charge les param�tres des layers
-		if (file_exists("../../param/events.xml")) {
-		    $this->xmlEvent = simplexml_load_file("../../param/events.xml");
+		if (file_exists(PathRoot."/param/events.xml")) {
+		    $this->xmlEvent = simplexml_load_file(PathRoot."/param/events.xml");
 		} else {
 		    exit('Echec lors de l\'ouverture du fichier events.xml.');
 		}
-		if (file_exists("../../param/primitives.xml")) {
-		    $this->xmlPrimis = simplexml_load_file("../../param/primitives.xml");
+		if (file_exists(PathRoot."/param/primitives.xml")) {
+		    $this->xmlPrimis = simplexml_load_file(PathRoot."/param/primitives.xml");
 		} else {
 		    exit('Echec lors de l\'ouverture du fichier primitives.xml.');
 		}
@@ -166,36 +166,35 @@ Class Sem{
 		
 	}
 	
-	 function AddTradAuto($idFlux,$tag,$libIeml,$arrLang,$insAddTrad=-1){ 
+	 function AddTradAuto($idFlux,$tag,$libIeml,$lang,$insAddTrad=-1){ 
 	 	set_time_limit(9000);
 	 	$xml="";
 	 	$Entrys=$this->LiveMetalRequestAll($tag,'getExpression');
-	    foreach($arrLang as $lang){
-	    	$Xpath = "//entry[@lang='".$lang."']";
-	    	foreach($Entrys->xpath($Xpath) as $entry){
-				$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
-				$xml.="<entry lang='".$lang."' id='".$iemlEntry->entry->id."' >";
-				$xml.="<iemlCode>".$iemlEntry->entry->expression."</iemlCode>";
-				$xml.="<iemlLib>".$entry->expression."</iemlLib>";
-				$xml.="<iemlLevel>".$iemlEntry->entry->level."</iemlLevel>";
-				$xml.="<iemlParent>".$iemlEntry->entry->parent."</iemlParent>";
-				$xml.="</entry>";
-			 	if($insAddTrad==-1){
-					$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$iemlEntry->entry->id),$lang);
-			 	}else{
-			 		$oCacheXml = new Cache("LiveMetal/".$_SESSION['loginSess'], CACHETIME);
-			 		$xmlString=simplexml_load_string($oCacheXml->Get(true));
-			 		$Xpath = "//entry[@id='".$iemlEntry->entry->id."'][@lang='".$lang."']";
-			 		$Entrys=$xmlString->xpath($Xpath);
-			 		if(sizeof($Entrys)==0){
-			 			$xml=str_replace('</Ieml>',$xml,$xmlString.'');
-			 		}
-			 		if(!$this->VerifTradGetFlux($idFlux,$iemlEntry->entry->id,array($this->site->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']))){
-			 			$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$iemlEntry->entry->id),$lang);
-			 		}
-			 	}
-			 }
-	    }	
+
+ 	   	$Xpath = "//entry[@lang='".$lang."']";
+    	foreach($Entrys->xpath($Xpath) as $entry){
+			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
+			$xml.="<entry lang='".$lang."' id='".$iemlEntry->entry->id."' >";
+			$xml.="<iemlCode>".$iemlEntry->entry->expression."</iemlCode>";
+			$xml.="<iemlLib>".$entry->expression."</iemlLib>";
+			$xml.="<iemlLevel>".$iemlEntry->entry->level."</iemlLevel>";
+			$xml.="<iemlParent>".$iemlEntry->entry->parent."</iemlParent>";
+			$xml.="</entry>";
+		 	if($insAddTrad==-1){
+				$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$iemlEntry->entry->id),$lang);
+		 	}else{
+		 		$oCacheXml = new Cache("LiveMetal/".$_SESSION['loginSess'], CACHETIME);
+		 		$xmlString=simplexml_load_string($oCacheXml->Get(true));
+		 		$Xpath = "//entry[@id='".$iemlEntry->entry->id."'][@lang='".$lang."']";
+		 		$Entrys=$xmlString->xpath($Xpath);
+		 		if(sizeof($Entrys)==0){
+		 			$xml=str_replace('</Ieml>',$xml,$xmlString.'');
+		 		}
+		 		if(!$this->VerifTradGetFlux($idFlux,$iemlEntry->entry->id,array($this->site->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']))){
+		 			$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$iemlEntry->entry->id),$lang);
+		 		}
+		 	}
+		 }
 
 		return $xml;  
 	 	
@@ -712,14 +711,22 @@ Class Sem{
 
 			return $message;
    }
-   function verfiIdIemlExist(){
+
+   function GetIemlTrad($login,$tag){
+   	
+		$rs = $this->site->RequeteSelect('GetTagTradUti',array(array('-tag-',$tag),array('-login-',$login)));
+		$usl="";
+		while($r=mysql_fetch_assoc($rs)){
+			$usl .= $this->StarParam["usl"]."(".$r["ieml_code"].")";
+		}
+		return $usl;
    	
    }
    
    function Add_Trad($codeflux,$codeIeml,$libIeml,$iduti=-1,$getId=false,$res=-1,$lang=''){
    				$objSite = $this->site;
    				$Activite= new Acti();
-	   			$sem = new Sem($this->site,$this->site->infos["FicXml"],"");
+	   			$sem = new Sem($this->site,$this->site->infos["XML_Param"],"");
    				
 	   			if($iduti==-1)
 	   				$iduti=$_SESSION['iduti'];
@@ -727,7 +734,7 @@ Class Sem{
 	   				//recuperation des identifiants ieml_id et ieml_onto_flux
 	   				$res= array();
 	   				$EntryExp=$this->LiveMetalRequest('ieml',trim($codeIeml),'getId');
-					$idF=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax_recup_id','-codeFlux-','--',$codeflux,' '));
+					$idF=mysql_fetch_array($this->site->RequeteSelect('ExeAjax_recup_id',array(array('-codeFlux-',$codeflux),array('--',' '))));
 		        	$res[0]=$idF['onto_flux_id'];
 	   			    $res[1]=$EntryExp->entry->id;
 	   			    
@@ -752,25 +759,29 @@ Class Sem{
    						
 	   			}
 	   			//vérifie si la traduction existe
-	            $rs=mysql_fetch_array($this->RequeteSelect($objSite,'ExeAjax-AddTrad-VerifExist',"-idflux-","-idIeml-", $res[0] , $res[1]));
+	            $rs=mysql_fetch_array($this->site->RequeteSelect('ExeAjax-AddTrad-VerifExist'
+	            	,array(array("-idflux-",$res[0]),array("-idIeml-", $res[1]))
+	            	));
 	            if(!$rs){
 	                // insertion dans la table de traductions des identifiants
-	                $idTrad=$this->RequeteInsert($objSite,'ExeAjax-AddTrad-Insert',array(array("-idflux-", $res[0]),array("-idIeml-",$res[1])));
+	                $idTrad=$this->site->RequeteInsert('ExeAjax-AddTrad-Insert',array(array("-idflux-", $res[0]),array("-idIeml-",$res[1])));
                      
                 	//vérifie si le code ieml est déjà attribué à l'auteur
-              		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifIemlUtiOnto','-IdIeml-','-IdUti-',$res[1],$iduti));
+              		$verif=mysql_fetch_array($this->site->RequeteSelect('VerifIemlUtiOnto'
+              		,array(array('-IdIeml-',$res[1]),array('-IdUti-',$iduti))
+              		));
                 	if(!$verif){		                	
 	                	//insertion de la traduction dans la table des utilisateurs
-		                $this->RequeteInsert($objSite,'ieml_uti_onto',array(array("-idieml-", $res[1]),array("-iduti-",$iduti)));		                	
+		                $this->site->RequeteInsert('ieml_uti_onto',array(array("-idieml-", $res[1]),array("-iduti-",$iduti)));		                	
 	                }
 
 	                //insertion du partage de la trad pour l'utilisateur
-                	$this->RequeteInsert($objSite,'InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $iduti)));
+                	$this->site->RequeteInsert('InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $iduti)));
                 	
                 	//si l'utilisateur est "automatique" on ajoute un partage à l'utilisateur connecté
                 	//pour pouvoir supprimer cette traduction par la suite 
                 	if($iduti==$this->site->infos["UTI_TRAD_AUTO"]){
-                		$this->RequeteInsert($objSite,'InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $_SESSION['iduti'])));
+                		$this->site->RequeteInsert('InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $_SESSION['iduti'])));
                 	}
 	                
 	                $message = "Traduction de '".$codeflux."' en *".$codeIeml."** ajoutée";
@@ -780,10 +791,12 @@ Class Sem{
                 }else{
                 	$idTrad = $rs['trad_id'];                
                 	//vérifie si la traduction est déjà attribué à l'auteur
-              		$verif=mysql_fetch_array($this->RequeteSelect($objSite,'VerifPartageTrad','-idTrad-','-idUti-',$idTrad,$_SESSION['iduti']));
+              		$verif=mysql_fetch_array($this->site->RequeteSelect('VerifPartageTrad'
+              			,array(array('-idTrad-',$idTrad),array('-idUti-',$_SESSION['iduti']))
+              			));
                 	if($verif["nb"]==0){		                	
 	                	//insertion du partage de la trad pour l'utilisateur
-                		$this->RequeteInsert($objSite,'InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $_SESSION['iduti'])));
+                		$this->RequeteInsert('InsertPartageTrad',array(array("-idTrad-", $idTrad),array("-idUti-", $_SESSION['iduti'])));
                 		$message = "La traduction de '".$codeflux."' en *".$codeIeml."** est ajoutée pour ".$_SESSION['loginSess'];
                 	}else{            	
 	                	$message = "La traduction de '".$codeflux."' en *".$codeIeml."** existe déjà";
@@ -796,42 +809,7 @@ Class Sem{
 	                return $message;
   
    }
-  function RequeteSelect($objSite,$function,$var1,$var2,$val1,$val2){
-   	 
-   	   $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
-	   $Q = $objSite->XmlParam->GetElements($Xpath);
-	   $from=str_replace($var1, $val1, $Q[0]->from);
-	   $from=str_replace($var2, $val2, $from);
-	   $where=str_replace($var1, $val1, $Q[0]->where);
-	   $where=str_replace($var2, $val2,$where);
-	   $sql = $Q[0]->select.$from.$where;
-	   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-	   $link=$db->connect();   
-	  // $db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
-	   $result = $db->query($sql);
-	   $db->close($link);
-	   
-	   return ($result);
-   	
-   }
-   function RequeteInsert($objSite,$function,$arrVarVal){
-   
-   	 $Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
-   	 $Q = $objSite->XmlParam->GetElements($Xpath);
-   	 $values=$Q[0]->values;
-   	 foreach($arrVarVal as $VarVal){
-     	$values=str_replace($VarVal[0], $VarVal[1],$values);	
-   	 }
-     $sql = $Q[0]->insert.$values;
-     $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
-	 $link=$db->connect();   
-	 //$db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
-	 $db->query($sql);
-	 $idTrad= mysql_insert_id();
-     $db->close($link);
-     		return $idTrad;
-   	
-   }
+
    function Sup_Trad($codeIeml,$codeflux){
    				$objSite = $this->site;
    				
@@ -984,8 +962,9 @@ function recherche($query,$type,$IdUti,$lang){
 			while($data = mysql_fetch_array($result)) {
 				$results['lib'][]=$data['onto_flux_code'];
 			}
-     	}else
+     	}else{
    			$results=$this->rechLiveMetal($lang,$query);
+     	}
      	
      	$json = json_encode($results);
      	return $json;
@@ -1022,7 +1001,7 @@ function recherche($query,$type,$IdUti,$lang){
 	function LiveMetalRequest($lang,$param,$type){
 
 		$objSite = $this->site;
-		$oCacheXml = new Cache("LiveMetal/".$type."_".$param."_".$lang,CACHETIME);
+		$oCacheXml = new Cache("LiveMetal/".$type."_".$this->site->strtokey($param)."_".$lang,CACHETIME);
 		if(!$oCacheXml->Check()){
 			switch ($type) {
 				case 'getEntry':
@@ -1046,10 +1025,10 @@ function recherche($query,$type,$IdUti,$lang){
 				echo "Sem.php:LiveMetalRequest:lien".$lien."<br/>";
 
 			$sResult = $this->site->GetCurl($lien);      
+
 			//nettoie le résultat du parser
-			$sResult = str_replace('<?xml version="1.0" encoding="utf-8"?>',"",$sResult);
-		    $sResult = str_replace('<!DOCTYPE wikimetal SYSTEM "http://evalactisem.ieml.org/livemetal.dtd">',"",$sResult);
-			
+			$sResult = $this->cleanResult($sResult);
+						
 			$oCacheXml->Set($sResult);			
 		}else{
 			$sResult = $oCacheXml->Get();
@@ -1080,9 +1059,9 @@ function recherche($query,$type,$IdUti,$lang){
 		$oCacheXml = new Cache("LiveMetal/".$type."_".$param,CACHETIME);
 		if(!$oCacheXml->Check()){
 			if($type=='getEntryAll')
-				$lien="http://evalactisem.ieml.org/entries/".$param."/all";
+				$lien=$this->site->infos["PATH_LiveMetal"]."/entries/".$param."/all";
 			else
-				$lien="http://evalactisem.ieml.org/searchField/expression/".$param."/all";			
+				$lien=$this->site->infos["PATH_LiveMetal"]."/searchField/expression/".$param."/all";			
 			$xml = $this->site->GetCurl($lien);      
 			$oCacheXml->Set($xml);			
 		}else{
@@ -1119,25 +1098,14 @@ function recherche($query,$type,$IdUti,$lang){
      	return $results;
    }
    function getLangLiveMetal(){
-   	    $lien="http://evalactisem.ieml.org/languages";
-		//$xml = simplexml_load_file($lien);
-		 $oCurl = curl_init($lien);
-		// set options
-	    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
-		
-		// request URL
-		$sResult = curl_exec($oCurl);
-		
-		// close session
-		curl_close($oCurl);
+   	    $lien = $this->site->infos["PATH_LiveMetal"]."/languages";
+		$sResult = $this->site->GetCurl($lien);      
 		if($this->trace)
 			echo "Sem.php:Parse:sResult".$sResult."<br/>";
-		
-		
+				
 		//nettoie le résultat du parser
-		$sResult = str_replace('<?xml version="1.0" encoding="utf-8"?>',"",$sResult);
-	    $sResult = str_replace('<!DOCTYPE wikimetal SYSTEM "http://evalactisem.ieml.org/livemetal.dtd">',"",$sResult);
+		$sResult = $this->cleanResult($sResult);
+
 		$xml = simplexml_load_string($sResult);	
 		$Xpath = "//language";
 		$Entrys=$xml->xpath($Xpath);
@@ -1147,6 +1115,12 @@ function recherche($query,$type,$IdUti,$lang){
 		}
 		return json_encode($ArrLang);
    }
- 
+   function cleanResult($sResult){
+		//nettoie le résultat du parser
+		$sResult = str_replace('<?xml version="1.0" encoding="utf-8"?>',"",$sResult);
+	    $sResult = str_replace('<!DOCTYPE wikimetal SYSTEM "'.$this->site->infos["PATH_LiveMetal"].'/livemetal.dtd">',"",$sResult);
+   		return $sResult;
+   }
+   
 }
 ?>
