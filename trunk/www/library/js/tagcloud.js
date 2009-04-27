@@ -1,6 +1,29 @@
     
     //tag pour ne pas recharger le svg pendant qu'on initialise les paramètres des outils
     var SetParamOutil;
+    var UrlExaSvg = "http://localhost/evalactisem/library/php/ExeAjax.php?f=GetExaIEML&codeIeml=";
+
+	function VoirExagramme(id,usl,r){
+		try {
+			
+			var doc = document.getElementById(id);			
+			if(document.getElementById("SVGexa_"+usl))
+				//supprime le flux déjà présent
+				doc.removeChild(document.getElementById("SVGexa_"+usl));
+			
+			var url = UrlExaSvg+usl+"&r="+r;  	
+			//charge le svg  
+			AppendSVG(url,doc,true);
+			
+		} catch(ex2){ alert("tagcloud:VoirExagramme:"+ex2); }
+	}
+	
+	function VoirLogin(login){
+	 try {
+			alert(login);	
+	  } catch(ex2){ alert("tagcloud:VoirLogin:"+ex2); }
+	}
+
       
     function GrossiMaigriTag(evt){
 		//augmente une fois la taille du texte pour le voir plus facilement

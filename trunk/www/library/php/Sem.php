@@ -109,38 +109,7 @@ Class Sem{
 		
 				
 	}
-
-	public function GetExagramme($code){
 		
-		//parse le code
-		$oCacheXml = new Cache("StarParser/".$this->site->strtokey($code),CACHETIME);
-		if(!$oCacheXml->Check()){
-			$xml = $this->parse($code,false);
-			$oCacheXml->Set($xml,true);			
-		}else{
-			$xml = $oCacheXml->Get(true);
-		}
-		
-		if(strstr($xml,"ERROR:")){
-			return $xml;
-		}
-    	$this->StarParse= simplexml_load_string($xml);
-		
-    	/*	
-		//calcule un tableau des couches à partir de l'ancienne version du parser
-		$this->Sequences =array();
-		$this->GetCouches($this->StarParse->children());
-		$exa->ShowSequence($this->Sequences);
- 		*/
-    			
-		//initialisation du svg
-		$exa = new Exagramme($this); 	
-		$exa->GetSequence();
-
-	}
-
-	
-	
 	function GetCouches($couches){
 		
 		foreach($couches as $c){
@@ -565,38 +534,54 @@ Class Sem{
 	
 	function Parse($code="",$GetObjet=true){
 	    set_time_limit(1000);
-		if($code=="")
+	    if($code=="")
 			$code=$this->Src;
-		$code = stripslashes ($code);
-	    $lien = PATH_STAR_PARSER.$code;
-		if($this->trace)
-			echo "Sem:Parse:$lien=".$lien."<br/>";
+	    
+		//parse le code
+		$oCacheXml = new Cache("StarParser/".$this->site->strtokey($code),CACHETIME);
+		if(!$oCacheXml->Check()){
+			$code = stripslashes ($code);
+		    $lien = PATH_STAR_PARSER.$code;
+			if($this->trace)
+				echo "Sem:Parse:$lien=".$lien."<br/>";
 			
-	    $oCurl = curl_init($lien);
-		// set options
-	    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		    $oCurl = curl_init($lien);
+			// set options
+		    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+			
+			// request URL
+			$sResult = curl_exec($oCurl);
+			
+			// close session
+			curl_close($oCurl);
+			if($this->trace)
+				echo "Sem.php:Parse:sResult".$sResult."<br/>";
+			
+			
+			//nettoie le résultat du parser
+			$sResult = str_replace("<XMP>","",$sResult);
+		    $sResult = str_replace("</XMP>","",$sResult);
+		    if(eregi('<(.*)>(.*)<(.*)>',$sResult)){
+		    	$xml = str_replace('<?xml version="1.0" encoding="UTF-8"?>'," ",$sResult);
+		    }
+			
+		    $oCacheXml->Set($xml,true);			
+	    		    
+		}
+
+		$xml = $oCacheXml->Get(true);
+		$this->StarParse= simplexml_load_string($xml);
 		
-		// request URL
-		$sResult = curl_exec($oCurl);
-		
-		// close session
-		curl_close($oCurl);
-		if($this->trace)
-			echo "Sem.php:Parse:sResult".$sResult."<br/>";
-		
-		
-		//nettoie le résultat du parser
-		$sResult = str_replace("<XMP>","",$sResult);
-	    $sResult = str_replace("</XMP>","",$sResult);
-	    if(eregi('<(.*)>(.*)<(.*)>',$sResult)){
-	    	$xml = str_replace('<?xml version="1.0" encoding="UTF-8"?>'," ",$sResult);
-			if($GetObjet)
-	    		$xml = simplexml_load_string($xml);
-			  return $xml;
-	    }else{
-	    	return  $sResult;
+		if(strstr($xml,"ERROR:")){
+			return $xml;
+		}
+	    if($GetObjet){
+    		$xml = simplexml_load_string($xml);
 	    }
+		return $xml;
+	    
+	    
 	}
 
 	function GetDonneeBdd($objSite,$function,$getTag=false,$tag="",$getCouche=false,$couche=""){
@@ -712,17 +697,21 @@ Class Sem{
 			return $message;
    }
 
-   function GetIemlTrad($login,$tag){
+   function GetIemlTrad($tag){
    	
-		$rs = $this->site->RequeteSelect('GetTagTradUti',array(array('-tag-',$tag),array('-login-',$login)));
+		$rs = $this->site->RequeteSelect('GetTagTradUti',array(array('-tag-',$tag)));
 		$usl="";
+		$arrTradUti = array();
 		while($r=mysql_fetch_assoc($rs)){
-			$usl .= $this->StarParam["usl"]."(".$r["ieml_code"].")";
+			$arrTradUti["idFlux"]="onto_flux_id-".$r["onto_flux_id"];
+			$ieml = $this->LiveMetalRequest("",$r["ieml_id"],"getEntry");
+			$arrTradUti[$r["uti_login"]]["usl"] .= $this->StarParam["usl"]."(".$ieml->entry[0]->expression.")";
+			$arrTradUti[$r["uti_login"]][$r["ieml_id"]] = $ieml;
 		}
-		return $usl;
+		return $arrTradUti;
    	
    }
-   
+      
    function Add_Trad($codeflux,$codeIeml,$libIeml,$iduti=-1,$getId=false,$res=-1,$lang=''){
    				$objSite = $this->site;
    				$Activite= new Acti();

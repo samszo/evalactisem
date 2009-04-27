@@ -16,15 +16,28 @@ class Exagramme {
   public $svg; 
   public $arrPrevTrait;
   public $showAll=true; 
+  public $r; 
+  public $doc; 
+  public $site; 
+  public $x; 
+  public $y; 
   
   function __tostring() {
     return "Cette classe permet de d�finir et manipuler un Exagramme.<br/>";
     }
 
-  function __construct($sem) {
+  function __construct($site,$code,$showAll=true,$r=-1,$doc=true,$x=0,$y=0) {
     $this->trace = TRACE;
+    $this->site=$site;
     date_default_timezone_set('UTC');		
-    $this->sem = $sem;
+    $this->sem = new Sem($site);
+    $this->sem->Parse($code);
+    
+    $this->showAll = $showAll;
+    $this->r = $r;
+    $this->doc = $doc;
+    $this->x = $x;
+    $this->y = $y; 
   }
 
   
@@ -58,11 +71,11 @@ class Exagramme {
 	public function GetExa($arrTrait, $doc = true)
 	{
 		//initialisation du svg
-		if($doc)
-			$svg = new SvgDocument("600","600","","","","SVGglobal",$js);
-		else
-			$svg = new SvgGroup("","","SVGExa_");
 		$yTrait=0;
+		if($doc)
+			$svg = new SvgDocument("600","600","","","","SVGExa_",$js);
+		else
+			$svg = new SvgGroup("","","SVGExa_".$this->x_exa."_".$yTrait);
 		foreach($arrTrait as $trait){
 			if($trait){
 				$svg->addChild($this->GetYang($this->x_exa,$this->y_exa-$yTrait));
@@ -84,7 +97,11 @@ class Exagramme {
 	{
 		if($niv==0){
 			//initialisation du svg
-			$this->svg = new SvgDocument("100%","100%","","","","SVGglobal",$js); 	
+			$id= "SVGexa_".$this->sem->StarParse["expression"];
+			if($doc)
+				$this->svg = new SvgDocument("100%","100%","","","",$id,""); 	
+			else
+				$this->svg = new SvgFragment("100%","100%",$this->x,$this->y,"","","",$id);
 			//ajoute le titre de la séquence
 			$this->svg->addChild(new SvgText($this->x_exa, $this->marge, $this->sem->StarParse["expression"],$this->styleTexte));			
 			//récupère les enfants de la séquence
@@ -169,7 +186,7 @@ class Exagramme {
 			$Width = $this->x_exa+$this->width_trait+$this->x_entre_exa+$this->x_entre_exa;
 			$Height = $this->y_exa+$this->y_entre_texte + (6*($this->y_entre_trait+$this->heigth_trait));
 			
-			if($this->showAll){
+			if(!$this->showAll){
 				//affiche taille réelle
 				$this->svg->mWidth = $Width;
 				$this->svg->mHeight = $Height;
@@ -178,11 +195,17 @@ class Exagramme {
 				$this->svg->mPreserveAspectRatio="xMinYMin meet";
 				$this->svg->mViewBox = "0 0 ".$Width." ".$Height."";
 				$this->svg->mWidth = 1000;
-				$this->svg->mHeight = $Height;
+				if($this->r==-1)
+					$this->svg->mHeight = $Height;
+				else
+					$this->svg->mHeight = $this->r*3;
 			}
 					
 			//retourne le svg global
-			$this->svg->printElement();
+			if($this->doc)
+				$this->svg->printElement();
+			else
+				return $this->svg;
 		}
 	}
 	

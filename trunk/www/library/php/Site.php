@@ -61,7 +61,7 @@ class Site{
 	   		$from=str_replace($VarVal[0], $VarVal[1],$from);	
 	    	$where=str_replace($VarVal[0], $VarVal[1],$where);	
 	   	}
-	   $sql = $Q[0]->select.$from.$where;
+	   $sql = $select.$from.$where;
 	   $db = new mysql ($this->infos["SQL_HOST"], $this->infos["SQL_LOGIN"], $this->infos["SQL_PWD"], $this->infos["SQL_DB"]);
 	   $link=$db->connect();   
 	   $result = $db->query($sql);
