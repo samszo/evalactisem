@@ -33,7 +33,7 @@
        
 		switch ($fonction) {
 				case 'GetExaIEML':
-					$resultat = GetExaIEML($_GET['codeIeml']);
+					$resultat = GetExaIEML($_GET['codeIeml'],$_GET['r'],$ShowAll);
 					break;
 				case 'VerifExpIEML':
 					$resultat = VerifExpIEML(stripslashes($_GET['codeIeml']),stripslashes ($_GET['libIeml']));
@@ -107,11 +107,12 @@
 	}
         
         
-	function GetExaIEML($code){
+	function GetExaIEML($code,$r,$ShowAll){
         global $objSite;
-        $sem = new Sem($objSite);
-        $sem->GetExagramme($code);
-		
+		//construction un document svg exagramme 
+		$exa = new Exagramme($objSite,$code,$ShowAll,$r,true); 	
+		$exa->GetSequence();
+        		
 	}
         
 	function VerifExpIEML($code,$lib){

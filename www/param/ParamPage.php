@@ -6,14 +6,8 @@ session_start();
 		$login = $_SESSION['loginSess'];
 		$mdp = $_SESSION['mdpSess'];
 	}else{
-		/*
-		$login = "luckysemiosis";
-		$mdp = "Samszo0";
-		*/
-		$login = "samszo";
-		$mdp = "Lucky71";
 		$login = "evalactisem";
-		$mdp = "d.t.-09";
+		$mdp = "delcious09";
 		$_SESSION['loginSess']=$login;
 		$_SESSION['mdpSess']=$mdp;
 	}

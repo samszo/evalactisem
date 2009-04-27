@@ -28,7 +28,7 @@ class TagCloud {
   public $TagNbTot;
   public $PostNb;
   public $PostCarMax;
-  public $PostLargMax;
+  public $LargMax;
   private $oDlcs;
   public $lang;
   public $login;
@@ -96,12 +96,12 @@ class TagCloud {
 		  	$svg->addChild(new SvgScript(jsPathWeb."tagcloud.js"));
 		  	
 			//v�rifie s'il y a des posts
-		  	if($this->PostLargMax>0){
+		  	if($this->LargMax>0){
 				//echo $Max.", ".$Min.", ".$Tot.", ".$nb.", ".$IntVals[0].", ".$IntVals[1];
 			  	//construit la grille du tagcloud
 			  	$hPost = 32; 
 			  	//d�fini la taille du graphique
-				$this->width = $this->PostLargMax;
+				$this->width = $this->LargMax+$this->marge;
 				//d�fini le milieu du graphique = racine centrale
 			  	$cxTC = $this->width/2;
 				//d�fini la place de la premi�re couche
@@ -146,9 +146,10 @@ class TagCloud {
 			if($type=="post"){
 				$svg->mPreserveAspectRatio="xMinYMin meet";
 				$svg->mViewBox = "0 0 ".($this->xTagD)." ".($this->yTC)."";
-			}else{
+			}
+			if($type=="tag"){
 				$svg->mHeight="600";
-				$svg->mWidth="80";
+				$svg->mWidth=$svgWidth;
 				$svg->mPreserveAspectRatio="xMinYMin meet";
 				//$svg->mViewBox = $this->xTagG." 0 ".($this->xTagD)." ".($this->yTC)."";				
 				$svg->mViewBox = "0 0 ".($this->xTC)." ".($this->yTC)."";				
@@ -168,7 +169,7 @@ class TagCloud {
 		if($tags) {
         	if($this->trace)
 		    	echo "TagCloud:GetSvgTag:book".print_r($tags)."<br/>";
-
+		    	
 			//calcul les tags
 			$this->CalculTags($tags,$NbDeb,$NbFin);
 			
@@ -197,7 +198,7 @@ class TagCloud {
 				$svg->addChild($ligneTag);
 				
 				//redimensionne le svg
-				$svgWidth = $this->xTC*2;
+				$svgWidth = $this->LargMax;
 			  	$svg = $this->RedimSvg($ShowAll,$svg,$svgWidth,"tag");
 		  	}else{
 		  		$svg->addChild(new SvgText(30,30,"AUCUN TAG","fill:black;font-size:30;"));
@@ -257,15 +258,17 @@ class TagCloud {
 	function CalculStyle($ieml){
 		//vérifie la langue
 		if($this->lang=="ieml"){
-			if($ieml==""){
+			if($ieml!=""){
 				$style = "fill:crimson;fill-opacity:0.3;";
-				//vérifie si il y a une traduction dans le network
-				$NetWork= "";
-				if($NetWork!=""){
+				//boucle sur les traductions disponibles
+				foreach($ieml as $login=>$entry){
+					//vérifie si il y a une traduction pour le login
+					if($login==$this->login){
+						$style = "fill:forestgreen;fill-opacity:0.3;";
+						return $style;						
+					}
 					$style = "fill:darkorange;fill-opacity:0.3;";
 				}
-			}else{
-					$style = "fill:forestgreen;fill-opacity:0.3;";						
 			}
 		}else{
 			$color = $this->rgb2hex(array(rand(0, 255),rand(0, 255),rand(0, 255)));
@@ -273,6 +276,29 @@ class TagCloud {
 		}
 		
 		return $style;
+	}
+
+	function CalculScript($ieml){
+		if($ieml!=""){
+			$script = "onclick=\"";
+			//boucle sur les traductions disponibles
+			foreach($ieml as $login=>$entry){
+				//vérifie qu'on traite des logins
+				if($login!="idFlux"){
+					//vérifie si il y a une traduction pour le login
+					if($login==$this->login){
+						$script .= "VoirExagramme(this.parentNode.id,'".str_replace("'","\'",$entry["usl"])."',this.getAttribute('r'));";
+					}else{
+						$script .= "VoirLogin('".str_replace("'","\'",$login)."');";
+					}
+				}
+			}
+			$script.="\"";
+		}else{
+			$script = "onclick=\"alert('".$lib." (".$nb.")')\"";
+		}
+		
+		return $script;
 	}
 	
 	function CalculTags($tags,$NbDeb,$NbFin){
@@ -289,8 +315,8 @@ class TagCloud {
 			if($nb>=$NbDeb && $nb<=$NbFin){
 				$this->nbTag ++;
 				
-				//récupère la traduction ieml
-				$ieml = $sem->GetIemlTrad($this->login,$tag->title); 
+				//récupère toute les traductions ieml
+				$ieml = $sem->GetIemlTrad($tag->title); 
 				
 				//calcul le style
 				$style = $this->CalculStyle($ieml);
@@ -353,7 +379,7 @@ class TagCloud {
 					//v�rifie si le tag est d�j� conserv�
 					if (!$arrTags[$keyTag]) {
 						//récupère la traduction ieml
-						$ieml = $sem->GetIemlTrad($this->login,$tag->title); 
+						$ieml = $sem->GetIemlTrad($tag->title); 
 						
 						//calcul le style
 						$style = $this->CalculStyle($ieml);
@@ -409,9 +435,10 @@ class TagCloud {
 					$this->TagDateFin=$post["date"];				
 				if($post["date"]<$this->TagDateDeb)
 					$this->TagDateDeb=$post["date"];				
-			}
-			if($this->PostLargMax < $PostLargMax){
-				$this->PostLargMax = $PostLargMax;
+				//calcul la largeur maximal
+				if($this->LargMax < $PostLargMax){
+					$this->LargMax = $PostLargMax;
+				}
 			}
 		}
 		$this->arrPosts = $arrPosts;
@@ -509,17 +536,33 @@ class TagCloud {
 		$style = $tag["style"];
 		$lib = $this->SVG_entities($tag["tag"]);
 		
-		//ajoute le cercle
-		$script = "onclick=\"alert('".$lib." (".$nb.") ".str_replace("'","\'",$tag["ieml"])." ')\"";
+		//calcul le script
+		$script = $this->CalculScript($tag["ieml"]);
+		//$script = "onclick=\"alert('".$lib." (".$nb.") ".str_replace("'","\'",$tag["ieml"])." ')\"";
 		//$script = " onmouseover=\"GrossiMaigriTag(evt)\"";
 		//$script .= " onmouseleave=\"MaigriTag(evt)\"";
 		//$script .= " grossi='non'";
-		$g->addChild(new SvgCircle($this->xTC,$this->yTC,$r,$style,"",$script));
+		
+		//ajoute le cercle
+		$g->addChild(new SvgCircle($this->xTC,$this->yTC,$r,$style,"",$script,$tag["ieml"]["idFlux"]));
 		
 	  	//ajoute le texte
 		$s = "fill:black;font-size:".$fontsize."px;";
   		//$g->addChild(new SvgText($xT,$this->yTC,$lib,$s,"scale:2;"));
   		$g->addChild(new SvgText($xT,$this->yTC,$lib,$s));
+  		
+  		
+		//ajoute si la langue est ieml
+  		if($this->lang=="ieml"){
+  			//les traduction proposées
+	  		$g->addChild($this->AddTagTrad($j, $tag["ieml"], $r, $fontsize));
+  			//l'exagramme 
+  			$g->addChild($this->AddTagExa($j, $tag["ieml"], $r));
+  		}
+  		
+		//enregistre la largeur maximale
+		$maxLarg = $this->xTC+($r*2);
+		if($this->LargMax<$maxLarg)	$this->LargMax=$maxLarg;
   		
   		//met � jour le placement horizontal
 		//$this->xTC += $r;
@@ -530,6 +573,71 @@ class TagCloud {
 		
 	}
 
+
+	function AddTagExa($j, $ieml, $r){
+
+		$g = new SvgGroup("","","TagExa_".$j,"");
+		$exaHeight = 0;
+		
+  		//seulement pour l'utilisateur loguer
+  		$usl = $ieml[$this->login]["usl"];
+
+  		if($usl){
+			$exa = new Exagramme($this->site,$usl,true,$r,false,$this->xTC,$this->yTC+$r); 	
+			$exa->marge=0;
+			$svgExa = $exa->GetSequence();
+			$exaHeight = $svgExa->mHeight;
+			//enregistre la largeur maximale
+			if($this->LargMax<$svgExa->mWidth)
+				$this->LargMax=$svgExa->mWidth;
+			$g->addChild($svgExa); 
+	  		//met � jour le placement vertical
+			$this->yTC += $exaHeight;
+  		}
+			
+		return $g;
+	}
+
+	
+	function AddTagTrad($j, $ieml, $r, $fontsize){
+
+		$g = new SvgGroup("","","TagTrad_".$j,"");
+
+		//le titre du bloc
+		$style = "fill:black;font-size:".$fontsize."px;";
+		$g->addChild(new SvgText($this->xTC+$r,$this->yTC,"Auteur(s) de traduction",$style));
+  		//met � jour le placement vertical
+		$this->yTC += $fontsize;
+  		
+		//boucle sur les traductions disponibles
+		$i=0;
+		foreach($ieml as $login=>$entry){
+			//vérifie qu'on traite des logins
+			if($login!="idFlux"){
+	  			$usl = $entry["usl"];
+				
+		  		//vérifie si il y a une traduction pour le login
+		  		if($usl){
+	  				//affiche le login avec un lien pour montrer la traduction
+					$script .= "VoirLogin('".str_replace("'","\'",$login)."');";
+					$g->addChild(new SvgText($this->xTC+$r,$this->yTC,$login,$style));
+  					//met � jour le placement vertical
+					$this->yTC += $fontsize;
+  					$i++;		
+		  		}
+			}
+		}
+  		//met � jour le placement vertical
+		$this->yTC -= $fontsize;
+
+		//vérifie s'il y a au moins une traduction
+		if($i==0){
+			$g = new SvgGroup("","","TagTrad_".$j,"");			
+		}
+		
+		return $g;
+	}
+	
 	function GetLargeurBoiteTexte($str){
 		return (strlen($str)*$this->font_size)+20;
 	}
