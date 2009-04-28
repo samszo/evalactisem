@@ -281,6 +281,7 @@ class TagCloud {
 	function CalculScript($ieml){
 		if($ieml!=""){
 			$script = "onclick=\"";
+			$trad = "no";
 			//boucle sur les traductions disponibles
 			foreach($ieml as $login=>$entry){
 				//vérifie qu'on traite des logins
@@ -288,17 +289,21 @@ class TagCloud {
 					//vérifie si il y a une traduction pour le login
 					if($login==$this->login){
 						$script .= "VoirExagramme(this.parentNode.id,'".str_replace("'","\'",$entry["usl"])."',this.getAttribute('r'));";
+						$trad = "uti";
 					}else{
 						$script .= "VoirLogin('".str_replace("'","\'",$login)."');";
+						$trad = "net";
 					}
 				}
 			}
 			$script.="\"";
 		}else{
+			$trad = "no";
 			$script = "onclick=\"alert('".$lib." (".$nb.")')\"";
 		}
-		
-		return $script;
+		//ajoute le type de traduction
+		$trad = " trad='".$trad."' ";
+		return $script.$trad;
 	}
 	
 	function CalculTags($tags,$NbDeb,$NbFin){
@@ -379,7 +384,7 @@ class TagCloud {
 					//v�rifie si le tag est d�j� conserv�
 					if (!$arrTags[$keyTag]) {
 						//récupère la traduction ieml
-						$ieml = $sem->GetIemlTrad($tag->title); 
+						$ieml = $sem->GetIemlTrad($cat[0]); 
 						
 						//calcul le style
 						$style = $this->CalculStyle($ieml);
@@ -676,9 +681,12 @@ class TagCloud {
 				$style = $tag["style"]."fill-opacity:0.1;";				
 			}
 		}
-				
+
+		//calcul le script
+		$script = $this->CalculScript($tag["ieml"]);
+		
 		//ajoute le rectangle
-	  	$g->addChild(new SvgRect($x,$this->yTC,$larg,$this->TagRectHaut,$style));
+	  	$g->addChild(new SvgRect($x,$this->yTC,$larg,$this->TagRectHaut,$style,"",$script));
 		
 	  	//ajoute la taille du bloc texte
 		if($TagIn){
