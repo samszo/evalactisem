@@ -332,7 +332,7 @@ class TagCloud {
 				$nbCar = $this->GetLargeurBoiteTexte($tag->title);	
 				if($this->PostCarMax < $nbCar){
 					$this->PostCarMax = $nbCar;
-				}				
+				}
 			}
 		}
 		$this->IntVals[0] = ($this->TagNbMax-$this->TagNbMin)/3;

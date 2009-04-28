@@ -83,6 +83,13 @@
 			</hbox>
 			<checkbox id="TempsVide" label="Afficher les silences" checked="true"/>
 		</groupbox>
+
+		 <groupbox orient="vertical" >
+			<caption label='Afficher les traductions' />
+			<checkbox id="TradUti" label="De l'utilisateurs" checked="true"/>
+			<checkbox id="TradNetWork" label="De son réseau" checked="true"/>
+			<checkbox id="TradNo" label="pas faites" checked="true"/>
+		</groupbox>
 		
 		<groupbox orient="vertical" flex="1" >
 			<caption label='Réseau social' />

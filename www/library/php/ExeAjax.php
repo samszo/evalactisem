@@ -33,7 +33,11 @@
        
 		switch ($fonction) {
 				case 'GetExaIEML':
-					$resultat = GetExaIEML($_GET['codeIeml'],$_GET['r'],$ShowAll);
+			        if(isset($_GET['r']))
+			                $r = $_GET['r'];
+			         else
+			         		$r=10000;
+					$resultat = GetExaIEML($_GET['codeIeml'],$r,$ShowAll);
 					break;
 				case 'VerifExpIEML':
 					$resultat = VerifExpIEML(stripslashes($_GET['codeIeml']),stripslashes ($_GET['libIeml']));
