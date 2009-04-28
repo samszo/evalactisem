@@ -4,7 +4,7 @@
 
 function AppendSVG(url,doc, InSvg) {
   try {
-	dump("AppendSVG IN "+url+"\n");
+	document.documentElement.style.cursor = "wait";
 
 	if(!InSvg){
 		//vide le conteneur
@@ -28,13 +28,15 @@ function AppendSVG(url,doc, InSvg) {
 		doc.appendChild(resultDoc.documentElement);
 
 	}
-	dump("AppendSVG OUT \n");
    } catch(ex2){alert("AppendSVG::"+ex2);}
+	document.documentElement.style.cursor = "auto";
+
 }
 
 function GetResult(url) {
   try {
-	dump("GetResult IN "+url+"\n");
+	document.documentElement.style.cursor = "wait";
+
     response = "";
 	p = new XMLHttpRequest();
 	p.onload = null;
@@ -53,12 +55,15 @@ function GetResult(url) {
 	}
 	return response;
 	dump("GetResult OUT \n");
-   } catch(ex2){alert(ex2);dump("::"+ex2);}
+   } catch(ex2){alert(ex2)}
+	document.documentElement.style.cursor = "auto";
 }
 
 
 function AppendResult(url,doc,ajoute) {
   try {
+	document.documentElement.style.cursor = "wait";
+
 	dump("AppendResult IN "+url+"\n");
 	p = new XMLHttpRequest();
 	p.onload = null;
@@ -84,8 +89,8 @@ function AppendResult(url,doc,ajoute) {
 		//ajoute le résultat
 		doc.appendChild(resultDoc.documentElement);
 	}
-	dump("AppendResult OUT \n");
-   } catch(ex2){alert(ex2);dump("::"+ex2);}
+   } catch(ex2){alert(ex2);}
+	document.documentElement.style.cursor = "auto";
 }
 
 
@@ -132,6 +137,8 @@ function processReqChange() {
 }
 function AjaxRequest(url,fonction_sortie,params,id) {
    
+	document.documentElement.style.cursor = "wait";
+
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
  	this.params = params;
@@ -168,10 +175,13 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 		alert("Votre navigateur ne connait pas l'objet XMLHttpRequest.");
 
 	}
+	document.documentElement.style.cursor = "auto";
 
 }
 function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
    
+	document.documentElement.style.cursor = "wait";
+
  	this.url = encodeURI(url);
  	this.fonction_sortie = fonction_sortie;
  	this.urlparams =encodeURI(urlparams);
@@ -211,6 +221,7 @@ function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
 		alert("Votre navigateur ne connait pas l'objet XMLHttpRequest.");
 
 	}
+	document.documentElement.style.cursor = "auto";
 
 }
 
@@ -219,6 +230,7 @@ function AjaxRequestPost(url,urlparams,fonction_sortie,params,id) {
 function AppendResultPost(url,urlparams,doc,ajoute) {
   
   try {
+	document.documentElement.style.cursor = "wait";
   
 	dump("AppendResultPost IN "+url+"\n");
 	p = new XMLHttpRequest();
@@ -248,4 +260,6 @@ function AppendResultPost(url,urlparams,doc,ajoute) {
 	}
 	dump("AppendResultPost OUT \n");
    } catch(ex2){alert(ex2);dump("::"+ex2);}
+	document.documentElement.style.cursor = "auto";
+
 }

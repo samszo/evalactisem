@@ -84,11 +84,11 @@
 			<checkbox id="TempsVide" label="Afficher les silences" checked="true"/>
 		</groupbox>
 
-		 <groupbox orient="vertical" >
+		 <groupbox orient="horizontal" >
 			<caption label='Afficher les traductions' />
-			<checkbox id="TradUti" label="De l'utilisateurs" checked="true"/>
-			<checkbox id="TradNetWork" label="De son réseau" checked="true"/>
-			<checkbox id="TradNo" label="pas faites" checked="true"/>
+			<checkbox id="TradUti" label="De l'utilisateur" oncommand="voirTrad()" checked="true"/>
+			<checkbox id="TradNetWork" label="De son réseau" oncommand="voirTrad()" checked="true"/>
+			<checkbox id="TradNo" label="pas faites" oncommand="voirTrad()" checked="true"/>
 		</groupbox>
 		
 		<groupbox orient="vertical" flex="1" >

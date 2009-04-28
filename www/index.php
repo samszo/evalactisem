@@ -43,7 +43,7 @@ if($con==1){
 }elseif($con==3){
 	$lbl = "label='Del.icio.us API access throttled.'" ;
 }else{  
-	$lbl = "label='Traduction del.icio.us -> IEML ' style='color:blue;font-size:150%'"; 
+	$lbl = "label='Traduction Tag -> IEML ' style='color:blue;font-size:150%'"; 
 }
 
 header ("Content-type: application/vnd.mozilla.xul+xml; charset=utf-8");
@@ -59,6 +59,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	<script src="library/js/Interface.js"/>
 	<script src="library/js/ajax.js"/>
  	<script src="library/js/utf8.js"/>
+	<script src="library/js/tagcloud.js"/>
 	
 
 	<script type="text/javascript" > 
@@ -103,7 +104,6 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	    </menu>
 	    <menu id="outils" label="Outils">
 	      <menupopup id="Outils-popup">
-	        <menuitem id='TagCloud' label="Tag Cloud" onclick="window.open('tagcloud.xul')" />
 	        <menuitem id='Dictio' label="Dictionnaire" onclick="window.open('http://www.ieml.org/french/elements.html')" />
 	        <menuitem id='LiveMetal' label="Live Metal" onclick="window.open('http://evalactisem.ieml.org')" />
 	      </menupopup>
@@ -123,13 +123,23 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
    </vbox>
 
 	<vbox id="main" flex="1">
+
+		<tabbox flex="1" >
+		    <tabs >
+		        <tab label="Traduction" />
+		        <tab label="Exploration" />
+		    </tabs>
+		    <tabpanels flex="1"  >
+		        <tabpanel >
+					<vbox flex="1" >
+
+	
 		 <groupbox orient="horizontal" flex="1" >
-			<caption <?php echo $lbl;?> />
 			<vbox id="infosTrad" flex="1" >
 				<label id="trad-message" hidden="false" style="color:blue;" />
 				<hbox flex="1" >
 					<groupbox orient="horizontal" >
-						<caption label="Tag delicious"/>
+						<caption label="Tags"/>
 					    <label id="id-trad-flux" hidden="true"/>
 						<stack style='height:150px;margin-top:20px;"' flex='1'>
 							<textbox id="code-trad-flux" style="color:red;font-size:150%" onkeyup="lancer(event);" autocomplete="off" />
@@ -250,8 +260,128 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					    </tabpanels>
 					</tabbox>
 	-->
+
+ <!--  fin dee l'onglet traduction -->
 		</vbox>
+								</vbox>
+ 					         </tabpanel>
+					        <tabpanel>
+
+
+<hbox id="main" flex="1" style="overflow:auto" >
+	<vbox id="outils" flex="1" >
+		<hbox >
+			<groupbox orient="horizontal" >
+				<caption label='Choix de la représentation' />
+				 <menulist id="choixTC" >
+				    <menupopup>
+				      <menuitem label="Posts" value="posts"/>
+				      <menuitem label="Tags" value="tags"/>
+				    </menupopup>
+				  </menulist>
+				 <menulist id="choixAjout" >
+				    <menupopup>
+				      <menuitem label="Remplace" value="-1"/>
+				      <menuitem label="Ajoute" value="0"/>
+				    </menupopup>
+				  </menulist>
+				 <menulist id="ShowAll" >
+				    <menupopup>
+				      <menuitem label="Taille réelle" value="false"/>
+				      <menuitem label="Taille compressée" value="true"/>
+				    </menupopup>
+				  </menulist>
+			</groupbox>
+			<groupbox orient="horizontal" >
+				<caption label='Choix de la langue' />
+				 <menulist id="choixLangue" >
+				    <menupopup>
+				      <menuitem label="tag" value="tag"/>
+				      <menuitem label="ieml" value="ieml"/>
+				    </menupopup>
+				  </menulist>
+			</groupbox>
+		</hbox>	
+		<groupbox orient="vertical" >
+			<caption label='Occurence des Tags' />
+			<hbox>
+				<label value="Min :" /><label id="lblTagIntMin" value="" />
+			</hbox>
+			<scrollbar
+			    id="scrollTagIntMin" 
+			    idLbl="lblTagIntMin"
+			    orient="horizontal"
+			    curpos="1"
+			    maxpos="100"
+			    increment="1"
+			    pageincrement="10"
+			    onmouseup="SelectNetwork('TreeDeliciousNetwork',1);"/>
+			<hbox>
+				<label value="Max :" /><label id="lblTagIntMax" value="" />
+			</hbox>
+			<scrollbar
+			    id="scrollTagIntMax"
+			    idLbl="lblTagIntMax"
+			    orient="horizontal"
+			    curpos="1"
+			    maxpos="100"
+			    increment="1"
+			    pageincrement="10"
+			    onmouseup="SelectNetwork('TreeDeliciousNetwork',1);"/>
+		</groupbox>
+		
+		 <groupbox orient="vertical" >
+			<caption label='Interval de temps' />
+			<hbox>
+				<label value="Début :" /><datepicker onchange="" id="dpTagDeb" type="popup" value="2007-03-26"/>
+				<label value="Fin : " /><datepicker id="dpTagFin" type="popup" value="2007-03-26"/>
+			</hbox>
+			<checkbox id="TempsVide" label="Afficher les silences" checked="true"/>
+		</groupbox>
+
+		 <groupbox orient="horizontal" >
+			<caption label='Afficher les traductions' />
+			<checkbox id="TradUti" label="De <?php echo $_SESSION['loginSess']; ?>" oncommand="VoirTrad()" checked="true"/>
+			<checkbox id="TradNetWork" label="De son réseau" oncommand="VoirTrad()" checked="true"/>
+			<checkbox id="TradNo" label="pas faites" oncommand="VoirTrad()" checked="true"/>
+		</groupbox>
+		
+		<groupbox orient="vertical" flex="1" >
+			<caption label='Réseau social' />
+			<hbox id="DeliciousNetwork" flex="1">
+			</hbox>
+		</groupbox>
+	</vbox>
+   	<splitter collapse="before" >
+		<grippy/>
+	</splitter>
+	<vbox flex="1">
+		<groupbox orient="vertical" flex="1" >
+			<caption label='Représentation' />
+			<hbox id="tagcloud" flex="1"  style="overflow:auto" />
+		</groupbox>
+	</vbox>
+</hbox>
+
+	<script>
+		//création des listener
+		document.getElementById("scrollTagIntMin").addEventListener("DOMAttrModified",
+			function(event) {onScroll(event);}, false);	
+		document.getElementById("scrollTagIntMax").addEventListener("DOMAttrModified",
+			function(event) {onScroll(event);}, false);
+		//récupération de l'arbre du réseau social
+		GetTreeDeliciousNetwork();
+	</script>
+ 
+					         </tabpanel>
+					    </tabpanels>
+					</tabbox>
+ 
+ <!--  fin du main -->
  </vbox>
+ 
+ 
+ 
  <script type="text/javascript">
  	//r�cup�ration des flux
   Sem_getLangLiveMetal(); 
