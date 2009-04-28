@@ -22,8 +22,8 @@ session_start();
 	top:50%;
 	width:300px;
 	height:416px;
-	margin-top: -208px; /* moitié de la hauteur */
-	margin-left: -105px; /* moitié de la largeur */
+	margin-top: -208px; /* moitiï¿½ de la hauteur */
+	margin-left: -105px; /* moitiï¿½ de la largeur */
 	border: 1px solid #FFFFFF;
 	background-image:url(images/log5.gif);
 	background-repeat:no-repeat;
