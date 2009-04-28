@@ -20,5 +20,6 @@ require_once (SVG_CLASS_BASE."Svg.php");
 require_once(TT_CLASS_BASE.'CacheLite/Lite.php');
 require_once(TT_CLASS_BASE.'CacheLite/Lite/Function.php');
 require_once (TT_CLASS_BASE."Uti.php");
+require_once (TT_CLASS_BASE."twitter.php");
 
 ?>

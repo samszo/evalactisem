@@ -1,7 +1,57 @@
     
     //tag pour ne pas recharger le svg pendant qu'on initialise les paramètres des outils
+	var urlTagCloud = "tagcloud.php";
     var SetParamOutil;
     var UrlExaSvg = "http://localhost/evalactisem/library/php/ExeAjax.php?f=GetExaIEML&codeIeml=";
+
+	function VoirTrad(){
+		try {
+			document.documentElement.style.cursor = "wait";
+			
+			var docTradUti = document.getElementById("TradUti");
+			var docTradNetWork = document.getElementById("TradNetWork");
+			var docTradNo = document.getElementById("TradNo");
+			var TagName = false;
+			if(document.getElementById("choixTC").value=="tags"){
+				TagName = "circle";
+			}
+			if(document.getElementById("choixTC").value=="posts"){
+				TagName = "rect";
+			}
+
+			
+			
+			var docSvg = document.getElementById("tagcloud");
+			var tags = docSvg.getElementsByTagName(TagName);
+			//boucle sur tout les tags
+			for (var i = 0; i < tags.length; i++){
+				var trad = tags[i].getAttribute("trad");
+				//vérifie chacunne des possibilités de traduction
+				if(trad=="no"){
+					if(docTradNo.checked){
+						tags[i].parentNode.setAttribute('visibility', "visible");
+					}else{
+						tags[i].parentNode.setAttribute('visibility', "hidden");
+					}
+				}
+				if(trad=="uti"){
+					if(docTradUti.checked){
+						tags[i].parentNode.setAttribute('visibility', "visible");
+					}else{
+						tags[i].parentNode.setAttribute('visibility', "hidden");
+					}
+				}
+				if(trad=="net"){
+					if(docTradNetWork.checked){
+						tags[i].parentNode.setAttribute('visibility', "visible");
+					}else{
+						tags[i].parentNode.setAttribute('visibility', "hidden");
+					}
+				}								
+			}
+		} catch(ex2){ alert("tagcloud:VoirTrad:"+ex2); }
+		document.documentElement.style.cursor = "auto";
+	}
 
 	function VoirExagramme(id,usl,r){
 		try {

@@ -98,7 +98,7 @@ class Exagramme {
 		if($niv==0){
 			//initialisation du svg
 			$id= "SVGexa_".$this->sem->StarParse["expression"];
-			if($doc)
+			if($this->doc)
 				$this->svg = new SvgDocument("100%","100%","","","",$id,""); 	
 			else
 				$this->svg = new SvgFragment("100%","100%",$this->x,$this->y,"","","",$id);
