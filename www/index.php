@@ -82,12 +82,14 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 	</popupset>
 	<toolbox >
 	  <menubar id="evalactisem-menubar">
+	  	<!--  
 	    <menu id="flux" label="Flux">
 	      <menupopup id="Flux-popup">
 	        <menuitem label="Del.icio.us" onclick="GetFlux(true);"/>
 	        <menuitem label="Twitter"/>
 	      </menupopup>
 	    </menu>
+	    -->
 	    <menu id="lang_flux" label="Langues" >
 	      <menupopup id="Lang_flux-popup" >
 	        <menuitem id='ar' label="Ar" type='radio' oncommand="lang=this.id;Xul_Ajax_ShowTreeTrad('');" />
@@ -199,11 +201,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 					        	<vbox flex="1">
 									<label hidden="true" style='color:blue;' value="1. Choisissez un tag" />
 									<label hidden="true" style='color:blue;' value="2. Choisissez une expression IEML dans l'onglet 'Dictionnaire et Cycles'" />
-									<hbox hidden="true" >
-										<label  style='color:blue;' value="3. Cliquez ici" />
-										<button label="Ajouter la traduction" oncommand="AddTrad();"/>	
-									</hbox>
-									<box id="tpNoTrad" flex="1" />
+									<button label="Traduire automatiquement" oncommand="Xul_GetTradAuto();"/>	
+									<box id="GetTradAuto" flex="1" />
+									<box id="tpNoTrad" flex="4" />
 								</vbox>
 					         </tabpanel>
 					    </tabpanels>

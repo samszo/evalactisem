@@ -2,7 +2,7 @@
     //tag pour ne pas recharger le svg pendant qu'on initialise les paramètres des outils
 	var urlTagCloud = "tagcloud.php";
     var SetParamOutil;
-    var UrlExaSvg = "http://localhost/evalactisem/library/php/ExeAjax.php?f=GetExaIEML&codeIeml=";
+    var UrlExaSvg = urlAjax+"library/php/ExeAjax.php?f=GetExaIEML&codeIeml=";
 
 	function VoirTrad(){
 		try {
@@ -108,7 +108,8 @@
 	function GetTreeDeliciousNetwork(){
 	 try {
 			//pour les traduction faites
-			var url = urlExeAjax+"?f=GetTreeDeliciousNetwork";
+			var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeDeliciousNetwork";
+			alert("tagcloud:GetTreeDeliciousNetwork:"+url);
 			AppendResult(url,document.getElementById('DeliciousNetwork'),false);
 				
 	  } catch(ex2){ alert("tagcloud:GetTreeDeliciousNetwork:"+ex2); }

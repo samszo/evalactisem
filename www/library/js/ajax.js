@@ -28,7 +28,7 @@ function AppendSVG(url,doc, InSvg) {
 		doc.appendChild(resultDoc.documentElement);
 
 	}
-   } catch(ex2){alert("AppendSVG::"+ex2);}
+   } catch(ex2){alert("AppendSVG::"+ex2+":"+url);}
 	document.documentElement.style.cursor = "auto";
 
 }
@@ -137,6 +137,7 @@ function processReqChange() {
 }
 function AjaxRequest(url,fonction_sortie,params,id) {
    
+	try {
 	document.documentElement.style.cursor = "wait";
 
  	this.url = encodeURI(url);
@@ -155,10 +156,6 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 		this.req.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
         this.req.send(null);
 
-		try {
-	    	//console.log("request: "+url);
-	   	} catch (e) {}
-
 	} else if (window.ActiveXObject) {
 
 	    this.req = new ActiveXObject("Microsoft.XMLHTTP");						 // IE/Windows ActiveX
@@ -175,6 +172,8 @@ function AjaxRequest(url,fonction_sortie,params,id) {
 		alert("Votre navigateur ne connait pas l'objet XMLHttpRequest.");
 
 	}
+  	} catch (e) {alert("ajax:AjaxRequest:url:"+url+" :"+e)}
+
 	document.documentElement.style.cursor = "auto";
 
 }

@@ -135,7 +135,10 @@ Class Sem{
 		
 	}
 	
-	 function AddTradAuto($idFlux,$tag,$libIeml,$lang,$insAddTrad=-1){ 
+
+
+	
+	function AddTradAuto($idFlux,$tag,$libIeml,$lang,$insAddTrad=-1){ 
 	 	set_time_limit(9000);
 	 	$xml="";
 	 	$Entrys=$this->LiveMetalRequestAll($tag,'getExpression');
@@ -990,7 +993,7 @@ function recherche($query,$type,$IdUti,$lang){
 	function LiveMetalRequest($lang,$param,$type){
 
 		$objSite = $this->site;
-		$oCacheXml = new Cache("LiveMetal/".$type."_".$this->site->strtokey($param)."_".$lang,CACHETIME);
+		$oCacheXml = new Cache("LiveMetal/".$type."_".md5($param)."_".$lang,CACHETIME);
 		if(!$oCacheXml->Check()){
 			switch ($type) {
 				case 'getEntry':
@@ -1045,7 +1048,7 @@ function recherche($query,$type,$IdUti,$lang){
 	}
 	function LiveMetalRequestAll($param,$type){
 		
-		$oCacheXml = new Cache("LiveMetal/".$type."_".$param,CACHETIME);
+		$oCacheXml = new Cache("LiveMetal/".$type."_".md5($param),CACHETIME);
 		if(!$oCacheXml->Check()){
 			if($type=='getEntryAll')
 				$lien=$this->site->infos["PATH_LiveMetal"]."/entries/".$param."/all";
