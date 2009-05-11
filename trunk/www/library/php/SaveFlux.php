@@ -71,11 +71,11 @@ class SauvFlux{
 						$this->flux_uti($objSite,$oUti->id,$idflux);
 					}
 					
-					//ajoute les traductions automatiques
+					//ajoute les traductions automatiques uniquement si c'est demandé par l'utilisateur
 	                if($getFlux=="true")
 						$xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$lang,1);			   		
-					else	
-					    $xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$lang,-1);	
+					//else	
+					//    $xml.=$objSem->AddTradAuto($idflux,$aPost['tag'],"",$lang,-1);	
 			  	  } 
 			   
 		    }else {

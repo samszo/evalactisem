@@ -70,6 +70,28 @@ function Xul_Ajax_ShowTreeTrad(result){
 
 }
 
+
+function Xul_GetTradAuto(){
+	
+  try {
+
+    var codeFlux=document.getElementById("code-trad-flux");
+    var message=document.getElementById("trad-message");
+    
+	if(codeFlux.value==""){
+		alert("Veuillez sélectionner un tag del.icio.us");
+		return
+	}	
+
+	var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeTradAuto&codeFlux="+codeFlux.value+"&lang="+lang;
+
+	AppendResult(url,document.getElementById('GetTradAuto'),false);
+	
+  } catch(ex2){ alert("interface:Xul_GetTradAuto:"+url); }
+	
+}   
+
+
 function Sem_AddTrad(){
 	
 	var libIeml=document.getElementById("lib-trad-ieml");

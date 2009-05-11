@@ -32,6 +32,9 @@
          		$mbook="toto";
        
 		switch ($fonction) {
+				case 'GetTreeTradAuto':
+					$resultat = GetTreeTradAuto($_GET['codeFlux'],$lang);
+					break;
 				case 'GetExaIEML':
 			        if(isset($_GET['r']))
 			                $r = $_GET['r'];
@@ -105,6 +108,14 @@
         
         echo $resultat;  
 
+    function GetTreeTradAuto($tag,$lang){
+
+        global $objSite;
+        $xul = new Xul($objSite);
+		return $xul->GetTreeTradAuto($tag,$lang);    	
+    	
+    }
+        
 	function SetSession($lib,$val){
 		$_SESSION[$lib] = $val;
 		return "_SESSION[".$lib."]=".$_SESSION[$lib];

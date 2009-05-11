@@ -298,6 +298,102 @@ function GetTreeItemTradUti($oUti,$type,$lang){
 }
 
 
+function GetTreeTradAuto($tag,$lang){
+
+	$sem = new Sem($this->site,$this->site->infos["XML_Param"],"");
+
+	//on récupère les traductions disponibles
+ 	$Entrys=$sem->LiveMetalRequestAll($tag,'searchField');
+	
+	//construction de l'entete du tree
+	$ihm = '<tree                  
+		enableColumnDrag="true"
+        id="GetTreeTradAuto"
+        flex="1"        
+        multiple="true"';
+    $ihm .= ' onselect="SelectTrad(\'GetTreeTradAuto\',1,2,3);">'.EOL;
+    $ihm .= '<treecols >'.EOL;
+	$ihm .= '<treecol hidden="false" flex="1" label="Traductions"  persist="width ordinal hidden"  />'.EOL;
+    $ihm .= '<splitter class="tree-splitter"/>'.EOL;
+	$ihm .= '<treecol id="treecol_Tagdel" flex="2"  primary="true" label="Tag"  persist="width ordinal hidden"  />'.EOL;
+    $ihm .= '<splitter class="tree-splitter"/>'.EOL;
+    $ihm .= '<treecol id="treecol_descp" flex="2" label="Libellé IEML"  persist="width ordinal hidden" />'.EOL;
+    $ihm .= '<splitter class="tree-splitter"/>'.EOL;
+    $ihm .= '<treecol id="treecol_'.$type.'" flex="1"  label="IEML"  persist="width ordinal hidden" />'.EOL;
+    $ihm .= '</treecols>'.EOL;
+    $ihm .= '<treechildren >'.EOL;
+    /*on ouvre le tag
+    $ihm .= '<treeitem id="ieml_niv_'.$iemlNiv.'" container="true" open="true">'.EOL;
+    $ihm .= '<treerow>'.EOL;
+    $ihm .= '<treecell label="Automatique"/>'.EOL ;
+    $ihm .= '<treecell label="'.$tag.'"/>'.EOL ;
+    $ihm .= '<treecell label=""/>'.EOL ;
+    $ihm .= '</treerow>'.EOL;
+    $ihm .= '<treechildren>'.EOL;
+    */
+ 	
+ 	$i=0;
+	$Nivs = array("L0"=>"","L1"=>"","L2"=>"","L3"=>"","L4"=>"","L5"=>"");
+	//construction du tree des réponses
+    foreach($Entrys->entry as $entry){
+
+    	//récupère l'élément IEML
+    	$iemlE = $sem->LiveMetalRequestAll($entry->id,"getEntryAll");
+    	
+   		$iemlCode = $iemlE->entry[0]->expression;
+    	$iemlNiv = $sem->GetIemlLevel($iemlCode);
+   		
+    	//on crée les couches
+       	if($Nivs[$iemlNiv]==""){
+       		//on crée un nouveau niveau
+       		$Nivs[$iemlNiv] = '<treeitem id="ieml_niv_'.$iemlNiv.'" container="true" open="true">'.EOL;
+			$Nivs[$iemlNiv] .= '<treerow>'.EOL;
+    		$Nivs[$iemlNiv] .= '<treecell label=" "/>'.EOL ;
+			$Nivs[$iemlNiv] .= '<treecell label="'.$iemlNiv.'"/>'.EOL ;
+	        $Nivs[$iemlNiv] .= '<treecell label=""/>'.EOL ;
+            $Nivs[$iemlNiv] .= '</treerow>'.EOL;
+       		$Nivs[$iemlNiv] .= '<treechildren>'.EOL;
+       	}
+       	
+       	//on crée la branche de traduction
+        $Nivs[$iemlNiv] .= $this->AddTreeItemTrad('ieml_id_'.$entry->id,"",array("",$tag,$entry->expression.'',$iemlCode.''));
+
+       	
+        $i++;
+   	}
+    
+   	//v�rifie s'il existe des traductions
+   	if($i==0)
+   		return "Pas de traduction";
+   		
+    //on ferme les niveaux 
+	$ihmNivs="";
+    foreach($Nivs as $niv=>$ihmNiv){
+       	//uniquement ceux qui sont remplies
+		if($ihmNiv!=""){
+       		//on ferme le précédent tag
+			$Nivs[$niv] .= '</treechildren>'.EOL;
+			$Nivs[$niv] .= '</treeitem>'.EOL;
+			$ihmNivs .= $Nivs[$niv];
+       	}
+	}
+	
+    //on ajoute les niveaux
+    $ihm .= $ihmNivs;	
+    
+	/*on ferme le tag
+	$ihm .= '</treechildren>'.EOL;
+    $ihm .= '</treeitem>'.EOL;
+    */
+    
+    //termine le tree
+	$ihm .= '</treechildren>'.EOL;
+    $ihm .= '</tree>'.EOL;
+
+    return $ihm;    
+	
+}
+
 	function AddTreeItemTrad($id, $style, $cells){
 		
 		$item = '<treeitem id="'.$id.'" >'.EOL;  
