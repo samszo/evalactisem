@@ -55,13 +55,6 @@ echo ('<' . '?xml-stylesheet href="CSS/iemlCycle.css" type="text/css"?' . '>' . 
 echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 ?>
 <window flex="1" id="trad_flux" title="traduction Flux" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload=" ">
-    <script src="library/js/tree.js"/>
-	<script src="library/js/Interface.js"/>
-	<script src="library/js/ajax.js"/>
- 	<script src="library/js/utf8.js"/>
-	<script src="library/js/tagcloud.js"/>
-	
-
 	<script type="text/javascript" > 
 		var Flux; var f;
 		var urlExeAjax = "<?php echo ajaxPathWeb; ?>";
@@ -74,6 +67,12 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 		var m=0;
 	</script>
 
+    <script src="library/js/tree.js"/>
+	<script src="library/js/Interface.js"/>
+	<script src="library/js/ajax.js"/>
+ 	<script src="library/js/utf8.js"/>
+	<script src="library/js/tagcloud.js"/>
+	
 	<popupset id="popupset">
 		<popup id="clipmenu" onpopupshowing="javascript:;">
 			<menuitem label="Voir les primitives" oncommand="ParserIemlExp('|','Primitive');"/>
@@ -176,6 +175,9 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				</hbox>
 			</vbox>
 		</groupbox>
+	   	<splitter collapse="before" >
+			<grippy/>
+		</splitter>
 		
 		<vbox flex="6" >
 			<hbox flex="6">
