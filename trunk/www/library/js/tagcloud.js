@@ -109,7 +109,6 @@
 	 try {
 			//pour les traduction faites
 			var url = urlAjax+"library/php/ExeAjax.php?f=GetTreeDeliciousNetwork";
-			alert("tagcloud:GetTreeDeliciousNetwork:"+url);
 			AppendResult(url,document.getElementById('DeliciousNetwork'),false);
 				
 	  } catch(ex2){ alert("tagcloud:GetTreeDeliciousNetwork:"+ex2); }
