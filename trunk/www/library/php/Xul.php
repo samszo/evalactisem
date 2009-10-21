@@ -399,7 +399,7 @@ function GetTreeTradAuto($tag,$lang){
 		$item = '<treeitem id="'.$id.'" >'.EOL;  
         $item .= '<treerow id="TreeRow_'.$id.'" '.$style.' >'.EOL;
         foreach($cells as $cell){
-        	$item .= '<treecell label="'.$cell.'"  />'.EOL ;      	
+        	$item .= '<treecell label="'.htmlspecialchars($cell).'"  />'.EOL ;      	
         }
         $item .= '</treerow>'.EOL;
         $item .= '</treeitem>'.EOL;
