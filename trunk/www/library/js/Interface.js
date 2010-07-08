@@ -159,8 +159,8 @@ function SelectNoTrad(id,treecol){
   	var TreeRow=document.getElementById("TreeRow_"+IdTreeItem);
 
   	//label du tag del.icio.us
-  	console.log(TreeRow.childNodes.length);
-  	console.log(TreeRow.childNodes[3]);
+  	//console.log(TreeRow.childNodes.length);
+  	//console.log(TreeRow.childNodes[3]);
     txtcode_flux.value=TreeRow.childNodes[3].getAttribute('label');
     txtlib_ieml.value = TreeRow.childNodes[7].getAttribute('label');
     //txtcode_ieml.value = TreeRow.childNodes[9].getAttribute('label');
@@ -220,7 +220,7 @@ function SelectTrad(id,treecolTag,treecolTrad,treecolIeml,type){
   }
   		 
  catch(e){
-  console.log("interface:Select_Trad:"+e+""); 
+  //console.log("interface:Select_Trad:"+e+""); 
  }
 }
 
@@ -290,7 +290,7 @@ function GetIemlTreeExp(idTree, col, op){
 	//met � jour chaque expression suivant le niveau le plus haut
 	//n�cessaire pour que l'expression soit valide pour le parser
 	if(trace)
-		console.log('interface:GetIemlTreeExp:'+maxNiv);   
+		//console.log('interface:GetIemlTreeExp:'+maxNiv);   
 	
 	for (var i = 0; i < arrIEML.length; i++){
 		if(arrIEML[i][1]<maxNiv){
@@ -328,7 +328,7 @@ function GetIemlLayer(ieml){
 	if(c=="_")
 		niv = 6;
 	if(trace)
-		console.log('interface:GetIemlLayer:niv='+niv+' c='+c);   
+		//console.log('interface:GetIemlLayer:niv='+niv+' c='+c);   
 	
 	return niv;
 
@@ -667,7 +667,7 @@ function Load(key){
     	if(document.getElementById('ar').getAttribute("checked"))
     		arrSelect+=',"en"';
     	arrSelect+=']';
-    	console.log(eval('('+arrSelect+')'));
+    	//console.log(eval('('+arrSelect+')'));
     	return arrSelect;
     	
     	
