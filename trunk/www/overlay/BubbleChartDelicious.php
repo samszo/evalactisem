@@ -40,7 +40,6 @@ classes.slice(1).forEach(function(d) {
   var i = d.nodeName.lastIndexOf(".");
   d.className = d.nodeName.substring(i + 1);
   d.packageName = d.className.substring(0, 1);
-//console.log(d.nodeName,d.className,d.packageName);
   d.nodeValue = d.nodeValue.value;
 });
 
