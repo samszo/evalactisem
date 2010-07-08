@@ -1,6 +1,5 @@
     
     //tag pour ne pas recharger le svg pendant qu'on initialise les paramètres des outils
-	var urlTagCloud = "tagcloud.php";
     var SetParamOutil;
     var UrlExaSvg = urlAjax+"library/php/ExeAjax.php?f=GetExaIEML&codeIeml=";
 
@@ -117,7 +116,7 @@
 	function SelectNetwork(id,GetParam){
 	  try{
 	    var login = GetTreeValSelect(id,0);
-		var url = urlTagCloud+"?login="+login;
+		var url = urlExeAjax+"?f=TagCloud&user="+login;
 		//récupère le choix d'affichage
 		var ShowAll = document.getElementById("ShowAll").value;
 		url += "&ShowAll="+ShowAll;
@@ -149,13 +148,18 @@
 				  url += "&DateFin="+DateFin;
 		}
 		
-		//charge le svg  
-		AppendSVG(url,document.getElementById("tagcloud"),ajout);
-		
-		//met à jour les paramètres des outils
-	  	var svg = document.getElementById("SVGglobal");
-	  	InitOutilsParams(svg.getAttribute("TagNbMin"),svg.getAttribute("TagNbMax"),svg.getAttribute("TagDateDeb"),svg.getAttribute("TagDateFin"));
-		  
+		if(TC=="bulles"){
+			AppendResult(url,document.getElementById("tagcloud"),ajout);		
+			//met à jour les paramètres des outils
+		  	//var iframe = document.getElementById("fBulles_"+login);
+		  	//InitOutilsParams(iframe.getAttribute("TagNbMin"),iframe.getAttribute("TagNbMax"),iframe.getAttribute("TagDateDeb"),iframe.getAttribute("TagDateFin"));
+		}else{
+			//charge le svg  
+			AppendSVG(url,document.getElementById("tagcloud"),ajout);
+			//met à jour les paramètres des outils
+		  	var svg = document.getElementById("SVGglobal");
+		  	InitOutilsParams(svg.getAttribute("TagNbMin"),svg.getAttribute("TagNbMax"),svg.getAttribute("TagDateDeb"),svg.getAttribute("TagDateFin"));
+		}		  
 		  
 	  }catch(e){
 	  console.log("tagcloud:SelectNetwork:"+e+""); 
