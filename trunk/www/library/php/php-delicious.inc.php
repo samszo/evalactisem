@@ -574,7 +574,20 @@
             
             return $oCache->Get(true);
       }
-      
+
+      public function GetUserTagsRelated($sUsername, $sTag) {
+            $oCache = new Cache("tags/$sUsername-$sTag", $this->iCacheTime);
+            if (!$oCache->Check()) {
+               if ($sRss = $this->HttpRequest(PHP_DELICIOUS_RSS_URL."tags/$sUsername/$sTag")) {
+                  $oCache->Set($sRss,true);
+               } else {
+                  $oCache->Set(false,true);
+               }
+            }
+            
+            return $oCache->Get(true);
+      }
+            
       public function GetUserPosts($sUsername,$tag) {
             $oCache = new Cache("posts/".$sUsername."_".$tag, $this->iCacheTime);
             if (!$oCache->Check()) {

@@ -9,6 +9,8 @@ session_start();
 	}else{
 		$login = "evalactisem";
 		$mdp = "delcious09";
+		$login = "luckysemiosis";
+		$mdp = "Samszo0";
 		$_SESSION['loginSess']=$login;
 		$_SESSION['mdpSess']=$mdp;
 	}
@@ -81,12 +83,12 @@ session_start();
 		$NbDeb = $_GET['NbDeb'];
 	else
 		$NbDeb = 0;
-		
+	
 	if(isset($_GET['NbFin']))
 		$NbFin = $_GET['NbFin'];
 	else
 		$NbFin = 1000000000000;
-	
+		
 	if(isset($_GET['TC']))
 		$TC = $_GET['TC'];
 	else
@@ -108,6 +110,71 @@ session_start();
 	$_SESSION['iduti']=$objUti->id;
 	
 
+        if(isset($_POST['f'])){
+              $fonction = $_POST['f'];
+            
+        }else
+        if(isset($_GET['f']))
+                $fonction = $_GET['f'];
+        else 
+        		$fonction ='';
+        if(isset($_GET['id']))
+                $id = $_GET['id'];
+        else
+                $id = -1;
+        if(isset($_GET['code']))
+                $code = stripslashes ($_GET['code']);
+        else
+                $code = -1;
+        if(isset($_GET['desc']))
+                $desc = $_GET['desc'];
+        else
+                $desc = -1;
+        if(isset($_GET['bookmark']))
+                $mbook = stripslashes($_GET['bookmark']);
+         else
+         		$mbook="toto";
+        if(isset($_GET['user']))
+                $user = $_GET['user'];
+         else
+         		$user = $_SESSION['loginSess'];
+		
+         		
+
+
+function ChercheAbo ()
+	{
+		// connexion a delicious
+		global $con;
+		
+		$login=$_POST['login_uti'];
+		$mdp=$_POST['mdp_uti'];
+		if(TRACE)
+			echo "index:ChercheAbo:login:".$_POST['login_uti']." mdp=".$_POST['mdp_uti']."<br/>";
+   	   	
+		if(($login!="")&&($mdp!="")){
+			$oDelicious = new PhpDelicious($login, $mdp);
+			$_SESSION['loginSess']=$login;
+			$_SESSION['mdpSess']=$mdp;
+			$_SESSION['Delicious']=$oDelicious;
+			if(TRACE)
+				echo "ParamPage:Debug:oDelicious=".$oDelicious->sUsername."<br/>";
+			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
+			$con=$oDelicious->LastError();
+			
+			if ($con==2)
+			{
+				echo "Incorrect del.icio.us username or password";
+				include("login.php");
+				exit;
+			}
+		}else{
+			include("login.php");
+			exit;
+		}
+}
+		
+		
 //function pour le cache
 	function cParse($code){
 		global $objSite;

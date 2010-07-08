@@ -7,17 +7,14 @@ class SauvFlux{
 	public $descFlux;
 	public $niveauFlux;
 	public $trace;
+	private $site;
 	
 	
-	function _construct($desc_Band,$niv_Band,$parent_Band,$desc,$niv){
+	function __construct($objSite){
 		
 		$this->trace = TRACE;
 		
-		$this->descFlux_Band=$desc_Band;
-		$this->niveauFlux_Band=$niv_Band;
-		$this->parentsFlux_Band=$parent_Band;
-		$this->descFlux=$desc;
-		$this->niveauFlux=$niv;
+		$this->site=$objSite;
 		
 		
 	}
@@ -27,21 +24,21 @@ class SauvFlux{
 		if ($aPosts = $oDelicious->GetAllBundles()) {
 		  foreach ($aPosts as $aPost) {
 		  	$name.=$aPost['name'].";";
-		  	$reponse= $this->VerifFluxExiste($objSite,$aPost['name']);
+		  	$reponse= $this->VerifFluxExiste($aPost['name']);
 		  	if(!$reponse){
-			  $idflux= $this->InsertFlux($objSite,$aPost['name']);
-			  $this->flux_uti($objSite,$iduti,$idflux);
+			  $idflux= $this->InsertFlux($aPost['name']);
+			  $this->flux_uti($iduti,$idflux);
 		    }else{
-		      $this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
+		      $this->flux_uti($iduti,$reponse['onto_flux_id']);
 		    }
 		    $ArrTags=explode(" ",$aPost["tags"]);
 			foreach($ArrTags as $tag){
-			   $reponse= $this->VerifFluxExiste($objSite,$tag);			   
+			   $reponse= $this->VerifFluxExiste($tag);			   
 			   if(!$reponse){
-				$idflux= $this->InsertFlux($objSite,$tag);					 		
-				$this->flux_uti($objSite,$iduti,$idflux);
+				$idflux= $this->InsertFlux($tag);					 		
+				$this->flux_uti($iduti,$idflux);
 			   }else{
-				$this->flux_uti($objSite,$iduti,$reponse['onto_flux_id']);
+				$this->flux_uti($iduti,$reponse['onto_flux_id']);
 			   }
 		    } 
 		 } 
@@ -54,21 +51,34 @@ class SauvFlux{
      function aGetAllTags($objSite,$oDelicious,$oUti,$lang,$getFlux){
      	set_time_limit(9000);
      	$objSem = new Sem($objSite,$objSite->infos["XML_Param"],"");
-     	//verfie s'il y a des nouvelles tags 
+     	/*verfie s'il y a des nouvelles tags dans le cas où:
+     	- le bookmark a été mis à jour
+		- il n'y a pas encore de flux enregistré pour l'utilisateur
+		- on force la récupération du flux
+     	*/
      	if($oDelicious->isUpdatePost() || $objSem->GetUtiOntoFlux($oUti->id)==0 || $getFlux=="true" ){
 			$xml='';
+			//vérifie si le dictionnaire de l'utilisateur est créé
+			$oCacheXml = new Cache("LiveMetal/".$oUti->login,10);
+			if(!file_exists($oCacheXml->sFile)){
+				$oCacheXml->Set('<IEML><user>'.$oUti->login.'</user></IEML>',true);
+			}
+			
      		if ($aPosts = $oDelicious->GetAllTags()) { 
 		     	foreach ($aPosts as $aPost) { 
-			  	  	//vérifie que le tag du flux existe	     		
-				    $reponse = $this->VerifFluxExiste($objSite,$aPost['tag']);			   
+			  	  	//vérifie que le tag du flux existe
+			  	  	if($aPost['tag']=='tamazight'){
+			  	  		$toto = true;	     		
+			  	  	}
+				    $reponse = $this->VerifFluxExiste($aPost['tag']);			   
 					if(!$reponse){
 						//ajoute un nouveau tag de flux
-					   	$idflux= $this->InsertFlux($objSite,$aPost['tag']);			   	
-						$this->flux_uti($objSite,$oUti->id,$idflux);
+					   	$idflux= $this->InsertFlux($aPost['tag']);			   	
+						$this->flux_uti($oUti->id,$idflux);
 					}else{
 						$idflux=$reponse['onto_flux_id'];
 						//vérifie si l'utilisateur possède le flux
-						$this->flux_uti($objSite,$oUti->id,$idflux);
+						$this->flux_uti($oUti->id,$idflux);
 					}
 					
 					//ajoute les traductions automatiques uniquement si c'est demandé par l'utilisateur
@@ -81,9 +91,39 @@ class SauvFlux{
 		    }else {
 			   echo $oDelicious->LastErrorString();
 			}	
-			$xml='<Ieml>'.$xml.'</Ieml>';
-			$oCacheXml = new Cache("LiveMetal/".$oUti->login, $iCacheTime=10);
-			$oCacheXml->Set($xml,true);
+		}
+	}
+
+     function aSetTagsLinks($oDelicious,$oUti){
+     	set_time_limit(9000);
+
+     	/*verfie s'il y a des nouvelles tags dans le cas où:
+     	- le bookmark a été mis à jour
+     	*/
+     	if($oDelicious->isUpdatePost() || FORCE_CALCUL){
+     		if ($rssTags = $oDelicious->GetUserTags($oUti->login)) { 
+		     	$xmlTags = simplexml_load_string($rssTags);
+     			foreach ($xmlTags->channel->item as $Tag) { 
+					
+		     		//vérifie que le tag existe pour l'utilisateur
+		     		$idflux = $this->VerifUserFlux($oUti->id,$Tag->title);
+		     		
+					//récupère les tags liés
+		     		if($rssTagsRela = $oDelicious->GetUserTagsRelated($oUti->login, $Tag->title)) { 
+				     	$xmlTagsRela = simplexml_load_string($rssTagsRela);
+		     			foreach ($xmlTagsRela->channel->item as $TagRela) { 
+		     				//vérifie que le tag existe pour l'utilisateur
+				     		$idfluxRela = $this->VerifUserFlux($oUti->id, $TagRela->title); 
+				     		//vérifie que la relation entre tags existe pour l'utilisateur
+				     		$this->VerifUserFluxRela($oUti->id,$idflux,$idfluxRela,$TagRela->description);
+				     	}
+				    }else {
+					   echo $oDelicious->LastErrorString();
+					}	
+		     	} 
+		    }else {
+			   echo $oDelicious->LastErrorString();
+			}	
 		}
 	}
 	
@@ -136,42 +176,96 @@ class SauvFlux{
 	
 }
 	
-	function flux_uti($objSite,$uti_id,$flux_id){
+	function flux_uti($uti_id,$flux_id){
 		$Xpath=$this->Xpath('Ieml_Uti_Onto_Flux_existe');
 		if(!$flux_id){
 			$toto=1;
 		}
-		$Q=$objSite->XmlParam->GetElements($Xpath);
+		$Q=$this->site->XmlParam->GetElements($Xpath);
 		$where=str_replace("-idflux-",$flux_id,$Q[0]->where);
 		$where=str_replace("-iduti-",$uti_id,$where);
 		
-		$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 		$db->connect();
 		$sql=$Q[0]->select.$Q[0]->from.$where;
 		$r = $db->query($sql);
 		$db->close();
 		
 		if(mysql_num_rows($r)==0){				   	 
-			$db1 = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+			$db1 = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 			$Xpath=$this->Xpath('flux_utilisateur');
-			$Q=$objSite->XmlParam->GetElements($Xpath);
+			$Q=$this->site->XmlParam->GetElements($Xpath);
 			$values=str_replace("-iduti-",$uti_id,$Q[0]->values);
 			$values=str_replace("-idflux-",$flux_id,$values);
 			$sql=$Q[0]->insert.$values;
 			$db1->query($sql);
 			if($this->trace)
-				echo "SaveFlux:flux_uti:login=".$objSite->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
+				echo "SaveFlux:flux_uti:login=".$this->site->infos["SQL_LOGIN"]." sql=".$sql."<br/>";
 			$db1->close();
 		}
 		
 	}
 
 
-	function InsertFlux($objSite,$codeFlux){
+	function VerifUserFlux($UtiId, $tag){
+
+		//vérifie que le tag du flux existe
+	    $reponse = $this->VerifFluxExiste($tag);			   
+		if(!$reponse){
+			//ajoute un nouveau tag de flux
+		   	$idflux= $this->InsertFlux($tag);			   	
+		}else{
+			$idflux=$reponse['onto_flux_id'];
+		}
+		//vérifie si l'utilisateur possède le flux
+		$this->flux_uti($UtiId,$idflux);
+		
+	    
+	    return $idflux;				
+	}
+
+	
+	function VerifUserFluxRela($UtiId, $FluxId, $FluxIdRela, $poids){
+
+		//vérifie que la relation existe
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+        $db->connect();
+		$sql = "SELECT poids 
+	    	FROM ieml_uti_onto_flux_related
+	    	WHERE uti_id = $UtiId AND onto_flux_id = $FluxId AND onto_flux_id_rela = $FluxIdRela";
+	    $req = $db->query($sql);
+		$reponse=mysql_fetch_assoc($req);
+	    $db->close();
+		if($reponse){
+			//vérifie s'il faut mettre à jour le poids
+			if($reponse["poids"]!=$poids){
+				$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+				$db->connect();
+				$sql = "UPDATE ieml_uti_onto_flux_related
+					SET poids = $poids)
+	    			WHERE uti_id = $UtiId AND onto_flux_id = $FluxId AND onto_flux_id_rela = $FluxIdRela";
+	    		$req = $db->query($sql);
+			    $db->close();
+			}	    	
+	    }else{
+	    	//ajoute la relation entre tag
+	        $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+	    	$db->connect();
+			$sql = "INSERT INTO ieml_uti_onto_flux_related
+				(uti_id, onto_flux_id, onto_flux_id_rela, poids)
+				VALUES ($UtiId,$FluxId,$FluxIdRela,$poids)";
+		    $req = $db->query($sql);
+		    $db->close();	    	
+	    }
+						
+	}
+	
+	
+	function InsertFlux($codeFlux){
 		$Xpath=$this->Xpath('Ieml_Onto_Flux');
-		$Q=$objSite->XmlParam->GetElements($Xpath);
+		$Q=$this->site->XmlParam->GetElements($Xpath);
 		$value = str_replace("-codeFlux-",addslashes($codeFlux),$Q[0]->values);
-			$db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+			$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
         $link=$db->connect();
         //$db->query("SET CHARACTER SET 'utf8';", $link)or die(mysql_error());
 		$sql = $Q[0]->insert.$value;
@@ -184,12 +278,12 @@ class SauvFlux{
 	}
 
 	
-	function VerifFluxExiste($objSite,$tag){
+	function VerifFluxExiste($tag){
 	   $Xpath=$this->Xpath('Ieml_Onto_existe');
-       $Q=$objSite->XmlParam->GetElements($Xpath);        
+       $Q=$this->site->XmlParam->GetElements($Xpath);        
        $where=str_replace("-tag-",addslashes($tag),$Q[0]->where);
 	   $sql=$Q[0]->select.$Q[0]->from." ".$where;
-	   $db = new mysql ($objSite->infos["SQL_HOST"], $objSite->infos["SQL_LOGIN"], $objSite->infos["SQL_PWD"], $objSite->infos["SQL_DB"]);
+	   $db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 	   $db->connect();
 	   $req = $db->query($sql);
 	   $reponse=@mysql_fetch_assoc($req);

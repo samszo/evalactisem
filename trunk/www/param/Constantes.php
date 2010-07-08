@@ -16,8 +16,10 @@
 	define ("DEFSITE", "local");
   //define ("DEFSITE", "mundi");
 
-  define ("CACHETIME", 100000000);
-
+  //define ("CACHETIME", 100000000);
+  define ("CACHETIME", 86400); //une journée
+  define ("FORCE_CALCUL", true); //pour forcer les calculs et la mise à jour
+  
   // folder to store cache files
    define('CACHE_PATH', PathRoot.'/tmp/');   
   

@@ -140,35 +140,38 @@ Class Sem{
 	
 	function AddTradAuto($idFlux,$tag,$libIeml,$lang,$insAddTrad=-1){ 
 	 	set_time_limit(9000);
-	 	$xml="";
-	 	$Entrys=$this->LiveMetalRequestAll($tag,'getExpression');
+
+	 	//gestion du dictionnaire de l'utilisateur en cache pour utiliser l'application en déconnexion
+	 	$oCacheXml = new Cache("LiveMetal/".$_SESSION['loginSess'],0);
+	 	$xmlString=simplexml_load_string($oCacheXml->Get(true));
+		
+	 	//vérifie si l'expression est dans le dictionnaire
+		$Entrys=$this->LiveMetalRequestAll($tag,'getExpression');
 
  	   	$Xpath = "//entry[@lang='".$lang."']";
     	foreach($Entrys->xpath($Xpath) as $entry){
 			$iemlEntry=$this->LiveMetalRequest('ieml',$entry->id,'getEntry');
-			$xml.="<entry lang='".$lang."' id='".$iemlEntry->entry->id."' >";
+			$xml ="<entry lang='".$lang."' id='".$iemlEntry->entry->id."' >";
 			$xml.="<iemlCode>".$iemlEntry->entry->expression."</iemlCode>";
 			$xml.="<iemlLib>".$entry->expression."</iemlLib>";
-			$xml.="<iemlLevel>".$iemlEntry->entry->level."</iemlLevel>";
-			$xml.="<iemlParent>".$iemlEntry->entry->parent."</iemlParent>";
 			$xml.="</entry>";
 		 	if($insAddTrad==-1){
 				$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$iemlEntry->entry->id),$lang);
 		 	}else{
-		 		$oCacheXml = new Cache("LiveMetal/".$_SESSION['loginSess'], CACHETIME);
-		 		$xmlString=simplexml_load_string($oCacheXml->Get(true));
 		 		$Xpath = "//entry[@id='".$iemlEntry->entry->id."'][@lang='".$lang."']";
 		 		$Entrys=$xmlString->xpath($Xpath);
 		 		if(sizeof($Entrys)==0){
-		 			$xml=str_replace('</Ieml>',$xml,$xmlString.'');
+		 			$xml=str_replace('</IEML>',$xml.'</IEML>',$xmlString->asXML());
+		 			$oCacheXml->Set($xml,true);
+		 			$xmlString=simplexml_load_string($xml);
 		 		}
 		 		if(!$this->VerifTradGetFlux($idFlux,$iemlEntry->entry->id,array($this->site->infos["UTI_TRAD_AUTO"],$_SESSION['iduti']))){
 		 			$this->Add_Trad("","","",$this->site->infos["UTI_TRAD_AUTO"],false,array($idFlux,$iemlEntry->entry->id),$lang);
 		 		}
 		 	}
 		 }
-
-		return $xml;  
+				 
+		return $oCacheXml->Get(true);  
 	 	
 	}
 	 
@@ -743,9 +746,9 @@ Class Sem{
 						$noeud.="<iemlLevel>".$EntryExp->entry->level."</iemlLevel>";
 						$noeud.="<iemlParent>".$EntryExp->entry->parent."</iemlParent>";
 						$noeud.="</entry>";
-						$noeud.='</Ieml>';
+						$noeud.='</IEML>';
 						$xmlString=$oCacheXml->Get(true);
-						$xmlString=str_replace('</Ieml>',$noeud,$xmlString);
+						$xmlString=str_replace('</IEML>',$noeud,$xmlString);
 						$oCacheXml->SET($xmlString,true);
    					}
    						
