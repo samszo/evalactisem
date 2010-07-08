@@ -6,31 +6,7 @@
 
         $resultat = "";
         
-        if(isset($_POST['f'])){
-              $fonction = $_POST['f'];
-            
-        }else
-        if(isset($_GET['f']))
-                $fonction = $_GET['f'];
-        else 
-        		$fonction ='';
-        if(isset($_GET['id']))
-                $id = $_GET['id'];
-        else
-                $id = -1;
-        if(isset($_GET['code']))
-                $code = stripslashes ($_GET['code']);
-        else
-                $code = -1;
-        if(isset($_GET['desc']))
-                $desc = $_GET['desc'];
-        else
-                $desc = -1;
-        if(isset($_GET['bookmark']))
-                $mbook = stripslashes($_GET['bookmark']);
-         else
-         		$mbook="toto";
-       
+     
 		switch ($fonction) {
 				case 'GetTreeTradAuto':
 					$resultat = GetTreeTradAuto($_GET['codeFlux'],$lang);
@@ -65,11 +41,9 @@
                 case 'Delet_Compte_Delicious':
                		$resultat=Delet_Compte_Delicious();
                		break;
-               		
-                case 'TagCloud':
-	                	$tg = new TagCloud();
-	                	$tg->GetSvg();
-                	break;
+                case 'TagCloud':	
+					GetTagCloud($objSite,$oDelicious,$TC,$user,$NbDeb,$NbFin,$lang,$ShowAll,$TempsVide,$DateDeb,$DateFin);
+					break;
                 case 'CreaCycle':
                 	    $resultat=CreaCycle($_GET['json']);
                 	    break;  
@@ -104,11 +78,52 @@
                  case 'SetSession':
                 	    SetSession($_GET['lib'],$_GET['val']);
                 	    break;
-   }
+                 case 'GetTagsLinks':
+                	    GetTagsLinks($login);
+                	    break;
+                 case 'SetTagsLinks':
+                	    SetTagsLinks($login);
+                	    break;
+		}
         
         echo $resultat;  
 
-    function GetTreeTradAuto($tag,$lang){
+        
+	function SetTagsLinks($login){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oSaveFlux= new SauvFlux($objSite); 
+   		$oSaveFlux->aSetTagsLinks($oDelicious,$objUti,$lang,$getFlux);
+		$Activite->AddActi('GTL',$objUti->id);		
+	}
+	
+	
+	function GetTagCloud($objSite,$oDelicious,$TC,$user,$NbDeb,$NbFin,$lang,$ShowAll,$TempsVide,$DateDeb,$DateFin){
+
+		if($TC=="bulles"){
+			$url = "http://localhost/evalactisem/overlay/BubbleChartDelicious.php";
+			$params = array ('user'=>$user,'NbDeb'=>$NbDeb,'NbFin'=>$NbFin);
+			$url .= "?json=".urlencode(json_encode($params));
+			echo ('<iframe id="fBulles_'.$user.'" flex="1"  src="'.$url.'"  />');
+		}else{
+			$oTC = new TagCloud($objSite,$oDelicious,$lang,$user);
+			//$oTC->SauveBookmarkNetwork($_GET['login'],$mdp);
+	
+			//header("Content-type: image/svg+xml");
+			if($TC=="posts")
+				$oTC->GetSvgPost($user,$ShowAll,$TempsVide,$DateDeb,$DateFin,$NbDeb,$NbFin);
+			if($TC=="tags")
+				$oTC->GetSvgTag($user,$ShowAll,$NbDeb,$NbFin);
+			if($TC=="roots")
+				$oTC->GetSvgRoot($user,$ShowAll,$NbDeb,$NbFin);
+		}                                
+
+		
+	}
+        
+	function GetTreeTradAuto($tag,$lang){
 
         global $objSite;
         $xul = new Xul($objSite);

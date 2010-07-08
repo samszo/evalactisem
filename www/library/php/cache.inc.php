@@ -34,7 +34,7 @@
    /***************************************************************/
    
    class Cache {
-      protected $sFile;
+      public $sFile;
       protected $sFileLock;
       protected $iCacheTime;
       

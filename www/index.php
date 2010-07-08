@@ -3,39 +3,6 @@
 require('param/ParamPage.php');
 
 
-function ChercheAbo ()
-	{
-		// connexion a delicious
-		global $con;
-		
-		$login=$_POST['login_uti'];
-		$mdp=$_POST['mdp_uti'];
-		if(TRACE)
-			echo "index:ChercheAbo:login:".$_POST['login_uti']." mdp=".$_POST['mdp_uti']."<br/>";
-   	   	
-		if(($login!="")&&($mdp!="")){
-			$oDelicious = new PhpDelicious($login, $mdp);
-			$_SESSION['loginSess']=$login;
-			$_SESSION['mdpSess']=$mdp;
-			$_SESSION['Delicious']=$oDelicious;
-			if(TRACE)
-				echo "ParamPage:Debug:oDelicious=".$oDelicious->sUsername."<br/>";
-			$oDelicious->DeliciousRequest('posts/delete', array('url' => $sUrl));
-			$con=$oDelicious->LastError();
-			
-			if ($con==2)
-			{
-				echo "Incorrect del.icio.us username or password";
-				include("login.php");
-				exit;
-			}
-		}else{
-			include("login.php");
-			exit;
-		}
-}
-
-
 ChercheAbo ();
 
 if($con==1){
@@ -279,6 +246,7 @@ echo '<'.'?xul-overlay href="overlay/treeDicoIeml.xul"?'.'>';
 				    <menupopup>
 				      <menuitem label="Posts" value="posts"/>
 				      <menuitem label="Tags" value="tags"/>
+				      <menuitem label="Bulles" value="bulles"/>
 				    </menupopup>
 				  </menulist>
 				 <menulist id="choixAjout" >
