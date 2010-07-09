@@ -9,6 +9,17 @@ if(isset($_GET['json'])){
 	$NbFin = $params->NbFin; 
 }
 //echo $user." - ".$NbDeb." - ".$NbFin;
+
+//récupère les tags de l'utilisateur
+$jsTags = json_decode($objSite->GetCurl("http://feeds.delicious.com/v2/json/tags/".$user));
+//filtre les valeurs en dehors de la plage
+$jsTagsFiltre = array();
+foreach($jsTags as $k=>$val){
+	if($val > $NbDeb && $val < $NbFin){
+		$jsTagsFiltre[$k]=$val;
+	}
+}
+
 ?>
 <html>
   <head>
@@ -24,7 +35,7 @@ body {
   </head>
   <body>
     <script type="text/javascript">
-    var datas = <?php echo $objSite->GetCurl("http://feeds.delicious.com/v2/json/tags/".$user) ?>;
+    var datas = <?php echo json_encode($jsTagsFiltre); ?>;
     var TagNbMin = <?php echo $NbDeb; ?>;
     var TagNbMax = <?php echo $NbFin; ?>;
     var TagDateDeb = "2009-11-05";
@@ -36,11 +47,11 @@ body {
 /* Produce a flat hierarchy of the Flare classes. */
 var classes = pv.nodes(pv.flatten(datas).leaf(Number).array());
 classes.slice(1).forEach(function(d) {
-  d.nodeName = "<?php echo $user; ?>." +  d.nodeValue.keys.join(".");
-  var i = d.nodeName.lastIndexOf(".");
-  d.className = d.nodeName.substring(i + 1);
-  d.packageName = d.className.substring(0, 1);
-  d.nodeValue = d.nodeValue.value;
+	d.nodeName = "<?php echo $user; ?>." +  d.nodeValue.keys.join(".");
+	var i = d.nodeName.lastIndexOf(".");
+	d.className = d.nodeName.substring(i + 1);
+	d.packageName = d.className.substring(0, 1);
+	d.nodeValue = d.nodeValue.value;
 });
 
 /* For pretty number formatting. */
