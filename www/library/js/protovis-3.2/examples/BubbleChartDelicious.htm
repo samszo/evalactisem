@@ -44,7 +44,7 @@ vis.add(pv.Layout.Pack)
     .visible(function(d) d.parentNode)
     .title(function(d) d.nodeName + ": " + format(d.nodeValue))
   .anchor("center").add(pv.Label)
-    .text("");
+    .text(function(d) d.className.substring(0, Math.sqrt(d.nodeValue) >> 4));
 
 vis.render();
 
