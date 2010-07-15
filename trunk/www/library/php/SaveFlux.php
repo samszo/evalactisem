@@ -94,7 +94,31 @@ class SauvFlux{
 		}
 	}
 
-     function aSetTagsLinks($oDelicious,$oUti){
+    function aSetTagLinks($oDelicious, $oUti, $tag, $niv=0){
+    	
+     	//vérifie que le tag existe pour l'utilisateur
+     	$idflux = $this->VerifUserFlux($oUti->id,$tag);
+     	
+		//récupère les tags liés
+     	if($rssTagsRela = $oDelicious->GetUserTagsRelated($oUti->login, $tag)) { 
+	     	$xmlTagsRela = simplexml_load_string($rssTagsRela);
+     		foreach ($xmlTagsRela->channel->item as $TagRela) { 
+     			//vérifie que le tag existe pour l'utilisateur
+	     		$idfluxRela = $this->VerifUserFlux($oUti->id, $TagRela->title); 
+	     		//vérifie que la relation entre tags existe pour l'utilisateur
+	     		$this->VerifUserFluxRela($oUti->id,$idflux,$idfluxRela,$TagRela->description);
+	     		//calcul les liens du tag lié au tag de base
+	     		if($niv==0){
+	     			$this->aSetTagLinks($oDelicious, $oUti, $TagRela->title, $niv+1);
+	     		}
+	     	}
+	    }else {
+		   echo $oDelicious->LastErrorString();
+		}	
+					
+    }
+	
+	function aSetTagsLinks($oDelicious,$oUti){
      	set_time_limit(9000);
 
      	/*verfie s'il y a des nouvelles tags dans le cas où:
