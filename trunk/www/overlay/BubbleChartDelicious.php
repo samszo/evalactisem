@@ -44,7 +44,7 @@ body {
 
     <script type="text/javascript+protovis">
 
-/* Produce a flat hierarchy of the Flare classes. */
+/* Produce a flat hierarchy of the json. */
 var classes = pv.nodes(pv.flatten(datas).leaf(Number).array());
 classes.slice(1).forEach(function(d) {
 	d.nodeName = "<?php echo $user; ?>." +  d.nodeValue.keys.join(".");
@@ -75,6 +75,7 @@ vis.add(pv.Layout.Pack)
     .title(function(d) d.nodeName + ": " + format(d.nodeValue))
   .anchor("center").add(pv.Label)
     .text("");
+    //.text(function(d) d.className);
 
 vis.render();
 
