@@ -28,19 +28,6 @@ class Site{
 	}else{
 		$this->idParent = -1;
 	}
-	if($complet){
-		if($this->scope["VoirEn"] == "Mot")
-			$Liens = array("page"=>"themes.php?"
-				,"pageAjax"=>"design/BlocMilieuMot.php?"
-				,"VoirEn"=>"Mot"
-				);
-		else
-			$Liens = array("page"=>"lieux.php?"
-				,"pageAjax"=>"design/BlocMilieuTopos.php?"
-				,"VoirEn"=>"Topos"
-				);
-		$this->menu = $this->MenuSite($this->id,0,$Liens);
-	}
 
 	// cr�ation de l'objet de cache
 	$this->cache = new Cache_Lite_Function(array('cacheDir' => CACHE_PATH,'lifeTime' => CACHETIME));
@@ -49,6 +36,26 @@ class Site{
 		
     }
 
+	public function GetFile($path){
+
+	    if(!$_SESSION['ForceCalcul'] && file_exists($path)){
+			$contents = file_get_contents($path);
+			return $contents;
+		}else{
+			return false;	
+		}
+    }
+    
+    public function SaveFile($path,$texte){
+
+		$fic = fopen($path, "w");
+		if($fic){
+			fwrite($fic, $texte);		
+	    	fclose($fic);
+		}
+
+    }
+    
  	function RequeteSelect($function,$arrVarVal){
    	 
    		$Xpath = "/XmlParams/XmlParam/Querys/Query[@fonction='".$function."']";
