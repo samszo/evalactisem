@@ -84,10 +84,48 @@
                  case 'SetTagsLinks':
                 	    SetTagsLinks($login);
                 	    break;
+                 case 'GetTagsLinks':
+                	    GetTagsLinks($login);
+                	    break;
+                 case 'SetTagLinks':
+                	    SetTagLinks($login,$tag);
+                	    break;
+                 case 'GetTagLinks':
+                	    GetTagLinks($login);
+                	    break;
 		}
         
         echo $resultat;  
 
+        
+	function GetTagLinks($login,$tag){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
+   		$oTG->GetTagsLinks($objUti);
+		$Activite->AddActi('GTL',$objUti->id);		
+	}
+        
+   	function SetTagLinks($login,$tag){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oSaveFlux= new SauvFlux($objSite); 
+   		$oSaveFlux->aSetTagLinks($oDelicious,$objUti,$tag);
+		$Activite->AddActi('STL',$objUti->id);		
+	}        
+	function GetTagsLinks($login){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
+   		$oTG->GetTagsLinks($objUti);
+		$Activite->AddActi('GTL',$objUti->id);		
+	}
         
 	function SetTagsLinks($login){
 		global $objSite;
@@ -95,8 +133,8 @@
        	global $objUti;
    		$Activite= new Acti();
 		$oSaveFlux= new SauvFlux($objSite); 
-   		$oSaveFlux->aSetTagsLinks($oDelicious,$objUti,$lang,$getFlux);
-		$Activite->AddActi('GTL',$objUti->id);		
+   		$oSaveFlux->aSetTagsLinks($oDelicious,$objUti);
+		$Activite->AddActi('STL',$objUti->id);		
 	}
 	
 	

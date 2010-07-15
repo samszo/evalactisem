@@ -46,7 +46,79 @@ class TagCloud {
     date_default_timezone_set('UTC');		
   }
 
+   	public function GetTagsLinks($oUti)
+	{
+		$oSF = new SauvFlux($this->site);
+		$oDlcs = new PhpDelicious($oUti->login,"");
 
+		//mise à jour des liens Tags et des liens
+		//$oSF->aSetTagsLinks($oDlcs,$oUti);
+		
+		//récupération des données enregistrées
+		//ATTENTION si le tag n'a pas de lien avec un autre tag il n'apparaitra pas 
+		$sql = "SELECT of.onto_flux_id TagId, of.onto_flux_code Tag, ofr.onto_flux_id, ofr.onto_flux_code TagRela, uofr.poids
+			FROM ieml_onto_flux of
+				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id AND uof.uti_id = 30 AND of.onto_flux_id = 2112 
+				INNER JOIN ieml_uti_onto_flux_related uofr ON uofr.onto_flux_id = of.onto_flux_id AND uofr.uti_id = uof.uti_id
+				INNER JOIN ieml_onto_flux ofr ON ofr.onto_flux_id = uofr.onto_flux_id_rela
+			ORDER BY of.onto_flux_code";
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$db->close();
+		
+		//création du tableau des clefs séquencielles pour les liens
+		$arrL = array();
+		/*
+		$oTagId = -1;
+		while($r=mysql_fetch_assoc($rs))
+		{
+			if($oTagId!=$r["TagId"]){
+				$arrL[] = $r["Tag"]; 
+				$oTagId=$r["TagId"];		
+			}
+		}
+		*/
+		
+		//construction des données Json
+		$arrTL = array("nodes"=>array(), "links"=>array());
+		$oTagId = -1;
+		mysql_data_seek($rs, 0);
+		while($r=mysql_fetch_assoc($rs))
+		{
+			if($oTagId!=$r["TagId"]){
+				//création d'une nouvelle clef séquentielle
+				$arrL[] = $r["Tag"];
+				//ajout dans le tableau des noeuds 
+				$arrTL["nodes"][] = array("nodeName"=>$r["Tag"], "group"=>ord(substr($r["Tag"],0,1)));	
+				//récupération de la clef
+				$nTag = array_search($r["Tag"], $arrL);
+				$oTagId=$r["TagId"];		
+			}
+			//création du tag destination
+			$nTagRela = array_search($r["TagRela"], $arrL);
+			//vérification de la présence de la clef séquencielle
+			if(!$nTagRela){
+				//création d'une nouvelle clef séquentielle
+				$arrL[] = $r["TagRela"];
+				//ajout dans le tableau des noeuds 
+				$arrTL["nodes"][] = array("nodeName"=>$r["TagRela"], "group"=>ord(substr($r["TagRela"],0,1)));	
+				//récupération de la clef
+				$nTagRela = array_search($r["TagRela"], $arrL);
+			}
+			//création des liens
+			$arrTL["links"][] = array("source"=>$nTag, "target"=>$nTagRela, "value"=>intval($r["poids"]));
+		}
+		
+		//création du json
+		$jsTL = json_encode($arrTL);
+		
+		//enregistrement du fichier
+		$this->site->SaveFile(CACHE_PATH."json/TagsLinks_".$oUti->login.".js", "var miserables = ".$jsTL);
+		
+	}
+  
+	
   	public function SauveBookmarkNetwork($uti,$pwd)
 	{
 		$oDlcs = new PhpDelicious($uti,$pwd);
