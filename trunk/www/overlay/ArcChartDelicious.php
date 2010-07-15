@@ -1,7 +1,6 @@
 <?php
 require('../param/ParamPage.php');
-
-
+		
 	//récupère les tags liés à un tag pour un utilisateur
 	$TagLinks = json_decode($objSite->GetCurl("http://feeds.delicious.com/v2/json/tags/".$user."/".$tag));
 
@@ -13,12 +12,15 @@ require('../param/ParamPage.php');
 
 	//ajout des tag liés
 	$i=1;
-	foreach($TagLinks as $k=>$v){		
-		//ajout dans le tableau des noeuds 
-		$arrTL["nodes"][] = array("nodeName"=>$k, "group"=>ord(substr($k,0,1)));	
-		//création des liens
-		$arrTL["links"][] = array("source"=>0, "target"=>$i, "value"=>$v);
-		$i ++;
+	foreach($TagLinks as $k=>$v){
+		//prise en compte de la plage des occurrence
+		if($v > $NbDeb && $v < $NbFin){				
+			//ajout dans le tableau des noeuds 
+			$arrTL["nodes"][] = array("nodeName"=>$k, "group"=>ord(substr($k,0,1)));	
+			//création des liens
+			$arrTL["links"][] = array("source"=>0, "target"=>$i, "value"=>$v);
+			$i ++;
+		}
 	}
 		
 ?>
@@ -47,8 +49,8 @@ body {
 #fig {
   position: relative;
   margin: auto;
-  width: 880px;
-  height: 400px;
+  width: <?php echo $width; ?>;
+  height: <?php echo $height; ?>;
 }
 
     </style>
@@ -57,8 +59,8 @@ body {
     <script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
-    .width(<?php echo 800;//$i*60; ?>)
-    .height(<?php echo 300;//$i*30; ?>)
+    .width(<?php echo $width; ?>)
+    .height(<?php echo $height; ?>)
 	.bottom(100);
 
 var arc = vis.add(pv.Layout.Arc)
