@@ -1,36 +1,41 @@
 <?php
 require('../param/ParamPage.php');
-		
-	//récupère les tags liés à un tag pour un utilisateur
-	$TagLinks = json_decode($objSite->GetCurl("http://feeds.delicious.com/v2/json/tags/".$user."/".$tag));
 
-	//construction des données Json
-	$arrTL = array("nodes"=>array(), "links"=>array());
-
-	//ajout du tag initial 
-	$arrTL["nodes"][] = array("nodeName"=>$tag, "group"=>ord(substr($tag,0,1)));	
-
-	//ajout des tag liés
-	$i=1;
-	foreach($TagLinks as $k=>$v){
-		//prise en compte de la plage des occurrence
-		if($v > $NbDeb && $v < $NbFin){				
-			//ajout dans le tableau des noeuds 
-			$arrTL["nodes"][] = array("nodeName"=>$k, "group"=>ord(substr($k,0,1)));	
-			//création des liens
-			$arrTL["links"][] = array("source"=>0, "target"=>$i, "value"=>$v);
-			$i ++;
+	if($complet){
+		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
+   		$oTG->GetTagLinks($objUti,$tag);
+   		$js = '<script type="text/javascript" src="'.PathWeb.'tmp/json/TagLinks_'.$objUti->login.'_'.$tag.'.js"></script>';		
+	}else{
+		//récupère les tags liés à un tag pour un utilisateur
+		$TagLinks = json_decode($objSite->GetCurl("http://feeds.delicious.com/v2/json/tags/".$user."/".$tag));
+	
+		//construction des données Json
+		$arrTL = array("nodes"=>array(), "links"=>array());
+	
+		//ajout du tag initial 
+		$arrTL["nodes"][] = array("nodeName"=>$tag, "group"=>ord(substr($tag,0,1)));	
+	
+		//ajout des tag liés
+		$i=1;
+		foreach($TagLinks as $k=>$v){
+			//prise en compte de la plage des occurrence
+			if($v > $NbDeb && $v < $NbFin){				
+				//ajout dans le tableau des noeuds 
+				$arrTL["nodes"][] = array("nodeName"=>$k, "group"=>ord(substr($k,0,1)));	
+				//création des liens
+				$arrTL["links"][] = array("source"=>0, "target"=>$i, "value"=>$v);
+				$i ++;
+			}
 		}
-	}
+		$js = '<script type="text/javascript"> var data = '.json_encode($arrTL).';</script>';		
 		
+	}		
 ?>
 <html>
   <head>
     <title>Tag Links</title>
-    <script type="text/javascript" src="<?php echo PathWeb;?>/library/js/protovis-3.2/protovis-r3.2.js"></script>
-    <script type="text/javascript">
-    	var data = <?php echo json_encode($arrTL); ?>;
-    </script>
+    <script type="text/javascript" src="<?php echo PathWeb;?>library/js/protovis-3.2/protovis-r3.2.js"></script>
+	<?php echo $js;?>
     <style type="text/css">
 
 body {

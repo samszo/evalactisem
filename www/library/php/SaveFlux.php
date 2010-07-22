@@ -96,6 +96,14 @@ class SauvFlux{
 
     function aSetTagLinks($oDelicious, $oUti, $tag, $niv=0){
     	
+    	/*requêtes utiles
+    	 * le nombre de liens total, le nombre de tag lié aux niveaux 0 et 1 pour un utilisateur 
+SELECT count(*) nbTot, count(distinct n0.onto_flux_id_rela) nb0, count(distinct n1.onto_flux_id_rela) nb1
+FROM `ieml_uti_onto_flux_related` n0
+INNER JOIN ieml_uti_onto_flux_related n1 ON n1.onto_flux_id = n0.onto_flux_id_rela AND n1.uti_id = n0.uti_id 
+WHERE n0.uti_id = 32 AND n0.onto_flux_id = 551
+    	 */
+    	
      	//vérifie que le tag existe pour l'utilisateur
      	$idflux = $this->VerifUserFlux($oUti->id,$tag);
      	

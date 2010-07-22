@@ -91,7 +91,7 @@
                 	    SetTagLinks($login,$tag);
                 	    break;
                  case 'GetTagLinks':
-                	    GetTagLinks($login);
+                	    GetTagLinks($login,$tag);
                 	    break;
 		}
         
@@ -104,7 +104,7 @@
        	global $objUti;
    		$Activite= new Acti();
 		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
-   		$oTG->GetTagsLinks($objUti);
+   		$oTG->GetTagLinks($objUti,$tag);
 		$Activite->AddActi('GTL',$objUti->id);		
 	}
         

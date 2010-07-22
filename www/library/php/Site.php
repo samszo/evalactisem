@@ -35,7 +35,7 @@ class Site{
 	//echo "FIN new Site <br/>";
 		
     }
-
+    
 	public function GetFile($path){
 
 	    if(!$_SESSION['ForceCalcul'] && file_exists($path)){
@@ -48,7 +48,7 @@ class Site{
     
     public function SaveFile($path,$texte){
 
-		$fic = fopen($path, "w");
+   		$fic = fopen($path, "w");
 		if($fic){
 			fwrite($fic, $texte);		
 	    	fclose($fic);
