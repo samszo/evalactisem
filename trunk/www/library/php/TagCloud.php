@@ -16,6 +16,7 @@ class TagCloud {
   public $xTagG;
   public $xTagD;
   public $arrTags;
+  public $arrLink;
   public $arrPosts;
   public $IntVals;
   public $TagNb;
@@ -46,12 +47,96 @@ class TagCloud {
     date_default_timezone_set('UTC');		
   }
 
-   	public function GetTagsLinks($oUti)
+   	public function GetTagLinks($oUti, $tag, $niv=0, $json=true, $update=false)
+	{		
+		//mise à jour des liens Tags et des liens
+		if($update){
+			$oSF = new SauvFlux($this->site);
+			$oDlcs = new PhpDelicious($oUti->login,"");
+			$oSF->aSetTagLinks($oDlcs,$oUti,$tag);
+		}
+		
+		//récupération des données enregistrées
+		$sql = "SELECT of.onto_flux_id TagId, of.onto_flux_code Tag, ofr.onto_flux_id, ofr.onto_flux_code TagRela, uofr.poids
+			FROM ieml_onto_flux of
+				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id AND uof.uti_id = ".$oUti->id." 
+				INNER JOIN ieml_uti_onto_flux_related uofr ON uofr.onto_flux_id = of.onto_flux_id AND uofr.uti_id = uof.uti_id
+				INNER JOIN ieml_onto_flux ofr ON ofr.onto_flux_id = uofr.onto_flux_id_rela
+			WHERE of.onto_flux_code = \"".$tag."\"
+			ORDER BY of.onto_flux_code";
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$db->close();
+		
+		if($niv==0){
+			//création du tableau des clefs séquencielles pour les liens
+			$this->arrLink = array();
+			//création du tableau pour le graphique
+			$this->arrTags = array("nodes"=>array(), "links"=>array());
+			//xréation du tableau pour vérifier le doublon des liens
+			$this->arrPosts = array();
+		}
+		
+		$oTagId = -1;
+		while($r=mysql_fetch_assoc($rs))
+		{
+			//récupération du tag source
+			$nTag = $this->GetArrTag($r["Tag"]);
+
+			//récupération du tag destination
+			$nTagRela = $this->GetArrTag($r["TagRela"]);
+
+			//vérifie que le lien n'existe pas déjà
+			$key = $nTag."-".$nTagRela."-".$r["poids"];
+			if(array_search($key, $this->arrPosts)===false){
+				//création des liens
+				$this->arrTags["links"][] = array("source"=>$nTag, "target"=>$nTagRela, "value"=>intval($r["poids"]));
+				$this->arrPosts[] = $key; 
+			}
+
+			//récupération des liens pour le tag en relation
+			if($niv==0){
+				$this->GetTagLinks($oUti,$r["TagRela"],$niv+1,$json,$update); 
+			}
+		}
+		
+		if($niv==0){
+			if($json){
+				//nécéssaire pour les ros bookmark
+				ini_set("memory_limit",'16M');
+				//création du json
+				$jsTL = json_encode($this->arrTags);		
+				//enregistrement du fichier
+				$this->site->SaveFile(CACHE_PATH."json/TagLinks_".$oUti->login."_".$tag.".js", "var data = ".$jsTL);
+			}else{
+				return $this->arrTags;
+			}
+		}
+		
+	}
+  
+  	public function GetArrTag($tag)
+	{
+		//vérification de la présence de la clef séquencielle
+		$nTag = array_search($tag, $this->arrLink);
+		if($nTag===false){
+			//création d'une nouvelle clef séquentielle
+			$this->arrLink[] = $tag;
+			//ajout dans le tableau des noeuds 
+			$this->arrTags["nodes"][] = array("nodeName"=>$tag, "group"=>ord(substr($tag,0,1)));	
+			//récupération de la clef
+			$nTag = array_search($tag, $this->arrLink);
+		}
+		return $nTag;	
+	}
+	
+  	public function GetTagsLinks($oUti)
 	{
 		$oSF = new SauvFlux($this->site);
-		$oDlcs = new PhpDelicious($oUti->login,"");
 
 		//mise à jour des liens Tags et des liens
+		//$oDlcs = new PhpDelicious($oUti->login,"");
 		//$oSF->aSetTagsLinks($oDlcs,$oUti);
 		
 		//récupération des données enregistrées
@@ -114,7 +199,7 @@ class TagCloud {
 		$jsTL = json_encode($arrTL);
 		
 		//enregistrement du fichier
-		$this->site->SaveFile(CACHE_PATH."json/TagsLinks_".$oUti->login.".js", "var miserables = ".$jsTL);
+		$this->site->SaveFile(CACHE_PATH."json/TagsLinks_".$oUti->login.".js", "var data = ".$jsTL);
 		
 	}
   

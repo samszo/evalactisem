@@ -54,28 +54,58 @@ classes.slice(1).forEach(function(d) {
 	d.nodeValue = d.nodeValue.value;
 });
 
+/* Sizing parameters and scales. */
+var w = 800,
+    h = 500,
+    kx = w / h,
+    ky = 1,
+    x = pv.Scale.linear(-kx, kx).range(0, w),
+    y = pv.Scale.linear(-ky, ky).range(0, h);
+
+
 /* For pretty number formatting. */
 var format = pv.Format.number();
 
 var vis = new pv.Panel()
-    .width(document.body.clientWidth)
-    .height(document.body.clientHeight);
+    .width(w)
+    .height(h)
+    .top(30)
+    .left(40)
+    .right(20)
+    .bottom(20)
+    .strokeStyle("#aaa");
 
 vis.add(pv.Layout.Pack)
-    //.top(-50)
-    //.bottom(-50)
     .nodes(classes)
     .size(function(d) d.nodeValue)
     .spacing(0)
     .order(null)
-  .node.add(pv.Dot)
+	.node.add(pv.Dot)
     .fillStyle(pv.Colors.category20().by(function(d) d.packageName))
     .strokeStyle(function() this.fillStyle().darker())
     .visible(function(d) d.parentNode)
     .title(function(d) d.nodeName + ": " + format(d.nodeValue))
-  .anchor("center").add(pv.Label)
+  	.anchor("center").add(pv.Label)
     .text("");
     //.text(function(d) d.className);
+
+/* Use an invisible panel to capture pan & zoom events. */
+vis.add(pv.Panel)
+    //.events("all")
+    .event("mousedown", pv.Behavior.pan())
+    .event("mousewheel", pv.Behavior.zoom())
+    .event("pan", transform)
+    .event("zoom", transform);
+
+/** Update the x- and y-scale domains per the new transform. */
+function transform() {
+  var t = this.transform().invert();
+  x.domain(t.x / w * 2 * kx - kx, (t.k + t.x / w) * 2 * kx - kx);
+  y.domain(t.y / h * 2 * ky - ky, (t.k + t.y / h) * 2 * ky - ky);
+  vis.render();
+}
+
+
 
 vis.render();
 

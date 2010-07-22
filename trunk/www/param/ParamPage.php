@@ -3,16 +3,27 @@
 session_start();
 	require_once ("Constantes.php");
 	
+	if(isset($_GET['user'])){
+		$user = $_GET['user'];
+		$_SESSION['loginSess']=$user;
+		$_SESSION['mdpSess']="";
+	}				
 	if(isset($_SESSION['loginSess'])){
 		$login = $_SESSION['loginSess'];
 		$mdp = $_SESSION['mdpSess'];
 	}else{
-		$login = "evalactisem";
-		$mdp = "delcious09";
-		$login = "luckysemiosis";
-		$mdp = "Samszo0";
+		if(isset($_GET['login'])){
+			$login = $_GET['login'];
+			$mdp = $_GET['mdp'];
+		}else{
+			$login = "evalactisem";
+			$mdp = "delcious09";
+			$login = "luckysemiosis";
+			$mdp = "Samszo0";			
+		}
 		$_SESSION['loginSess']=$login;
 		$_SESSION['mdpSess']=$mdp;
+		$user = $_SESSION['loginSess'];
 	}
 	
 	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],CACHETIME);
@@ -110,38 +121,55 @@ session_start();
 	$_SESSION['iduti']=$objUti->id;
 	
 
-        if(isset($_POST['f'])){
-              $fonction = $_POST['f'];
-            
-        }else
-        if(isset($_GET['f']))
-                $fonction = $_GET['f'];
-        else 
+	if(isset($_POST['f'])){
+		$fonction = $_POST['f'];
+	}else
+    	if(isset($_GET['f']))
+        	$fonction = $_GET['f'];
+        	else 
         		$fonction ='';
-        if(isset($_GET['id']))
-                $id = $_GET['id'];
-        else
-                $id = -1;
-        if(isset($_GET['code']))
-                $code = stripslashes ($_GET['code']);
-        else
-                $code = -1;
-        if(isset($_GET['desc']))
-                $desc = $_GET['desc'];
-        else
-                $desc = -1;
-        if(isset($_GET['bookmark']))
-                $mbook = stripslashes($_GET['bookmark']);
-         else
-         		$mbook="toto";
-        if(isset($_GET['user']))
-                $user = $_GET['user'];
-         else
-         		$user = $_SESSION['loginSess'];
+	
+	if(isset($_GET['id']))
+		$id = $_GET['id'];
+	else
+		$id = -1;
+        
+	if(isset($_GET['code']))
+		$code = stripslashes ($_GET['code']);
+	else
+		$code = -1;
+        
+	if(isset($_GET['desc']))
+		$desc = $_GET['desc'];
+	else
+		$desc = -1;
+        
+	if(isset($_GET['bookmark']))
+		$mbook = stripslashes($_GET['bookmark']);
+	else
+		$mbook="toto";
 		
-         		
-
-
+	if(isset($_GET['tag']))
+		$tag = $_GET['tag'];
+	else
+		$tag = 'no_tag';
+		
+	if(isset($_GET['width']))
+		$width = $_GET['width'];
+	else
+		$width = 800;
+	
+	if(isset($_GET['height']))
+		$height = $_GET['height'];
+	else
+		$height = 300;
+			
+	if(isset($_GET['complet']))
+		$complet = true;
+	else
+		$complet = false;
+		
+		
 function ChercheAbo ()
 	{
 		// connexion a delicious
