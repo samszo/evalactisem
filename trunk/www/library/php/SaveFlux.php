@@ -256,6 +256,31 @@ WHERE n0.uti_id = 32 AND n0.onto_flux_id = 551
 	    return $idflux;				
 	}
 
+	function UpdateUserFluxPoids(){
+
+		//vérifie que la relation existe
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+        $db->connect();
+		$sql = "SELECT SUM(uofr.poids) poids, of.onto_flux_id, of.onto_flux_code, uof.uti_id
+			FROM ieml_onto_flux of
+				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id
+				INNER JOIN ieml_uti_onto_flux_related uofr ON uofr.onto_flux_id = of.onto_flux_id AND uofr.uti_id = uof.uti_id 
+			GROUP BY of.onto_flux_id, of.onto_flux_code, uof.uti_id";
+	    $rs = $db->query($sql);
+	    $db->close();
+	    while($r=mysql_fetch_assoc($rs))
+		{
+			$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+			$db->connect();
+			$sql = "UPDATE ieml_uti_onto_flux
+				SET poids = ".$r["poids"]."
+    			WHERE uti_id = ".$r["uti_id"]." AND onto_flux_id = ".$r["onto_flux_id"];
+    		$req = $db->query($sql);
+		    $db->close();
+	    }
+						
+	}
+	
 	
 	function VerifUserFluxRela($UtiId, $FluxId, $FluxIdRela, $poids){
 

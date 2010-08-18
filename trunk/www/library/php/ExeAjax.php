@@ -78,14 +78,8 @@
                  case 'SetSession':
                 	    SetSession($_GET['lib'],$_GET['val']);
                 	    break;
-                 case 'GetTagsLinks':
-                	    GetTagsLinks($login);
-                	    break;
                  case 'SetTagsLinks':
                 	    SetTagsLinks($login);
-                	    break;
-                 case 'GetTagsLinks':
-                	    GetTagsLinks($login);
                 	    break;
                  case 'SetTagLinks':
                 	    SetTagLinks($login,$tag);
@@ -93,10 +87,55 @@
                  case 'GetTagLinks':
                 	    GetTagLinks($login,$tag);
                 	    break;
+                 case 'UpdateUserFluxPoids':
+                	    UpdateUserFluxPoids();
+                	    break;
+                 case 'GetUsersTagsDistrib':
+                	    GetUsersTagsDistrib($users);
+                	    break;
+                 case 'GetUsersTagLinks':
+                	    GetUsersTagLinks($users,$tag,$_GET['all']);
+                	    break;
 		}
         
         echo $resultat;  
+        
+   	function GetUsersTagLinks($users,$tag,$all){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
+		//esterhasz,fennec_sokoko,luckysemiosis,samueld,wazololo
+		$arrUsers = split(",",$users);
+		$jsTL = json_encode($oTG->GetUsersTagLinks($arrUsers,$tag,$all));
+   		echo $jsTL;
+		//enregistrement du fichier
+		$objSite->SaveFile(CACHE_PATH."json/TagLinks_".$users."_".$tag."_".$all.".js", $jsTL);
+		$Activite->AddActi('GetUsersTagLinks',$objUti->id);		
+  	}        
+        
+  	function GetUsersTagsDistrib($users){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
+		//esterhasz,fennec_sokoko,luckysemiosis,samueld,wazololo
+		$arrUsers = split(",",$users);
+		echo $oTG->GetUsersTagsDistrib($arrUsers);
+		$Activite->AddActi('GetUsersTagsDistrib',$objUti->id);		
+  	}        
 
+   	function UpdateUserFluxPoids(){
+		global $objSite;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oSaveFlux= new SauvFlux($objSite); 
+   		$oSaveFlux->UpdateUserFluxPoids();
+		$Activite->AddActi('UpdateUserFluxPoids',$objUti->id);		
+	}        
+        
         
 	function GetTagLinks($login,$tag){
 		global $objSite;
@@ -104,8 +143,14 @@
        	global $objUti;
    		$Activite= new Acti();
 		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
-   		$oTG->GetTagLinks($objUti,$tag);
-		$Activite->AddActi('GTL',$objUti->id);		
+   		$arrTL = $oTG->GetTagLinks($objUti,$tag);
+		//nécéssaire pour les gros bookmark
+		ini_set("memory_limit",'16M');
+   		$jsTL = json_encode($arrTL);
+   		echo $jsTL;
+		//enregistrement du fichier
+		$objSite->SaveFile(CACHE_PATH."json/TagLinks_".$oUti->login."_".$tag.".js", "var data = ".$jsTL);
+   		$Activite->AddActi('GTL',$objUti->id);		
 	}
         
    	function SetTagLinks($login,$tag){
@@ -117,16 +162,7 @@
    		$oSaveFlux->aSetTagLinks($oDelicious,$objUti,$tag);
 		$Activite->AddActi('STL',$objUti->id);		
 	}        
-	function GetTagsLinks($login){
-		global $objSite;
-       	global $oDelicious;
-       	global $objUti;
-   		$Activite= new Acti();
-		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
-   		$oTG->GetTagsLinks($objUti);
-		$Activite->AddActi('GTL',$objUti->id);		
-	}
-        
+	        
 	function SetTagsLinks($login){
 		global $objSite;
        	global $oDelicious;

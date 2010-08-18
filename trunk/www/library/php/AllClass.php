@@ -21,5 +21,7 @@ require_once(TT_CLASS_BASE.'CacheLite/Lite.php');
 require_once(TT_CLASS_BASE.'CacheLite/Lite/Function.php');
 require_once (TT_CLASS_BASE."Uti.php");
 require_once (TT_CLASS_BASE."twitter.php");
+require_once (TT_CLASS_BASE."mysql2json.class.php");
+
 
 ?>
