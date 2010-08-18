@@ -93,6 +93,7 @@ function initGraph(id){
 
   //affichage des données
   document.getElementById('fig').innerHTML=data;
+  document.getElementById('url').innerHTML='<a href="'+url+'" >'+url+'</a>';
 }
 
 </script>
@@ -131,6 +132,7 @@ body {
   	<div id="VennSelect" >VEUILLEZ SELECTIONNER UN ENSEMBLE DE TAG</div>
   </td>
   <td valign="top">
+  	<div id="url" ></div>
   	<div id="fig" style="height:420px;width:800px;overflow:auto;">
 	</div>
   </td>
