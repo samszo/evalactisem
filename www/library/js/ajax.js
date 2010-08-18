@@ -12,7 +12,7 @@ function AppendSVG(url,doc, InSvg) {
 			doc.removeChild(doc.firstChild);
 	}
 
-	p = new XMLHttpRequest();
+	var p = new XMLHttpRequest();
 	p.onload = null;
 	p.open("GET", url, false);
 	p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -25,7 +25,8 @@ function AppendSVG(url,doc, InSvg) {
 	    var response = p.responseText;
 		var parser=new DOMParser();
 		var resultDoc=parser.parseFromString(response,"text/xml");
-		doc.appendChild(resultDoc.documentElement);
+		var nodeToImport = document.importNode(resultDoc.documentElement, true); 
+		doc.appendChild(nodeToImport);
 
 	}
    } catch(ex2){alert("AppendSVG::"+ex2+":"+url);}
@@ -37,8 +38,8 @@ function GetResult(url) {
   try {
 	document.documentElement.style.cursor = "wait";
 
-    response = "";
-	p = new XMLHttpRequest();
+    var response = "";
+	var p = new XMLHttpRequest();
 	p.onload = null;
 	//p.open("GET", urlExeAjax+"?f=GetCurl&url="+url, false);
 	
@@ -53,6 +54,7 @@ function GetResult(url) {
 	}else{
 	    response = p.responseText;
 	}
+	document.documentElement.style.cursor = "auto";
 	return response;
 	dump("GetResult OUT \n");
    } catch(ex2){alert(ex2)}

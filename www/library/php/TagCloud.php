@@ -47,7 +47,78 @@ class TagCloud {
     date_default_timezone_set('UTC');		
   }
 
-   	public function GetTagLinks($oUti, $tag, $niv=0, $json=true, $update=false)
+   	public function GetUsersTagLinks($users, $tag, $all=false)
+	{
+		//récupération des identifiants de chaque utilisateur
+		$u = new Uti($this->site,$this->login);
+		$idsUsers = $u->GetUsersIds($users);
+
+		//vérifie s'il faut récupérer tous les tags
+		if($all){
+			$whereTag = "";
+		}else{
+			//récupération de la liste des tags communs à chaque utilisateur
+			//ATTENTION : s'il n'y a qu'un utilisateur la liste renvoie les tags utilisés seulement par cet utilisateurs
+			$rTagsId = $this->GetUserTagsIdDistrib($users);
+			$arrIdsTags = split(",",$rTagsId["Ids"]);
+			//pour sélectionner les liens entres les tags reliés
+			$whereTag = " AND (uofr.onto_flux_id IN (".$rTagsId["Ids"].") OR uofr.onto_flux_id_rela IN (".$rTagsId["Ids"].")) "; 
+		}
+		
+		$sql = "SELECT uofr.onto_flux_id TagId, of.onto_flux_code Tag, ofr.onto_flux_id TagRelaId, ofr.onto_flux_code TagRela, SUM(uofr.poids) poids, COUNT(DISTINCT uofr.uti_id) NbUti
+		FROM ieml_uti_onto_flux_related uofr 
+			INNER JOIN ieml_onto_flux ofr ON uofr.onto_flux_id_rela = ofr.onto_flux_id  			
+			INNER JOIN ieml_onto_flux of ON of.onto_flux_id = uofr.onto_flux_id  			
+		WHERE uofr.uti_id IN ($idsUsers) $whereTag
+		GROUP BY uofr.onto_flux_id, uofr.onto_flux_id_rela
+		ORDER BY NbUti DESC";
+		
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$db->close();
+		
+		$this->InitArrTag();
+		
+		$oTagId = 0;
+		while($r=mysql_fetch_assoc($rs))
+		{
+			if($oTagId>100)break;
+			
+			
+			if($all){
+				$arrIdsTags[]=$r["TagRelaId"];
+				$arrIdsTags[]=$r["TagId"];
+			}
+			
+			//exclusion des tags qui ne sont pas dans la liste
+			if (in_array($r["TagRelaId"], $arrIdsTags) && in_array($r["TagId"], $arrIdsTags)) {
+				//récupération du tag source
+				$nTag = $this->GetArrTag($r["Tag"],$r["NbUti"]);
+		
+				//récupération du tag destination
+				$nTagRela = $this->GetArrTag($r["TagRela"],$r["NbUti"]);
+		
+				//création du lien
+				$this->GetArrLink($nTag, $nTagRela, $r["poids"]);			
+				$oTagId++;
+			}			
+				
+		}
+		//dans le cas où les tags en communs n'ont pas liés avec d'autres tags en commun
+		if(!$all){
+			while($r=mysql_fetch_assoc($rTagsId["rs"]))
+			{	
+				$this->GetArrTag($r["tag"],0);					
+			}
+		}
+				
+		return $this->arrTags;
+		
+	}
+    
+  	
+   	public function GetTagLinks($oUti, $tag, $niv=0, $update=false)
 	{		
 		//mise à jour des liens Tags et des liens
 		if($update){
@@ -69,14 +140,7 @@ class TagCloud {
 		$rs = $db->query($sql);
 		$db->close();
 		
-		if($niv==0){
-			//création du tableau des clefs séquencielles pour les liens
-			$this->arrLink = array();
-			//création du tableau pour le graphique
-			$this->arrTags = array("nodes"=>array(), "links"=>array());
-			//xréation du tableau pour vérifier le doublon des liens
-			$this->arrPosts = array();
-		}
+		if($niv==0)InitArrTag();
 		
 		$oTagId = -1;
 		while($r=mysql_fetch_assoc($rs))
@@ -87,122 +151,183 @@ class TagCloud {
 			//récupération du tag destination
 			$nTagRela = $this->GetArrTag($r["TagRela"]);
 
-			//vérifie que le lien n'existe pas déjà
-			$key = $nTag."-".$nTagRela."-".$r["poids"];
-			if(array_search($key, $this->arrPosts)===false){
-				//création des liens
-				$this->arrTags["links"][] = array("source"=>$nTag, "target"=>$nTagRela, "value"=>intval($r["poids"]));
-				$this->arrPosts[] = $key; 
-			}
+			//création du lien
+			$this->GetArrLink($nTag, $nTagRela, $r["poids"]);			
 
 			//récupération des liens pour le tag en relation
 			if($niv==0){
-				$this->GetTagLinks($oUti,$r["TagRela"],$niv+1,$json,$update); 
+				$this->GetTagLinks($oUti,$r["TagRela"],$niv+1,$update); 
 			}
 		}
 		
 		if($niv==0){
-			if($json){
-				//nécéssaire pour les ros bookmark
-				ini_set("memory_limit",'16M');
-				//création du json
-				$jsTL = json_encode($this->arrTags);		
-				//enregistrement du fichier
-				$this->site->SaveFile(CACHE_PATH."json/TagLinks_".$oUti->login."_".$tag.".js", "var data = ".$jsTL);
-			}else{
-				return $this->arrTags;
-			}
+			return $this->arrTags;
 		}
 		
 	}
   
-  	public function GetArrTag($tag)
+	function InitArrTag(){
+		//création du tableau des clefs séquencielles pour les liens
+		$this->arrLink = array();
+		//création du tableau pour le graphique
+		$this->arrTags = array("nodes"=>array(), "links"=>array());
+		$this->arrPosts = array();		
+	}
+	
+	public function GetArrTag($tag, $group="")
 	{
 		//vérification de la présence de la clef séquencielle
 		$nTag = array_search($tag, $this->arrLink);
 		if($nTag===false){
 			//création d'une nouvelle clef séquentielle
 			$this->arrLink[] = $tag;
+			if($group==""){
+				//calcul du groupe
+				$group = $this->GetTagGroup($tag);
+			}			
 			//ajout dans le tableau des noeuds 
-			$this->arrTags["nodes"][] = array("nodeName"=>$tag, "group"=>ord(substr($tag,0,1)));	
+			$this->arrTags["nodes"][] = array("nodeName"=>$tag, "group"=>$group);	
 			//récupération de la clef
 			$nTag = array_search($tag, $this->arrLink);
 		}
 		return $nTag;	
 	}
-	
-  	public function GetTagsLinks($oUti)
-	{
-		$oSF = new SauvFlux($this->site);
 
-		//mise à jour des liens Tags et des liens
-		//$oDlcs = new PhpDelicious($oUti->login,"");
-		//$oSF->aSetTagsLinks($oDlcs,$oUti);
+  	public function GetArrLink($src, $dst, $val)
+	{
+		//vérifie que le lien n'existe pas déjà
+		$key = $src."-".$dst."-".$val;
+		if(array_search($key, $this->arrPosts)===false){
+			//création des liens
+			$this->arrTags["links"][] = array("source"=>$src, "target"=>$dst, "value"=>intval($val));
+			$this->arrPosts[] = $key; 
+		}
+			
+	}
+	
+  	public function GetTagGroup($tag, $type="popu")
+	{
+		switch ($type) {
+			case 'initiale':
+				//le groupe correspond à l'initiale du tag
+				$resultat = ord(substr($tag,0,1));
+				break;
+			case 'popu':
+				//le groupe correspond au nombre d'utilisateur utilisant ce tag
+				$resultat = $this->GetTagPopu($tag);
+				break;
+		}
+		return $resultat;
+	}
+
+   	public function GetUserTagsIdDistrib($users)
+	{
 		
-		//récupération des données enregistrées
-		//ATTENTION si le tag n'a pas de lien avec un autre tag il n'apparaitra pas 
-		$sql = "SELECT of.onto_flux_id TagId, of.onto_flux_code Tag, ofr.onto_flux_id, ofr.onto_flux_code TagRela, uofr.poids
+		//renvoie le nombre de tag en commun pour chaque permutations d'utilisateur
+		$select = "SELECT of.onto_flux_id, of.onto_flux_code tag ";
+		$from = " FROM ieml_onto_flux of ";
+		$groupby = " GROUP BY of.onto_flux_id ";
+				
+		//création de la requête en bouclant sur chaque utilisateur
+		$i=1;
+		$notin = " 'AutresUtis'";
+		foreach($users as $user){
+			//$select .= ",uof$i.uti_id $user";
+			$from .= " INNER JOIN ieml_uti_onto_flux uof$i ON uof$i.onto_flux_id = of.onto_flux_id AND uof$i.uti_id = (SELECT uti_id FROM ieml_uti WHERE uti_login = '$user') ";
+			$notin .= ", '".$user."'";
+			$i++;
+		}
+		//pour limiter aux tags qui ne sont utilisés par personne d'autres
+		$from .= " LEFT JOIN ieml_uti_onto_flux uofA ON uofA.onto_flux_id = of.onto_flux_id AND uofA.uti_id NOT IN (SELECT uti_id FROM ieml_uti WHERE uti_login IN ($notin)) ";
+		$where = " WHERE uofA.uti_id IS NULL ";
+		$sql = $select.$from.$where.$groupby;
+
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$num=mysql_affected_rows(); 
+		$db->close();
+
+		//création de la liste des ids
+		$ids="";
+		while($r=mysql_fetch_assoc($rs))
+		{	
+			$ids.= $r["onto_flux_id"].",";	
+		}
+		$ids = substr($ids,0,-1);
+		mysql_data_seek($rs,0);
+		
+		return array("Ids"=>$ids,"rs"=>$rs); 
+		
+	}
+   	
+	
+  	public function GetUsersTagsDistrib($users)
+	{
+		
+		//renvoie le nombre de tag en commun pour chaque permutations d'utilisateur
+		$select = "SELECT COUNT(DISTINCT of.onto_flux_code) nbtag ";
+		$from = " FROM ieml_onto_flux of ";
+		$groupby = " GROUP BY ";
+				
+		//création de la requête en bouclant sur chaque utilisateur
+		$i=1;
+		foreach($users as $user){
+			$select .= ",uof$i.uti_id $user";
+			$from .= " LEFT JOIN ieml_uti_onto_flux uof$i ON uof$i.onto_flux_id = of.onto_flux_id AND uof$i.uti_id = (SELECT uti_id FROM ieml_uti WHERE uti_login = '$user') ";
+			if($i<>1) $groupby .= ",";
+			$groupby .= " uof$i.uti_id ";
+			$i++;
+		}
+		$sql = $select.$from.$groupby;
+
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$num=mysql_affected_rows(); 
+		$db->close();
+
+		//création du json
+		$objJSON=new mysql2json();
+		return (trim($objJSON->getJSON($rs,$num))); 
+		
+	}
+	
+	public function GetTagPopu($tag)
+	{
+		//renvoie au nombre d'utilisateur utilisant ce tag
+		$sql = "SELECT COUNT(DISTINCT uof.uti_id) nbuser
 			FROM ieml_onto_flux of
-				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id AND uof.uti_id = 30 AND of.onto_flux_id = 2112 
-				INNER JOIN ieml_uti_onto_flux_related uofr ON uofr.onto_flux_id = of.onto_flux_id AND uofr.uti_id = uof.uti_id
-				INNER JOIN ieml_onto_flux ofr ON ofr.onto_flux_id = uofr.onto_flux_id_rela
-			ORDER BY of.onto_flux_code";
+				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id
+			WHERE of.onto_flux_code = \"".$tag."\"
+			";
 		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 		$db->connect();
 		$rs = $db->query($sql);
 		$db->close();
-		
-		//création du tableau des clefs séquencielles pour les liens
-		$arrL = array();
-		/*
-		$oTagId = -1;
-		while($r=mysql_fetch_assoc($rs))
-		{
-			if($oTagId!=$r["TagId"]){
-				$arrL[] = $r["Tag"]; 
-				$oTagId=$r["TagId"];		
-			}
-		}
-		*/
-		
-		//construction des données Json
-		$arrTL = array("nodes"=>array(), "links"=>array());
-		$oTagId = -1;
-		mysql_data_seek($rs, 0);
-		while($r=mysql_fetch_assoc($rs))
-		{
-			if($oTagId!=$r["TagId"]){
-				//création d'une nouvelle clef séquentielle
-				$arrL[] = $r["Tag"];
-				//ajout dans le tableau des noeuds 
-				$arrTL["nodes"][] = array("nodeName"=>$r["Tag"], "group"=>ord(substr($r["Tag"],0,1)));	
-				//récupération de la clef
-				$nTag = array_search($r["Tag"], $arrL);
-				$oTagId=$r["TagId"];		
-			}
-			//création du tag destination
-			$nTagRela = array_search($r["TagRela"], $arrL);
-			//vérification de la présence de la clef séquencielle
-			if(!$nTagRela){
-				//création d'une nouvelle clef séquentielle
-				$arrL[] = $r["TagRela"];
-				//ajout dans le tableau des noeuds 
-				$arrTL["nodes"][] = array("nodeName"=>$r["TagRela"], "group"=>ord(substr($r["TagRela"],0,1)));	
-				//récupération de la clef
-				$nTagRela = array_search($r["TagRela"], $arrL);
-			}
-			//création des liens
-			$arrTL["links"][] = array("source"=>$nTag, "target"=>$nTagRela, "value"=>intval($r["poids"]));
-		}
-		
-		//création du json
-		$jsTL = json_encode($arrTL);
-		
-		//enregistrement du fichier
-		$this->site->SaveFile(CACHE_PATH."json/TagsLinks_".$oUti->login.".js", "var data = ".$jsTL);
+		$r=mysql_fetch_assoc($rs);
+		return $r["nbuser"];				
 		
 	}
-  
+	
+  	public function GetTagPoids($tag)
+	{
+		//renvoie le poids total de tag
+		$sql = "SELECT SUM(uofr.poids) poids
+			FROM ieml_onto_flux of
+				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id
+				INNER JOIN ieml_uti_onto_flux_related uofr ON uofr.onto_flux_id = of.onto_flux_id AND uofr.uti_id = uof.uti_id
+			WHERE of.onto_flux_code = \"".$tag."\"
+			";
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$db->close();
+		$r=mysql_fetch_assoc($rs);
+		return $r["poids"];				
+		
+	}
+	
 	
   	public function SauveBookmarkNetwork($uti,$pwd)
 	{

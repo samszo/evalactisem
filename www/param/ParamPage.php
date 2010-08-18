@@ -25,11 +25,11 @@ session_start();
 		$_SESSION['mdpSess']=$mdp;
 		$user = $_SESSION['loginSess'];
 	}
-	
-	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],CACHETIME);
-	$_SESSION['Delicious']= $oDelicious;
-		
 
+	if(isset($_GET['users'])){
+		$users = $_GET['users'];
+	}
+	
 	if(isset($_GET['lang'])){
 		$_SESSION['lang']=$_GET['lang'];
 		$lang = $_GET['lang'];
@@ -117,6 +117,9 @@ session_start();
 	$objXul= new Xul($objSite);
 	$objUti = new Uti($objSite,$_SESSION['loginSess']);
 	$objUtiTradAuto = new Uti($objSite,false,$objSite->infos["UTI_TRAD_AUTO"]);
+	$oDelicious = new PhpDelicious($_SESSION['loginSess'],$_SESSION['mdpSess'],CACHETIME);
+	
+	$_SESSION['Delicious']= $oDelicious;
 	
 	$_SESSION['iduti']=$objUti->id;
 	
