@@ -57,14 +57,18 @@ var colorD = pv.Scale.log(distrib.data, function(d) d.nbtag).range("#c9ffff", "#
 
 			//ajout des événements
 			nSvg.setAttribute("onmouseover", "document.getElementById('VennSelect').innerHTML='"+lib+"'");
- 
+			nSvg.setAttribute("onclick", "initGraph(this.id);");
 		}
 	}
 
 
 function calcQuery(id){
+	
+	//décomposition de l'identifiant svg
 	var reg=new RegExp("[_]+", "g");
 	var arrQ = id.split(reg);
+
+	//construction des paramètres de la requête
 	var Q="";
 	//ATTENTION le premier élément du tableau = "v"
 	//on commence avec i= 1
@@ -72,7 +76,7 @@ function calcQuery(id){
  		Q += arrUsers[arrQ[i]-1] + ",";
 	}
 	Q = Q.substr(0,Q.length-1);
-    console.log("calcQuery:Q=",Q);
+	
 	return Q;	 
 }
 
@@ -80,7 +84,7 @@ function initGraph(id){
   //calcul de la requête
   var Q = calcQuery(id);
  
- //récupération des nouvelles valeurs
+  //récupération des nouvelles valeurs
   var url = "<?php echo ajaxPathWeb;?>?f=GetUsersTagLinks&tag=dhyp&users="+Q;
   data = GetResult(url);
 
