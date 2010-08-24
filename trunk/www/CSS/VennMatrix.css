@@ -1,0 +1,39 @@
+@CHARSET "UTF-8";
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#center {
+  vertical-align: top;
+  font: 12px Helvetica Neue, sans-serif;
+}
+
+}
+#figM{
+  vertical-align: top;
+  margin: auto;
+  position:absolute;
+  top:-100px;
+  left:260px;
+}
+
+#figTitre {
+  font: 18px Helvetica Neue, sans-serif;
+}
+
+#figLegende {
+  vertical-align: top;
+  margin: auto;
+}
+
+#Venn {
+  width: 320px;
+  height: 320px;
+}
+
+#VennSelect {
+  width: 320px;
+  height: 60px;
+}
