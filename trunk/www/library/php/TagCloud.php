@@ -94,10 +94,10 @@ class TagCloud {
 			//exclusion des tags qui ne sont pas dans la liste
 			if (in_array($r["TagRelaId"], $arrIdsTags) && in_array($r["TagId"], $arrIdsTags)) {
 				//récupération du tag source
-				$nTag = $this->GetArrTag($r["Tag"],$r["NbUti"]);
+				$nTag = $this->GetArrTag($r["Tag"],$r["NbUti"], $r["poids"]);
 		
 				//récupération du tag destination
-				$nTagRela = $this->GetArrTag($r["TagRela"],$r["NbUti"]);
+				$nTagRela = $this->GetArrTag($r["TagRela"],$r["NbUti"], $r["poids"]);
 		
 				//création du lien
 				$this->GetArrLink($nTag, $nTagRela, $r["poids"]);			
@@ -105,14 +105,14 @@ class TagCloud {
 			}			
 				
 		}
-		//dans le cas où les tags en communs n'ont pas liés avec d'autres tags en commun
+		//dans le cas où les tags en communs ne sont pas liés avec d'autres tags en commun
 		if(!$all){
 			while($r=mysql_fetch_assoc($rTagsId["rs"]))
 			{	
-				$this->GetArrTag($r["tag"],0);					
+				$this->GetArrTag($r["tag"],0,1);					
 			}
 		}
-				
+							
 		return $this->arrTags;
 		
 	}
@@ -174,7 +174,7 @@ class TagCloud {
 		$this->arrPosts = array();		
 	}
 	
-	public function GetArrTag($tag, $group="")
+	public function GetArrTag($tag, $group="", $poids=0)
 	{
 		//vérification de la présence de la clef séquencielle
 		$nTag = array_search($tag, $this->arrLink);
@@ -186,9 +186,13 @@ class TagCloud {
 				$group = $this->GetTagGroup($tag);
 			}			
 			//ajout dans le tableau des noeuds 
-			$this->arrTags["nodes"][] = array("nodeName"=>$tag, "group"=>$group);	
+			$this->arrTags["nodes"][] = array("nodeName"=>$tag, "group"=>$group, "LinkDegree"=>$poids);	
 			//récupération de la clef
 			$nTag = array_search($tag, $this->arrLink);
+		}else{
+			//incrémente le LinkDegree
+			//cf. http://gitorious.org/protovis/protovis/blobs/master/src/layout/Network.js#line297 
+			$this->arrTags["nodes"][$nTag]["LinkDegree"]+=$poids;
 		}
 		return $nTag;	
 	}
@@ -269,6 +273,7 @@ class TagCloud {
 		$select = "SELECT COUNT(DISTINCT of.onto_flux_code) nbtag ";
 		$from = " FROM ieml_onto_flux of ";
 		$groupby = " GROUP BY ";
+		$orderby = " ORDER BY nbtag ";
 				
 		//création de la requête en bouclant sur chaque utilisateur
 		$i=1;
@@ -279,7 +284,7 @@ class TagCloud {
 			$groupby .= " uof$i.uti_id ";
 			$i++;
 		}
-		$sql = $select.$from.$groupby;
+		$sql = $select.$from.$groupby.$orderby;
 
 		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
 		$db->connect();
@@ -295,7 +300,7 @@ class TagCloud {
 	
 	public function GetTagPopu($tag)
 	{
-		//renvoie au nombre d'utilisateur utilisant ce tag
+		//renvoie le nombre d'utilisateur utilisant ce tag
 		$sql = "SELECT COUNT(DISTINCT uof.uti_id) nbuser
 			FROM ieml_onto_flux of
 				INNER JOIN ieml_uti_onto_flux uof ON uof.onto_flux_id = of.onto_flux_id
