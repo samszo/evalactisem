@@ -147,6 +147,9 @@ document.body.setAttribute("style","cursor:wait");//marche pas
 //console.log(dataLegL,dataLegN,dataLegF);
 //console.log(filtreLeg);
 
+legFiltre.visible(true);
+legFiltre.render();
+
   //vérifie le type de graphique à afficher
   var typeVisu = document.getElementById('typeVisu').value;
 

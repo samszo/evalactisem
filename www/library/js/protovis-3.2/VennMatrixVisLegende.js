@@ -114,7 +114,7 @@ legN.render();
 var legFiltre = new pv.Panel()
     .width(160)
     .height(80)
-	.visible(function(){return dataLegN.length>0;})
+	.visible(false)
 ;
 
 legFiltre.add(pv.Label)
