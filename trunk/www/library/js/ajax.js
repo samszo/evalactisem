@@ -4,8 +4,7 @@
 
 function AppendSVG(url,doc, InSvg) {
   try {
-	document.documentElement.style.cursor = "wait";
-
+	document.body.style.cursor = "wait";
 	if(!InSvg){
 		//vide le conteneur
 		while(doc.hasChildNodes())
@@ -30,13 +29,13 @@ function AppendSVG(url,doc, InSvg) {
 
 	}
    } catch(ex2){alert("AppendSVG::"+ex2+":"+url);}
-	document.documentElement.style.cursor = "auto";
+	document.body.style.cursor = "auto";
 
 }
 
 function GetResult(url) {
   try {
-	document.documentElement.style.cursor = "wait";
+	document.body.style.cursor = "wait";
 
     var response = "";
 	var p = new XMLHttpRequest();
@@ -54,11 +53,11 @@ function GetResult(url) {
 	}else{
 	    response = p.responseText;
 	}
-	document.documentElement.style.cursor = "auto";
+	document.body.style.cursor = "auto";
 	return response;
 	dump("GetResult OUT \n");
    } catch(ex2){alert(ex2)}
-	document.documentElement.style.cursor = "auto";
+	document.body.style.cursor = "auto";
 }
 
 

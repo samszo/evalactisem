@@ -5,7 +5,7 @@ require('../param/ParamPage.php');
 <html>
   <head>
     <title>Venn Tag Links</title>
-    <script type="text/javascript" src="<?php echo PathWeb;?>library/js/protovis-3.2/protovis-r3.2.js" ></script>
+    <script type="text/javascript" src="<?php echo PathWeb;?>library/js/protovis/protovis-r3.2.js" ></script>
     <script type="text/javascript" src="<?php echo PathWeb;?>library/js/ajax.js" ></script>
     <script type="text/javascript+protovis">
 
