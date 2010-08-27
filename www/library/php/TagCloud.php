@@ -140,7 +140,7 @@ class TagCloud {
 		$rs = $db->query($sql);
 		$db->close();
 		
-		if($niv==0)InitArrTag();
+		if($niv==0)$this->InitArrTag();
 		
 		$oTagId = -1;
 		while($r=mysql_fetch_assoc($rs))

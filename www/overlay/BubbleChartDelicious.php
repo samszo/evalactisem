@@ -24,7 +24,7 @@ foreach($jsTags as $k=>$val){
 <html>
   <head>
     <title>Bubble Chart</title>
-    <script type="text/javascript" src="<?php echo PathWeb;?>/library/js/protovis-3.2/protovis-r3.2.js"></script>
+    <script type="text/javascript" src="<?php echo PathWeb;?>/library/js/protovis/protovis-r3.2.js"></script>
     <style type="text/css">
 
 body {
@@ -60,12 +60,9 @@ var w = 800,
     kx = w / h,
     ky = 1,
     x = pv.Scale.linear(-kx, kx).range(0, w),
-    y = pv.Scale.linear(-ky, ky).range(0, h);
-
-
-/* For pretty number formatting. */
-var format = pv.Format.number();
-
+    y = pv.Scale.linear(-ky, ky).range(0, h),
+    t = pv.Transform.identity;
+ 
 var vis = new pv.Panel()
     .width(w)
     .height(h)
@@ -73,9 +70,31 @@ var vis = new pv.Panel()
     .left(40)
     .right(20)
     .bottom(20)
-    .strokeStyle("#aaa");
+    .strokeStyle("#ccc");
+ 
+vis.add(pv.Rule)
+    .data(function() x.domain(t.x, w * t.k + t.x).ticks())
+    .strokeStyle("#ccc")
+    .left(x)
+  .anchor("bottom").add(pv.Label);
+ 
+vis.add(pv.Rule)
+    .data(function() y.domain(t.y, h * t.k + t.y).ticks())
+    .strokeStyle("#ccc")
+    .top(y)
+  .anchor("left").add(pv.Label);
 
-vis.add(pv.Layout.Pack)
+
+/* For pretty number formatting. */
+var format = pv.Format.number();
+
+var view = vis.add(pv.Panel)
+    .overflow("hidden")
+    .fillStyle("rgba(0,0,0,.001)") // pointer-events = "all"
+    .event("mousedown", pv.Behavior.pan())
+    .event("mousewheel", pv.Behavior.zoom(2));//préciser la vitesse de la roulette
+
+view.add(pv.Layout.Pack)
     .nodes(classes)
     .size(function(d) d.nodeValue)
     .spacing(0)
@@ -87,28 +106,24 @@ vis.add(pv.Layout.Pack)
     .title(function(d) d.nodeName + ": " + format(d.nodeValue))
   	.anchor("center").add(pv.Label)
     .text("");
-    //.text(function(d) d.className);
 
-/* Use an invisible panel to capture pan & zoom events. */
-vis.add(pv.Panel)
-    //.events("all")
-    .event("mousedown", pv.Behavior.pan())
-    .event("mousewheel", pv.Behavior.zoom())
-    .event("pan", transform)
-    .event("zoom", transform);
+//view.render();
 
-/** Update the x- and y-scale domains per the new transform. */
-function transform() {
-  var t = this.transform().invert();
-  x.domain(t.x / w * 2 * kx - kx, (t.k + t.x / w) * 2 * kx - kx);
-  y.domain(t.y / h * 2 * ky - ky, (t.k + t.y / h) * 2 * ky - ky);
+/* Hack! Need a way get the transform as it is set. */
+view.transform = function() {
+  var f = view.transform;
+  return function(v) {
+    if (v) t = v.invert();
+    return f.apply(this, arguments);
+  };
+}();
+ 
+/* Hack! Need a way to control which panel gets rendered with pan & zoom! */
+view.render = function() {
   vis.render();
-}
-
-
-
+};
+ 
 vis.render();
-
     </script>
   </body>
 </html>
