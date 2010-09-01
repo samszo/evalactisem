@@ -54,7 +54,12 @@
       	}else{ 
       		$this->sShortKey = $sPrefix.md5($sKey);
       	}
-      	 $this->sFile = "$sCachePath$this->sShortKey.xml";
+      	if(ereg("json/",$sKey)){
+			$this->sShortKey = $sPrefix.$sKey;
+      		$this->sFile = $sCachePath.$this->sShortKey;
+      	}else{
+			$this->sFile = "$sCachePath$this->sShortKey.xml";
+      	}
          $this->sFileLock = "$this->sFile.lock";
          $this->iCacheTime = $iCacheTime;
          //echo ereg("bookmarks/",$sKey);

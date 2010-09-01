@@ -317,7 +317,11 @@ class Site{
 	  return $theValue;
 	}
 
-
+	function getmicrotime($t) { 
+		list($usec, $sec) = explode(" ",$t); 
+		return ((float)$usec + (float)$sec); 
+	} 
+	
 	public function GetLien($url, $type_select, $new_val, $arrSup=false)
 	{
 		if($this->scope!=-1){		
@@ -453,7 +457,7 @@ class Site{
 	}
 	
 
-	public function GetCurl($url){
+	public function GetCurl($url, $infos=false){
 		
 		if($this->trace)
 			echo "Site:GetCurl:url=".$url."<br/>";
@@ -462,19 +466,24 @@ class Site{
 	   // curl_setopt($oCurl, CURLOPT_HEADER, true);
 		curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
-		$arrInfos = curl_getinfo($oCurl);
 		if($this->trace)
 			echo "Site:GetCurl:arrInfos=".print_r($arrInfos)."<br/>";
 
 		// request URL
 		$sResult = curl_exec($oCurl);
+
+		$arrInfos = curl_getinfo($oCurl);
+		
 		if($this->trace)
 			echo "Site:GetCurl:sResult=".$sResult."<br/>";
 		
 		// close session
 		curl_close($oCurl);
 
-		return $sResult;
+		if($infos)
+			return $arrInfos;
+		else
+			return $sResult;
 		
 	}
 	
