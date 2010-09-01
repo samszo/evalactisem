@@ -96,9 +96,71 @@
                  case 'GetUsersTagLinks':
                 	    GetUsersTagLinks($users,$tag,$_GET['all']);
                 	    break;
+                 case 'SetTagPosts':
+                	    SetTagPosts($tag);
+                	    break;
+                 case 'SetUserTagsPosts':
+                	    SetUserTagsPosts();
+                	    break;
+                 case 'DelUserTags':
+                	    DelUserTags();
+                	    break;
+                	    
 		}
         
         echo $resultat;  
+
+    function DelUserTags(){
+     	// end start benchmark
+     	$start = microtime(); 
+    	
+     	global $objSite;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oSaveFlux= new SauvFlux($objSite); 
+   		$oSaveFlux->DelUserTags($objUti);
+		$Activite->AddActi('DUT',$objUti->id);		
+
+		// end benchmark timing
+		$end = microtime(); 
+		$t2 = ($this->site->getmicrotime($end) - $this->site->getmicrotime($start)); 
+		echo "<p>Total DelUserTags Time: <b>$t2</b>";
+		$mem=memory_get_usage(true);$mem=$mem/1048576;
+		echo "<br/>$mem M <br/>";
+    }
+        
+    function SetUserTagsPosts(){
+     	// end start benchmark
+     	$start = microtime(); 
+
+     	ini_set("memory_limit","320M");
+    	
+     	global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oSaveFlux= new SauvFlux($objSite); 
+   		$oSaveFlux->aSetUserTagsPosts($oDelicious,$objUti);
+		$Activite->AddActi('SUTP',$objUti->id);		
+
+		// end benchmark timing
+		$end = microtime(); 
+		$t2 = ($this->site->getmicrotime($end) - $this->site->getmicrotime($start)); 
+		echo "<p>Total SetTagsPosts Time: <b>$t2</b>";
+		$mem=memory_get_usage(true);$mem=$mem/1048576;
+		echo "<br/>$mem M <br/>";
+    }
+        
+    function SetTagPosts($tag){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oSaveFlux= new SauvFlux($objSite); 
+   		$oSaveFlux->aSetTagsPosts($oDelicious,$objUti,$tag);
+		$Activite->AddActi('STP',$objUti->id);		
+    }
+        
         
    	function GetUsersTagLinks($users,$tag,$all){
 		global $objSite;
@@ -108,12 +170,18 @@
 		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
 		//esterhasz,fennec_sokoko,luckysemiosis,samueld,wazololo
 		$arrUsers = split(",",$users);
-		$jsTL = json_encode($oTG->GetUsersTagLinks($arrUsers,$tag,$all));
-   		echo $jsTL;
-		//enregistrement du fichier
-		$objSite->SaveFile(CACHE_PATH."json/TagLinks_".$users."_".$tag."_".$all.".js", $jsTL);
+
+		//$jsTL = json_encode($oTG->GetUsersTagLinks($arrUsers,$tag,$all));
+   		//echo $jsTL;
+
+		$oCache = new Cache("json/TagLinks_".$users."_".$tag."_".$all.".js",CACHETIME);   
+        if (!$oCache->Check()) {
+        	$jsTL = json_encode($oTG->GetUsersTagLinks($arrUsers,$tag,$all));
+        	$oCache->Set($jsTL,true);
+		}
+		echo $oCache->Get(true);
 		$Activite->AddActi('GetUsersTagLinks',$objUti->id);		
-  	}        
+   	}        
         
   	function GetUsersTagsDistrib($users){
 		global $objSite;
@@ -157,7 +225,9 @@
 		global $objSite;
        	global $oDelicious;
        	global $objUti;
-   		$Activite= new Acti();
+    	set_time_limit(9000);
+    	ini_set("memory_limit","100M");
+       	$Activite= new Acti();
 		$oSaveFlux= new SauvFlux($objSite); 
    		$oSaveFlux->aSetTagLinks($oDelicious,$objUti,$tag);
 		$Activite->AddActi('STL',$objUti->id);		

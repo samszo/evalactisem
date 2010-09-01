@@ -65,7 +65,8 @@ class TagCloud {
 			$whereTag = " AND (uofr.onto_flux_id IN (".$rTagsId["Ids"].") OR uofr.onto_flux_id_rela IN (".$rTagsId["Ids"].")) "; 
 		}
 		
-		$sql = "SELECT uofr.onto_flux_id TagId, of.onto_flux_code Tag, ofr.onto_flux_id TagRelaId, ofr.onto_flux_code TagRela, SUM(uofr.poids) poids, COUNT(DISTINCT uofr.uti_id) NbUti
+		$sql = "SELECT uofr.onto_flux_id TagId, of.onto_flux_code Tag, ofr.onto_flux_id TagRelaId, ofr.onto_flux_code TagRela
+			, SUM(uofr.poids) poids, COUNT(DISTINCT uofr.uti_id) NbUti
 		FROM ieml_uti_onto_flux_related uofr 
 			INNER JOIN ieml_onto_flux ofr ON uofr.onto_flux_id_rela = ofr.onto_flux_id  			
 			INNER JOIN ieml_onto_flux of ON of.onto_flux_id = uofr.onto_flux_id  			
@@ -83,21 +84,20 @@ class TagCloud {
 		$oTagId = 0;
 		while($r=mysql_fetch_assoc($rs))
 		{
-			if($oTagId>100)break;
+			//if($oTagId>100)break;
 			
 			
 			if($all){
 				$arrIdsTags[]=$r["TagRelaId"];
 				$arrIdsTags[]=$r["TagId"];
 			}
-			
 			//exclusion des tags qui ne sont pas dans la liste
 			if (in_array($r["TagRelaId"], $arrIdsTags) && in_array($r["TagId"], $arrIdsTags)) {
 				//récupération du tag source
-				$nTag = $this->GetArrTag($r["Tag"],$r["NbUti"], $r["poids"]);
+				$nTag = $this->GetArrTag($r["Tag"],"", $r["poids"]);
 		
 				//récupération du tag destination
-				$nTagRela = $this->GetArrTag($r["TagRela"],$r["NbUti"], $r["poids"]);
+				$nTagRela = $this->GetArrTag($r["TagRela"],"", $r["poids"]);
 		
 				//création du lien
 				$this->GetArrLink($nTag, $nTagRela, $r["poids"]);			
@@ -109,7 +109,7 @@ class TagCloud {
 		if(!$all){
 			while($r=mysql_fetch_assoc($rTagsId["rs"]))
 			{	
-				$this->GetArrTag($r["tag"],0,1);					
+				$this->GetArrTag($r["tag"],"",1);					
 			}
 		}
 							
@@ -176,6 +176,11 @@ class TagCloud {
 	
 	public function GetArrTag($tag, $group="", $poids=0)
 	{
+
+		if($tag=="alexa"){
+			$toto = "";
+		}
+		
 		//vérification de la présence de la clef séquencielle
 		$nTag = array_search($tag, $this->arrLink);
 		if($nTag===false){
@@ -209,16 +214,24 @@ class TagCloud {
 			
 	}
 	
-  	public function GetTagGroup($tag, $type="popu")
+  	public function GetTagGroup($tag, $type="nbDoc")
 	{
 		switch ($type) {
 			case 'initiale':
-				//le groupe correspond à l'initiale du tag
+				//l'initiale du tag
 				$resultat = ord(substr($tag,0,1));
 				break;
 			case 'popu':
-				//le groupe correspond au nombre d'utilisateur utilisant ce tag
+				//le nombre d'utilisateur utilisant ce tag
 				$resultat = $this->GetTagPopu($tag);
+				break;
+			case 'nbOctet':
+				//la somme des octets de chaque document
+				$resultat = $this->GetTagNbOctet($tag);
+				break;
+			case 'nbDoc':
+				//la somme des octets de chaque document
+				$resultat = $this->GetTagNbDoc($tag);
 				break;
 		}
 		return $resultat;
@@ -314,6 +327,25 @@ class TagCloud {
 		return $r["nbuser"];				
 		
 	}
+
+	public function GetTagNbDoc($tag)
+	{
+		//renvoie le nombre d'utilisateur utilisant ce tag
+		$sql = "SELECT COUNT(td.id_doc) nb 
+			FROM flux_tags_docs td 
+				INNER JOIN ieml_onto_flux of ON td.id_tag = of.onto_flux_id
+			WHERE of.onto_flux_code = \"".$tag."\"
+			";
+		$db = new mysql ($this->site->infos["SQL_HOST"], $this->site->infos["SQL_LOGIN"], $this->site->infos["SQL_PWD"], $this->site->infos["SQL_DB"]);
+		$db->connect();
+		$rs = $db->query($sql);
+		$db->close();
+		$r=mysql_fetch_assoc($rs);
+
+		return $r["nb"];				
+	
+	}
+	
 	
   	public function GetTagPoids($tag)
 	{
