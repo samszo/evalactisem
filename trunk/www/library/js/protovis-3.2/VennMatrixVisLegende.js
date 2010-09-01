@@ -29,7 +29,7 @@ legL.add(pv.Bar)
   .anchor("bottom").add(pv.Dot)
      .size(32)
      .top(72)
-   	 .fillStyle("green")
+   	 .fillStyle(function(){return distribTooBig && this.index>2 ? "red" : "green"})
  	 .cursor("pointer")
      .event("click",function(d) filtreVis(event,"nbOcc",d)) 
 ;
@@ -67,7 +67,7 @@ legF.add(pv.Bar)
   .anchor("bottom").add(pv.Dot)
      .size(32)
      .top(72)
-   	 .fillStyle("green")
+   	 .fillStyle(function(){return distribTooBig && this.index>2 ? "red" : "green"})
  	 .cursor("pointer")
      .event("click",function(d) filtreVis(event,"nbLien",d)) 
 ;
@@ -84,7 +84,7 @@ var legN = new pv.Panel()
 
 legN.add(pv.Label)
     .top(20)
-    .text("Nb d'utilisateurs")
+    .text("Nb de documents")
 	.visible(function(){return dataLegN.length>0;})
 	.font("16px sans-serif")
 ;
@@ -105,9 +105,9 @@ legN.add(pv.Bar)
   .anchor("bottom").add(pv.Dot)
      .size(32)
      .top(72)
-   	 .fillStyle("green")
+   	 .fillStyle(function(){return distribTooBig && this.index>2 ? "red" : "green"})
  	 .cursor("pointer")
-     .event("click",function(d) filtreVis(event,"nbUti",d)) 
+	 .event("click",function(d) filtreVis(event,"nbUti",d)) 
 ;
 legN.render();
 
@@ -121,6 +121,11 @@ legFiltre.add(pv.Label)
     .top(20)
     .text("Filtrage des données")
 	.font("16px sans-serif")
+;
+legFiltre.add(pv.Label)
+    .top(80)
+    .text("(Chrome uniquement)")
+	.font("14px sans-serif")
 ;
 
 legFiltre.add(pv.Dot)
