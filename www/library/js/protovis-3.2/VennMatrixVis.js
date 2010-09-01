@@ -4,8 +4,8 @@ var w = 800,
     h = 600,
     t = pv.Transform.identity, // the inverted transform
     x = pv.Scale.linear(0, w).range(0, w),
-    y = pv.Scale.linear(0, h).range(0, h);
- 
+    y = pv.Scale.linear(0, h).range(0, h),
+     
 visZP = new pv.Panel()
     .width(w)
     .height(h)
@@ -69,7 +69,7 @@ arc.node.add(pv.Dot)
 
 
 arc.label.add(pv.Label)
-	.font(function(d) Math.sqrt(d.group) * 20 + "px sans-serif")
+	.font(function(d) NbOct(d.group) + "px sans-serif")
 	.textStyle(function(d) colorN(d.group))
 ;
 
@@ -110,7 +110,7 @@ matrix.link.add(pv.Bar)
     .fillStyle(function(l) l.linkValue
         ? colorL(l.linkValue) : "#FFF")
 	.title(function(l) l.linkValue
-        ? l.targetNode.nodeName+" + "+l.sourceNode.nodeName+" "+l.linkValue+" fois par "+l.targetNode.group+" utilisateur(s)" : "pas de co-occurrence")
+        ? l.targetNode.nodeName+" + "+l.sourceNode.nodeName+" "+l.linkValue+" fois pour "+l.targetNode.group+" document(s)" : "pas de co-occurrence")
     .event("mouseover",function(l)visM.lnk([l.sourceNode.nodeName,l.targetNode.nodeName])) 
     .event("mouseout", function()visM.lnk([-1,-1])) 
 ;

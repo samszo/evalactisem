@@ -9,14 +9,16 @@ url = ajaxPathWeb+"?f=GetUsersTagsDistrib&tag="+aggTag+"&users="+arrUsers.join("
 var distrib = eval('(' + GetResult(url) + ')');
 //pour stocker les distribution qui posent des problème de rendu
 var distribCheck = [];
-var valCheck = 200;
+var distribSelect;
+var arrValCheck = {"matrix":[200],"arc":[600]};
+var distribTooBig = false;
 
 //mise à jour du lien vers les data
 document.getElementById('distribData').innerHTML= '<a href="'+url+'" target="_blank" >data</a>'; 
 
 
 /* définition des couleurs cf. http://www.w3schools.com/tags/ref_colormixer.asp*/
-var cNmax = "#CC0066", cNmin = "#FF9966",
+var cNmax = "#FF3300", cNmin = "#FFFF00";
 	cLmax = "#9900CC", cLmin = "#FFFF00", 
 	cFmax = "#006666", cFmin = "#CCFF33", 
 	cDmax = "#40006f", cDmin = "#c9ffff";
@@ -33,6 +35,7 @@ var filtreLeg = {"nbOcc":[],"nbLien":[],"nbUti":[]};
 	function initSvg(){
 		//affichage du svg
 	    AppendSVG(PathWeb+"overlay/Venn5dyna.svg",document.getElementById('Venn'), false);
+//console.log("initSvg",distrib.data);
 
 		//mise à jour du svg
 		var idSvg, nSvg, nbTag, lib, c;
@@ -47,29 +50,48 @@ var filtreLeg = {"nbOcc":[],"nbLien":[],"nbUti":[]};
 					lib += arrUsers[j]+" et "; 	
 				}
 			}
-			nbTag = distrib.data[i].nbtag;
-			lib = lib.substr(0,lib.length-3)+": "+nbTag+" TAG(s)";
-			
-			//récupération du noeud svg
-			nSvg = document.getElementById(idSvg);
-
-			//conserve le nombre de tag 
-			nSvg.setAttribute("nbTag", nbTag);
-
-			//vérifie s'il faut tester la distribution
-			if(nbTag>valCheck){
-				distribCheck.push(idSvg);
-			}
-
-			//met à jour les couleurs
-			setColorDistrib(nSvg);
-						
-			//ajout des événements
-			nSvg.setAttribute("onmouseover", "document.getElementById('VennSelect').innerHTML='"+lib+"'");
-			nSvg.setAttribute("onclick", "initGraph(this.id,'"+lib+"');");
- 
+			if(idSvg!="v"){
+				nbTag = distrib.data[i].nbtag;
+				lib = lib.substr(0,lib.length-3)+": "+nbTag+" TAG(s)";
+//console.log("initSvg",idSvg,nbTag,lib);
+				
+				//récupération du noeud svg
+				nSvg = document.getElementById(idSvg);
+				//conserve le nombre de tag 
+				nSvg.setAttribute("nbTag", nbTag);
+	
+				//vérifie s'il faut tester la distribution
+				if(nbTag>arrValCheck["matrix"][0]){
+					distribCheck.push(idSvg);
+				}
+				if(nbTag>arrValCheck["arc"][0]){
+					distribCheck.push(idSvg);
+				}
+					
+				//met à jour les couleurs
+				setColorDistrib(nSvg);
+							
+				//ajout des événements
+				nSvg.setAttribute("onmouseover", "document.getElementById('VennSelect').innerHTML='"+lib+"'");
+				nSvg.setAttribute("onclick", "changeDistrib(this.id);initGraph(this.id,'"+lib+"');");
+			} 
 		}
 	}
+
+function changeDistrib(id){
+	
+	if(distribSelect){
+		//redonne la couleur d'origine à la distribution
+		distribSelect.setAttribute("fill", distribSelect.getAttribute("cDistrib"));
+	}
+	//stocke la nouvelle sélection
+	distribSelect = document.getElementById(id);
+	//stocke la couleur d'origine de la distibution
+	distribSelect.setAttribute("cDistrib", distribSelect.getAttribute("fill"));
+	//met la sélection en vert
+	distribSelect.setAttribute("fill", "green");
+
+}
 
 function setColorDistrib(nSvg){
 
@@ -88,7 +110,8 @@ function setColorDistrib(nSvg){
 
 	//met un contour rouge si le rendu prend trop de temps
 	//pour un type de visualisation
-	if(nbTag>valCheck && typeVisu=="matrix"){
+//console.log(nbTag,arrValCheck[typeVisu][0]);
+	if(nbTag>arrValCheck[typeVisu][0]){
 		nSvg.setAttribute("stroke-width", 10);
 		nSvg.setAttribute("stroke", "red");
 	}else{
@@ -117,8 +140,13 @@ document.body.setAttribute("style","cursor:wait");//marche pas
 
   //calcul de la requête
   var Q = calcQuery(id);
-  //récupération des nouvelles valeurs
-  var url = ajaxPathWeb+"?f=GetUsersTagLinks&tag=dhyp&users="+Q;
+  
+  //vérifie si la distribution est trop importante
+  distribTooBig = document.getElementById(id).getAttribute("stroke")=="red";
+//console.log("initGraph",distribTooBig);
+    
+  //requête pour les nouvelles valeurs
+  var url = ajaxPathWeb+"?f=GetUsersTagLinks&tag=dhyp&users="+Q+"&TooBig="+distribTooBig;
   //conserve le json pour pouvoir filtrer
   json = GetResult(url);
   data = eval('(' + json + ')');
@@ -126,11 +154,13 @@ document.body.setAttribute("style","cursor:wait");//marche pas
   //mise à jour du titre
   document.getElementById('figTitre').innerHTML="PERMUTATION SELECTIONNEE (<a href='"+url+"' target='_blank' >data</a>) :<br/>"+lib;
 
-
   //mise à jour des couleurs
   colorN = pv.Scale.log(data.nodes, function(d) d.group).range(cNmin, cNmax);
   colorL = pv.Scale.log(data.links, function(d) d.value).range(cLmin, cLmax);
   colorF = pv.Scale.log(data.nodes, function(d) d.LinkDegree).range(cFmin, cFmax);
+
+  //mise à jour de l'échelle pour la taille des caractères
+  NbOct = pv.Scale.linear(data.nodes, function(d) d.group).range(18, 64);
 
   //mise à jour des légendes	
   dataLegL = GetDataLegL();
@@ -153,42 +183,47 @@ legFiltre.render();
   //vérifie le type de graphique à afficher
   var typeVisu = document.getElementById('typeVisu').value;
 
-  //mise à jour des visualisations
-  if(typeVisu=="matrix"){
-    dataM = data;
-    dataA = {"nodes":[],"links":[]};
-	visZP.visible(false)
-		.width(function(){return 0})
-    	.height(function(){return 0})
-		;
-	visM.width(dataM.nodes.length * 10)
-    	.height(dataM.nodes.length * 10)
-		.top(200)
-		;
-  }else{
-    dataM = {"nodes":[],"links":[]};
-    dataA = data;
-	visZP.visible(true)
-		.width(w)
-    	.height(h)
-		;
-	visM.width(function(){return 0})
-    	.height(function(){return 0})
-		.top(function(){return 0})
-		;
+  //vérifie si la distribution n'est pas trop grande
+  if(distribTooBig){
+	//crée un filtre sur les trois premières valeure de chaque data
+	filtreLeg["nbOcc"] = [];
+	filtreLeg["nbLien"] = [];
+	filtreLeg["nbUti"] = [];
+	for (var i= 0; i < 3; i++){
+		filtreLeg["nbOcc"].push(dataLegL[i]);
+		filtreLeg["nbUti"].push(dataLegN[i]);
+		filtreLeg["nbLien"].push(dataLegF[i]);
+	}
   }
-//console.log(data,dataM,dataA);
-  
-  //vide le cache des visualisation
-  matrix.reset();
-  arc.reset();
+//console.log("initGraph",filtreLeg);  
 
-  //rendu des visualisations 
-  visM.render();
-  visA.render();
+  filtreData();
 
 document.body.style.cursor = 'auto';
 
+}
+
+function ShowTypeVisu(typeVisu){
+	  
+	  if(typeVisu=="matrix"){
+		visZP.visible(false)
+			.width(function(){return 0})
+	    	.height(function(){return 0})
+			;
+		visM.width(dataM.nodes.length * 10)
+	    	.height(dataM.nodes.length * 10)
+			.top(200)
+			;
+	  }else{
+		visZP.visible(true)
+			.width(w)
+	    	.height(h)
+			;
+		visM.width(function(){return 0})
+	    	.height(function(){return 0})
+			.top(function(){return 0})
+			;
+	  }
 }
 
 function GetDataLegL(){
@@ -249,14 +284,16 @@ function filtreDoublons(dt){
 }
 
 function changeType(type){
-//console.log("changeType:type:",type);
+//console.log("changeType:type:",type,distribCheck);
 	for(var i= 0; i < distribCheck.length; i++){
 		setColorDistrib(document.getElementById(distribCheck[i]));
 	}
 }
 
-function filtreVis(event,typeFiltre,val){
 	
+function filtreVis(event,typeFiltre,val){
+
+	//la récupération de l'événement ne marche pas avec firefox
 	var n = event.target;
 	var arr=[];
 //console.log(n,typeFiltre);
@@ -264,6 +301,7 @@ function filtreVis(event,typeFiltre,val){
 
 	//change la couleur du bouton
 	//ajoute ou supprime les valeurs au filtre
+console.log(n.getAttribute("fill"));
 	if(n.getAttribute("fill")=="red"){
 		n.setAttribute("fill", "green");
 		filtreLeg[typeFiltre].push(val);
@@ -274,30 +312,12 @@ function filtreVis(event,typeFiltre,val){
 		}
 		filtreLeg[typeFiltre]=arr;		
 	}
+console.log(n.getAttribute("fill"));
 //console.log(filtreLeg[typeFiltre]);
 //console.log(dataA,dt);
 
 	//calcule les nouvelles données
-	arr = filtreData();
-
-	//vérifie le type de graphique à afficher
-	var typeVisu = document.getElementById('typeVisu').value;
-	if(typeVisu=="matrix"){
-		//met à jour les data
-		dataM.nodes = arr[0];  
-		dataM.links = arr[1];  
-		//recalcule la visualisation
-	    matrix.reset();
-	    visM.render();
-	}else{
-	  	//met à jour les data
-		dataA.nodes = arr[0];  
-		dataA.links = arr[1];  
-		//recalcule la visualisation
-	    arc.reset();
-	    visA.render();
-	}
-//console.log(data,dataM,dataA);
+	filtreData();
 
 }
 
@@ -382,7 +402,49 @@ function filtreData(){
 
   	//met à jour les filtres de la légende 
 
-	return [arrFiltreN, arrFiltreL];
+	var arr = [arrFiltreN, arrFiltreL];
+
+	//vérifie le type de graphique à afficher
+	var typeVisu = document.getElementById('typeVisu').value;
+	if(typeVisu=="matrix"){
+		//met à jour les data
+		dataM.nodes = arr[0];  
+		dataM.links = arr[1];  
+
+		visZP.visible(false)
+			.width(function(){return 0})
+	    	.height(function(){return 0})
+			;
+		visM.width(dataM.nodes.length * 10)
+	    	.height(dataM.nodes.length * 10)
+			.top(200)
+			;
+
+	}else{
+	
+		visZP.visible(true)
+			.width(w)
+	    	.height(h)
+			;
+		visM.width(function(){return 0})
+	    	.height(function(){return 0})
+			.top(function(){return 0})
+			;
+	
+	  	//met à jour les data
+		dataA.nodes = arr[0];  
+		dataA.links = arr[1];  
+	}
+
+	//recalcule la visualisation
+    matrix.reset();
+    visM.render();
+
+	//recalcule la visualisation
+    arc.reset();
+    visA.render();
+
+console.log(data,dataM,dataA);
 
 }
 
