@@ -47,6 +47,60 @@ class TagCloud {
     date_default_timezone_set('UTC');		
   }
 
+  
+	public function GetStatVisu($users, $tag, $all=false)
+	{
+		
+		//récupère les distributions valides
+		$rs = $this->GetUsersTagsDistrib($users,false);
+		
+		$arrStatVisu = array();
+		$arr = array();
+		//calcul les légendes de chaque permutation
+		while($r=mysql_fetch_assoc($rs))
+		{
+			$arrUse = array();
+			foreach($users as $user){
+				if($r[$user]!=null){
+					array_push($arrUse, $user);
+				}
+			}
+			if(count($arrUse)>0){
+				//print_r($arrUse);
+				//echo "<br/>".EOL;
+				$arr = $this->GetUsersTagLinks($arrUse,$tag,$all);
+				//récupère les valeurs de filtre
+				$Lien = $this->GetDistinctArrVal($arr["nodes"],"LinkDegree");
+				$Doc = $this->GetDistinctArrVal($arr["nodes"],"group");
+				$Occ = $this->GetDistinctArrVal($arr["links"],"value");
+				//calcul le nombre de visualisation
+				//cf. http://fr.wikipedia.org/wiki/Combinatoire#Permutations_avec_r.C3.A9p.C3.A9tition_d.27objets_discernables
+				$nbVisu = $this->Fact(count($Lien)+count($Doc)+count($Occ)) / $this->Fact(count($Lien))*$this->Fact(count($Doc))*$this->Fact(count($Lien));
+				array_push($arrStatVisu, array("Users"=>$arrUse,"nbVisu"=>$nbVisu,"Occ"=>$Occ,"Doc"=>$Doc,"Lien"=>$Lien));
+			}
+			
+		} 
+		return $arrStatVisu;
+	}
+
+   	public function GetDistinctArrVal($arrM, $key)
+	{
+		$arr = array();
+		foreach($arrM as $a){
+			array_push($arr, $a[$key]);
+		}
+		$arr = array_unique($arr);
+		sort($arr);
+		return $arr;
+	}
+	
+	function Fact($x) {   
+	    if ($x <= 1)   
+	        return 1;   
+	    else   
+	        return ($x * $this->Fact($x-1));   
+	}	
+	
    	public function GetUsersTagLinks($users, $tag, $all=false)
 	{
 		//récupération des identifiants de chaque utilisateur
@@ -279,7 +333,7 @@ class TagCloud {
 	}
    	
 	
-  	public function GetUsersTagsDistrib($users)
+  	public function GetUsersTagsDistrib($users, $json=true)
 	{
 		
 		//renvoie le nombre de tag en commun pour chaque permutations d'utilisateur
@@ -305,9 +359,13 @@ class TagCloud {
 		$num=mysql_affected_rows(); 
 		$db->close();
 
-		//création du json
-		$objJSON=new mysql2json();
-		return (trim($objJSON->getJSON($rs,$num))); 
+		if($json){
+			//création du json
+			$objJSON=new mysql2json();
+			return (trim($objJSON->getJSON($rs,$num)));
+		}else{
+			return $rs;
+		} 
 		
 	}
 	

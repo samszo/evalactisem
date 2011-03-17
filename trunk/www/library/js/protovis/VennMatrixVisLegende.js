@@ -124,8 +124,8 @@ legFiltre.add(pv.Label)
 ;
 legFiltre.add(pv.Label)
     .top(80)
-    .text("(Chrome uniquement)")
-	.font("14px sans-serif")
+    .text("(ne marche pas avec Firefox)")
+	.font("12px sans-serif")
 ;
 
 legFiltre.add(pv.Dot)

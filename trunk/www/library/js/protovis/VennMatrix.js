@@ -236,6 +236,11 @@ function GetDataLegL(){
 		dt = [val+1,val];
 		colorL = pv.Scale.log(dt).range(cLmin, cLmax);
   	}
+  }else{
+  	if(data.nodes.length>0){
+		dt = [2,1];
+		colorL = pv.Scale.log(dt).range(cLmin, cLmax);
+  	}
   }
   return dt;
 }
@@ -444,7 +449,7 @@ function filtreData(){
     arc.reset();
     visA.render();
 
-console.log(data,dataM,dataA);
+//console.log(data,dataM,dataA);
 
 }
 
