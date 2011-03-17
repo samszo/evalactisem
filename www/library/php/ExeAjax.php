@@ -105,11 +105,32 @@
                  case 'DelUserTags':
                 	    DelUserTags();
                 	    break;
+                 case 'GetStatVisu':
+                	    GetStatVisu($users,$tag);
+                	    break;
                 	    
 		}
         
         echo $resultat;  
 
+    function GetStatVisu($users,$tag){
+		global $objSite;
+       	global $oDelicious;
+       	global $objUti;
+   		$Activite= new Acti();
+		$oTG = new TagCloud($objSite,$oDelicious,"",$login);
+		//esterhasz,fennec_sokoko,luckysemiosis,samueld,wazololo
+		$arrUsers = split(",",$users);
+
+		$oCache = new Cache("json/GetStatVisu_".$users."_".$tag.".js",CACHETIME);   
+        if (!$oCache->Check()) {
+        	$jsTL = json_encode($oTG->GetStatVisu($arrUsers,$tag));
+        	$oCache->Set($jsTL,true);
+		}
+		echo $oCache->Get(true);
+		$Activite->AddActi('GetStatVisu',$objUti->id);		
+   	}        
+            
     function DelUserTags(){
      	// end start benchmark
      	$start = microtime(); 

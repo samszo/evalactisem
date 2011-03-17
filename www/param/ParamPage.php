@@ -172,7 +172,11 @@ session_start();
 	else
 		$complet = false;
 		
-		
+	if(isset($_GET['TooBig']))
+		$TooBig = $_GET['TooBig'];
+	else
+		$TooBig = false;
+				
 function ChercheAbo ()
 	{
 		// connexion a delicious

@@ -2,7 +2,6 @@
 
 require('param/ParamPage.php');
 
-
 ChercheAbo ();
 
 if($con==1){
